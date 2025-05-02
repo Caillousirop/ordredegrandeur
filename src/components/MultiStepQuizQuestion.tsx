@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { MultiStepQuestion, Step, QuizScore } from "./types";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { themes } from "@/data/questions";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -20,21 +21,24 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   onNext,
   onScore 
 }) => {
-  const [currentStep, setCurrentStep] = useState<number | null>(null);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(question.steps.length).fill(null));
   const [submitted, setSubmitted] = useState<boolean[]>(Array(question.steps.length).fill(false));
   const [directFinalMode, setDirectFinalMode] = useState(false);
   const [directFinalAnswer, setDirectFinalAnswer] = useState<string>("");
   const [finalSubmitted, setFinalSubmitted] = useState(false);
   const [finalAccuracy, setFinalAccuracy] = useState(0);
+  const [activeSteps, setActiveSteps] = useState<number[]>([]);
+  
+  // Find theme color
+  const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
 
-  const handleSelectStep = (stepIndex: number) => {
-    setCurrentStep(stepIndex);
-  };
+  useEffect(() => {
+    // By default, make all steps active
+    setActiveSteps(Array.from({ length: question.steps.length }, (_, i) => i));
+  }, [question.steps.length]);
 
   const handleDirectFinalToggle = () => {
     setDirectFinalMode(!directFinalMode);
-    setCurrentStep(null);
   };
 
   const handleStepSubmit = (e: React.FormEvent, stepIndex: number) => {
@@ -114,13 +118,13 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
 
   return (
     <Card className="w-full max-w-4xl mx-auto border-2 border-secondary/50">
-      <CardHeader className="bg-gradient-to-r from-background to-secondary/10 border-b border-border/50">
+      <CardHeader className={`bg-gradient-to-r ${themeColor} border-b border-border/50`}>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+            <CardTitle className="text-xl md:text-2xl font-bold text-white">
               {question.question}
             </CardTitle>
-            <CardDescription className="mt-2">
+            <CardDescription className="mt-2 text-white/90">
               Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
             </CardDescription>
           </div>
@@ -191,62 +195,53 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-1 gap-6">
               {question.steps.map((step, index) => (
-                <Button
-                  key={index}
-                  variant={currentStep === index ? "default" : submitted[index] ? "secondary" : "outline"}
-                  size="sm"
-                  onClick={() => handleSelectStep(index)}
+                <div 
+                  key={index} 
+                  className={`p-4 border rounded-md ${submitted[index] ? "bg-accent/10" : "bg-card/50"}`}
                 >
-                  Étape {index + 1}
-                  {submitted[index] && " ✓"}
-                </Button>
-              ))}
-            </div>
-            
-            {currentStep !== null && (
-              <div className="p-4 border rounded-md bg-card/50">
-                <h3 className="font-medium mb-3">
-                  {question.steps[currentStep].question}
-                </h3>
-                
-                {!submitted[currentStep] ? (
-                  <form onSubmit={(e) => handleStepSubmit(e, currentStep)} className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="text"
-                        value={answers[currentStep]?.toString() || ""}
-                        onChange={(e) => handleInputChange(currentStep, e.target.value)}
-                        placeholder="Votre réponse"
-                        className="flex-grow"
+                  <h3 className="font-medium mb-3">
+                    Étape {index + 1}: {step.question}
+                  </h3>
+                  
+                  {!submitted[index] ? (
+                    <form onSubmit={(e) => handleStepSubmit(e, index)} className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="text"
+                          value={answers[index]?.toString() || ""}
+                          onChange={(e) => handleInputChange(index, e.target.value)}
+                          placeholder="Votre réponse"
+                          className="flex-grow"
+                        />
+                        {step.unit && (
+                          <span className="text-sm text-muted-foreground">
+                            {step.unit}
+                          </span>
+                        )}
+                      </div>
+                      <Button type="submit" className="w-full">Valider</Button>
+                    </form>
+                  ) : (
+                    <div className="space-y-4">
+                      <AccuracyGauge 
+                        userAnswer={answers[index]!} 
+                        correctAnswer={step.correctAnswer} 
+                        answerSubmitted={true} 
                       />
-                      {question.steps[currentStep].unit && (
-                        <span className="text-sm text-muted-foreground">
-                          {question.steps[currentStep].unit}
-                        </span>
+                      
+                      {step.explanation && (
+                        <div className="mt-4 p-3 bg-accent/20 rounded-md text-sm">
+                          <p className="font-medium">Explication:</p>
+                          <p>{step.explanation}</p>
+                        </div>
                       )}
                     </div>
-                    <Button type="submit" className="w-full">Valider</Button>
-                  </form>
-                ) : (
-                  <div className="space-y-4">
-                    <AccuracyGauge 
-                      userAnswer={answers[currentStep]!} 
-                      correctAnswer={question.steps[currentStep].correctAnswer} 
-                      answerSubmitted={true} 
-                    />
-                    
-                    {question.steps[currentStep].explanation && (
-                      <div className="mt-4 p-3 bg-accent/20 rounded-md text-sm">
-                        <p className="font-medium">Explication:</p>
-                        <p>{question.steps[currentStep].explanation}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              ))}
+            </div>
             
             {allStepsCompleted && (
               <div className="p-4 mt-4 border-2 border-primary/20 rounded-md bg-accent/10">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
 import { toast } from "sonner";
 import { Question, QuizScore } from "./types";
+import { themes } from "@/data/questions";
 
 interface QuizQuestionProps {
   question: Question;
@@ -21,6 +22,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [answer, setAnswer] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
+
+  // Find theme color
+  const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +64,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   return (
     <Card className="w-full max-w-md mx-auto border border-secondary/50 shadow-sm">
-      <CardHeader className="bg-gradient-to-r from-background to-accent/10">
-        <CardTitle className="text-xl text-primary/90">{question.question}</CardTitle>
-        <CardDescription>
+      <CardHeader className={`bg-gradient-to-r ${themeColor}`}>
+        <CardTitle className="text-xl text-white">{question.question}</CardTitle>
+        <CardDescription className="text-white/90">
           {question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}
         </CardDescription>
       </CardHeader>

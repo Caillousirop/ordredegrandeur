@@ -3,39 +3,76 @@ import React, { useState, useEffect } from "react";
 import QuizQuestion from "./QuizQuestion";
 import MultiStepQuizQuestion from "./MultiStepQuizQuestion";
 import SearchBar from "./SearchBar";
-import { questions } from "@/data/questions";
+import ThemeSelector from "./ThemeSelector";
+import QuestionTypeSelector from "./QuestionTypeSelector";
+import { questions, themes } from "@/data/questions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Question, MultiStepQuestion, QuizScore } from "./types";
+import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>(questions);
-  const [activeTab, setActiveTab] = useState("toutes");
+  const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
+  const [activeTab, setActiveTab] = useState("setup");
   const [scores, setScores] = useState<QuizScore[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
+  const [selectedTheme, setSelectedTheme] = useState<QuizTheme | null>(null);
+  const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (query: string) => {
-    if (!query.trim()) {
-      setFilteredQuestions(questions);
-      return;
+  // Filter questions based on theme, type, and search query
+  useEffect(() => {
+    let filtered = [...questions];
+    
+    // Filter by theme if selected
+    if (selectedTheme) {
+      filtered = filtered.filter(q => q.theme === selectedTheme.id);
     }
     
-    const filtered = questions.filter(q => 
-      q.question.toLowerCase().includes(query.toLowerCase())
-    );
+    // Filter by question type if selected
+    if (selectedType !== "all") {
+      filtered = filtered.filter(q => q.type === selectedType);
+    }
     
-    if (filtered.length === 0) {
-      toast.info("Aucune question ne correspond à votre recherche.");
-      return;
+    // Apply search filter if there's a query
+    if (searchQuery) {
+      filtered = filtered.filter(q => 
+        q.question.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
     
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
+  }, [selectedTheme, selectedType, searchQuery]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleThemeSelect = (theme: QuizTheme) => {
+    setSelectedTheme(theme);
+  };
+
+  const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
+    setSelectedType(type);
+  };
+
+  const handleStartQuiz = () => {
+    if (!selectedTheme) {
+      toast.error("Veuillez sélectionner un thème");
+      return;
+    }
+    
+    if (filteredQuestions.length === 0) {
+      toast.error("Aucune question disponible pour cette sélection");
+      return;
+    }
+    
+    setActiveTab("toutes");
   };
 
   const handleNext = () => {
@@ -97,30 +134,65 @@ const QuizContainer: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
       <div className="flex flex-col items-center space-y-6">
-        <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-          Challenge Stats Quiz
+        <h1 className="text-center">
+          <span className="text-3xl font-bold text-primary">Ordre de </span>
+          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Gran</span>
+          <span className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">deur</span>
         </h1>
         <p className="text-center text-muted-foreground max-w-lg mx-auto">
           Testez vos connaissances statistiques ! Répondez directement ou décomposez le problème en étapes pour gagner des points.
         </p>
         
-        <SearchBar onSearch={handleSearch} />
-        
         <Tabs 
-          defaultValue="toutes" 
+          defaultValue="setup" 
           value={activeTab} 
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="toutes">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="setup">
+              Configuration
+            </TabsTrigger>
+            <TabsTrigger value="toutes" disabled={filteredQuestions.length === 0}>
               Questions 
               <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
             </TabsTrigger>
-            <TabsTrigger value="stats">
+            <TabsTrigger value="stats" disabled={scores.length === 0}>
               Statistiques
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="setup" className="mt-6">
+            <div className="space-y-6">
+              <ThemeSelector 
+                onSelectTheme={handleThemeSelect} 
+                selectedTheme={selectedTheme} 
+              />
+              
+              {selectedTheme && (
+                <>
+                  <QuestionTypeSelector 
+                    onSelectType={handleTypeSelect}
+                    selectedType={selectedType}
+                  />
+                  
+                  <div className="mt-6">
+                    <SearchBar onSearch={handleSearch} />
+                  </div>
+                  
+                  <div className="flex justify-center mt-8">
+                    <Button 
+                      onClick={handleStartQuiz} 
+                      className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary/80"
+                    >
+                      Commencer le quiz
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </TabsContent>
+          
           <TabsContent value="toutes" className="mt-8">
             {filteredQuestions.length > 0 ? (
               <div className="space-y-4">
@@ -154,6 +226,7 @@ const QuizContainer: React.FC = () => {
               </div>
             )}
           </TabsContent>
+          
           <TabsContent value="stats" className="mt-6">
             <Card className="w-full border-2 border-secondary/50">
               <CardHeader>

@@ -6,6 +6,7 @@ export interface Question {
   unit?: string;
   explanation?: string;
   type: "simple";
+  theme: string;
 }
 
 export interface Step {
@@ -21,6 +22,7 @@ export interface MultiStepQuestion {
   question: string;
   steps: Step[];
   finalExplanation?: string;
+  theme: string;
 }
 
 export type QuizScore = {
@@ -28,4 +30,11 @@ export type QuizScore = {
   accuracy: number;
   isMultiStep: boolean;
   directFinalAnswer: boolean;
+};
+
+export type QuizTheme = {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
 };

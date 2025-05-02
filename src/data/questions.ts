@@ -8,7 +8,8 @@ export const questions: (Question | MultiStepQuestion)[] = [
     correctAnswer: 51.7,
     unit: "%",
     explanation: "En France, les femmes représentent environ 51,7% de la population selon les dernières estimations de l'INSEE.",
-    type: "simple"
+    type: "simple",
+    theme: "démographie"
   },
   {
     id: "2",
@@ -16,7 +17,8 @@ export const questions: (Question | MultiStepQuestion)[] = [
     correctAnswer: 14.8,
     unit: "°C",
     explanation: "La température moyenne mondiale en 2023 était d'environ 14,8°C, ce qui est plus élevé que la moyenne pré-industrielle.",
-    type: "simple"
+    type: "simple",
+    theme: "environnement"
   },
   {
     id: "3",
@@ -24,7 +26,8 @@ export const questions: (Question | MultiStepQuestion)[] = [
     correctAnswer: 7.1,
     unit: "%",
     explanation: "Le taux de chômage en France en 2023 était d'environ 7,1% selon l'INSEE.",
-    type: "simple"
+    type: "simple",
+    theme: "économie"
   },
   {
     id: "4",
@@ -32,7 +35,8 @@ export const questions: (Question | MultiStepQuestion)[] = [
     correctAnswer: 71,
     unit: "%",
     explanation: "Les océans couvrent environ 71% de la surface terrestre.",
-    type: "simple"
+    type: "simple",
+    theme: "environnement"
   },
   {
     id: "5",
@@ -40,13 +44,15 @@ export const questions: (Question | MultiStepQuestion)[] = [
     correctAnswer: 148,
     unit: "litres",
     explanation: "Un Français consomme en moyenne 148 litres d'eau par jour pour son usage domestique.",
-    type: "simple"
+    type: "simple",
+    theme: "environnement"
   },
   {
     id: "6",
     type: "multistep",
     question: "Combien de femmes de plus de 50 ans ont un diplôme Bac+5 en France ?",
     finalExplanation: "D'après les statistiques de l'INSEE, environ 420 000 femmes de plus de 50 ans possèdent un diplôme de niveau Bac+5 ou plus en France.",
+    theme: "démographie",
     steps: [
       {
         question: "Combien y a-t-il de femmes de plus de 50 ans en France ?",
@@ -73,6 +79,7 @@ export const questions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de voitures électriques circulent dans les villes de plus de 100 000 habitants en France ?",
     finalExplanation: "En croisant les données d'immatriculation et d'urbanisme, on estime qu'environ 210 000 voitures électriques circulent dans les grandes villes françaises de plus de 100 000 habitants.",
+    theme: "environnement",
     steps: [
       {
         question: "Combien y a-t-il de voitures électriques en France au total ?",
@@ -96,3 +103,23 @@ export const questions: (Question | MultiStepQuestion)[] = [
   }
 ];
 
+export const themes = [
+  { 
+    id: "démographie", 
+    name: "Démographie", 
+    description: "Questions sur la population et ses caractéristiques",
+    color: "from-blue-500 to-blue-300" 
+  },
+  { 
+    id: "économie", 
+    name: "Économie", 
+    description: "Questions sur l'économie et les finances",
+    color: "from-green-500 to-green-300" 
+  },
+  { 
+    id: "environnement", 
+    name: "Environnement", 
+    description: "Questions sur l'écologie et l'environnement",
+    color: "from-emerald-500 to-emerald-300" 
+  }
+];
