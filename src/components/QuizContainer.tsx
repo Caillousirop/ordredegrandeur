@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import QuizQuestion from "./QuizQuestion";
 import MultiStepQuizQuestion from "./MultiStepQuizQuestion";
 import SearchBar from "./SearchBar";
 import ThemeSelector from "./ThemeSelector";
 import QuestionTypeSelector from "./QuestionTypeSelector";
+import { Button } from "./ui/button"; // Added missing import
 import { questions, themes } from "@/data/questions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
