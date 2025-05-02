@@ -1,17 +1,18 @@
+
 import React, { useState, useEffect } from "react";
 import QuizQuestion from "./QuizQuestion";
 import MultiStepQuizQuestion from "./MultiStepQuizQuestion";
 import SearchBar from "./SearchBar";
 import ThemeSelector from "./ThemeSelector";
 import QuestionTypeSelector from "./QuestionTypeSelector";
-import { Button } from "./ui/button"; // Added missing import
+import { Button } from "./ui/button";
 import { questions, themes } from "@/data/questions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Badge } from "./ui/badge";
+import { Progress } from "./ui/progress";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -59,19 +60,7 @@ const QuizContainer: React.FC = () => {
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
-  };
-
-  const handleStartQuiz = () => {
-    if (!selectedTheme) {
-      toast.error("Veuillez sélectionner un thème");
-      return;
-    }
-    
-    if (filteredQuestions.length === 0) {
-      toast.error("Aucune question disponible pour cette sélection");
-      return;
-    }
-    
+    // Automatically start quiz when type is selected
     setActiveTab("toutes");
   };
 
@@ -179,15 +168,6 @@ const QuizContainer: React.FC = () => {
                   <div className="mt-6">
                     <SearchBar onSearch={handleSearch} />
                   </div>
-                  
-                  <div className="flex justify-center mt-8">
-                    <Button 
-                      onClick={handleStartQuiz} 
-                      className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary/80"
-                    >
-                      Commencer le quiz
-                    </Button>
-                  </div>
                 </>
               )}
             </div>
@@ -211,7 +191,7 @@ const QuizContainer: React.FC = () => {
                 )}
                 
                 <div className="flex items-center justify-between text-sm text-muted-foreground px-2">
-                  <p>Question {currentQuestionIndex + 1} sur {filteredQuestions.length}</p>
+                  <p>{currentQuestionIndex + 1}/{filteredQuestions.length}</p>
                   
                   {isMultiStep && (
                     <Badge variant="outline" className="bg-primary/10">

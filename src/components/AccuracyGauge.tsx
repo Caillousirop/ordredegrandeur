@@ -17,7 +17,7 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   const [progress, setProgress] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
   
-  // Calculate the accuracy with improved order of magnitude recognition
+  // Calculate the accuracy with higher rewards for correct order of magnitude
   useEffect(() => {
     if (answerSubmitted) {
       // Compute order of magnitude difference
@@ -34,21 +34,27 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       // Order of magnitude is correct (or very close)
       if (orderOfMagnitudeDifference === 0) {
         // Give higher scores when the order of magnitude is correct
-        if (relativeDifference < 0.1) {
+        if (relativeDifference < 0.05) {
           calculatedAccuracy = 100; // Perfect or very close
+        } else if (relativeDifference < 0.15) {
+          calculatedAccuracy = 95; // Very good
         } else if (relativeDifference < 0.25) {
           calculatedAccuracy = 90; // Very good
+        } else if (relativeDifference < 0.4) {
+          calculatedAccuracy = 85; // Very good
         } else if (relativeDifference < 0.5) {
           calculatedAccuracy = 80; // Good
+        } else if (relativeDifference < 0.75) {
+          calculatedAccuracy = 75; // Acceptable
         } else if (relativeDifference < 1) {
           calculatedAccuracy = 70; // Acceptable
         } else {
-          calculatedAccuracy = 60; // Same order of magnitude but quite off
+          calculatedAccuracy = 65; // Same order of magnitude but quite off
         }
       } 
       // One order of magnitude off
       else if (orderOfMagnitudeDifference === 1) {
-        calculatedAccuracy = 40;
+        calculatedAccuracy = 45;
       } 
       // More than one order of magnitude off
       else {

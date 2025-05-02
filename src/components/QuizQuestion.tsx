@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
@@ -63,9 +63,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto border border-secondary/50 shadow-sm">
-      <CardHeader className={`bg-gradient-to-r ${themeColor}`}>
-        <CardTitle className="text-xl text-white">{question.question}</CardTitle>
+    <Card className="w-full max-w-md mx-auto border-[1px] border-secondary/50 shadow-sm">
+      <CardHeader className={`text-white bg-gradient-to-r ${themeColor}`}>
+        <CardTitle className="text-xl">{question.question}</CardTitle>
         <CardDescription className="text-white/90">
           {question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}
         </CardDescription>
@@ -96,7 +96,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             />
             
             {question.explanation && (
-              <div className="mt-4 p-3 bg-accent rounded-md text-sm">
+              <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
                 <p className="font-medium">Explication:</p>
                 <p>{question.explanation}</p>
               </div>

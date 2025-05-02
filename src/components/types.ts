@@ -30,7 +30,7 @@ export type QuizScore = {
   accuracy: number;
   isMultiStep: boolean;
   directFinalAnswer: boolean;
-  skippedSteps?: boolean; // Nouvelle propriété pour indiquer si des étapes ont été sautées
+  skippedSteps?: boolean;
 };
 
 export type QuizTheme = {
@@ -38,4 +38,5 @@ export type QuizTheme = {
   name: string;
   description: string;
   color: string;
+  icon?: string;
 };
