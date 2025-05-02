@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { themes } from "@/data/questions";
+import { CircleCheck, ArrowDown, ArrowUp } from "lucide-react";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -28,17 +29,23 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const [finalSubmitted, setFinalSubmitted] = useState(false);
   const [finalAccuracy, setFinalAccuracy] = useState(0);
   const [activeSteps, setActiveSteps] = useState<number[]>([]);
+  const [expandedStep, setExpandedStep] = useState<number | null>(0);
+  const [skippedSteps, setSkippedSteps] = useState(false);
   
   // Find theme color
   const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
 
   useEffect(() => {
-    // By default, make all steps active
-    setActiveSteps(Array.from({ length: question.steps.length }, (_, i) => i));
+    // By default, only make the first step active
+    setActiveSteps([0]);
+    setExpandedStep(0);
   }, [question.steps.length]);
 
   const handleDirectFinalToggle = () => {
     setDirectFinalMode(!directFinalMode);
+    if (!directFinalMode) {
+      setSkippedSteps(true);
+    }
   };
 
   const handleStepSubmit = (e: React.FormEvent, stepIndex: number) => {
@@ -56,6 +63,17 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     // Calculate accuracy for this step
     const step = question.steps[stepIndex];
     const accuracy = calculateAccuracy(answers[stepIndex]!, step.correctAnswer);
+    
+    // If this isn't the last step, make the next one active
+    if (stepIndex < question.steps.length - 1) {
+      setActiveSteps(prevActiveSteps => {
+        if (!prevActiveSteps.includes(stepIndex + 1)) {
+          return [...prevActiveSteps, stepIndex + 1];
+        }
+        return prevActiveSteps;
+      });
+      setExpandedStep(stepIndex + 1);
+    }
     
     if (onScore) {
       onScore({
@@ -84,6 +102,13 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     const accuracy = calculateAccuracy(numAnswer, finalStep.correctAnswer);
     setFinalAccuracy(accuracy);
     
+    // Show congratulations message for direct final answers that are accurate
+    if (accuracy >= 80) {
+      toast.success("🎉 Bravo ! Excellente réponse directe !", {
+        duration: 5000,
+      });
+    }
+    
     // Award bonus points for direct final answer
     if (onScore) {
       onScore({
@@ -91,16 +116,42 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         // Give 50% bonus for direct final answer if accurate
         accuracy: accuracy * 1.5 > 100 ? 100 : accuracy * 1.5, 
         isMultiStep: true,
-        directFinalAnswer: true
+        directFinalAnswer: true,
+        skippedSteps: true
       });
     }
   };
 
   const calculateAccuracy = (userAnswer: number, correctAnswer: number): number => {
-    const maxDifference = correctAnswer;
-    const actualDifference = Math.abs(userAnswer - correctAnswer);
-    const accuracy = Math.max(0, 100 - (actualDifference / maxDifference) * 100);
-    return Math.min(100, Math.max(0, accuracy));
+    // Use the same logic as in AccuracyGauge component
+    const orderOfMagnitudeDifference = Math.abs(
+      Math.floor(Math.log10(Math.abs(userAnswer))) - 
+      Math.floor(Math.log10(Math.abs(correctAnswer)))
+    );
+    
+    const relativeDifference = Math.abs(userAnswer - correctAnswer) / correctAnswer;
+    
+    let calculatedAccuracy = 0;
+    
+    if (orderOfMagnitudeDifference === 0) {
+      if (relativeDifference < 0.1) {
+        calculatedAccuracy = 100;
+      } else if (relativeDifference < 0.25) {
+        calculatedAccuracy = 90;
+      } else if (relativeDifference < 0.5) {
+        calculatedAccuracy = 80;
+      } else if (relativeDifference < 1) {
+        calculatedAccuracy = 70;
+      } else {
+        calculatedAccuracy = 60;
+      }
+    } else if (orderOfMagnitudeDifference === 1) {
+      calculatedAccuracy = 40;
+    } else {
+      calculatedAccuracy = Math.max(0, 30 - (orderOfMagnitudeDifference - 1) * 10);
+    }
+    
+    return Math.min(100, Math.max(0, calculatedAccuracy));
   };
 
   const handleInputChange = (stepIndex: number, value: string) => {
@@ -112,12 +163,28 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const handleNextQuestion = () => {
     if (onNext) onNext();
   };
+  
+  const toggleStepExpansion = (stepIndex: number) => {
+    if (!activeSteps.includes(stepIndex)) {
+      // If step isn't active yet, make it active (skipping previous steps)
+      setActiveSteps(prev => {
+        const newActiveSteps = [...prev];
+        if (!newActiveSteps.includes(stepIndex)) {
+          newActiveSteps.push(stepIndex);
+        }
+        return newActiveSteps;
+      });
+      setSkippedSteps(true);
+    }
+    
+    setExpandedStep(expandedStep === stepIndex ? null : stepIndex);
+  };
 
   const allStepsCompleted = submitted.every(step => step === true);
   const completionPercentage = (submitted.filter(Boolean).length / question.steps.length) * 100;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto border-2 border-secondary/50">
+    <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
       <CardHeader className={`bg-gradient-to-r ${themeColor} border-b border-border/50`}>
         <div className="flex items-center justify-between">
           <div>
@@ -130,7 +197,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6 space-y-6">
+      <CardContent className="pt-6 space-y-6 bg-transparent">
         <div className="flex justify-between items-center">
           <div className="space-y-1">
             <h3 className="text-sm font-medium">Progression</h3>
@@ -152,7 +219,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         </div>
 
         {directFinalMode ? (
-          <div className="space-y-4 p-4 bg-accent/20 rounded-lg">
+          <div className="space-y-4 p-4 rounded-lg border border-border/40">
             <h3 className="font-medium">Réponse directe <Badge variant="secondary" className="ml-1">+50% points</Badge></h3>
             {!finalSubmitted ? (
               <form onSubmit={handleDirectFinalSubmit} className="space-y-4">
@@ -180,8 +247,17 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                   answerSubmitted={finalSubmitted} 
                 />
                 
+                {finalAccuracy >= 80 && (
+                  <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
+                    <p className="font-medium flex items-center gap-2">
+                      <CircleCheck className="h-5 w-5 text-green-500" />
+                      Bravo pour cette excellente réponse directe !
+                    </p>
+                  </div>
+                )}
+                
                 {question.finalExplanation && (
-                  <div className="mt-4 p-3 bg-accent/20 rounded-md text-sm">
+                  <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
                     <p className="font-medium">Explication finale:</p>
                     <p>{question.finalExplanation}</p>
                   </div>
@@ -199,42 +275,60 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
               {question.steps.map((step, index) => (
                 <div 
                   key={index} 
-                  className={`p-4 border rounded-md ${submitted[index] ? "bg-accent/10" : "bg-card/50"}`}
+                  className={`p-4 border rounded-md ${submitted[index] ? "" : ""}`}
                 >
-                  <h3 className="font-medium mb-3">
-                    Étape {index + 1}: {step.question}
-                  </h3>
+                  <div 
+                    className="flex justify-between items-center cursor-pointer mb-2"
+                    onClick={() => toggleStepExpansion(index)}
+                  >
+                    <h3 className="font-medium flex items-center">
+                      <Badge 
+                        variant={submitted[index] ? "default" : "outline"} 
+                        className={`mr-2 ${submitted[index] ? "bg-primary" : ""}`}
+                      >
+                        {index + 1}
+                      </Badge>
+                      Étape {index + 1}: {step.question}
+                    </h3>
+                    <button className="text-muted-foreground">
+                      {expandedStep === index ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
+                    </button>
+                  </div>
                   
-                  {!submitted[index] ? (
-                    <form onSubmit={(e) => handleStepSubmit(e, index)} className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="text"
-                          value={answers[index]?.toString() || ""}
-                          onChange={(e) => handleInputChange(index, e.target.value)}
-                          placeholder="Votre réponse"
-                          className="flex-grow"
-                        />
-                        {step.unit && (
-                          <span className="text-sm text-muted-foreground">
-                            {step.unit}
-                          </span>
-                        )}
-                      </div>
-                      <Button type="submit" className="w-full">Valider</Button>
-                    </form>
-                  ) : (
-                    <div className="space-y-4">
-                      <AccuracyGauge 
-                        userAnswer={answers[index]!} 
-                        correctAnswer={step.correctAnswer} 
-                        answerSubmitted={true} 
-                      />
-                      
-                      {step.explanation && (
-                        <div className="mt-4 p-3 bg-accent/20 rounded-md text-sm">
-                          <p className="font-medium">Explication:</p>
-                          <p>{step.explanation}</p>
+                  {expandedStep === index && activeSteps.includes(index) && (
+                    <div className="mt-2 pt-2 border-t">
+                      {!submitted[index] ? (
+                        <form onSubmit={(e) => handleStepSubmit(e, index)} className="space-y-4">
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="text"
+                              value={answers[index]?.toString() || ""}
+                              onChange={(e) => handleInputChange(index, e.target.value)}
+                              placeholder="Votre réponse"
+                              className="flex-grow"
+                            />
+                            {step.unit && (
+                              <span className="text-sm text-muted-foreground">
+                                {step.unit}
+                              </span>
+                            )}
+                          </div>
+                          <Button type="submit" className="w-full">Valider</Button>
+                        </form>
+                      ) : (
+                        <div className="space-y-4">
+                          <AccuracyGauge 
+                            userAnswer={answers[index]!} 
+                            correctAnswer={step.correctAnswer} 
+                            answerSubmitted={true} 
+                          />
+                          
+                          {step.explanation && (
+                            <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
+                              <p className="font-medium">Explication:</p>
+                              <p>{step.explanation}</p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -244,7 +338,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             </div>
             
             {allStepsCompleted && (
-              <div className="p-4 mt-4 border-2 border-primary/20 rounded-md bg-accent/10">
+              <div className="p-4 mt-4 border-2 border-primary/20 rounded-md">
                 <h3 className="font-medium">Félicitations ! Vous avez complété toutes les étapes.</h3>
                 {question.finalExplanation && (
                   <div className="mt-2 text-sm">

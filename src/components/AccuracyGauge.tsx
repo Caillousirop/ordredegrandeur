@@ -17,12 +17,43 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   const [progress, setProgress] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
   
-  // Calculate the accuracy as a percentage of how close the user's answer is to the correct one
+  // Calculate the accuracy with improved order of magnitude recognition
   useEffect(() => {
     if (answerSubmitted) {
-      const maxDifference = correctAnswer; // Assuming this is a reasonable max difference
-      const actualDifference = Math.abs(userAnswer - correctAnswer);
-      const calculatedAccuracy = Math.max(0, 100 - (actualDifference / maxDifference) * 100);
+      // Compute order of magnitude difference
+      const orderOfMagnitudeDifference = Math.abs(
+        Math.floor(Math.log10(Math.abs(userAnswer))) - 
+        Math.floor(Math.log10(Math.abs(correctAnswer)))
+      );
+      
+      // Calculate relative difference
+      const relativeDifference = Math.abs(userAnswer - correctAnswer) / correctAnswer;
+      
+      let calculatedAccuracy = 0;
+      
+      // Order of magnitude is correct (or very close)
+      if (orderOfMagnitudeDifference === 0) {
+        // Give higher scores when the order of magnitude is correct
+        if (relativeDifference < 0.1) {
+          calculatedAccuracy = 100; // Perfect or very close
+        } else if (relativeDifference < 0.25) {
+          calculatedAccuracy = 90; // Very good
+        } else if (relativeDifference < 0.5) {
+          calculatedAccuracy = 80; // Good
+        } else if (relativeDifference < 1) {
+          calculatedAccuracy = 70; // Acceptable
+        } else {
+          calculatedAccuracy = 60; // Same order of magnitude but quite off
+        }
+      } 
+      // One order of magnitude off
+      else if (orderOfMagnitudeDifference === 1) {
+        calculatedAccuracy = 40;
+      } 
+      // More than one order of magnitude off
+      else {
+        calculatedAccuracy = Math.max(0, 30 - (orderOfMagnitudeDifference - 1) * 10);
+      }
       
       // Clamp between 0-100
       const clampedAccuracy = Math.min(100, Math.max(0, calculatedAccuracy));
