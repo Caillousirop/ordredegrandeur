@@ -12,16 +12,19 @@ interface QuizQuestionProps {
   question: Question;
   onNext?: () => void;
   onScore?: (score: QuizScore) => void;
+  language: 'fr' | 'en';
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({ 
   question, 
   onNext,
-  onScore
+  onScore,
+  language = 'fr'
 }) => {
   const [answer, setAnswer] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // Find theme color
   const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
@@ -32,7 +35,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     const numAnswer = parseFloat(answer);
     
     if (isNaN(numAnswer)) {
-      toast.error("Veuillez entrer un nombre valide.");
+      toast.error(language === 'fr' ? "Veuillez entrer un nombre valide." : "Please enter a valid number.");
       return;
     }
     
@@ -59,15 +62,23 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     setAnswer("");
     setSubmitted(false);
     setUserAnswer(0);
+    setShowAnswer(false);
     if (onNext) onNext();
+  };
+
+  const toggleShowAnswer = () => {
+    setShowAnswer(!showAnswer);
   };
 
   return (
     <Card className="w-full max-w-md mx-auto border-[1px] border-secondary/50 shadow-sm">
-      <CardHeader className={`text-white bg-gradient-to-r ${themeColor}`}>
-        <CardTitle className="text-xl">{question.question}</CardTitle>
-        <CardDescription className="text-white/90">
-          {question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}
+      <CardHeader className="text-white bg-transparent">
+        <CardTitle className={`text-xl bg-gradient-to-r ${themeColor} bg-clip-text text-transparent`}>{question.question}</CardTitle>
+        <CardDescription className="text-muted-foreground">
+          {language === 'fr' 
+            ? `${question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}`
+            : `${question.unit ? `Answer with a number (${question.unit})` : "Answer with a number"}`
+          }
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 pt-6">
@@ -78,32 +89,36 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 type="text"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Votre réponse"
+                placeholder={language === 'fr' ? "Votre réponse" : "Your answer"}
                 className="flex-grow"
               />
               {question.unit && (
                 <span className="text-sm text-muted-foreground">{question.unit}</span>
               )}
             </div>
-            <Button type="submit" className="w-full">Valider</Button>
+            <Button type="submit" className="w-full">
+              {language === 'fr' ? "Valider" : "Submit"}
+            </Button>
           </form>
         ) : (
           <div className="space-y-4">
             <AccuracyGauge 
               userAnswer={userAnswer} 
               correctAnswer={question.correctAnswer} 
-              answerSubmitted={submitted} 
+              answerSubmitted={submitted}
+              showAnswer={showAnswer}
+              onToggleShowAnswer={toggleShowAnswer}
             />
             
-            {question.explanation && (
+            {showAnswer && question.explanation && (
               <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
-                <p className="font-medium">Explication:</p>
-                <p>{question.explanation}</p>
+                <p className="font-medium">{language === 'fr' ? "Explication:" : "Explanation:"}</p>
+                <p>{language === 'fr' ? question.explanation : question.explanationEn || question.explanation}</p>
               </div>
             )}
             
             <Button onClick={handleNextQuestion} className="w-full">
-              {onNext ? "Question suivante" : "Réessayer"}
+              {onNext ? (language === 'fr' ? "Question suivante" : "Next question") : (language === 'fr' ? "Réessayer" : "Try again")}
             </Button>
           </div>
         )}

@@ -1,81 +1,50 @@
 
 import React from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { cn } from "@/lib/utils";
-
-type QuestionType = "simple" | "multistep" | "all";
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 interface QuestionTypeSelectorProps {
-  onSelectType: (type: QuestionType) => void;
-  selectedType: QuestionType;
+  onSelectType: (type: "simple" | "multistep" | "all") => void;
+  selectedType: "simple" | "multistep" | "all";
+  language: 'fr' | 'en';
 }
 
-const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({ onSelectType, selectedType }) => {
+const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({
+  onSelectType,
+  selectedType,
+  language = 'fr'
+}) => {
   return (
-    <div className="w-full max-w-4xl mx-auto mt-6">
-      <h2 className="text-xl font-medium mb-4">Choisissez un type de question</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card 
-          className={cn(
-            "cursor-pointer transition-all hover:shadow-md",
-            selectedType === "simple" 
-              ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10"
-          )}
-          onClick={() => onSelectType("simple")}
+    <Card className="border border-secondary/40">
+      <CardContent className="pt-6">
+        <RadioGroup 
+          defaultValue={selectedType} 
+          value={selectedType}
+          onValueChange={(value) => onSelectType(value as "simple" | "multistep" | "all")}
+          className="flex flex-wrap gap-4"
         >
-          <CardHeader className="bg-gradient-to-r from-violet-500 to-violet-300 p-4">
-            <CardTitle className="text-white">Questions simples</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">
-              Une seule estimation à réaliser par question
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className={cn(
-            "cursor-pointer transition-all hover:shadow-md",
-            selectedType === "multistep" 
-              ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10"
-          )}
-          onClick={() => onSelectType("multistep")}
-        >
-          <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-300 p-4">
-            <CardTitle className="text-white">Questions à étapes</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">
-              Plusieurs estimations à réaliser par question
-            </p>
-            <Badge variant="secondary" className="mt-2">+50% bonus</Badge>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className={cn(
-            "cursor-pointer transition-all hover:shadow-md",
-            selectedType === "all" 
-              ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10"
-          )}
-          onClick={() => onSelectType("all")}
-        >
-          <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-300 p-4">
-            <CardTitle className="text-white">Tous les types</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">
-              Mélange de questions simples et à étapes
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="all" id="all" />
+            <Label htmlFor="all" className="cursor-pointer">
+              {language === 'fr' ? 'Toutes les questions' : 'All questions'}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="simple" id="simple" />
+            <Label htmlFor="simple" className="cursor-pointer">
+              {language === 'fr' ? 'Questions simples' : 'Simple questions'}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="multistep" id="multistep" />
+            <Label htmlFor="multistep" className="cursor-pointer">
+              {language === 'fr' ? 'Questions à étapes' : 'Multi-step questions'}
+            </Label>
+          </div>
+        </RadioGroup>
+      </CardContent>
+    </Card>
   );
 };
 
