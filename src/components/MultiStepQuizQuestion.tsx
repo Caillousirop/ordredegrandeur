@@ -241,7 +241,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                     userAnswer={parseFloat(directFinalAnswer)} 
                     correctAnswer={question.steps[question.steps.length - 1].correctAnswer} 
                     answerSubmitted={finalSubmitted}
-                    hideCorrectValue={true}
                   />
                   <div className="flex justify-center">
                     <Button 

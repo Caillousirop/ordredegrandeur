@@ -105,7 +105,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   userAnswer={userAnswer} 
                   correctAnswer={question.correctAnswer} 
                   answerSubmitted={submitted}
-                  hideCorrectValue={true}
                 />
                 <div className="flex justify-center">
                   <Button 

@@ -336,6 +336,133 @@ export const questions: (Question | MultiStepQuestion)[] = [
         explanation: "En moyenne, les Français prennent 37 jours de congés par an, en additionnant les congés payés standards et les RTT."
       }
     ]
+  },
+  // Nouvelles questions avec des pourcentages
+  {
+    id: "23",
+    question: "Quel pourcentage des Français vivent en zone urbaine ?",
+    correctAnswer: 81,
+    unit: "%",
+    explanation: "Selon l'INSEE, environ 81% des Français vivent en zone urbaine en 2023.",
+    type: "simple",
+    theme: "démographie"
+  },
+  {
+    id: "24",
+    question: "Quel est le pourcentage de jeunes de 18-24 ans poursuivant des études supérieures en France ?",
+    correctAnswer: 46.2,
+    unit: "%",
+    explanation: "Selon les données de l'INSEE, 46,2% des jeunes de 18 à 24 ans poursuivent des études supérieures en France.",
+    type: "simple",
+    theme: "éducation"
+  },
+  {
+    id: "25",
+    question: "Quel est le pourcentage de logements équipés de chauffage électrique en France ?",
+    correctAnswer: 34.7,
+    unit: "%",
+    explanation: "Selon l'INSEE, 34,7% des logements français sont équipés d'un chauffage électrique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "26",
+    type: "multistep",
+    question: "Quel est le pourcentage d'électricité produite à partir d'énergies renouvelables en France ?",
+    finalExplanation: "D'après les données de RTE et de l'INSEE, environ 24% de l'électricité en France provient des énergies renouvelables en 2023.",
+    theme: "environnement",
+    steps: [
+      {
+        question: "Quelle quantité d'électricité est produite annuellement en France ?",
+        correctAnswer: 540,
+        unit: "TWh",
+        explanation: "La France produit environ 540 térawattheures d'électricité par an selon RTE."
+      },
+      {
+        question: "Quelle quantité d'électricité est produite par des énergies renouvelables ?",
+        correctAnswer: 129.6,
+        unit: "TWh",
+        explanation: "Les énergies renouvelables produisent environ 129,6 térawattheures en France."
+      },
+      {
+        question: "Quel pourcentage de l'électricité française est donc renouvelable ?",
+        correctAnswer: 24,
+        unit: "%",
+        explanation: "En divisant la production renouvelable par la production totale, on obtient 24% d'électricité renouvelable."
+      }
+    ]
+  },
+  {
+    id: "27",
+    type: "multistep",
+    question: "Quel pourcentage des déplacements urbains sont effectués à vélo en France ?",
+    finalExplanation: "Selon les données de l'INSEE et du Ministère de la Transition Écologique, environ 4% des déplacements urbains sont effectués à vélo en France.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de déplacements quotidiens un Français effectue-t-il en moyenne ?",
+        correctAnswer: 3.15,
+        unit: "déplacements",
+        explanation: "Un Français effectue en moyenne 3,15 déplacements quotidiens selon les enquêtes de mobilité."
+      },
+      {
+        question: "Combien de Français se déplacent régulièrement à vélo en zone urbaine ?",
+        correctAnswer: 8.3,
+        unit: "millions",
+        explanation: "Environ 8,3 millions de Français utilisent régulièrement le vélo en zone urbaine."
+      },
+      {
+        question: "Quel pourcentage des déplacements urbains sont effectués à vélo ?",
+        correctAnswer: 4,
+        unit: "%",
+        explanation: "Le vélo représente environ 4% de l'ensemble des déplacements urbains en France."
+      }
+    ]
+  },
+  {
+    id: "28",
+    question: "Quel pourcentage des emplois en France sont dans le secteur tertiaire (services) ?",
+    correctAnswer: 76.8,
+    unit: "%",
+    explanation: "Selon l'INSEE, 76,8% des emplois en France sont dans le secteur tertiaire (services).",
+    type: "simple",
+    theme: "emploi"
+  },
+  {
+    id: "29",
+    question: "Quel est le pourcentage de médecins généralistes parmi l'ensemble des médecins en France ?",
+    correctAnswer: 44.3,
+    unit: "%",
+    explanation: "Selon les données de l'Ordre des Médecins et de l'INSEE, 44,3% des médecins en France sont des généralistes.",
+    type: "simple",
+    theme: "santé"
+  },
+  {
+    id: "30",
+    type: "multistep",
+    question: "Quel pourcentage de Français utilisent quotidiennement les transports en commun ?",
+    finalExplanation: "Environ 16% des Français utilisent quotidiennement les transports en commun selon les données de l'INSEE.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Quelle est la population française en âge de se déplacer de façon autonome (plus de 12 ans) ?",
+        correctAnswer: 61.4,
+        unit: "millions",
+        explanation: "En France, environ 61,4 millions de personnes ont plus de 12 ans et peuvent se déplacer de façon autonome."
+      },
+      {
+        question: "Combien de personnes utilisent les transports en commun chaque jour ?",
+        correctAnswer: 9.8,
+        unit: "millions",
+        explanation: "Environ 9,8 millions de Français utilisent les transports en commun quotidiennement."
+      },
+      {
+        question: "Quel pourcentage cela représente-t-il par rapport à la population en âge de se déplacer ?",
+        correctAnswer: 16,
+        unit: "%",
+        explanation: "En divisant 9,8 millions par 61,4 millions, on obtient environ 16% de la population."
+      }
+    ]
   }
 ];
 

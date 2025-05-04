@@ -16,15 +16,16 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
   // Function to get the icon component based on icon name
   const getIconComponent = (iconName: string | undefined) => {
     if (!iconName) return null;
-    const Icon = (LucideIcons as Record<string, React.ElementType>)[iconName];
-    return Icon ? <Icon className="h-5 w-5 text-white" /> : null;
+    // Type assertion to ensure compatibility
+    const IconComponent = (LucideIcons as any)[iconName];
+    return IconComponent ? <IconComponent className="h-5 w-5 text-white" /> : null;
   };
 
   return (
     <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un thème</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {themes.map((theme) => (
           <Card 
             key={theme.id}

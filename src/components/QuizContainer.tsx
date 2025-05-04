@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
+import { Random } from "lucide-react";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -59,18 +60,21 @@ const QuizContainer: React.FC = () => {
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
     // Automatically start quiz when type is selected
-    setActiveTab("toutes");
+    setActiveTab("questions");
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < filteredQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setQuestionsCompleted(prev => prev + 1);
-    } else {
-      toast.success("Vous avez terminé toutes les questions !");
+    // Get a random question index different from the current one
+    if (filteredQuestions.length > 1) {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * filteredQuestions.length);
+      } while (newIndex === currentQuestionIndex);
+      setCurrentQuestionIndex(newIndex);
+    } else if (filteredQuestions.length === 1) {
       setCurrentQuestionIndex(0);
-      setQuestionsCompleted(prev => prev + 1);
     }
+    setQuestionsCompleted(prev => prev + 1);
   };
   
   const handleScore = (score: QuizScore) => {
@@ -129,8 +133,9 @@ const QuizContainer: React.FC = () => {
             <TabsTrigger value="setup">
               Configuration
             </TabsTrigger>
-            <TabsTrigger value="toutes" disabled={filteredQuestions.length === 0}>
-              Questions 
+            <TabsTrigger value="questions" disabled={filteredQuestions.length === 0} className="flex items-center gap-2">
+              <Random size={16} />
+              Question aléatoire
               <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
             </TabsTrigger>
           </TabsList>
@@ -157,7 +162,7 @@ const QuizContainer: React.FC = () => {
             </div>
           </TabsContent>
           
-          <TabsContent value="toutes" className="mt-8">
+          <TabsContent value="questions" className="mt-8">
             {filteredQuestions.length > 0 ? (
               <div className="space-y-4">
                 {isMultiStep ? (
@@ -175,7 +180,7 @@ const QuizContainer: React.FC = () => {
                 )}
                 
                 <div className="flex items-center justify-between text-sm text-muted-foreground px-2">
-                  <p>{currentQuestionIndex + 1}/{filteredQuestions.length}</p>
+                  <p>Question {questionsCompleted + 1}</p>
                   
                   {isMultiStep && (
                     <Badge variant="outline" className="bg-primary/10">
