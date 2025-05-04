@@ -7,6 +7,7 @@ import AccuracyGauge from "./AccuracyGauge";
 import { toast } from "sonner";
 import { Question, QuizScore } from "./types";
 import { themes } from "@/data/questions";
+import { EyeIcon } from "lucide-react";
 
 interface QuizQuestionProps {
   question: Question;
@@ -22,9 +23,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [answer, setAnswer] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // Find theme color
-  const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
+  const theme = themes.find(t => t.id === question.theme);
+  const themeColor = theme?.color || "from-primary to-primary/70";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,14 +62,21 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     setAnswer("");
     setSubmitted(false);
     setUserAnswer(0);
+    setShowAnswer(false);
     if (onNext) onNext();
+  };
+
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
   };
 
   return (
     <Card className="w-full max-w-md mx-auto border-[1px] border-secondary/50 shadow-sm">
-      <CardHeader className={`text-white bg-gradient-to-r ${themeColor}`}>
-        <CardTitle className="text-xl">{question.question}</CardTitle>
-        <CardDescription className="text-white/90">
+      <CardHeader className="border-b border-border/50">
+        <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
+          {question.question}
+        </CardTitle>
+        <CardDescription>
           {question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}
         </CardDescription>
       </CardHeader>
@@ -89,16 +99,39 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           </form>
         ) : (
           <div className="space-y-4">
-            <AccuracyGauge 
-              userAnswer={userAnswer} 
-              correctAnswer={question.correctAnswer} 
-              answerSubmitted={submitted} 
-            />
-            
-            {question.explanation && (
-              <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
-                <p className="font-medium">Explication:</p>
-                <p>{question.explanation}</p>
+            {!showAnswer ? (
+              <div className="space-y-4">
+                <AccuracyGauge 
+                  userAnswer={userAnswer} 
+                  correctAnswer={question.correctAnswer} 
+                  answerSubmitted={submitted}
+                  hideCorrectValue={true}
+                />
+                <div className="flex justify-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={handleShowAnswer} 
+                    className="flex items-center gap-2"
+                  >
+                    <EyeIcon size={16} />
+                    Voir la réponse
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <AccuracyGauge 
+                  userAnswer={userAnswer} 
+                  correctAnswer={question.correctAnswer} 
+                  answerSubmitted={submitted} 
+                />
+                
+                {question.explanation && (
+                  <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
+                    <p className="font-medium">Explication:</p>
+                    <p>{question.explanation}</p>
+                  </div>
+                )}
               </div>
             )}
             

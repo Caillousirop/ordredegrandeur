@@ -8,7 +8,7 @@ import { MultiStepQuestion, Step, QuizScore } from "./types";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { themes } from "@/data/questions";
-import { CircleCheck, ArrowDown, ArrowUp } from "lucide-react";
+import { CircleCheck, ArrowDown, ArrowUp, EyeIcon } from "lucide-react";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -30,9 +30,11 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const [activeSteps, setActiveSteps] = useState<number[]>([]);
   const [expandedStep, setExpandedStep] = useState<number | null>(0);
   const [skippedSteps, setSkippedSteps] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   
-  // Find theme color
-  const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
+  // Find theme
+  const theme = themes.find(t => t.id === question.theme);
+  const themeColor = theme?.color || "from-primary to-primary/70";
 
   useEffect(() => {
     // By default, only make the first step active
@@ -178,18 +180,22 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     
     setExpandedStep(expandedStep === stepIndex ? null : stepIndex);
   };
+  
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+  };
 
   const allStepsCompleted = submitted.every(step => step === true);
 
   return (
     <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
-      <CardHeader className={`bg-gradient-to-r ${themeColor} text-white border-b border-border/50`}>
+      <CardHeader className="border-b border-border/50">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-xl md:text-2xl font-bold">
+            <CardTitle className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
               {question.question}
             </CardTitle>
-            <CardDescription className="mt-2 text-white/90">
+            <CardDescription className="mt-2">
               Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
             </CardDescription>
           </div>
@@ -229,18 +235,41 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             </form>
           ) : (
             <div className="space-y-4">
-              <AccuracyGauge 
-                userAnswer={parseFloat(directFinalAnswer)} 
-                correctAnswer={question.steps[question.steps.length - 1].correctAnswer} 
-                answerSubmitted={finalSubmitted} 
-              />
-              
-              {finalAccuracy >= 80 && (
-                <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
-                  <p className="font-medium flex items-center gap-2">
-                    <CircleCheck className="h-5 w-5 text-green-500" />
-                    Bravo pour cette excellente réponse directe !
-                  </p>
+              {!showAnswer ? (
+                <div className="space-y-4">
+                  <AccuracyGauge 
+                    userAnswer={parseFloat(directFinalAnswer)} 
+                    correctAnswer={question.steps[question.steps.length - 1].correctAnswer} 
+                    answerSubmitted={finalSubmitted}
+                    hideCorrectValue={true}
+                  />
+                  <div className="flex justify-center">
+                    <Button 
+                      variant="outline" 
+                      onClick={handleShowAnswer} 
+                      className="flex items-center gap-2"
+                    >
+                      <EyeIcon size={16} />
+                      Voir la réponse
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <AccuracyGauge 
+                    userAnswer={parseFloat(directFinalAnswer)} 
+                    correctAnswer={question.steps[question.steps.length - 1].correctAnswer} 
+                    answerSubmitted={finalSubmitted} 
+                  />
+                  
+                  {finalAccuracy >= 80 && (
+                    <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
+                      <p className="font-medium flex items-center gap-2">
+                        <CircleCheck className="h-5 w-5 text-green-500" />
+                        Bravo pour cette excellente réponse directe !
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -318,7 +347,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         </div>
 
         {/* Final explanation or next question button */}
-        {(allStepsCompleted || finalSubmitted) && (
+        {(allStepsCompleted || (finalSubmitted && showAnswer)) && (
           <div className="p-4 mt-4 border-2 border-primary/20 rounded-md">
             {question.finalExplanation && (
               <div className="mt-2 text-sm mb-4">

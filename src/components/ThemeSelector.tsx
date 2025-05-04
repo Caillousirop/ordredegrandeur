@@ -5,6 +5,7 @@ import { QuizTheme } from "./types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
+import * as LucideIcons from "lucide-react";
 
 interface ThemeSelectorProps {
   onSelectTheme: (theme: QuizTheme) => void;
@@ -12,11 +13,18 @@ interface ThemeSelectorProps {
 }
 
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTheme }) => {
+  // Function to get the icon component based on icon name
+  const getIconComponent = (iconName: string | undefined) => {
+    if (!iconName) return null;
+    const Icon = (LucideIcons as Record<string, React.ElementType>)[iconName];
+    return Icon ? <Icon className="h-5 w-5 text-white" /> : null;
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un thème</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {themes.map((theme) => (
           <Card 
             key={theme.id}
@@ -29,7 +37,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
             onClick={() => onSelectTheme(theme)}
           >
             <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4")}>
-              <CardTitle className="text-white">{theme.name}</CardTitle>
+              <div className="flex items-center gap-2">
+                {theme.icon && getIconComponent(theme.icon)}
+                <CardTitle className="text-white">{theme.name}</CardTitle>
+              </div>
             </CardHeader>
             <CardContent className="p-4">
               <p className="text-sm text-muted-foreground">{theme.description}</p>

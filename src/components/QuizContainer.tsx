@@ -12,14 +12,12 @@ import { toast } from "sonner";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
-import { Progress } from "./ui/progress";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
   const [activeTab, setActiveTab] = useState("setup");
   const [scores, setScores] = useState<QuizScore[]>([]);
-  const [totalScore, setTotalScore] = useState(0);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
   const [selectedTheme, setSelectedTheme] = useState<QuizTheme | null>(null);
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
@@ -105,17 +103,6 @@ const QuizContainer: React.FC = () => {
       toast.error("Essayez encore ! 📚");
     }
   };
-  
-  // Calculate total score whenever scores change
-  useEffect(() => {
-    if (scores.length === 0) {
-      setTotalScore(0);
-      return;
-    }
-    
-    const total = scores.reduce((sum, score) => sum + score.accuracy, 0);
-    setTotalScore(Math.round(total / scores.length));
-  }, [scores]);
 
   const currentQuestion = filteredQuestions[currentQuestionIndex];
   const isMultiStep = currentQuestion?.type === "multistep";
@@ -138,16 +125,13 @@ const QuizContainer: React.FC = () => {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="setup">
               Configuration
             </TabsTrigger>
             <TabsTrigger value="toutes" disabled={filteredQuestions.length === 0}>
               Questions 
               <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="stats" disabled={scores.length === 0}>
-              Statistiques
             </TabsTrigger>
           </TabsList>
 
@@ -206,75 +190,13 @@ const QuizContainer: React.FC = () => {
               </div>
             )}
           </TabsContent>
-          
-          <TabsContent value="stats" className="mt-6">
-            <Card className="w-full border-2 border-secondary/50">
-              <CardHeader>
-                <CardTitle className="text-xl text-primary">Vos statistiques</CardTitle>
-                <CardDescription>
-                  Suivez votre progression et vos performances
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Score moyen</span>
-                    <span className="font-medium">{totalScore}%</span>
-                  </div>
-                  <Progress value={totalScore} className="h-2" />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <Card className="border border-border/50 bg-card/50">
-                    <CardHeader className="py-3 px-4">
-                      <CardTitle className="text-sm">Questions complétées</CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-3 px-4">
-                      <p className="text-2xl font-bold">{questionsCompleted}</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="border border-border/50 bg-card/50">
-                    <CardHeader className="py-3 px-4">
-                      <CardTitle className="text-sm">Réponses directes réussies</CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-3 px-4">
-                      <p className="text-2xl font-bold">
-                        {scores.filter(s => s.directFinalAnswer && s.accuracy > 70).length}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                {scores.length > 0 && (
-                  <div className="space-y-2 pt-2">
-                    <h3 className="text-sm font-medium mb-2">Vos 5 dernières réponses</h3>
-                    <div className="space-y-2">
-                      {scores.slice(-5).reverse().map((score, index) => (
-                        <div key={index} className="flex justify-between items-center px-2 py-1 bg-accent/20 rounded-md">
-                          <div className="flex items-center gap-2">
-                            {score.accuracy >= 70 ? (
-                              <Badge variant="default" className="bg-green-500">✓</Badge>
-                            ) : (
-                              <Badge variant="outline" className="bg-orange-500/10">×</Badge>
-                            )}
-                            <span className="text-sm truncate">
-                              Question #{score.questionId} 
-                              {score.isMultiStep && score.directFinalAnswer && (
-                                <Badge variant="secondary" className="ml-2 text-xs">Direct</Badge>
-                              )}
-                            </span>
-                          </div>
-                          <span className="font-medium">{Math.round(score.accuracy)}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
+      </div>
+      
+      <div className="mt-4 border-t pt-4">
+        <p className="text-xs text-center text-muted-foreground">
+          Source des données : INSEE et autres organismes officiels. Pour une analyse détaillée ou des données plus récentes, consultez <a href="https://www.insee.fr" target="_blank" rel="noopener noreferrer" className="underline text-primary">insee.fr</a>
+        </p>
       </div>
     </div>
   );
