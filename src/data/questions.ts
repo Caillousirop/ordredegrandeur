@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion, QuizTheme } from "@/components/types";
 
 export const questions: (Question | MultiStepQuestion)[] = [
@@ -47,57 +46,76 @@ export const questions: (Question | MultiStepQuestion)[] = [
     type: "simple",
     theme: "environnement"
   },
+  
   {
     id: "6",
     type: "multistep",
-    question: "Combien de femmes de plus de 50 ans ont un diplôme Bac+5 en France ?",
-    finalExplanation: "D'après les statistiques de l'INSEE, environ 420 000 femmes de plus de 50 ans possèdent un diplôme de niveau Bac+5 ou plus en France.",
-    theme: "démographie",
+    question: "Combien de bouteilles d'eau sont consommées en France par an par les touristes sur la Côte d'Azur ?",
+    finalExplanation: "Cette estimation de 96 millions de bouteilles d'eau consommées par les touristes sur la Côte d'Azur est une approximation basée sur les flux touristiques, la durée moyenne de séjour et les habitudes de consommation. Les chiffres réels peuvent varier en fonction des saisons, des conditions météorologiques et des changements dans les habitudes de consommation.",
+    theme: "environnement",
     steps: [
       {
-        question: "Combien y a-t-il de femmes de plus de 50 ans en France ?",
-        correctAnswer: 13.2,
+        question: "Combien de touristes visitent la Côte d'Azur chaque année ?",
+        correctAnswer: 10,
         unit: "millions",
-        explanation: "En France, il y a environ 13,2 millions de femmes âgées de plus de 50 ans selon les dernières données démographiques."
+        explanation: "Environ 10 millions de touristes visitent la Côte d'Azur annuellement selon les données du Comité Régional du Tourisme."
       },
       {
-        question: "Quel pourcentage de la population française possède un diplôme Bac+5 ?",
-        correctAnswer: 10.5,
-        unit: "%",
-        explanation: "Environ 10,5% de la population française détient un diplôme de niveau Bac+5 ou plus."
+        question: "Quelle est la durée moyenne de séjour d'un touriste sur la Côte d'Azur ?",
+        correctAnswer: 5.5,
+        unit: "jours",
+        explanation: "La durée moyenne de séjour d'un touriste sur la Côte d'Azur est d'environ 5,5 jours d'après les statistiques touristiques régionales."
       },
       {
-        question: "Parmi les femmes de plus de 50 ans, combien possèdent un diplôme Bac+5 ?",
-        correctAnswer: 420000,
-        unit: "personnes",
-        explanation: "Le croisement des données démographiques et éducatives montre qu'environ 420 000 femmes de plus de 50 ans ont un diplôme Bac+5."
+        question: "Combien de bouteilles d'eau un touriste consomme-t-il en moyenne par jour en période estivale ?",
+        correctAnswer: 1.75,
+        unit: "bouteilles",
+        explanation: "En période estivale, sous le climat méditerranéen, un touriste consomme en moyenne 1,75 bouteilles d'eau par jour."
+      },
+      {
+        question: "Combien de bouteilles d'eau sont consommées par les touristes sur la Côte d'Azur par an ?",
+        correctAnswer: 96,
+        unit: "millions",
+        explanation: "En multipliant le nombre de touristes (10 millions) par la durée moyenne de séjour (5,5 jours) et par la consommation quotidienne (1,75 bouteilles), on obtient environ 96 millions de bouteilles."
       }
     ]
   },
   {
     id: "7",
     type: "multistep",
-    question: "Combien de voitures électriques circulent dans les villes de plus de 100 000 habitants en France ?",
-    finalExplanation: "En croisant les données d'immatriculation et d'urbanisme, on estime qu'environ 210 000 voitures électriques circulent dans les grandes villes françaises de plus de 100 000 habitants.",
-    theme: "environnement",
+    question: "Combien d'heures sont passées sur les réseaux sociaux chaque année par les lycéens français de la région Île-de-France ?",
+    finalExplanation: "Cette estimation de 511 millions d'heures passées sur les réseaux sociaux par les lycéens d'Île-de-France chaque année est une approximation basée sur la population lycéenne, le taux d'utilisation des réseaux sociaux et le temps moyen passé quotidiennement. Les chiffres réels peuvent varier en fonction des évolutions technologiques, des tendances sociales et des politiques éducatives.",
+    theme: "technologie",
     steps: [
       {
-        question: "Combien y a-t-il de voitures électriques en France au total ?",
-        correctAnswer: 620000,
-        unit: "véhicules",
-        explanation: "La France compte environ 620 000 voitures électriques immatriculées selon les dernières statistiques."
+        question: "Combien y a-t-il de lycéens en Île-de-France ?",
+        correctAnswer: 500000,
+        unit: "lycéens",
+        explanation: "L'Île-de-France compte environ 500 000 lycéens selon les données du Rectorat et de l'INSEE."
       },
       {
-        question: "Quel pourcentage de la population française vit dans des villes de plus de 100 000 habitants ?",
-        correctAnswer: 34,
+        question: "Quel pourcentage de ces lycéens utilise régulièrement les réseaux sociaux ?",
+        correctAnswer: 93.5,
         unit: "%",
-        explanation: "Environ 34% de la population française vit dans des villes de plus de 100 000 habitants."
+        explanation: "Environ 93,5% des lycéens utilisent régulièrement les réseaux sociaux d'après les enquêtes sur les pratiques numériques des adolescents."
       },
       {
-        question: "Combien de voitures électriques circulent dans les villes de plus de 100 000 habitants ?",
-        correctAnswer: 210000,
-        unit: "véhicules",
-        explanation: "En appliquant la répartition démographique et les taux d'adoption plus élevés en zones urbaines, on estime ce nombre à 210 000 véhicules."
+        question: "Combien d'heures par jour un lycéen passe-t-il en moyenne sur les réseaux sociaux ?",
+        correctAnswer: 3,
+        unit: "heures",
+        explanation: "Un lycéen passe en moyenne 3 heures par jour sur les réseaux sociaux selon les études sur les usages numériques des adolescents."
+      },
+      {
+        question: "Combien de jours par an les lycéens utilisent-ils les réseaux sociaux ?",
+        correctAnswer: 365,
+        unit: "jours",
+        explanation: "Les lycéens utilisent les réseaux sociaux pratiquement tous les jours de l'année, soit 365 jours."
+      },
+      {
+        question: "Combien d'heures sont passées sur les réseaux sociaux chaque année par les lycéens d'Île-de-France ?",
+        correctAnswer: 511,
+        unit: "millions d'heures",
+        explanation: "En multipliant le nombre de lycéens (500 000) par le pourcentage utilisant les réseaux sociaux (93,5%) par le temps quotidien (3 heures) par le nombre de jours (365), on obtient environ 511 millions d'heures."
       }
     ]
   },
@@ -463,64 +481,160 @@ export const questions: (Question | MultiStepQuestion)[] = [
         explanation: "En divisant 9,8 millions par 61,4 millions, on obtient environ 16% de la population."
       }
     ]
-  }
-];
-
-export const themes: QuizTheme[] = [
-  { 
-    id: "démographie", 
-    name: "Démographie", 
-    description: "Questions sur la population et ses caractéristiques",
-    color: "from-blue-500 to-blue-300",
-    icon: "users"
   },
-  { 
-    id: "économie", 
-    name: "Économie", 
-    description: "Questions sur l'économie et les finances",
-    color: "from-green-500 to-green-300",
-    icon: "banknote"
+  {
+    id: "31",
+    type: "multistep",
+    question: "Combien de congés payés sont pris en moyenne par les Français de moins de 40 ans en région Bretagne ?",
+    finalExplanation: "Cette estimation de 725 000 jours de congés payés est une approximation basée sur la population bretonne de moins de 40 ans, le taux d'activité professionnelle et les habitudes de prise de congés dans cette région. Les chiffres réels peuvent varier selon les secteurs d'activité, les conventions collectives et les pratiques individuelles.",
+    theme: "emploi",
+    steps: [
+      {
+        question: "Quelle est la population totale de la Bretagne ?",
+        correctAnswer: 3.35,
+        unit: "millions",
+        explanation: "La Bretagne compte environ 3,35 millions d'habitants selon les dernières données de l'INSEE."
+      },
+      {
+        question: "Quel pourcentage de cette population a moins de 40 ans ?",
+        correctAnswer: 43,
+        unit: "%",
+        explanation: "Environ 43% de la population bretonne a moins de 40 ans selon la pyramide des âges régionale."
+      },
+      {
+        question: "Parmi cette population de moins de 40 ans, quel pourcentage est en activité professionnelle ?",
+        correctAnswer: 72,
+        unit: "%",
+        explanation: "Le taux d'activité professionnelle des moins de 40 ans en Bretagne est d'environ 72% selon les statistiques de l'emploi régional."
+      },
+      {
+        question: "Combien de jours de congés payés sont pris en moyenne par an par ces personnes ?",
+        correctAnswer: 25,
+        unit: "jours",
+        explanation: "Les actifs de moins de 40 ans en Bretagne prennent en moyenne 25 jours de congés payés par an, légèrement en-dessous de la moyenne nationale."
+      },
+      {
+        question: "Combien de jours de congés payés sont pris au total par les Bretons de moins de 40 ans ?",
+        correctAnswer: 725000,
+        unit: "jours",
+        explanation: "En multipliant la population totale (3,35 millions) par le pourcentage de moins de 40 ans (43%) par le taux d'activité (72%) par le nombre de jours de congés (25), on obtient environ 725 000 jours de congés payés."
+      }
+    ]
   },
-  { 
-    id: "environnement", 
-    name: "Environnement", 
-    description: "Questions sur l'écologie et l'environnement",
-    color: "from-emerald-500 to-emerald-300",
-    icon: "leaf"
+  {
+    id: "32",
+    type: "multistep",
+    question: "Quel est le nombre total d'heures passées dans les embouteillages chaque année par les habitants de la métropole de Lyon ?",
+    finalExplanation: "Cette estimation de 14,6 millions d'heures passées dans les embouteillages par les habitants de la métropole lyonnaise est une approximation qui se base sur la population active, le taux de déplacement en voiture et le temps moyen perdu dans les embouteillages. Les chiffres réels peuvent varier selon les saisons, les travaux routiers et les évolutions des modes de transport.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Quelle est la population de la métropole de Lyon ?",
+        correctAnswer: 1.4,
+        unit: "millions",
+        explanation: "La métropole de Lyon compte environ 1,4 millions d'habitants selon les dernières données de l'INSEE."
+      },
+      {
+        question: "Quel pourcentage de cette population utilise la voiture comme moyen de transport principal ?",
+        correctAnswer: 42,
+        unit: "%",
+        explanation: "Environ 42% des habitants de la métropole lyonnaise utilisent la voiture comme moyen de transport principal d'après les enquêtes sur les déplacements urbains."
+      },
+      {
+        question: "Combien de déplacements en voiture effectue en moyenne un conducteur par jour ouvré ?",
+        correctAnswer: 2.3,
+        unit: "déplacements",
+        explanation: "En moyenne, un conducteur lyonnais effectue 2,3 déplacements en voiture par jour ouvré selon les études de mobilité urbaine."
+      },
+      {
+        question: "Combien de minutes sont perdues en moyenne dans les embouteillages par déplacement ?",
+        correctAnswer: 18,
+        unit: "minutes",
+        explanation: "Un conducteur perd en moyenne 18 minutes par déplacement dans les embouteillages à Lyon selon les données de congestion routière."
+      },
+      {
+        question: "Combien de jours ouvrés compte une année ?",
+        correctAnswer: 220,
+        unit: "jours",
+        explanation: "Une année compte environ 220 jours ouvrés en France, déduction faite des week-ends et jours fériés."
+      },
+      {
+        question: "Combien d'heures sont passées dans les embouteillages chaque année par les habitants de la métropole de Lyon ?",
+        correctAnswer: 14.6,
+        unit: "millions d'heures",
+        explanation: "En multipliant la population (1,4 millions) par le pourcentage utilisant la voiture (42%) par le nombre de déplacements quotidiens (2,3) par le temps perdu (18 minutes) par le nombre de jours ouvrés (220), puis en convertissant en heures, on obtient environ 14,6 millions d'heures."
+      }
+    ]
   },
-  { 
-    id: "santé", 
-    name: "Santé", 
-    description: "Questions sur la santé et les soins médicaux",
-    color: "from-red-500 to-red-300",
-    icon: "heart-pulse"
+  {
+    id: "33",
+    type: "multistep",
+    question: "Combien de yaourts sont consommés annuellement par les enfants de moins de 12 ans dans les écoles primaires des zones rurales françaises ?",
+    finalExplanation: "Cette estimation de 98 millions de yaourts consommés par les enfants en milieu scolaire rural est une approximation basée sur la population scolaire rurale, les habitudes alimentaires et le calendrier scolaire. Les chiffres réels peuvent varier selon les politiques alimentaires locales, les préférences des enfants et les approvisionnements des cantines.",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il d'élèves en école primaire en France ?",
+        correctAnswer: 6.7,
+        unit: "millions",
+        explanation: "La France compte environ 6,7 millions d'élèves en école primaire selon les données du Ministère de l'Éducation Nationale."
+      },
+      {
+        question: "Quel pourcentage de ces élèves étudient dans des zones rurales ?",
+        correctAnswer: 17.5,
+        unit: "%",
+        explanation: "Environ 17,5% des élèves du primaire sont scolarisés dans des zones rurales d'après les statistiques de l'Éducation Nationale."
+      },
+      {
+        question: "Quel pourcentage de ces élèves mangent à la cantine ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "En zone rurale, environ 85% des élèves du primaire mangent à la cantine scolaire selon les enquêtes sur la restauration scolaire."
+      },
+      {
+        question: "Combien de jours d'école y a-t-il par an en France ?",
+        correctAnswer: 144,
+        unit: "jours",
+        explanation: "Une année scolaire en France compte environ 144 jours de classe avec restauration scolaire."
+      },
+      {
+        question: "Combien de fois par semaine en moyenne un yaourt est-il servi à la cantine ?",
+        correctAnswer: 3,
+        unit: "jours",
+        explanation: "Dans les cantines scolaires rurales, un yaourt est servi en moyenne 3 jours par semaine selon les plans alimentaires types."
+      },
+      {
+        question: "Combien de yaourts sont consommés annuellement par les enfants dans les écoles primaires rurales ?",
+        correctAnswer: 98,
+        unit: "millions",
+        explanation: "En multipliant le nombre d'élèves (6,7 millions) par le pourcentage en zone rurale (17,5%) par le taux de fréquentation des cantines (85%) par le nombre de jours d'école (144) par le ratio de service de yaourts (3/5), on obtient environ 98 millions de yaourts."
+      }
+    ]
   },
-  { 
-    id: "éducation", 
-    name: "Éducation", 
-    description: "Questions sur l'enseignement et l'apprentissage",
-    color: "from-amber-500 to-amber-300",
-    icon: "graduation-cap"
-  },
-  { 
-    id: "transport", 
-    name: "Transport", 
-    description: "Questions sur la mobilité et les transports",
-    color: "from-sky-500 to-sky-300",
-    icon: "train-front"
-  },
-  { 
-    id: "technologie", 
-    name: "Technologie", 
-    description: "Questions sur le numérique et l'innovation",
-    color: "from-indigo-500 to-indigo-300",
-    icon: "cpu"
-  },
-  { 
-    id: "emploi", 
-    name: "Emploi", 
-    description: "Questions sur le travail et les carrières",
-    color: "from-purple-500 to-purple-300",
-    icon: "briefcase"
-  }
-];
+  {
+    id: "34",
+    type: "multistep",
+    question: "Quel est le nombre de fenêtres lavées professionnellement chaque année dans les immeubles de bureaux de plus de 10 étages en France ?",
+    finalExplanation: "Cette estimation de 11,5 millions de fenêtres lavées professionnellement dans les grands immeubles de bureaux en France est une approximation basée sur le nombre de ces immeubles, leur architecture moyenne et la fréquence d'entretien. Les chiffres réels peuvent varier selon les politiques d'entretien, les contraintes budgétaires et les spécificités architecturales.",
+    theme: "économie",
+    steps: [
+      {
+        question: "Combien d'immeubles de bureaux de plus de 10 étages existe-t-il en France ?",
+        correctAnswer: 1250,
+        unit: "immeubles",
+        explanation: "On estime qu'il existe environ 1 250 immeubles de bureaux de plus de 10 étages en France, principalement concentrés dans les grandes métropoles."
+      },
+      {
+        question: "Combien d'étages compte en moyenne un de ces immeubles ?",
+        correctAnswer: 16.5,
+        unit: "étages",
+        explanation: "Ces grands immeubles de bureaux comptent en moyenne 16,5 étages selon les données d'urbanisme commercial."
+      },
+      {
+        question: "Combien de fenêtres y a-t-il en moyenne par étage ?",
+        correctAnswer: 35,
+        unit: "fenêtres",
+        explanation: "Un étage standard d'immeuble de bureaux moderne comprend en moyenne 35 fenêtres selon les normes architecturales contemporaines."
+      },
+      {
+        question: "Combien de fois par an les fenêtres sont-elles lavées professionnellement ?",
