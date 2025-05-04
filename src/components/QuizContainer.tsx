@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
-import { ArrowRight, Question as QuestionIcon } from "lucide-react";
+import { ArrowRight, HelpCircle } from "lucide-react";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -134,7 +134,7 @@ const QuizContainer: React.FC = () => {
               Configuration
             </TabsTrigger>
             <TabsTrigger value="questions" disabled={filteredQuestions.length === 0} className="flex items-center gap-2">
-              <QuestionIcon size={16} />
+              <HelpCircle size={16} />
               Question aléatoire
               <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
             </TabsTrigger>
