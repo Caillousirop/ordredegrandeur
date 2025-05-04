@@ -8,20 +8,18 @@ import { MultiStepQuestion, Step, QuizScore } from "./types";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { themes } from "@/data/questions";
-import { CircleCheck, ArrowDown, ArrowUp, Eye } from "lucide-react";
+import { CircleCheck, ArrowDown, ArrowUp } from "lucide-react";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
   onNext?: () => void;
   onScore?: (score: QuizScore) => void;
-  language: 'fr' | 'en';
 }
 
 const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({ 
   question, 
   onNext,
-  onScore,
-  language = 'fr'
+  onScore 
 }) => {
   const [answers, setAnswers] = useState<(number | null)[]>(Array(question.steps.length).fill(null));
   const [submitted, setSubmitted] = useState<boolean[]>(Array(question.steps.length).fill(false));
@@ -32,8 +30,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const [activeSteps, setActiveSteps] = useState<number[]>([]);
   const [expandedStep, setExpandedStep] = useState<number | null>(0);
   const [skippedSteps, setSkippedSteps] = useState(false);
-  const [showStepAnswers, setShowStepAnswers] = useState<boolean[]>(Array(question.steps.length).fill(false));
-  const [showFinalAnswer, setShowFinalAnswer] = useState(false);
   
   // Find theme color
   const themeColor = themes.find(t => t.id === question.theme)?.color || "from-primary to-primary/70";
@@ -42,7 +38,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     // By default, only make the first step active
     setActiveSteps([0]);
     setExpandedStep(0);
-    setShowStepAnswers(Array(question.steps.length).fill(false));
   }, [question.steps.length]);
 
   const handleDirectFinalToggle = () => {
@@ -56,7 +51,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     e.preventDefault();
     
     if (answers[stepIndex] === null) {
-      toast.error(language === 'fr' ? "Veuillez entrer une réponse valide" : "Please enter a valid answer");
+      toast.error("Veuillez entrer une réponse valide");
       return;
     }
 
@@ -95,7 +90,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     const numAnswer = parseFloat(directFinalAnswer);
     
     if (isNaN(numAnswer)) {
-      toast.error(language === 'fr' ? "Veuillez entrer un nombre valide" : "Please enter a valid answer");
+      toast.error("Veuillez entrer un nombre valide");
       return;
     }
     
@@ -108,7 +103,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     
     // Show congratulations message for direct final answers that are accurate
     if (accuracy >= 80) {
-      toast.success(language === 'fr' ? "🎉 Bravo ! Excellente réponse directe !" : "🎉 Wow! Excellent direct answer!", {
+      toast.success("🎉 Bravo ! Excellente réponse directe !", {
         duration: 5000,
       });
     }
@@ -147,10 +142,10 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
       } else if (relativeDifference < 1) {
         calculatedAccuracy = 70;
       } else {
-        calculatedAccuracy = 65;
+        calculatedAccuracy = 60;
       }
     } else if (orderOfMagnitudeDifference === 1) {
-      calculatedAccuracy = 45;
+      calculatedAccuracy = 40;
     } else {
       calculatedAccuracy = Math.max(0, 30 - (orderOfMagnitudeDifference - 1) * 10);
     }
@@ -184,53 +179,36 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     setExpandedStep(expandedStep === stepIndex ? null : stepIndex);
   };
 
-  const toggleShowStepAnswer = (stepIndex: number) => {
-    const newShowStepAnswers = [...showStepAnswers];
-    newShowStepAnswers[stepIndex] = !newShowStepAnswers[stepIndex];
-    setShowStepAnswers(newShowStepAnswers);
-  };
-
-  const toggleShowFinalAnswer = () => {
-    setShowFinalAnswer(!showFinalAnswer);
-  };
-
   const allStepsCompleted = submitted.every(step => step === true);
 
   return (
     <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
-      <CardHeader className="border-b border-border/50 bg-transparent">
+      <CardHeader className={`bg-gradient-to-r ${themeColor} text-white border-b border-border/50`}>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className={`text-xl md:text-2xl font-bold bg-gradient-to-r ${themeColor} bg-clip-text text-transparent`}>
-              {language === 'fr' ? question.question : question.questionEn || question.question}
+            <CardTitle className="text-xl md:text-2xl font-bold">
+              {question.question}
             </CardTitle>
-            <CardDescription className="mt-2 text-muted-foreground">
-              {language === 'fr' 
-                ? "Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement" 
-                : "Multi-step question - Solve each step or try to answer directly"}
+            <CardDescription className="mt-2 text-white/90">
+              Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
             </CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6 space-y-6">
+      <CardContent className="pt-6 space-y-6 bg-transparent">
         <div className="flex justify-end">
           <Button
             onClick={handleDirectFinalToggle}
             variant={directFinalMode ? "secondary" : "outline"}
             size="sm"
           >
-            {directFinalMode 
-              ? (language === 'fr' ? "Résoudre par étapes" : "Solve step by step") 
-              : (language === 'fr' ? "Réponse directe" : "Direct answer")}
+            {directFinalMode ? "Résoudre par étapes" : "Réponse directe"}
           </Button>
         </div>
 
         {/* Direct Answer Section - Always shown first */}
         <div className="space-y-4 p-4 rounded-lg border border-border/40">
-          <h3 className="font-medium">
-            {language === 'fr' ? "Réponse directe" : "Direct answer"} 
-            <Badge variant="secondary" className="ml-1">+50% {language === 'fr' ? "points" : "points"}</Badge>
-          </h3>
+          <h3 className="font-medium">Réponse directe <Badge variant="secondary" className="ml-1">+50% points</Badge></h3>
           {!finalSubmitted ? (
             <form onSubmit={handleDirectFinalSubmit} className="space-y-4">
               <div className="flex items-center gap-2">
@@ -238,7 +216,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                   type="text"
                   value={directFinalAnswer}
                   onChange={(e) => setDirectFinalAnswer(e.target.value)}
-                  placeholder={language === 'fr' ? "Votre réponse finale" : "Your final answer"}
+                  placeholder="Votre réponse finale"
                   className="flex-grow"
                 />
                 {question.steps[question.steps.length - 1].unit && (
@@ -247,27 +225,21 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                   </span>
                 )}
               </div>
-              <Button type="submit" className="w-full">
-                {language === 'fr' ? "Valider" : "Submit"}
-              </Button>
+              <Button type="submit" className="w-full">Valider</Button>
             </form>
           ) : (
             <div className="space-y-4">
               <AccuracyGauge 
                 userAnswer={parseFloat(directFinalAnswer)} 
                 correctAnswer={question.steps[question.steps.length - 1].correctAnswer} 
-                answerSubmitted={finalSubmitted}
-                showAnswer={showFinalAnswer}
-                onToggleShowAnswer={toggleShowFinalAnswer}
+                answerSubmitted={finalSubmitted} 
               />
               
               {finalAccuracy >= 80 && (
                 <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
                   <p className="font-medium flex items-center gap-2">
                     <CircleCheck className="h-5 w-5 text-green-500" />
-                    {language === 'fr' 
-                      ? "Bravo pour cette excellente réponse directe !" 
-                      : "Great job on this excellent direct answer!"}
+                    Bravo pour cette excellente réponse directe !
                   </p>
                 </div>
               )}
@@ -276,8 +248,8 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         </div>
 
         {/* Step-by-Step Section */}
-        <div className="space-y-6">
-          <h3 className="font-medium">{language === 'fr' ? "Résoudre par étapes" : "Solve step by step"}</h3>
+        <div className="space-y-6 mt-8">
+          <h3 className="font-medium">Résoudre par étapes</h3>
           <div className="grid grid-cols-1 gap-6">
             {question.steps.map((step, index) => (
               <div 
@@ -295,9 +267,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                     >
                       {index + 1}
                     </Badge>
-                    {language === 'fr' 
-                      ? `Étape ${index + 1}: ${step.question}` 
-                      : `Step ${index + 1}: ${step.questionEn || step.question}`}
+                    Étape {index + 1}: {step.question}
                   </h3>
                   <button className="text-muted-foreground">
                     {expandedStep === index ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
@@ -313,7 +283,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                             type="text"
                             value={answers[index]?.toString() || ""}
                             onChange={(e) => handleInputChange(index, e.target.value)}
-                            placeholder={language === 'fr' ? "Votre réponse" : "Your answer"}
+                            placeholder="Votre réponse"
                             className="flex-grow"
                           />
                           {step.unit && (
@@ -322,24 +292,20 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                             </span>
                           )}
                         </div>
-                        <Button type="submit" className="w-full">
-                          {language === 'fr' ? "Valider" : "Submit"}
-                        </Button>
+                        <Button type="submit" className="w-full">Valider</Button>
                       </form>
                     ) : (
                       <div className="space-y-4">
                         <AccuracyGauge 
                           userAnswer={answers[index]!} 
                           correctAnswer={step.correctAnswer} 
-                          answerSubmitted={true}
-                          showAnswer={showStepAnswers[index]}
-                          onToggleShowAnswer={() => toggleShowStepAnswer(index)}
+                          answerSubmitted={true} 
                         />
                         
-                        {showStepAnswers[index] && step.explanation && (
+                        {step.explanation && (
                           <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
-                            <p className="font-medium">{language === 'fr' ? "Explication:" : "Explanation:"}</p>
-                            <p>{language === 'fr' ? step.explanation : step.explanationEn || step.explanation}</p>
+                            <p className="font-medium">Explication:</p>
+                            <p>{step.explanation}</p>
                           </div>
                         )}
                       </div>
@@ -354,17 +320,17 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         {/* Final explanation or next question button */}
         {(allStepsCompleted || finalSubmitted) && (
           <div className="p-4 mt-4 border-2 border-primary/20 rounded-md">
-            {(showFinalAnswer || showStepAnswers.some(show => show)) && question.finalExplanation && (
+            {question.finalExplanation && (
               <div className="mt-2 text-sm mb-4">
-                <p className="font-medium">{language === 'fr' ? "Explication finale:" : "Final explanation:"}</p>
-                <p>{language === 'fr' ? question.finalExplanation : question.finalExplanationEn || question.finalExplanation}</p>
+                <p className="font-medium">Explication finale:</p>
+                <p>{question.finalExplanation}</p>
               </div>
             )}
             <Button 
               onClick={handleNextQuestion} 
               className="w-full mt-2 bg-gradient-to-r from-primary to-primary/80"
             >
-              {language === 'fr' ? "Question suivante" : "Next question"}
+              Question suivante
             </Button>
           </div>
         )}

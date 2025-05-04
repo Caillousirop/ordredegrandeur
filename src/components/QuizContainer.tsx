@@ -13,7 +13,6 @@ import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const QuizContainer: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -25,7 +24,6 @@ const QuizContainer: React.FC = () => {
   const [selectedTheme, setSelectedTheme] = useState<QuizTheme | null>(null);
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [language, setLanguage] = useState<'fr' | 'en'>('fr');
 
   // Filter questions based on theme, type, and search query
   useEffect(() => {
@@ -44,14 +42,13 @@ const QuizContainer: React.FC = () => {
     // Apply search filter if there's a query
     if (searchQuery) {
       filtered = filtered.filter(q => 
-        q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (language === 'en' && 'questionEn' in q && q.questionEn?.toLowerCase().includes(searchQuery.toLowerCase()))
+        q.question.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, searchQuery, language]);
+  }, [selectedTheme, selectedType, searchQuery]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -59,12 +56,12 @@ const QuizContainer: React.FC = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
-    // Automatically show question type selector
-    setActiveTab("toutes");
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
+    // Automatically start quiz when type is selected
+    setActiveTab("toutes");
   };
 
   const handleNext = () => {
@@ -72,12 +69,7 @@ const QuizContainer: React.FC = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setQuestionsCompleted(prev => prev + 1);
     } else {
-      toast.success(
-        language === 'fr' 
-          ? "Vous avez terminé toutes les questions !" 
-          : "You've completed all the questions!", 
-        { duration: 3000 }
-      );
+      toast.success("Vous avez terminé toutes les questions !");
       setCurrentQuestionIndex(0);
       setQuestionsCompleted(prev => prev + 1);
     }
@@ -102,15 +94,15 @@ const QuizContainer: React.FC = () => {
     
     // Show toast with score feedback
     if (score.accuracy >= 90) {
-      toast.success(language === 'fr' ? "Excellente réponse ! 🎯" : "Excellent answer! 🎯");
+      toast.success("Excellente réponse ! 🎯");
     } else if (score.accuracy >= 70) {
-      toast.success(language === 'fr' ? "Très bonne réponse ! 👍" : "Very good answer! 👍");
+      toast.success("Très bonne réponse ! 👍");
     } else if (score.accuracy >= 50) {
-      toast.info(language === 'fr' ? "Pas mal ! 😊" : "Not bad! 😊");
+      toast.info("Pas mal ! 😊");
     } else if (score.accuracy >= 30) {
-      toast.info(language === 'fr' ? "Vous pouvez faire mieux ! 🤔" : "You can do better! 🤔");
+      toast.info("Vous pouvez faire mieux ! 🤔");
     } else {
-      toast.error(language === 'fr' ? "Essayez encore ! 📚" : "Try again! 📚");
+      toast.error("Essayez encore ! 📚");
     }
   };
   
@@ -131,35 +123,14 @@ const QuizContainer: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
       <div className="flex flex-col items-center space-y-6">
-        <div className="flex flex-col items-center">
-          <h1 className="text-center">
-            <span className="text-3xl font-bold text-primary">
-              {language === 'fr' ? 'Ordre de ' : 'Order of '}
-            </span>
-            <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-              {language === 'fr' ? 'Gran' : 'Magni'}
-            </span>
-            <span className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">
-              {language === 'fr' ? 'deur' : 'tude'}
-            </span>
-          </h1>
-          <p className="text-center text-muted-foreground max-w-lg mx-auto mt-2">
-            {language === 'fr' 
-              ? 'Testez vos connaissances statistiques ! Répondez directement ou décomposez le problème en étapes.'
-              : 'Test your statistical knowledge! Answer directly or break down the problem into steps.'}
-          </p>
-          
-          <div className="mt-4">
-            <ToggleGroup type="single" value={language} onValueChange={(value) => value && setLanguage(value as 'fr' | 'en')}>
-              <ToggleGroupItem value="fr" aria-label="French" className="px-3">
-                🇫🇷 Français
-              </ToggleGroupItem>
-              <ToggleGroupItem value="en" aria-label="English" className="px-3">
-                🇬🇧 English
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-        </div>
+        <h1 className="text-center">
+          <span className="text-3xl font-bold text-primary">Ordre de </span>
+          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Gran</span>
+          <span className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">deur</span>
+        </h1>
+        <p className="text-center text-muted-foreground max-w-lg mx-auto">
+          Testez vos connaissances statistiques ! Répondez directement ou décomposez le problème en étapes pour gagner des points.
+        </p>
         
         <Tabs 
           defaultValue="setup" 
@@ -169,14 +140,14 @@ const QuizContainer: React.FC = () => {
         >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="setup">
-              {language === 'fr' ? 'Configuration' : 'Setup'}
+              Configuration
             </TabsTrigger>
             <TabsTrigger value="toutes" disabled={filteredQuestions.length === 0}>
-              {language === 'fr' ? 'Questions' : 'Questions'} 
+              Questions 
               <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="stats" disabled={scores.length === 0}>
-              {language === 'fr' ? 'Statistiques' : 'Statistics'}
+              Statistiques
             </TabsTrigger>
           </TabsList>
 
@@ -185,28 +156,24 @@ const QuizContainer: React.FC = () => {
               <ThemeSelector 
                 onSelectTheme={handleThemeSelect} 
                 selectedTheme={selectedTheme} 
-                language={language}
               />
               
               {selectedTheme && (
-                <div className="mt-6">
-                  <SearchBar onSearch={handleSearch} language={language} />
-                </div>
+                <>
+                  <QuestionTypeSelector 
+                    onSelectType={handleTypeSelect}
+                    selectedType={selectedType}
+                  />
+                  
+                  <div className="mt-6">
+                    <SearchBar onSearch={handleSearch} />
+                  </div>
+                </>
               )}
             </div>
           </TabsContent>
           
           <TabsContent value="toutes" className="mt-8">
-            {selectedTheme && (
-              <div className="mb-6">
-                <QuestionTypeSelector 
-                  onSelectType={handleTypeSelect}
-                  selectedType={selectedType}
-                  language={language}
-                />
-              </div>
-            )}
-            
             {filteredQuestions.length > 0 ? (
               <div className="space-y-4">
                 {isMultiStep ? (
@@ -214,14 +181,12 @@ const QuizContainer: React.FC = () => {
                     question={currentQuestion as MultiStepQuestion} 
                     onNext={handleNext} 
                     onScore={handleScore}
-                    language={language}
                   />
                 ) : (
                   <QuizQuestion 
                     question={currentQuestion as Question} 
                     onNext={handleNext} 
                     onScore={handleScore}
-                    language={language}
                   />
                 )}
                 
@@ -230,18 +195,14 @@ const QuizContainer: React.FC = () => {
                   
                   {isMultiStep && (
                     <Badge variant="outline" className="bg-primary/10">
-                      {language === 'fr' ? 'Question à étapes' : 'Multi-step question'}
+                      Question à étapes
                     </Badge>
                   )}
                 </div>
               </div>
             ) : (
               <div className="text-center p-8">
-                <p>
-                  {language === 'fr' 
-                    ? "Aucune question disponible." 
-                    : "No questions available."}
-                </p>
+                <p>Aucune question disponible.</p>
               </div>
             )}
           </TabsContent>
@@ -249,19 +210,15 @@ const QuizContainer: React.FC = () => {
           <TabsContent value="stats" className="mt-6">
             <Card className="w-full border-2 border-secondary/50">
               <CardHeader>
-                <CardTitle className="text-xl text-primary">
-                  {language === 'fr' ? 'Vos statistiques' : 'Your statistics'}
-                </CardTitle>
+                <CardTitle className="text-xl text-primary">Vos statistiques</CardTitle>
                 <CardDescription>
-                  {language === 'fr' 
-                    ? 'Suivez votre progression et vos performances'
-                    : 'Track your progress and performance'}
+                  Suivez votre progression et vos performances
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>{language === 'fr' ? 'Score moyen' : 'Average score'}</span>
+                    <span>Score moyen</span>
                     <span className="font-medium">{totalScore}%</span>
                   </div>
                   <Progress value={totalScore} className="h-2" />
@@ -270,9 +227,7 @@ const QuizContainer: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Card className="border border-border/50 bg-card/50">
                     <CardHeader className="py-3 px-4">
-                      <CardTitle className="text-sm">
-                        {language === 'fr' ? 'Questions complétées' : 'Questions completed'}
-                      </CardTitle>
+                      <CardTitle className="text-sm">Questions complétées</CardTitle>
                     </CardHeader>
                     <CardContent className="py-3 px-4">
                       <p className="text-2xl font-bold">{questionsCompleted}</p>
@@ -281,9 +236,7 @@ const QuizContainer: React.FC = () => {
                   
                   <Card className="border border-border/50 bg-card/50">
                     <CardHeader className="py-3 px-4">
-                      <CardTitle className="text-sm">
-                        {language === 'fr' ? 'Réponses directes réussies' : 'Successful direct answers'}
-                      </CardTitle>
+                      <CardTitle className="text-sm">Réponses directes réussies</CardTitle>
                     </CardHeader>
                     <CardContent className="py-3 px-4">
                       <p className="text-2xl font-bold">
@@ -295,9 +248,7 @@ const QuizContainer: React.FC = () => {
                 
                 {scores.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <h3 className="text-sm font-medium mb-2">
-                      {language === 'fr' ? 'Vos 5 dernières réponses' : 'Your last 5 answers'}
-                    </h3>
+                    <h3 className="text-sm font-medium mb-2">Vos 5 dernières réponses</h3>
                     <div className="space-y-2">
                       {scores.slice(-5).reverse().map((score, index) => (
                         <div key={index} className="flex justify-between items-center px-2 py-1 bg-accent/20 rounded-md">
@@ -308,11 +259,9 @@ const QuizContainer: React.FC = () => {
                               <Badge variant="outline" className="bg-orange-500/10">×</Badge>
                             )}
                             <span className="text-sm truncate">
-                              {language === 'fr' ? 'Question' : 'Question'} #{score.questionId} 
+                              Question #{score.questionId} 
                               {score.isMultiStep && score.directFinalAnswer && (
-                                <Badge variant="secondary" className="ml-2 text-xs">
-                                  {language === 'fr' ? 'Direct' : 'Direct'}
-                                </Badge>
+                                <Badge variant="secondary" className="ml-2 text-xs">Direct</Badge>
                               )}
                             </span>
                           </div>

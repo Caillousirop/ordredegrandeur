@@ -2,23 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 
 interface AccuracyGaugeProps {
   userAnswer: number;
   correctAnswer: number;
   answerSubmitted: boolean;
-  showAnswer?: boolean;
-  onToggleShowAnswer?: () => void;
 }
 
 const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   userAnswer,
   correctAnswer,
   answerSubmitted,
-  showAnswer = false,
-  onToggleShowAnswer,
 }) => {
   const [progress, setProgress] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
@@ -99,14 +93,6 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
     return "😢";
   };
 
-  const getFeedbackMessage = () => {
-    if (accuracy >= 90) return "Bravo ! Réponse exceptionnelle";
-    if (accuracy >= 70) return "Très bonne réponse";
-    if (accuracy >= 50) return "Bonne réponse";
-    if (accuracy >= 30) return "Pas si loin";
-    return "Vous pouvez faire mieux";
-  };
-
   return (
     <div className="w-full space-y-3">
       <div className="flex justify-between items-center">
@@ -122,32 +108,10 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
           className={cn("h-4 rounded-full transition-all", answerSubmitted ? getColor() : "")} 
         />
       </div>
-      
       {answerSubmitted && (
-        <div className="flex flex-col gap-2">
-          <p className="text-center font-medium text-sm mt-2">{getFeedbackMessage()}</p>
-          
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Votre réponse: {userAnswer}</span>
-            
-            {onToggleShowAnswer && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={onToggleShowAnswer}
-                className="flex items-center gap-1"
-              >
-                <Eye size={14} />
-                {showAnswer ? "Masquer la réponse" : "Voir la réponse"}
-              </Button>
-            )}
-          </div>
-          
-          {showAnswer && (
-            <div className="text-right font-medium text-sm">
-              Réponse correcte: {correctAnswer}
-            </div>
-          )}
+        <div className="flex justify-between text-sm pt-1">
+          <span className="text-muted-foreground">Votre réponse: {userAnswer}</span>
+          <span className="font-medium">Réponse correcte: {correctAnswer}</span>
         </div>
       )}
     </div>
