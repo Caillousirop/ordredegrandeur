@@ -8,7 +8,9 @@ import { MultiStepQuestion, Step, QuizScore } from "./types";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { themes } from "@/data/questions";
-import { CircleCheck, ArrowDown, ArrowUp, EyeIcon } from "lucide-react";
+import { CircleCheck, ArrowDown, ArrowUp, EyeIcon, Calculator } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import CalculatorComponent from "./Calculator";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -31,6 +33,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const [expandedStep, setExpandedStep] = useState<number | null>(0);
   const [skippedSteps, setSkippedSteps] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
   
   // Find theme
   const theme = themes.find(t => t.id === question.theme);
@@ -187,6 +190,34 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
 
   const allStepsCompleted = submitted.every(step => step === true);
 
+  // Function to render previous answers for reference
+  const renderPreviousAnswers = () => {
+    const completedSteps = submitted
+      .map((isSubmitted, index) => ({ isSubmitted, index }))
+      .filter(item => item.isSubmitted);
+    
+    if (completedSteps.length === 0) return null;
+    
+    return (
+      <div className="mb-4 p-3 border rounded-md bg-muted/30">
+        <h4 className="text-sm font-medium mb-2">Réponses intermédiaires:</h4>
+        <div className="space-y-2">
+          {completedSteps.map(({ index }) => {
+            const step = question.steps[index];
+            return (
+              <div key={`answer-${index}`} className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">{step.question}</span>
+                <span className="font-medium">
+                  {answers[index]} {step.unit}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
       <CardHeader className="border-b border-border/50">
@@ -199,6 +230,20 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
               Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
             </CardDescription>
           </div>
+          <Popover open={calculatorOpen} onOpenChange={setCalculatorOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-1"
+              >
+                <Calculator className="h-4 w-4" /> Calculatrice
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="p-0 w-auto">
+              <CalculatorComponent />
+            </PopoverContent>
+          </Popover>
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-6 bg-transparent">
@@ -217,6 +262,9 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
           <h3 className="font-medium">Réponse directe <Badge variant="secondary" className="ml-1">+50% points</Badge></h3>
           {!finalSubmitted ? (
             <form onSubmit={handleDirectFinalSubmit} className="space-y-4">
+              {/* Show previous answers for reference */}
+              {renderPreviousAnswers()}
+              
               <div className="flex items-center gap-2">
                 <Input
                   type="text"
@@ -282,7 +330,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             {question.steps.map((step, index) => (
               <div 
                 key={index} 
-                className={`p-4 border rounded-md ${submitted[index] ? "" : ""}`}
+                className={`p-4 border rounded-md ${submitted[index] ? "bg-muted/20" : ""}`}
               >
                 <div 
                   className="flex justify-between items-center cursor-pointer mb-2"
@@ -304,6 +352,9 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                 
                 {expandedStep === index && (
                   <div className="mt-2 pt-2 border-t">
+                    {/* Show previous answers for reference before current step */}
+                    {index > 0 && renderPreviousAnswers()}
+                    
                     {!submitted[index] ? (
                       <form onSubmit={(e) => handleStepSubmit(e, index)} className="space-y-4">
                         <div className="flex items-center gap-2">

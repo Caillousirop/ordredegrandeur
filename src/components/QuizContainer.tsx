@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import QuizQuestion from "./QuizQuestion";
 import MultiStepQuizQuestion from "./MultiStepQuizQuestion";
 import SearchBar from "./SearchBar";
@@ -198,10 +198,13 @@ const QuizContainer: React.FC = () => {
         </Tabs>
       </div>
       
-      <div className="mt-4 border-t pt-4">
-        <p className="text-xs text-center text-muted-foreground">
-          Source des données : INSEE et autres organismes officiels. Pour une analyse détaillée ou des données plus récentes, consultez <a href="https://www.insee.fr" target="_blank" rel="noopener noreferrer" className="underline text-primary">insee.fr</a>
+      <div className="mt-4 border-t pt-4 flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">
+          Source des données : INSEE et autres organismes officiels. 
         </p>
+        <Link to="/sources" className="text-xs text-primary hover:underline">
+          Consulter nos sources
+        </Link>
       </div>
     </div>
   );
