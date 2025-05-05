@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import QuizQuestion from "./QuizQuestion";
@@ -28,8 +29,8 @@ const QuizContainer: React.FC = () => {
   useEffect(() => {
     let filtered = [...questions];
     
-    // Filter by theme if selected
-    if (selectedTheme) {
+    // Filter by theme if selected (except for random theme)
+    if (selectedTheme && selectedTheme.id !== "random") {
       filtered = filtered.filter(q => q.theme === selectedTheme.id);
     }
     
@@ -43,6 +44,11 @@ const QuizContainer: React.FC = () => {
       filtered = filtered.filter(q => 
         q.question.toLowerCase().includes(searchQuery.toLowerCase())
       );
+    }
+    
+    // For random theme, just shuffle the questions
+    if (selectedTheme && selectedTheme.id === "random") {
+      filtered = filtered.sort(() => Math.random() - 0.5);
     }
     
     setFilteredQuestions(filtered);
@@ -59,8 +65,7 @@ const QuizContainer: React.FC = () => {
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
-    // Automatically start quiz when type is selected
-    setActiveTab("questions");
+    // We no longer automatically start the quiz when type is selected
   };
 
   const handleNext = () => {
@@ -108,6 +113,14 @@ const QuizContainer: React.FC = () => {
     }
   };
 
+  const startQuiz = () => {
+    if (filteredQuestions.length > 0) {
+      setActiveTab("questions");
+    } else {
+      toast.error("Veuillez sélectionner un thème et un type de question");
+    }
+  };
+
   const currentQuestion = filteredQuestions[currentQuestionIndex];
   const isMultiStep = currentQuestion?.type === "multistep";
 
@@ -115,9 +128,21 @@ const QuizContainer: React.FC = () => {
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
       <div className="flex flex-col items-center space-y-6">
         <h1 className="text-center">
-          <span className="text-3xl font-bold text-primary">Ordre de </span>
-          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Gran</span>
-          <span className="text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">deur</span>
+          <span className="text-2xl font-bold text-primary">O</span>
+          <span className="text-2xl font-bold text-primary">r</span>
+          <span className="text-2xl font-bold text-primary">d</span>
+          <span className="text-2xl font-bold text-primary">r</span>
+          <span className="text-2xl font-bold text-primary">e</span>
+          <span className="text-3xl font-bold text-primary"> d</span>
+          <span className="text-3xl font-bold text-primary">e</span>
+          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70"> G</span>
+          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">r</span>
+          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">a</span>
+          <span className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">n</span>
+          <span className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">d</span>
+          <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">e</span>
+          <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">u</span>
+          <span className="text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-secondary">r</span>
         </h1>
         <p className="text-center text-muted-foreground max-w-lg mx-auto">
           Testez vos connaissances statistiques ! Répondez directement ou décomposez le problème en étapes pour gagner des points.
@@ -142,22 +167,36 @@ const QuizContainer: React.FC = () => {
 
           <TabsContent value="setup" className="mt-6">
             <div className="space-y-6">
-              <ThemeSelector 
-                onSelectTheme={handleThemeSelect} 
-                selectedTheme={selectedTheme} 
-              />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <ThemeSelector 
+                  onSelectTheme={handleThemeSelect} 
+                  selectedTheme={selectedTheme} 
+                />
+                
+                <QuestionTypeSelector 
+                  onSelectType={handleTypeSelect}
+                  selectedType={selectedType}
+                />
+              </div>
               
               {selectedTheme && (
-                <>
-                  <QuestionTypeSelector 
-                    onSelectType={handleTypeSelect}
-                    selectedType={selectedType}
-                  />
-                  
-                  <div className="mt-6">
-                    <SearchBar onSearch={handleSearch} />
-                  </div>
-                </>
+                <div className="mt-6">
+                  <SearchBar onSearch={handleSearch} />
+                </div>
+              )}
+              
+              {selectedTheme && (
+                <div className="flex justify-center mt-8">
+                  <Button 
+                    onClick={startQuiz} 
+                    size="lg" 
+                    className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white"
+                    disabled={filteredQuestions.length === 0}
+                  >
+                    Commencer le quiz
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
               )}
             </div>
           </TabsContent>

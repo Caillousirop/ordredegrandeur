@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 import * as LucideIcons from "lucide-react";
+import { Shuffle } from "lucide-react";
 
 interface ThemeSelectorProps {
   onSelectTheme: (theme: QuizTheme) => void;
@@ -21,12 +22,24 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
     return IconComponent ? <IconComponent className="h-5 w-5 text-white" /> : null;
   };
 
+  // Add a random theme option
+  const randomTheme: QuizTheme = {
+    id: "random",
+    name: "Questions aléatoires",
+    description: "Questions issues de tous les thèmes, mélangées aléatoirement",
+    color: "from-purple-500 to-indigo-500",
+    icon: "Shuffle"
+  };
+
+  // All themes including the random theme
+  const allThemes = [randomTheme, ...themes];
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un thème</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {themes.map((theme) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {allThemes.map((theme) => (
           <Card 
             key={theme.id}
             className={cn(

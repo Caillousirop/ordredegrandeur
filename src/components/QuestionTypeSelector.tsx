@@ -13,7 +13,7 @@ interface QuestionTypeSelectorProps {
 
 const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({ onSelectType, selectedType }) => {
   return (
-    <div className="w-full max-w-4xl mx-auto mt-6">
+    <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un type de question</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
