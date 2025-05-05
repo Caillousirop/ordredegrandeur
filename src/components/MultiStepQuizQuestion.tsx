@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -213,7 +214,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     <div className="fixed bottom-4 right-4 z-50">
       <Popover open={calculatorOpen} onOpenChange={setCalculatorOpen}>
         <PopoverTrigger asChild>
-          <Button size="sm" className="flex items-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 shadow-lg border border-purple-300 text-white font-medium px-4">
+          <Button size="sm" className="flex items-center gap-1 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 shadow-lg border border-orange-300 text-white font-medium px-4">
             <Calculator className="h-4 w-4" /> Calculatrice
           </Button>
         </PopoverTrigger>

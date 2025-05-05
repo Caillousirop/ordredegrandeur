@@ -60,6 +60,10 @@ const QuizContainer: React.FC = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
+    // Automatically show questions if a theme is selected
+    if (theme) {
+      setActiveTab("questions");
+    }
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
@@ -165,34 +169,18 @@ const QuizContainer: React.FC = () => {
 
           <TabsContent value="setup" className="mt-6">
             <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-6">
-                <ThemeSelector 
-                  onSelectTheme={handleThemeSelect} 
-                  selectedTheme={selectedTheme} 
-                />
+              <ThemeSelector 
+                onSelectTheme={handleThemeSelect} 
+                selectedTheme={selectedTheme} 
+              />
 
-                <QuestionTypeSelector 
-                  onSelectType={handleTypeSelect}
-                  selectedType={selectedType}
-                />
-              </div>
+              <QuestionTypeSelector 
+                onSelectType={handleTypeSelect}
+                selectedType={selectedType}
+              />
               
-              {selectedTheme && (
-                <div className="mt-6">
-                  <SearchBar onSearch={handleSearch} />
-                </div>
-              )}
-              
-              <div className="flex justify-center mt-8">
-                <Button 
-                  onClick={startQuiz} 
-                  size="lg" 
-                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white"
-                  disabled={filteredQuestions.length === 0 || !selectedTheme}
-                >
-                  Commencer le quiz
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+              <div className="mt-6">
+                <SearchBar onSearch={handleSearch} />
               </div>
             </div>
           </TabsContent>
