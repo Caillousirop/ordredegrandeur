@@ -20,6 +20,9 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   // Calculate the accuracy with higher rewards for correct order of magnitude
   useEffect(() => {
     if (answerSubmitted) {
+      // Check for exact match first
+      const exactMatch = userAnswer === correctAnswer;
+      
       // Compute order of magnitude difference
       const orderOfMagnitudeDifference = Math.abs(
         Math.floor(Math.log10(Math.abs(userAnswer))) - 
@@ -31,11 +34,15 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       
       let calculatedAccuracy = 0;
       
+      // Exact match gets 100%
+      if (exactMatch) {
+        calculatedAccuracy = 100; // Only perfect match gets 100%
+      }
       // Order of magnitude is correct (or very close)
-      if (orderOfMagnitudeDifference === 0) {
+      else if (orderOfMagnitudeDifference === 0) {
         // Give higher scores when the order of magnitude is correct
         if (relativeDifference < 0.05) {
-          calculatedAccuracy = 100; // Perfect or very close
+          calculatedAccuracy = 99; // Very close but not exact
         } else if (relativeDifference < 0.15) {
           calculatedAccuracy = 95; // Very good
         } else if (relativeDifference < 0.25) {

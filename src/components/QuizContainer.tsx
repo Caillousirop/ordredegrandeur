@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import QuizQuestion from "./QuizQuestion";
@@ -65,7 +64,6 @@ const QuizContainer: React.FC = () => {
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
-    // We no longer automatically start the quiz when type is selected
   };
 
   const handleNext = () => {
@@ -167,12 +165,12 @@ const QuizContainer: React.FC = () => {
 
           <TabsContent value="setup" className="mt-6">
             <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <ThemeSelector 
                   onSelectTheme={handleThemeSelect} 
                   selectedTheme={selectedTheme} 
                 />
-                
+
                 <QuestionTypeSelector 
                   onSelectType={handleTypeSelect}
                   selectedType={selectedType}
@@ -185,19 +183,17 @@ const QuizContainer: React.FC = () => {
                 </div>
               )}
               
-              {selectedTheme && (
-                <div className="flex justify-center mt-8">
-                  <Button 
-                    onClick={startQuiz} 
-                    size="lg" 
-                    className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white"
-                    disabled={filteredQuestions.length === 0}
-                  >
-                    Commencer le quiz
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
+              <div className="flex justify-center mt-8">
+                <Button 
+                  onClick={startQuiz} 
+                  size="lg" 
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white"
+                  disabled={filteredQuestions.length === 0 || !selectedTheme}
+                >
+                  Commencer le quiz
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </TabsContent>
           
