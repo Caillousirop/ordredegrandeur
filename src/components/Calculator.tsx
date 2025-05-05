@@ -80,9 +80,9 @@ const Calculator = () => {
   };
 
   return (
-    <Card className="w-full max-w-[300px] shadow-md">
-      <CardHeader className="p-3 pb-0">
-        <CardTitle className="text-sm flex items-center gap-2">
+    <Card className="w-full max-w-[300px] shadow-lg border-2 border-purple-400">
+      <CardHeader className="p-3 pb-0 bg-gradient-to-r from-indigo-500 to-purple-500">
+        <CardTitle className="text-sm flex items-center gap-2 text-white">
           <CalculatorIcon className="h-4 w-4" /> Calculatrice
         </CardTitle>
       </CardHeader>
@@ -123,7 +123,7 @@ const Calculator = () => {
           
           <Button variant="outline" size="sm" className="col-span-2" onClick={() => handleNumberClick("0")}>0</Button>
           <Button variant="outline" size="sm" onClick={() => handleDecimalClick()}>.</Button>
-          <Button variant="outline" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => handleEqualsClick()}>=</Button>
+          <Button variant="outline" size="sm" className="bg-purple-500 text-white hover:bg-purple-600" onClick={() => handleEqualsClick()}>=</Button>
         </div>
       </CardContent>
     </Card>
