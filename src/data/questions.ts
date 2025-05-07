@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion, QuizTheme } from "@/components/types";
 
 export const questions: (Question | MultiStepQuestion)[] = [
@@ -639,67 +638,3 @@ export const questions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de fois par an les fenêtres sont-elles lavées professionnellement ?",
-        correctAnswer: 4,
-        unit: "fois",
-        explanation: "Les fenêtres des immeubles de bureaux sont généralement nettoyées professionnellement 4 fois par an selon les standards d'entretien des bâtiments commerciaux."
-      },
-      {
-        question: "Quel est le nombre total de fenêtres lavées chaque année dans ces immeubles ?",
-        correctAnswer: 11.5,
-        unit: "millions",
-        explanation: "En multipliant le nombre d'immeubles (1 250) par le nombre moyen d'étages (16,5) par le nombre moyen de fenêtres par étage (35) par la fréquence de nettoyage annuelle (4), on obtient environ 11,5 millions de fenêtres lavées par an."
-      }
-    ]
-  }
-];
-
-export const themes: QuizTheme[] = [
-  {
-    id: "démographie",
-    name: "Démographie",
-    description: "Questions sur la population et ses caractéristiques",
-    color: "from-blue-500 to-blue-700"
-  },
-  {
-    id: "environnement",
-    name: "Environnement",
-    description: "Questions sur l'écologie et le climat",
-    color: "from-green-500 to-green-700"
-  },
-  {
-    id: "économie",
-    name: "Économie",
-    description: "Questions sur l'argent et l'économie",
-    color: "from-amber-500 to-amber-700"
-  },
-  {
-    id: "santé",
-    name: "Santé",
-    description: "Questions sur la santé et le système médical",
-    color: "from-red-500 to-red-700"
-  },
-  {
-    id: "éducation",
-    name: "Éducation",
-    description: "Questions sur l'enseignement et la formation",
-    color: "from-purple-500 to-purple-700"
-  },
-  {
-    id: "transport",
-    name: "Transport",
-    description: "Questions sur les moyens de transport",
-    color: "from-orange-500 to-orange-700"
-  },
-  {
-    id: "technologie",
-    name: "Technologie",
-    description: "Questions sur le numérique et la technologie",
-    color: "from-indigo-500 to-indigo-700"
-  },
-  {
-    id: "emploi",
-    name: "Emploi",
-    description: "Questions sur le travail et l'emploi",
-    color: "from-cyan-500 to-cyan-700"
-  }
-];
