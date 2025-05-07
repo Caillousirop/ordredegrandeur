@@ -1,6 +1,6 @@
 
 import React from "react";
-import { themes } from "@/data/questions";
+import { themes } from "@/data/themes";
 import { QuizTheme } from "./types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";

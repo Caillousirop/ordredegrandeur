@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import QuizQuestion from "./QuizQuestion";
@@ -6,7 +7,7 @@ import SearchBar from "./SearchBar";
 import ThemeSelector from "./ThemeSelector";
 import QuestionTypeSelector from "./QuestionTypeSelector";
 import { Button } from "./ui/button";
-import { questions, themes } from "@/data/questions";
+import { questions, themes } from "@/data/themes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "./types";
