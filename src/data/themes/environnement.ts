@@ -97,5 +97,228 @@ export const environnementQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En divisant la production renouvelable par la production totale, on obtient 24% d'électricité renouvelable."
       }
     ]
+  },
+  // Nouvelles questions environnement
+  {
+    id: "env1",
+    question: "Combien de tonnes de déchets ménagers sont produits chaque année en France ?",
+    correctAnswer: 39,
+    unit: "millions",
+    explanation: "La France produit environ 39 millions de tonnes de déchets ménagers et assimilés chaque année selon les données de l'ADEME.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env2",
+    question: "Combien de foyers français sont équipés de panneaux solaires photovoltaïques ?",
+    correctAnswer: 870000,
+    unit: "foyers",
+    explanation: "Environ 870 000 foyers français sont équipés de panneaux solaires photovoltaïques selon les chiffres du Ministère de la Transition Écologique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env3",
+    question: "Combien de bouteilles en plastique sont consommées chaque jour en France ?",
+    correctAnswer: 25,
+    unit: "millions",
+    explanation: "Les Français consomment environ 25 millions de bouteilles en plastique chaque jour selon les données de l'ADEME.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env4",
+    question: "Combien de Français utilisent quotidiennement leur voiture pour des trajets de moins de 5 km ?",
+    correctAnswer: 13.8,
+    unit: "millions",
+    explanation: "Environ 13,8 millions de Français utilisent quotidiennement leur voiture pour des trajets de moins de 5 km selon l'INSEE.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env5",
+    question: "Combien de litres d'eau potable sont consommés par jour dans les foyers français ?",
+    correctAnswer: 450,
+    unit: "millions",
+    explanation: "Les foyers français consomment environ 450 millions de litres d'eau potable par jour selon les données des agences de l'eau.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env6",
+    question: "Combien de logements en France sont classés F ou G au DPE (passoires thermiques) ?",
+    correctAnswer: 4.8,
+    unit: "millions",
+    explanation: "Environ 4,8 millions de logements en France sont classés F ou G au Diagnostic de Performance Énergétique, les qualifiant de passoires thermiques.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env7",
+    question: "Combien de personnes utilisent le vélo comme principal mode de transport pour aller travailler ?",
+    correctAnswer: 2.1,
+    unit: "millions",
+    explanation: "Environ 2,1 millions de personnes utilisent le vélo comme principal mode de transport pour se rendre au travail en France.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env8",
+    question: "Combien de tonnes de CO₂ sont émises chaque année par les vols intérieurs en France ?",
+    correctAnswer: 3.4,
+    unit: "millions",
+    explanation: "Les vols intérieurs en France émettent environ 3,4 millions de tonnes de CO₂ par an selon la Direction générale de l'aviation civile.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env9",
+    question: "Combien de Français achètent régulièrement des produits bio ?",
+    correctAnswer: 28.3,
+    unit: "millions",
+    explanation: "Environ 28,3 millions de Français achètent régulièrement des produits biologiques selon l'Agence Bio.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env10",
+    question: "Combien de mètres carrés de forêts sont artificialisés chaque année en France ?",
+    correctAnswer: 23,
+    unit: "millions",
+    explanation: "Environ 23 millions de mètres carrés de forêts sont artificialisés chaque année en France selon les données du Ministère de la Transition Écologique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env11",
+    type: "multistep",
+    question: "Combien de Français participent activement à une action environnementale (bénévolat, associations, recyclage avancé) ?",
+    finalExplanation: "Environ 22 millions de Français participent activement à des actions environnementales, que ce soit par le bénévolat, l'engagement associatif ou des pratiques de recyclage avancées.",
+    theme: "environnement",
+    steps: [
+      {
+        question: "Quelle est la population adulte (plus de 18 ans) en France ?",
+        correctAnswer: 52.6,
+        unit: "millions",
+        explanation: "La France compte environ 52,6 millions d'adultes (plus de 18 ans) selon les données démographiques de l'INSEE."
+      },
+      {
+        question: "Quel pourcentage de la population adulte déclare s'engager activement pour l'environnement ?",
+        correctAnswer: 41.8,
+        unit: "%",
+        explanation: "Environ 41,8% des adultes français déclarent s'engager activement pour l'environnement selon les sondages récents."
+      },
+      {
+        question: "Combien de Français participent activement à une action environnementale ?",
+        correctAnswer: 22,
+        unit: "millions",
+        explanation: "En multipliant la population adulte (52,6 millions) par le pourcentage engagé (41,8%), on obtient environ 22 millions de Français."
+      }
+    ]
+  },
+  {
+    id: "env12",
+    question: "Combien de foyers trient correctement leurs déchets en France ?",
+    correctAnswer: 18.5,
+    unit: "millions",
+    explanation: "Environ 18,5 millions de foyers français trient correctement leurs déchets selon les données de l'ADEME.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env13",
+    question: "Combien de voitures électriques sont actuellement en circulation en France ?",
+    correctAnswer: 1.2,
+    unit: "millions",
+    explanation: "Environ 1,2 million de voitures électriques sont en circulation en France selon les données du Ministère de la Transition Écologique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env14",
+    question: "Combien de repas végétariens sont servis chaque semaine dans les cantines scolaires françaises ?",
+    correctAnswer: 7.3,
+    unit: "millions",
+    explanation: "Environ 7,3 millions de repas végétariens sont servis chaque semaine dans les cantines scolaires françaises selon les données du Ministère de l'Éducation.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env15",
+    question: "Combien d'entreprises en France mesurent leur empreinte carbone ?",
+    correctAnswer: 24700,
+    unit: "entreprises",
+    explanation: "Environ 24 700 entreprises françaises mesurent leur empreinte carbone, principalement les grandes entreprises et ETI soumises à des obligations réglementaires.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env16",
+    type: "multistep",
+    question: "Combien de tonnes de vêtements sont jetées chaque année en France ?",
+    finalExplanation: "Environ 624 000 tonnes de vêtements sont jetées chaque année en France selon les données de l'ADEME et de l'éco-organisme Refashion.",
+    theme: "environnement",
+    steps: [
+      {
+        question: "Combien de vêtements (en kg) un Français achète-t-il en moyenne par an ?",
+        correctAnswer: 9.2,
+        unit: "kg",
+        explanation: "Un Français achète en moyenne 9,2 kg de vêtements par an selon les données de l'industrie textile."
+      },
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 67.8,
+        unit: "millions",
+        explanation: "La population française est d'environ 67,8 millions d'habitants selon l'INSEE."
+      },
+      {
+        question: "Quel pourcentage de ces vêtements finit jeté sans être recyclé ou réutilisé ?",
+        correctAnswer: 55.7,
+        unit: "%",
+        explanation: "Environ 55,7% des vêtements achetés finissent jetés sans être recyclés ou réutilisés."
+      },
+      {
+        question: "Combien de tonnes de vêtements sont jetées par an ?",
+        correctAnswer: 624000,
+        unit: "tonnes",
+        explanation: "En multipliant le poids moyen acheté par personne (9,2 kg) par la population (67,8 millions) et le pourcentage jeté (55,7%), on obtient environ 624 000 tonnes."
+      }
+    ]
+  },
+  {
+    id: "env17",
+    question: "Combien de foyers utilisent une chaudière au fioul en France ?",
+    correctAnswer: 3.1,
+    unit: "millions",
+    explanation: "Environ 3,1 millions de foyers français utilisent encore une chaudière au fioul selon les données du Ministère de la Transition Écologique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env18",
+    question: "Combien de Français ont réduit leur consommation de viande sur les 12 derniers mois ?",
+    correctAnswer: 31.6,
+    unit: "millions",
+    explanation: "Environ 31,6 millions de Français déclarent avoir réduit leur consommation de viande au cours des 12 derniers mois selon les sondages récents.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env19",
+    question: "Combien de logements ne disposent pas d'une bonne isolation thermique ?",
+    correctAnswer: 7.3,
+    unit: "millions",
+    explanation: "Environ 7,3 millions de logements en France ne disposent pas d'une bonne isolation thermique selon les données du Ministère de la Transition Écologique.",
+    type: "simple",
+    theme: "environnement"
+  },
+  {
+    id: "env20",
+    question: "Combien de sacs plastiques à usage unique sont encore utilisés chaque année en France ?",
+    correctAnswer: 1.8,
+    unit: "milliards",
+    explanation: "Environ 1,8 milliard de sacs plastiques à usage unique sont encore utilisés chaque année en France malgré leur interdiction progressive.",
+    type: "simple",
+    theme: "environnement"
   }
 ];
