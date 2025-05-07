@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,7 @@ import AccuracyGauge from "./AccuracyGauge";
 import { MultiStepQuestion, Step, QuizScore } from "./types";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { themes } from "@/data/questions";
+import { themes } from "@/data/themes";
 import { CircleCheck, EyeIcon, Calculator } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import CalculatorComponent from "./Calculator";

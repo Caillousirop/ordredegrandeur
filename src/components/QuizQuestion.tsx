@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
 import { toast } from "sonner";
 import { Question, QuizScore } from "./types";
-import { themes } from "@/data/questions";
+import { themes } from "@/data/themes";
 import { EyeIcon } from "lucide-react";
 
 interface QuizQuestionProps {
