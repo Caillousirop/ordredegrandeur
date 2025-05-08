@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const transportQuestions: (Question | MultiStepQuestion)[] = [
@@ -494,8 +493,8 @@ export const transportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Comment ces voyages se répartissent-ils sur la semaine ?",
-        correctAnswer: [17, 14, 12, 12, 15, 17, 13],
-        unit: "%",
+        correctAnswer: 14,
+        unit: "% le lundi",
         explanation: "La répartition hebdomadaire est approximativement de 17% le vendredi, 17% le dimanche, 14% le lundi, 13% le samedi, et 12% les mardi, mercredi et jeudi."
       },
       {
@@ -627,148 +626,4 @@ export const transportQuestions: (Question | MultiStepQuestion)[] = [
     id: "156",
     type: "multistep",
     question: "Combien de taxis ou VTC sont en activité dans les grandes villes françaises ?",
-    finalExplanation: "Environ 105 000 taxis et VTC sont en activité dans les grandes villes françaises, un secteur qui a connu d'importantes mutations avec l'arrivée des plateformes de mise en relation.",
-    theme: "transport",
-    steps: [
-      {
-        question: "Combien de personnes vivent dans les grandes villes françaises (unités urbaines de plus de 100 000 habitants) ?",
-        correctAnswer: 31.2,
-        unit: "millions",
-        explanation: "Environ 31,2 millions de personnes vivent dans les grandes unités urbaines françaises de plus de 100 000 habitants."
-      },
-      {
-        question: "Combien y a-t-il de taxis et VTC pour 1 000 habitants dans les grandes villes en moyenne ?",
-        correctAnswer: 3.37,
-        unit: "véhicules",
-        explanation: "On compte en moyenne 3,37 taxis et VTC pour 1 000 habitants dans les grandes villes françaises."
-      },
-      {
-        question: "Combien de taxis ou VTC sont en activité dans les grandes villes françaises ?",
-        correctAnswer: 105000,
-        unit: "véhicules",
-        explanation: "En multipliant la population des grandes villes (31,2 millions) par le taux de taxis et VTC pour 1 000 habitants (3,37), on obtient environ 105 000 véhicules."
-      }
-    ]
-  },
-  {
-    id: "157",
-    type: "multistep",
-    question: "Combien de trajets sont effectués à pied pour aller au travail en France ?",
-    finalExplanation: "Environ 3,4 millions de trajets domicile-travail sont effectués à pied chaque jour en France, principalement dans les centres-villes où les distances sont plus courtes.",
-    theme: "transport",
-    steps: [
-      {
-        question: "Combien de personnes actives travaillent en France ?",
-        correctAnswer: 28.5,
-        unit: "millions",
-        explanation: "La France compte environ 28,5 millions de personnes actives occupées (ayant un emploi)."
-      },
-      {
-        question: "Quel pourcentage des actifs se rendent au travail à pied ?",
-        correctAnswer: 12,
-        unit: "%",
-        explanation: "Environ 12% des actifs français se rendent au travail principalement à pied selon les enquêtes sur les déplacements domicile-travail."
-      },
-      {
-        question: "Combien de trajets sont effectués à pied pour aller au travail en France ?",
-        correctAnswer: 3.4,
-        unit: "millions",
-        explanation: "En multipliant le nombre de personnes actives occupées (28,5 millions) par le pourcentage se rendant au travail à pied (12%), on obtient environ 3,4 millions de trajets pédestres quotidiens."
-      }
-    ]
-  },
-  {
-    id: "158",
-    type: "multistep",
-    question: "Combien de personnes utilisent quotidiennement un covoiturage domicile-travail ?",
-    finalExplanation: "Environ 910 000 personnes utilisent quotidiennement le covoiturage pour leurs trajets domicile-travail en France, une pratique encouragée par les politiques de mobilité durable.",
-    theme: "transport",
-    steps: [
-      {
-        question: "Combien de personnes actives travaillent en France ?",
-        correctAnswer: 28.5,
-        unit: "millions",
-        explanation: "La France compte environ 28,5 millions de personnes actives occupées (ayant un emploi)."
-      },
-      {
-        question: "Quel pourcentage des actifs se rendent au travail en voiture ?",
-        correctAnswer: 68,
-        unit: "%",
-        explanation: "Environ 68% des actifs français se rendent au travail en voiture selon les enquêtes sur les déplacements domicile-travail."
-      },
-      {
-        question: "Parmi les personnes qui se rendent au travail en voiture, quel pourcentage pratique le covoiturage quotidiennement ?",
-        correctAnswer: 4.7,
-        unit: "%",
-        explanation: "Environ 4,7% des automobilistes pratiquent le covoiturage quotidiennement pour leurs trajets domicile-travail."
-      },
-      {
-        question: "Combien de personnes utilisent quotidiennement un covoiturage domicile-travail ?",
-        correctAnswer: 910000,
-        unit: "personnes",
-        explanation: "En multipliant le nombre de personnes actives occupées (28,5 millions) par le pourcentage utilisant la voiture (68%) puis par le taux de covoiturage (4,7%), on obtient environ 910 000 personnes."
-      }
-    ]
-  },
-  {
-    id: "159",
-    type: "multistep",
-    question: "Combien de kilomètres sont parcourus en avion par les Français chaque année pour des trajets professionnels ?",
-    finalExplanation: "Environ 34 milliards de kilomètres sont parcourus en avion par les Français chaque année pour des trajets professionnels, bien que cette tendance soit en baisse depuis la pandémie et le développement des réunions virtuelles.",
-    theme: "transport",
-    steps: [
-      {
-        question: "Combien de trajets aériens professionnels sont effectués par des Français chaque année ?",
-        correctAnswer: 16.5,
-        unit: "millions",
-        explanation: "Environ 16,5 millions de trajets aériens professionnels sont effectués par des Français chaque année."
-      },
-      {
-        question: "Quelle est la distance moyenne d'un trajet aérien professionnel ?",
-        correctAnswer: 2060,
-        unit: "km",
-        explanation: "La distance moyenne d'un trajet aérien professionnel est d'environ 2 060 kilomètres, incluant les vols domestiques et internationaux."
-      },
-      {
-        question: "Combien de kilomètres sont parcourus en avion par les Français chaque année pour des trajets professionnels ?",
-        correctAnswer: 34,
-        unit: "milliards de km",
-        explanation: "En multipliant le nombre de trajets (16,5 millions) par la distance moyenne (2 060 km), on obtient environ 34 milliards de kilomètres parcourus."
-      }
-    ]
-  },
-  {
-    id: "160",
-    type: "multistep",
-    question: "Combien de Français ont une voiture mais s'en servent moins d'une fois par semaine ?",
-    finalExplanation: "Environ 2,8 millions de Français possèdent une voiture mais l'utilisent moins d'une fois par semaine, un phénomène particulièrement marqué dans les grandes agglomérations bien desservies par les transports en commun.",
-    theme: "transport",
-    steps: [
-      {
-        question: "Combien de ménages français possèdent au moins une voiture ?",
-        correctAnswer: 27.8,
-        unit: "millions",
-        explanation: "Environ 27,8 millions de ménages français possèdent au moins une voiture selon les données de l'INSEE."
-      },
-      {
-        question: "Combien de personnes adultes vivent en moyenne dans un ménage motorisé ?",
-        correctAnswer: 1.8,
-        unit: "adultes",
-        explanation: "En moyenne, 1,8 adulte vit dans un ménage motorisé en France."
-      },
-      {
-        question: "Quel pourcentage des adultes dans des ménages motorisés utilisent une voiture moins d'une fois par semaine ?",
-        correctAnswer: 5.6,
-        unit: "%",
-        explanation: "Environ 5,6% des adultes vivant dans des ménages motorisés utilisent une voiture moins d'une fois par semaine."
-      },
-      {
-        question: "Combien de Français ont une voiture mais s'en servent moins d'une fois par semaine ?",
-        correctAnswer: 2.8,
-        unit: "millions",
-        explanation: "En multipliant le nombre de ménages motorisés (27,8 millions) par le nombre moyen d'adultes par ménage (1,8) puis par le pourcentage d'utilisation rare (5,6%), on obtient environ 2,8 millions de personnes."
-      }
-    ]
-  }
-];
-
+    finalExplanation: "Environ 105 000 taxis et VTC sont en activité dans
