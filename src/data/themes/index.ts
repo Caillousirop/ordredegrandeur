@@ -1,80 +1,91 @@
 
-import { QuizTheme } from "@/components/types";
 import { demographieQuestions } from "./demographie";
-import { environnementQuestions } from "./environnement";
 import { economieQuestions } from "./economie";
-import { santeQuestions } from "./sante";
 import { educationQuestions } from "./education";
-import { transportQuestions } from "./transport";
-import { technologieQuestions } from "./technologie";
 import { emploiQuestions } from "./emploi";
+import { environnementQuestions } from "./environnement";
+import { mondeQuestions } from "./monde";
+import { santeQuestions } from "./sante";
+import { technologieQuestions } from "./technologie";
+import { transportQuestions } from "./transport";
+import { QuizTheme } from "@/components/types";
 
+// Combiner toutes les questions
 export const questions = [
   ...demographieQuestions,
-  ...environnementQuestions,
   ...economieQuestions,
-  ...santeQuestions,
   ...educationQuestions,
-  ...transportQuestions,
+  ...emploiQuestions,
+  ...environnementQuestions, 
+  ...mondeQuestions,
+  ...santeQuestions,
   ...technologieQuestions,
-  ...emploiQuestions
+  ...transportQuestions
 ];
 
+// Définir les thèmes disponibles
 export const themes: QuizTheme[] = [
   {
-    id: "démographie",
+    id: "demographie",
     name: "Démographie",
-    description: "Questions sur la population et ses caractéristiques",
-    color: "from-blue-500 to-blue-700",
+    description: "Questions sur la population française et les tendances démographiques",
+    color: "from-blue-500 to-blue-400",
     icon: "Users"
   },
   {
-    id: "environnement",
-    name: "Environnement",
-    description: "Questions sur l'écologie et le climat",
-    color: "from-green-500 to-green-700",
-    icon: "Leaf"
-  },
-  {
-    id: "économie",
+    id: "economie",
     name: "Économie",
-    description: "Questions sur l'argent et l'économie",
-    color: "from-amber-500 to-amber-700",
-    icon: "Euro"
+    description: "Questions sur l'économie française, l'emploi et les finances",
+    color: "from-green-500 to-green-400",
+    icon: "LineChart"
   },
   {
-    id: "santé",
-    name: "Santé",
-    description: "Questions sur la santé et le système médical",
-    color: "from-red-500 to-red-700",
-    icon: "HeartPulse"
-  },
-  {
-    id: "éducation",
+    id: "education",
     name: "Éducation",
-    description: "Questions sur l'enseignement et la formation",
-    color: "from-purple-500 to-purple-700",
+    description: "Questions sur le système éducatif français",
+    color: "from-amber-500 to-amber-400",
     icon: "GraduationCap"
-  },
-  {
-    id: "transport",
-    name: "Transport",
-    description: "Questions sur les moyens de transport",
-    color: "from-orange-500 to-orange-700",
-    icon: "Car"
-  },
-  {
-    id: "technologie",
-    name: "Technologie",
-    description: "Questions sur le numérique et la technologie",
-    color: "from-indigo-500 to-indigo-700",
-    icon: "Smartphone"
   },
   {
     id: "emploi",
     name: "Emploi",
-    description: "Questions sur le travail et l'emploi",
-    color: "from-cyan-500 to-cyan-700",
+    description: "Questions sur le marché du travail et les conditions d'emploi",
+    color: "from-cyan-500 to-cyan-400",
     icon: "Briefcase"
+  },
+  {
+    id: "environnement",
+    name: "Environnement",
+    description: "Questions sur l'écologie et le développement durable",
+    color: "from-emerald-500 to-emerald-400",
+    icon: "Leaf"
+  },
+  {
+    id: "monde",
+    name: "Monde",
+    description: "Questions sur les statistiques et les faits internationaux",
+    color: "from-indigo-500 to-indigo-400",
+    icon: "Globe"
+  },
+  {
+    id: "sante",
+    name: "Santé",
+    description: "Questions sur le système de santé et les indicateurs sanitaires",
+    color: "from-red-500 to-red-400",
+    icon: "Heart"
+  },
+  {
+    id: "technologie",
+    name: "Technologie",
+    description: "Questions sur l'innovation et les usages numériques",
+    color: "from-violet-500 to-violet-400",
+    icon: "Smartphone"
+  },
+  {
+    id: "transport",
+    name: "Transport",
+    description: "Questions sur les moyens de transport et les infrastructures",
+    color: "from-orange-500 to-orange-400",
+    icon: "Car"
   }
 ];

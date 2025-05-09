@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -160,26 +159,8 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
 
   const allStepsCompleted = submitted.every(step => step === true);
 
-  // Function to render previous answers for reference
-  const renderPreviousAnswers = (currentStepIndex: number) => {
-    const completedSteps = submitted
-      .map((isSubmitted, index) => ({ isSubmitted, index }))
-      .filter(item => item.isSubmitted && item.index < currentStepIndex);
-    
-    if (completedSteps.length === 0) return null;
-    
-    return (
-      <div className="mb-4 p-3 bg-muted/20 rounded-md">
-        <p className="text-sm font-medium mb-2">Réponses précédentes :</p>
-        {completedSteps.map(({ index }) => (
-          <div key={index} className="flex justify-between text-sm mb-1">
-            <span>{question.steps[index].question}</span>
-            <span className="font-medium">{answers[index]}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  // Fonction pour rendre les étapes précédentes - SUPPRIMÉ
+  // Nous supprimons complètement cette fonction qui affichait les réponses précédentes
 
   // Calculatrice flottante qui reste visible pendant le défilement
   const FloatingCalculator = () => (
@@ -223,8 +204,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
           <h3 className="font-medium">Réponse directe <Badge variant="secondary" className="ml-1">+50% points</Badge></h3>
           {!finalSubmitted ? (
             <form onSubmit={handleDirectFinalSubmit} className="space-y-4">
-              {/* Show previous answers for reference */}
-              {renderPreviousAnswers(question.steps.length)}
+              {/* Supprimé l'affichage des réponses précédentes */}
               
               <div className="flex items-center gap-2">
                 <Input 
@@ -286,8 +266,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                 </div>
                 
                 <div className="mt-2 pt-2 border-t">
-                  {/* Show previous answers for reference before current step */}
-                  {renderPreviousAnswers(index)}
+                  {/* Supprimé l'affichage des réponses précédentes */}
                   
                   {!submitted[index] ? (
                     <form onSubmit={e => handleStepSubmit(e, index)} className="space-y-4">

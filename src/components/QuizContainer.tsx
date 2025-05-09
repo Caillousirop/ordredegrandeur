@@ -183,6 +183,18 @@ const QuizContainer: React.FC = () => {
               <div className="mt-6">
                 <SearchBar onSearch={handleSearch} />
               </div>
+              
+              {/* Bouton Commencer le test */}
+              <div className="flex justify-center mt-8">
+                <Button 
+                  onClick={startQuiz}
+                  disabled={filteredQuestions.length === 0}
+                  size="lg"
+                  className="w-full max-w-md bg-gradient-to-r from-primary to-primary/80 font-semibold text-lg py-6"
+                >
+                  Commencer le test <ArrowRight className="ml-2" />
+                </Button>
+              </div>
             </div>
           </TabsContent>
           
