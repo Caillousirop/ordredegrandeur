@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const emploiQuestions: (Question | MultiStepQuestion)[] = [
@@ -652,5 +651,95 @@ export const emploiQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En multipliant le nombre d'entreprises innovantes (26 500) par leur taille moyenne (29,4 employés), on obtient environ 780 000 personnes."
       }
     ]
+  },
+  {
+    id: "emp-101",
+    type: "simple",
+    question: "Quel est le taux de chômage en France selon la définition du BIT ?",
+    correctAnswer: 7.4,
+    unit: "%",
+    explanation: "Le taux de chômage en France selon la définition du Bureau International du Travail est d'environ 7,4% de la population active.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-102",
+    type: "simple",
+    question: "Quelle est la durée moyenne d'un contrat à durée déterminée (CDD) en France ?",
+    correctAnswer: 46,
+    unit: "jours",
+    explanation: "La durée moyenne d'un CDD en France est d'environ 46 jours, tous secteurs confondus.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-103",
+    type: "simple",
+    question: "Quel pourcentage des salariés français travaille à temps partiel ?",
+    correctAnswer: 17.9,
+    unit: "%",
+    explanation: "Environ 17,9% des salariés français travaillent à temps partiel, avec une surreprésentation des femmes.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-104",
+    type: "simple",
+    question: "Quel est le nombre moyen de jours de congés payés pris par an par un salarié français ?",
+    correctAnswer: 26,
+    unit: "jours",
+    explanation: "Un salarié français prend en moyenne 26 jours de congés payés par an sur les 30 jours ouvrables légaux (5 semaines).",
+    theme: "emploi"
+  },
+  {
+    id: "emp-105",
+    type: "simple",
+    question: "Quelle est la durée légale du travail hebdomadaire en France ?",
+    correctAnswer: 35,
+    unit: "heures",
+    explanation: "La durée légale du travail en France est fixée à 35 heures par semaine depuis 2000.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-106",
+    type: "simple",
+    question: "Quel est le taux de syndicalisation des salariés en France ?",
+    correctAnswer: 10.3,
+    unit: "%",
+    explanation: "Le taux de syndicalisation en France est d'environ 10,3%, l'un des plus faibles parmi les pays industrialisés.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-107",
+    type: "simple",
+    question: "Quelle est la part du travail intérimaire dans l'emploi total en France ?",
+    correctAnswer: 3.2,
+    unit: "%",
+    explanation: "L'intérim représente environ 3,2% de l'emploi total en France.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-108",
+    type: "simple",
+    question: "Quel est le pourcentage de télétravailleurs réguliers parmi les actifs occupés en France ?",
+    correctAnswer: 22,
+    unit: "%",
+    explanation: "Environ 22% des actifs occupés pratiquent le télétravail de façon régulière en France, un chiffre qui a fortement augmenté depuis la pandémie de COVID-19.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-109",
+    type: "simple",
+    question: "Quel est le taux d'emploi des personnes handicapées en France ?",
+    correctAnswer: 36,
+    unit: "%",
+    explanation: "Le taux d'emploi des personnes en situation de handicap est d'environ 36% en France, bien inférieur à celui de la population générale.",
+    theme: "emploi"
+  },
+  {
+    id: "emp-110",
+    type: "simple",
+    question: "Quelle est la durée moyenne de recherche d'emploi pour un chômeur en France ?",
+    correctAnswer: 13.4,
+    unit: "mois",
+    explanation: "Un chômeur en France met en moyenne 13,4 mois pour retrouver un emploi.",
+    theme: "emploi"
   }
 ];

@@ -387,5 +387,95 @@ export const transportQuestions: (Question | MultiStepQuestion)[] = [
     explanation: "Environ 40 000 drones sont utilisés à des fins professionnelles en France.",
     type: "simple",
     theme: "transport"
+  },
+  {
+    id: "trans-101",
+    type: "simple",
+    question: "Quel est le nombre moyen de kilomètres parcourus par an par une voiture particulière en France ?",
+    correctAnswer: 12200,
+    unit: "km",
+    explanation: "Une voiture particulière en France parcourt en moyenne 12 200 kilomètres par an.",
+    theme: "transport"
+  },
+  {
+    id: "trans-102",
+    type: "simple",
+    question: "Quel est le nombre de voitures pour 1000 habitants en France ?",
+    correctAnswer: 571,
+    unit: "voitures",
+    explanation: "On compte environ 571 voitures pour 1000 habitants en France.",
+    theme: "transport"
+  },
+  {
+    id: "trans-103",
+    type: "simple",
+    question: "Quelle est la vitesse moyenne du trafic en heure de pointe à Paris ?",
+    correctAnswer: 15.3,
+    unit: "km/h",
+    explanation: "La vitesse moyenne du trafic en heure de pointe à Paris est d'environ 15,3 km/h.",
+    theme: "transport"
+  },
+  {
+    id: "trans-104",
+    type: "simple",
+    question: "Quel pourcentage des Français utilise les transports en commun pour se rendre au travail ?",
+    correctAnswer: 16.2,
+    unit: "%",
+    explanation: "Environ 16,2% des Français utilisent les transports en commun comme mode principal pour se rendre au travail.",
+    theme: "transport"
+  },
+  {
+    id: "trans-105",
+    type: "simple",
+    question: "Quelle est la longueur totale du réseau ferroviaire français ?",
+    correctAnswer: 29000,
+    unit: "km",
+    explanation: "Le réseau ferroviaire français compte environ 29 000 kilomètres de voies ferrées.",
+    theme: "transport"
+  },
+  {
+    id: "trans-106",
+    type: "simple",
+    question: "Quel est le nombre annuel de passagers transportés par les aéroports français ?",
+    correctAnswer: 174,
+    unit: "millions",
+    explanation: "Les aéroports français accueillent environ 174 millions de passagers par an (avant la crise du COVID-19).",
+    theme: "transport"
+  },
+  {
+    id: "trans-107",
+    type: "simple",
+    question: "Quel pourcentage du transport de marchandises en France est réalisé par la route ?",
+    correctAnswer: 88,
+    unit: "%",
+    explanation: "Environ 88% du transport de marchandises en France (en tonnes-kilomètres) est réalisé par la route.",
+    theme: "transport"
+  },
+  {
+    id: "trans-108",
+    type: "simple",
+    question: "Quelle est la part des véhicules électriques dans les ventes de voitures neuves en France ?",
+    correctAnswer: 14.5,
+    unit: "%",
+    explanation: "Les véhicules électriques représentent environ 14,5% des ventes de voitures neuves en France.",
+    theme: "transport"
+  },
+  {
+    id: "trans-109",
+    type: "simple",
+    question: "Quelle est la longueur totale du réseau d'autoroutes français ?",
+    correctAnswer: 11690,
+    unit: "km",
+    explanation: "Le réseau d'autoroutes français compte environ 11 690 kilomètres.",
+    theme: "transport"
+  },
+  {
+    id: "trans-110",
+    type: "simple",
+    question: "Quel est l'âge moyen du parc automobile français ?",
+    correctAnswer: 10.5,
+    unit: "ans",
+    explanation: "L'âge moyen des véhicules du parc automobile français est d'environ 10,5 ans.",
+    theme: "transport"
   }
 ];

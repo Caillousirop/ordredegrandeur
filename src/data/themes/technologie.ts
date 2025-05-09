@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const technologieQuestions: (Question | MultiStepQuestion)[] = [
@@ -544,7 +543,7 @@ export const technologieQuestions: (Question | MultiStepQuestion)[] = [
         question: "Combien de comptes actifs sur des IA génératives sont donc utilisés régulièrement en France ?",
         correctAnswer: 5.7,
         unit: "millions",
-        explanation: "En multipliant la population de plus de 15 ans (55,8 millions) par le pourcentage ayant essayé ces services (31%) puis par le taux d'utilisation régulière (33%), on obtient environ 5,7 millions de comptes actifs."
+        explanation: "En multipliant la population adulte (55,8 millions) par le pourcentage ayant essayé ces services (31%) puis par le taux d'utilisation régulière (33%), on obtient environ 5,7 millions de comptes actifs."
       }
     ]
   },
@@ -733,5 +732,95 @@ export const technologieQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En multipliant la population adulte (55,8 millions) par le pourcentage ayant essayé la réalité virtuelle (22%), on obtient environ 12,3 millions de personnes."
       }
     ]
+  },
+  {
+    id: "tech-101",
+    type: "simple",
+    question: "Quel est le pourcentage de Français possédant un smartphone ?",
+    correctAnswer: 84,
+    unit: "%",
+    explanation: "Environ 84% des Français possèdent un smartphone selon les dernières études sur l'équipement numérique des ménages.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-102",
+    type: "simple",
+    question: "Quel est le temps moyen passé par jour sur Internet par les Français ?",
+    correctAnswer: 4.8,
+    unit: "heures",
+    explanation: "Les Français passent en moyenne 4,8 heures par jour sur Internet, tous appareils confondus.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-103",
+    type: "simple",
+    question: "Quel est le taux d'équipement des ménages français en ordinateurs ?",
+    correctAnswer: 77,
+    unit: "%",
+    explanation: "Environ 77% des ménages français possèdent au moins un ordinateur à leur domicile.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-104",
+    type: "simple",
+    question: "Quelle est la proportion de Français abonnés à une plateforme de streaming vidéo ?",
+    correctAnswer: 62,
+    unit: "%",
+    explanation: "Environ 62% des Français sont abonnés à au moins une plateforme de streaming vidéo payante.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-105",
+    type: "simple",
+    question: "Quel est le nombre moyen d'applications installées sur le smartphone d'un Français ?",
+    correctAnswer: 28,
+    unit: "applications",
+    explanation: "Un utilisateur français a en moyenne 28 applications installées sur son smartphone, bien qu'il n'en utilise régulièrement qu'une dizaine.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-106",
+    type: "simple",
+    question: "Quel pourcentage des achats en ligne en France est réalisé via un appareil mobile ?",
+    correctAnswer: 41,
+    unit: "%",
+    explanation: "Environ 41% des achats en ligne en France sont réalisés via un appareil mobile (smartphone ou tablette).",
+    theme: "technologie"
+  },
+  {
+    id: "tech-107",
+    type: "simple",
+    question: "Quel est le pourcentage de foyers français équipés d'une enceinte connectée ?",
+    correctAnswer: 15.6,
+    unit: "%",
+    explanation: "Environ 15,6% des foyers français sont équipés d'au moins une enceinte connectée avec assistant vocal.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-108",
+    type: "simple",
+    question: "Quelle est la part du trafic internet mondial générée par les vidéos en streaming ?",
+    correctAnswer: 65,
+    unit: "%",
+    explanation: "Les vidéos en streaming représentent environ 65% du trafic internet mondial.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-109",
+    type: "simple",
+    question: "Quelle est la couverture du territoire français en 4G ?",
+    correctAnswer: 98,
+    unit: "%",
+    explanation: "Environ 98% du territoire français est couvert par la 4G, suite aux efforts déployés dans le cadre du plan France Très Haut Débit.",
+    theme: "technologie"
+  },
+  {
+    id: "tech-110",
+    type: "simple",
+    question: "Quel pourcentage des adultes français utilisent au moins un réseau social ?",
+    correctAnswer: 79,
+    unit: "%",
+    explanation: "Environ 79% des adultes français utilisent au moins un réseau social régulièrement.",
+    theme: "technologie"
   }
 ];

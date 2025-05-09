@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const educationQuestions: (Question | MultiStepQuestion)[] = [
@@ -643,5 +642,95 @@ export const educationQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En multipliant le nombre d'élèves du primaire (6,8 millions) par le pourcentage en difficulté (12,5%) puis par le taux de couverture des dispositifs (80%), on obtient environ 680 000 élèves."
       }
     ]
+  },
+  {
+    id: "edu-101",
+    type: "simple",
+    question: "Quel est le pourcentage de bacheliers dans une génération en France ?",
+    correctAnswer: 79.4,
+    unit: "%",
+    explanation: "Environ 79,4% d'une génération obtient le baccalauréat en France, toutes filières confondues.",
+    theme: "education"
+  },
+  {
+    id: "edu-102",
+    type: "simple",
+    question: "Quel est le nombre moyen d'élèves par classe en école primaire en France ?",
+    correctAnswer: 22.7,
+    unit: "élèves",
+    explanation: "On compte en moyenne 22,7 élèves par classe dans les écoles primaires françaises.",
+    theme: "education"
+  },
+  {
+    id: "edu-103",
+    type: "simple",
+    question: "Quel pourcentage d'une classe d'âge obtient un diplôme de l'enseignement supérieur ?",
+    correctAnswer: 46.8,
+    unit: "%",
+    explanation: "Environ 46,8% d'une classe d'âge obtient un diplôme de l'enseignement supérieur en France.",
+    theme: "education"
+  },
+  {
+    id: "edu-104",
+    type: "simple",
+    question: "Quel est le coût annuel moyen d'un étudiant en université pour l'État ?",
+    correctAnswer: 10840,
+    unit: "euros",
+    explanation: "L'État français dépense en moyenne 10 840 euros par an pour un étudiant en université.",
+    theme: "education"
+  },
+  {
+    id: "edu-105",
+    type: "simple",
+    question: "Quel est le taux de réussite au brevet des collèges ?",
+    correctAnswer: 87.9,
+    unit: "%",
+    explanation: "Le taux de réussite au brevet des collèges est d'environ 87,9% en France.",
+    theme: "education"
+  },
+  {
+    id: "edu-106",
+    type: "simple",
+    question: "Quel pourcentage des étudiants français bénéficie d'une bourse sur critères sociaux ?",
+    correctAnswer: 38,
+    unit: "%",
+    explanation: "Environ 38% des étudiants français bénéficient d'une bourse sur critères sociaux.",
+    theme: "education"
+  },
+  {
+    id: "edu-107",
+    type: "simple",
+    question: "Quel est le nombre total d'enseignants en France (primaire et secondaire) ?",
+    correctAnswer: 870000,
+    unit: "enseignants",
+    explanation: "La France compte environ 870 000 enseignants dans l'enseignement primaire et secondaire, public et privé sous contrat.",
+    theme: "education"
+  },
+  {
+    id: "edu-108",
+    type: "simple",
+    question: "Quel est le pourcentage d'élèves scolarisés dans l'enseignement privé en France ?",
+    correctAnswer: 17.3,
+    unit: "%",
+    explanation: "Environ 17,3% des élèves français sont scolarisés dans l'enseignement privé, majoritairement sous contrat avec l'État.",
+    theme: "education"
+  },
+  {
+    id: "edu-109",
+    type: "simple",
+    question: "Quel est le taux de scolarisation des enfants de 3 ans en France ?",
+    correctAnswer: 97.5,
+    unit: "%",
+    explanation: "Le taux de scolarisation des enfants de 3 ans est d'environ 97,5% en France, l'un des plus élevés au monde.",
+    theme: "education"
+  },
+  {
+    id: "edu-110",
+    type: "simple",
+    question: "Quelle est la durée moyenne de la scolarité en France ?",
+    correctAnswer: 16.4,
+    unit: "années",
+    explanation: "La durée moyenne de scolarité en France est de 16,4 années, de l'entrée à l'école jusqu'à la fin des études.",
+    theme: "education"
   }
 ];

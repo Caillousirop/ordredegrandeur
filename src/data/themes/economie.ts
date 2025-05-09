@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const economieQuestions: (Question | MultiStepQuestion)[] = [
@@ -437,7 +436,7 @@ export const economieQuestions: (Question | MultiStepQuestion)[] = [
         question: "Quel pourcentage de ces ménages consomme de l'alimentation hors domicile au moins occasionnellement ?",
         correctAnswer: 87,
         unit: "%",
-        explanation: "Environ 87% des ménages français consomment de l'alimentation hors domicile au moins occasionnellement selon les enquêtes de consommation."
+        explanation: "Environ 87% des ménages français consomme de l'alimentation hors domicile au moins occasionnellement selon les enquêtes de consommation."
       },
       {
         question: "Quelle est la dépense mensuelle moyenne d'un ménage pour l'alimentation hors domicile ?",
@@ -722,5 +721,95 @@ export const economieQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En calculant (18,4 millions × 37,5% × 3,5 commandes) / 30 jours, on obtient environ 720 000 livraisons quotidiennes."
       }
     ]
+  },
+  {
+    id: "eco-101",
+    type: "simple",
+    question: "Quel est le PIB par habitant en France ?",
+    correctAnswer: 39500,
+    unit: "euros",
+    explanation: "Le PIB par habitant en France est d'environ 39 500 euros selon les données les plus récentes.",
+    theme: "economie"
+  },
+  {
+    id: "eco-102",
+    type: "simple",
+    question: "Quelle est la part du secteur des services dans le PIB français ?",
+    correctAnswer: 78.9,
+    unit: "%",
+    explanation: "Le secteur des services représente environ 78,9% du PIB français, reflétant la tertiarisation avancée de l'économie.",
+    theme: "economie"
+  },
+  {
+    id: "eco-103",
+    type: "simple",
+    question: "Quel est le taux d'épargne moyen des ménages français en pourcentage du revenu disponible ?",
+    correctAnswer: 15.4,
+    unit: "%",
+    explanation: "Le taux d'épargne moyen des ménages français est d'environ 15,4% du revenu disponible, un des taux les plus élevés d'Europe.",
+    theme: "economie"
+  },
+  {
+    id: "eco-104",
+    type: "simple",
+    question: "Quel est le montant total de la dette publique française en pourcentage du PIB ?",
+    correctAnswer: 112.8,
+    unit: "%",
+    explanation: "La dette publique française représente environ 112,8% du PIB, dépassant largement les critères de Maastricht fixés à 60%.",
+    theme: "economie"
+  },
+  {
+    id: "eco-105",
+    type: "simple",
+    question: "Quel est le salaire médian mensuel net en France (tous emplois confondus) ?",
+    correctAnswer: 1940,
+    unit: "euros",
+    explanation: "Le salaire médian mensuel net en France, tous emplois confondus, est d'environ 1 940 euros.",
+    theme: "economie"
+  },
+  {
+    id: "eco-106",
+    type: "simple",
+    question: "Quel est le pourcentage des exportations françaises destinées aux pays de l'Union Européenne ?",
+    correctAnswer: 59,
+    unit: "%",
+    explanation: "Environ 59% des exportations françaises sont destinées aux pays membres de l'Union Européenne.",
+    theme: "economie"
+  },
+  {
+    id: "eco-107",
+    type: "simple",
+    question: "Quel est le nombre d'entreprises créées chaque année en France ?",
+    correctAnswer: 995000,
+    unit: "entreprises",
+    explanation: "Environ 995 000 entreprises sont créées chaque année en France, incluant les auto-entrepreneurs.",
+    theme: "economie"
+  },
+  {
+    id: "eco-108",
+    type: "simple",
+    question: "Quelle est la part du budget de l'État consacrée à l'éducation ?",
+    correctAnswer: 9.6,
+    unit: "%",
+    explanation: "Environ 9,6% du budget de l'État français est consacré à l'éducation nationale.",
+    theme: "economie"
+  },
+  {
+    id: "eco-109",
+    type: "simple",
+    question: "Quelle est la valeur moyenne du patrimoine net d'un ménage français ?",
+    correctAnswer: 239000,
+    unit: "euros",
+    explanation: "Le patrimoine net moyen d'un ménage français est d'environ 239 000 euros, incluant les biens immobiliers, financiers et professionnels.",
+    theme: "economie"
+  },
+  {
+    id: "eco-110",
+    type: "simple",
+    question: "Quel est le pourcentage de la population française vivant sous le seuil de pauvreté ?",
+    correctAnswer: 14.6,
+    unit: "%",
+    explanation: "Environ 14,6% de la population française vit sous le seuil de pauvreté, défini à 60% du revenu médian.",
+    theme: "economie"
   }
 ];

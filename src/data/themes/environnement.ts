@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const environnementQuestions: (Question | MultiStepQuestion)[] = [
@@ -703,5 +702,95 @@ export const environnementQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "En calculant le nombre initial de sacs (8,2 milliards) moins le pourcentage de réduction (78%), on obtient environ 1,8 milliard de sacs encore utilisés annuellement."
       }
     ]
+  },
+  {
+    id: "env-101",
+    type: "simple",
+    question: "Quelle est la part des énergies renouvelables dans la production d'électricité en France ?",
+    correctAnswer: 25.3,
+    unit: "%",
+    explanation: "Les énergies renouvelables représentent environ 25,3% de la production d'électricité en France.",
+    theme: "environnement"
+  },
+  {
+    id: "env-102",
+    type: "simple",
+    question: "Quelle est la production annuelle moyenne de déchets ménagers par habitant en France ?",
+    correctAnswer: 568,
+    unit: "kg",
+    explanation: "Un habitant français produit en moyenne 568 kg de déchets ménagers par an.",
+    theme: "environnement"
+  },
+  {
+    id: "env-103",
+    type: "simple",
+    question: "Quel pourcentage du territoire français est couvert de forêts ?",
+    correctAnswer: 31,
+    unit: "%",
+    explanation: "Les forêts couvrent environ 31% du territoire français, soit 17 millions d'hectares.",
+    theme: "environnement"
+  },
+  {
+    id: "env-104",
+    type: "simple",
+    question: "Quelle est la consommation d'eau moyenne par jour et par habitant en France ?",
+    correctAnswer: 148,
+    unit: "litres",
+    explanation: "Un Français consomme en moyenne 148 litres d'eau par jour pour ses usages domestiques.",
+    theme: "environnement"
+  },
+  {
+    id: "env-105",
+    type: "simple",
+    question: "Quel est le taux de recyclage des emballages ménagers en France ?",
+    correctAnswer: 68,
+    unit: "%",
+    explanation: "Environ 68% des emballages ménagers sont recyclés en France.",
+    theme: "environnement"
+  },
+  {
+    id: "env-106",
+    type: "simple",
+    question: "Quelle est l'empreinte carbone moyenne d'un Français par an ?",
+    correctAnswer: 9.9,
+    unit: "tonnes de CO2",
+    explanation: "L'empreinte carbone moyenne d'un Français est d'environ 9,9 tonnes de CO2 équivalent par an.",
+    theme: "environnement"
+  },
+  {
+    id: "env-107",
+    type: "simple",
+    question: "Quelle part du parc automobile français est composée de véhicules électriques ou hybrides ?",
+    correctAnswer: 7.8,
+    unit: "%",
+    explanation: "Environ 7,8% du parc automobile français est composé de véhicules électriques ou hybrides.",
+    theme: "environnement"
+  },
+  {
+    id: "env-108",
+    type: "simple",
+    question: "Quelle est la surface moyenne d'espaces verts par habitant dans les grandes villes françaises ?",
+    correctAnswer: 31,
+    unit: "m²",
+    explanation: "Les grandes villes françaises offrent en moyenne 31 m² d'espaces verts par habitant, avec de fortes disparités.",
+    theme: "environnement"
+  },
+  {
+    id: "env-109",
+    type: "simple",
+    question: "Quel pourcentage de l'agriculture française est en mode biologique ?",
+    correctAnswer: 10.3,
+    unit: "%",
+    explanation: "Environ 10,3% des surfaces agricoles françaises sont cultivées en agriculture biologique.",
+    theme: "environnement"
+  },
+  {
+    id: "env-110",
+    type: "simple",
+    question: "Quel est le pourcentage du littoral français protégé par le Conservatoire du littoral ?",
+    correctAnswer: 15.2,
+    unit: "%",
+    explanation: "Environ 15,2% du littoral français est protégé par le Conservatoire du littoral via des acquisitions foncières.",
+    theme: "environnement"
   }
 ];

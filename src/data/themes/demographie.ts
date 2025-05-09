@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 export const demographieQuestions: (Question | MultiStepQuestion)[] = [
@@ -295,5 +294,95 @@ export const demographieQuestions: (Question | MultiStepQuestion)[] = [
     explanation: "Environ 1,7 million de personnes travaillent dans les services à la personne en France selon les données de la DARES.",
     type: "simple",
     theme: "démographie"
+  },
+  {
+    id: "dem-101",
+    type: "simple",
+    question: "Quelle est la proportion de la population française vivant en zone urbaine ?",
+    correctAnswer: 81,
+    unit: "%",
+    explanation: "Environ 81% de la population française vit en zone urbaine selon la définition de l'INSEE.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-102",
+    type: "simple",
+    question: "Quelle est l'espérance de vie d'un homme à la naissance en France ?",
+    correctAnswer: 79.8,
+    unit: "ans",
+    explanation: "L'espérance de vie à la naissance pour un homme en France est de 79,8 ans selon les dernières données disponibles.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-103",
+    type: "simple",
+    question: "Quelle est la proportion de familles monoparentales parmi l'ensemble des familles en France ?",
+    correctAnswer: 24,
+    unit: "%",
+    explanation: "Les familles monoparentales représentent environ 24% de l'ensemble des familles avec enfants en France.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-104",
+    type: "simple",
+    question: "Quelle est la densité de population moyenne en France métropolitaine ?",
+    correctAnswer: 119,
+    unit: "habitants par km²",
+    explanation: "La France métropolitaine a une densité moyenne de 119 habitants par kilomètre carré, avec de fortes disparités régionales.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-105",
+    type: "simple",
+    question: "Quel est le pourcentage de la population française ayant plus de 65 ans ?",
+    correctAnswer: 20.5,
+    unit: "%",
+    explanation: "Les personnes âgées de 65 ans et plus représentent environ 20,5% de la population française totale.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-106",
+    type: "simple",
+    question: "Quel est le taux de natalité en France (nombre de naissances pour 1000 habitants) ?",
+    correctAnswer: 10.9,
+    unit: "naissances pour 1000 habitants",
+    explanation: "Le taux de natalité en France est de 10,9 naissances pour 1000 habitants, un chiffre en baisse depuis plusieurs années.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-107",
+    type: "simple",
+    question: "Quelle est la part des immigrés dans la population française ?",
+    correctAnswer: 10.2,
+    unit: "%",
+    explanation: "Les immigrés représentent environ 10,2% de la population totale en France selon les définitions de l'INSEE.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-108",
+    type: "simple",
+    question: "Quelle est la taille moyenne d'un ménage en France ?",
+    correctAnswer: 2.2,
+    unit: "personnes",
+    explanation: "Un ménage en France compte en moyenne 2,2 personnes, un chiffre en baisse constante depuis plusieurs décennies.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-109",
+    type: "simple",
+    question: "Quel est l'âge médian de la population française ?",
+    correctAnswer: 41.7,
+    unit: "ans",
+    explanation: "L'âge médian de la population française est de 41,7 ans, ce qui signifie que la moitié de la population a plus de cet âge et l'autre moitié a moins.",
+    theme: "demographie"
+  },
+  {
+    id: "dem-110",
+    type: "simple",
+    question: "Quel est le pourcentage de la population française vivant en région parisienne (Île-de-France) ?",
+    correctAnswer: 18.3,
+    unit: "%",
+    explanation: "Environ 18,3% de la population française vit en région parisienne (Île-de-France), qui reste la région la plus peuplée du pays.",
+    theme: "demographie"
   }
 ];
