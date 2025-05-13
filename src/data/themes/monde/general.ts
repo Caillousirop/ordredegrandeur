@@ -7,8 +7,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-101",
     type: "simple",
     question: "Quelle est la population mondiale actuelle ?",
-    correctAnswer: 8000,
-    unit: "millions",
+    correctAnswer: 8000000000,
+    unit: "personnes",
     explanation: "La population mondiale est d'environ 8 milliards d'habitants selon les dernières estimations des Nations Unies.",
     theme: "monde"
   },
@@ -16,8 +16,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-102",
     type: "simple",
     question: "Quel est le PIB mondial total ?",
-    correctAnswer: 101000,
-    unit: "milliards de dollars",
+    correctAnswer: 101000000000000,
+    unit: "dollars",
     explanation: "Le PIB mondial total est d'environ 101 000 milliards de dollars selon les données de la Banque mondiale.",
     theme: "monde"
   },
@@ -70,8 +70,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-108",
     type: "simple",
     question: "Quelle est la surface des terres émergées sur Terre ?",
-    correctAnswer: 149,
-    unit: "millions de km²",
+    correctAnswer: 149000000,
+    unit: "km²",
     explanation: "Les terres émergées représentent environ 149 millions de km² sur la surface totale de la Terre qui est de 510 millions de km².",
     theme: "monde"
   },
@@ -97,8 +97,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-s-001",
     type: "simple",
     question: "Quelle est la population totale de l'Inde ?",
-    correctAnswer: 1428,
-    unit: "millions",
+    correctAnswer: 1428000000,
+    unit: "personnes",
     explanation: "L'Inde compte environ 1,428 milliard d'habitants, ce qui en fait le pays le plus peuplé du monde.",
     theme: "monde"
   },
@@ -106,8 +106,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-s-002",
     type: "simple",
     question: "Combien de personnes vivent en Afrique ?",
-    correctAnswer: 1400,
-    unit: "millions",
+    correctAnswer: 1400000000,
+    unit: "personnes",
     explanation: "Le continent africain compte environ 1,4 milliard d'habitants.",
     theme: "monde"
   },
@@ -115,8 +115,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-s-003",
     type: "simple",
     question: "Combien de personnes parlent le mandarin comme langue maternelle ?",
-    correctAnswer: 920,
-    unit: "millions",
+    correctAnswer: 920000000,
+    unit: "personnes",
     explanation: "Environ 920 millions de personnes parlent le mandarin comme langue maternelle, ce qui en fait la langue la plus parlée au monde.",
     theme: "monde"
   },
@@ -124,8 +124,8 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-s-004",
     type: "simple",
     question: "Quelle est la superficie du Brésil ?",
-    correctAnswer: 8.5,
-    unit: "millions de km²",
+    correctAnswer: 8500000,
+    unit: "km²",
     explanation: "Le Brésil a une superficie d'environ 8,5 millions de kilomètres carrés, ce qui en fait le cinquième plus grand pays du monde.",
     theme: "monde"
   }

@@ -99,8 +99,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population mondiale actuelle ?",
-        correctAnswer: 8000,
-        unit: "millions",
+        correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes selon les dernières estimations des Nations Unies."
       },
       {
@@ -111,8 +111,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de personnes n'ont donc pas accès à l'eau potable dans le monde ?",
-        correctAnswer: 785,
-        unit: "millions",
+        correctAnswer: 785000000,
+        unit: "personnes",
         explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage sans accès à l'eau potable (9,8%), on obtient environ 785 millions de personnes."
       }
     ]
@@ -126,8 +126,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population mondiale actuelle ?",
-        correctAnswer: 8000,
-        unit: "millions",
+        correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes."
       },
       {
@@ -138,8 +138,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de personnes n'ont donc jamais utilisé internet ?",
-        correctAnswer: 2960,
-        unit: "millions",
+        correctAnswer: 2960000000,
+        unit: "personnes",
         explanation: "En calculant le pourcentage de personnes n'ayant jamais utilisé internet (100% - 63% = 37%) et en multipliant par la population mondiale (8 milliards), on obtient environ 2,96 milliards de personnes."
       }
     ]
@@ -153,8 +153,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population mondiale actuelle ?",
-        correctAnswer: 8000,
-        unit: "millions",
+        correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes."
       },
       {
@@ -171,8 +171,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de personnes vivent donc à plus de 2 500 mètres d'altitude ?",
-        correctAnswer: 140,
-        unit: "millions",
+        correctAnswer: 140000000,
+        unit: "personnes",
         explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage de terres à haute altitude (2,8%) et par le ratio de densité (0,625), on obtient environ 140 millions de personnes."
       }
     ]
@@ -186,8 +186,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population urbaine mondiale ?",
-        correctAnswer: 4544,
-        unit: "millions",
+        correctAnswer: 4544000000,
+        unit: "personnes",
         explanation: "La population urbaine mondiale est d'environ 4,544 milliards de personnes, soit environ 56,7% de la population totale."
       },
       {
@@ -198,8 +198,8 @@ export const mondeDemographieQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Quelle est la population moyenne d'une mégapole ?",
-        correctAnswer: 16.1,
-        unit: "millions",
+        correctAnswer: 16100000,
+        unit: "personnes",
         explanation: "Une mégapole compte en moyenne 16,1 millions d'habitants."
       },
       {

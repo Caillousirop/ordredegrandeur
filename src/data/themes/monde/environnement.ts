@@ -153,8 +153,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la superficie forestière mondiale actuelle ?",
-        correctAnswer: 4060,
-        unit: "millions d'hectares",
+        correctAnswer: 4060000000,
+        unit: "hectares",
         explanation: "Les forêts couvrent environ 4 060 millions d'hectares dans le monde selon la FAO."
       },
       {
@@ -165,8 +165,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien d'hectares de forêt disparaissent donc chaque année ?",
-        correctAnswer: 4.7,
-        unit: "millions",
+        correctAnswer: 4700000,
+        unit: "hectares",
         explanation: "En multipliant la superficie forestière mondiale (4 060 millions d'hectares) par le taux de déforestation (0,116%), on obtient environ 4,7 millions d'hectares par an."
       }
     ]
@@ -180,8 +180,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population mondiale actuelle ?",
-        correctAnswer: 8000,
-        unit: "millions",
+        correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes."
       },
       {
@@ -192,8 +192,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de kilos de plastique sont donc produits chaque année dans le monde ?",
-        correctAnswer: 380,
-        unit: "millions de tonnes",
+        correctAnswer: 380000000000,
+        unit: "kg",
         explanation: "En multipliant la population mondiale (8 milliards) par la production annuelle par personne (47,5 kg), on obtient environ 380 millions de tonnes."
       }
     ]
@@ -207,8 +207,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la production alimentaire mondiale annuelle (en tonnes) ?",
-        correctAnswer: 4000,
-        unit: "millions",
+        correctAnswer: 4000000000,
+        unit: "tonnes",
         explanation: "La production alimentaire mondiale annuelle est d'environ 4 milliards de tonnes."
       },
       {
@@ -219,8 +219,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de tonnes de nourriture sont donc gaspillées chaque année ?",
-        correctAnswer: 1300,
-        unit: "millions",
+        correctAnswer: 1300000000,
+        unit: "tonnes",
         explanation: "En multipliant la production alimentaire mondiale (4 milliards de tonnes) par le pourcentage gaspillé (32,5%), on obtient environ 1,3 milliard de tonnes."
       }
     ]
@@ -234,8 +234,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la superficie totale des terres émergées sur Terre ?",
-        correctAnswer: 149,
-        unit: "millions de km²",
+        correctAnswer: 149000000,
+        unit: "km²",
         explanation: "Les terres émergées représentent environ 149 millions de km² sur la surface totale de la Terre qui est de 510 millions de km²."
       },
       {
@@ -246,8 +246,8 @@ export const mondeEnvironnementQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de kilomètres carrés de terres sont donc consacrés à l'agriculture ?",
-        correctAnswer: 48.6,
-        unit: "millions de km²",
+        correctAnswer: 48600000,
+        unit: "km²",
         explanation: "En multipliant la superficie des terres émergées (149 millions de km²) par le pourcentage consacré à l'agriculture (32,6%), on obtient environ 48,6 millions de km²."
       }
     ]
