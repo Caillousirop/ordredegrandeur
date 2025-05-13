@@ -30,8 +30,9 @@ export const useQuiz = () => {
     
     // Apply search filter if there's a query
     if (searchQuery) {
+      const lowerCaseQuery = searchQuery.toLowerCase();
       filtered = filtered.filter(q => 
-        q.question.toLowerCase().includes(searchQuery.toLowerCase())
+        q.question.toLowerCase().includes(lowerCaseQuery)
       );
     }
     
@@ -50,10 +51,8 @@ export const useQuiz = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
-    // Automatically show questions if a theme is selected
-    if (theme) {
-      setActiveTab("questions");
-    }
+    // Ne pas basculer automatiquement vers l'onglet des questions
+    // Suppression de: setActiveTab("questions");
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {

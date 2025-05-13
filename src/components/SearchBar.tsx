@@ -16,6 +16,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     onSearch(query);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    // Rechercher au fur et à mesure que l'utilisateur tape
+    onSearch(newQuery);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-2">
       <div className="relative flex-grow">
@@ -24,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           type="text"
           placeholder="Rechercher une question..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleChange}
           className="pl-10"
         />
       </div>
