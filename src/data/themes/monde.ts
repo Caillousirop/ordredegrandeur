@@ -963,7 +963,7 @@ export const mondeQuestions: (Question | MultiStepQuestion)[] = [
         question: "Quel pourcentage de cette production est gaspillé ou perdu ?",
         correctAnswer: 32.5,
         unit: "%",
-        explanation: "Environ 32,5% de la production alimentaire mondiale est gaspillée ou perdue selon la FAO, que ce soit à la production, au transport, à la distribution ou à la consommation."
+        explanation: "Environ 32,5% de la production alimentaire mondiale est gaspillé ou perdue selon la FAO, que ce soit à la production, au transport, à la distribution ou à la consommation."
       },
       {
         question: "Combien de tonnes de nourriture sont donc gaspillées chaque année ?",
@@ -1026,7 +1026,7 @@ export const mondeQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "Environ 32,6% des terres émergées dans le monde sont consacrées à l'agriculture, selon la FAO."
       },
       {
-        question: "Combien de kilomètres carrés de terres sont donc consacrées à l'agriculture ?",
+        question: "Combien de kilomètres carrés de terres sont donc consacrés à l'agriculture ?",
         correctAnswer: 48.6,
         unit: "millions de km²",
         explanation: "En multipliant la superficie des terres émergées (149 millions de km²) par le pourcentage consacré à l'agriculture (32,6%), on obtient environ 48,6 millions de km²."
@@ -1155,4 +1155,7 @@ export const mondeQuestions: (Question | MultiStepQuestion)[] = [
     question: "Quelle est la superficie du Brésil ?",
     correctAnswer: 8.5,
     unit: "millions de km²",
-    explanation: "Le Brésil a une superficie d'environ 8,
+    explanation: "Le Brésil a une superficie d'environ 8,5 millions de kilomètres carrés, ce qui en fait le cinquième plus grand pays du monde.",
+    theme: "monde"
+  }
+]

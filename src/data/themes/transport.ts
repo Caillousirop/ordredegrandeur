@@ -719,4 +719,17 @@ export const transportQuestions: (Question | MultiStepQuestion)[] = [
         explanation: "Environ 16,5% des actifs utilisent les transports en commun comme mode principal pour se rendre au travail."
       },
       {
-        question: "En plus des trajets domicile-travail, combien
+        question: "En plus des trajets domicile-travail, combien de personnes utilisent les transports en commun pour d'autres motifs ?",
+        correctAnswer: 6.25,
+        unit: "millions",
+        explanation: "Environ 6,25 millions de personnes utilisent les transports en commun pour d'autres motifs que le trajet domicile-travail."
+      },
+      {
+        question: "Combien de personnes utilisent donc les transports en commun chaque jour en France ?",
+        correctAnswer: 16,
+        unit: "millions",
+        explanation: "En additionnant les utilisateurs pour les trajets domicile-travail (environ 4,78 millions) et les utilisateurs pour d'autres motifs (6,25 millions), et en tenant compte des personnes qui font plusieurs trajets, on arrive à environ 16 millions d'utilisateurs quotidiens."
+      }
+    ]
+  }
+]
