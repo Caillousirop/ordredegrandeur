@@ -684,5 +684,475 @@ export const mondeQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Environ 25,4% de la population mondiale est âgée de moins de 15 ans.",
     theme: "monde"
-  }
-];
+  },
+  {
+    id: "mon-ms-001",
+    type: "multistep",
+    question: "Combien de personnes dans le monde n'ont pas accès à l'eau potable ?",
+    finalExplanation: "Environ 785 millions de personnes dans le monde n'ont toujours pas accès à l'eau potable, ce qui représente un défi majeur pour le développement durable.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes selon les dernières estimations des Nations Unies."
+      },
+      {
+        question: "Quel pourcentage de la population mondiale n'a pas accès à l'eau potable ?",
+        correctAnswer: 9.8,
+        unit: "%",
+        explanation: "Environ 9,8% de la population mondiale n'a pas accès à des sources d'eau potable sûres selon l'OMS et l'UNICEF."
+      },
+      {
+        question: "Combien de personnes n'ont donc pas accès à l'eau potable dans le monde ?",
+        correctAnswer: 785,
+        unit: "millions",
+        explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage sans accès à l'eau potable (9,8%), on obtient environ 785 millions de personnes."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-002",
+    type: "multistep",
+    question: "Combien d'heures sont travaillées dans le monde chaque jour ?",
+    finalExplanation: "Environ 30,4 milliards d'heures sont travaillées dans le monde chaque jour, représentant l'effort collectif de l'humanité.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population mondiale est en âge de travailler (15-64 ans) ?",
+        correctAnswer: 65,
+        unit: "%",
+        explanation: "Environ 65% de la population mondiale est en âge de travailler (15-64 ans)."
+      },
+      {
+        question: "Parmi les personnes en âge de travailler, quel pourcentage occupe effectivement un emploi ?",
+        correctAnswer: 58,
+        unit: "%",
+        explanation: "Environ 58% des personnes en âge de travailler occupent effectivement un emploi selon l'Organisation internationale du travail."
+      },
+      {
+        question: "Combien d'heures une personne travaille-t-elle en moyenne par jour dans le monde ?",
+        correctAnswer: 6.4,
+        unit: "heures",
+        explanation: "En moyenne, une personne travaille environ 6,4 heures par jour dans le monde, tous emplois confondus."
+      },
+      {
+        question: "Combien d'heures sont donc travaillées dans le monde chaque jour ?",
+        correctAnswer: 30.4,
+        unit: "milliards",
+        explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage en âge de travailler (65%) par le taux d'emploi (58%) par le nombre d'heures travaillées par jour (6,4), on obtient environ 30,4 milliards d'heures."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-003",
+    type: "multistep",
+    question: "Combien d'hectares de forêt disparaissent chaque année dans le monde ?",
+    finalExplanation: "Environ 4,7 millions d'hectares de forêt disparaissent chaque année dans le monde, principalement en raison de la déforestation pour l'agriculture.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la superficie forestière mondiale actuelle ?",
+        correctAnswer: 4060,
+        unit: "millions d'hectares",
+        explanation: "Les forêts couvrent environ 4 060 millions d'hectares dans le monde selon la FAO."
+      },
+      {
+        question: "Quel est le taux annuel de déforestation nette (pourcentage de forêts qui disparaissent chaque année) ?",
+        correctAnswer: 0.116,
+        unit: "%",
+        explanation: "Le taux annuel de déforestation nette est d'environ 0,116%, ce qui inclut la déforestation moins le reboisement."
+      },
+      {
+        question: "Combien d'hectares de forêt disparaissent donc chaque année ?",
+        correctAnswer: 4.7,
+        unit: "millions",
+        explanation: "En multipliant la superficie forestière mondiale (4 060 millions d'hectares) par le taux de déforestation (0,116%), on obtient environ 4,7 millions d'hectares par an."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-004",
+    type: "multistep",
+    question: "Combien de langues sont parlées dans le monde ?",
+    finalExplanation: "Environ 7 100 langues sont parlées dans le monde aujourd'hui, bien que près de la moitié soit menacée d'extinction d'ici la fin du siècle.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Combien de pays y a-t-il dans le monde (reconnus par l'ONU) ?",
+        correctAnswer: 193,
+        unit: "pays",
+        explanation: "Il y a 193 pays membres des Nations Unies."
+      },
+      {
+        question: "Combien de langues sont parlées en moyenne dans chaque pays ?",
+        correctAnswer: 37,
+        unit: "langues",
+        explanation: "En moyenne, environ 37 langues sont parlées dans chaque pays, avec d'énormes variations (de 1 à plus de 800)."
+      },
+      {
+        question: "Combien de langues sont donc parlées dans le monde ?",
+        correctAnswer: 7100,
+        unit: "langues",
+        explanation: "Le calcul simple (193 pays × 37 langues) donnerait environ 7 100 langues, ce qui correspond aux estimations des linguistes, bien que le calcul réel soit plus complexe car de nombreuses langues sont parlées dans plusieurs pays."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-005",
+    type: "multistep",
+    question: "Combien de personnes vivent avec moins de 2 dollars par jour dans le monde ?",
+    finalExplanation: "Environ 736 millions de personnes vivent avec moins de 2 dollars par jour dans le monde, principalement dans les pays en développement d'Afrique subsaharienne et d'Asie du Sud.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population mondiale vit avec moins de 2 dollars par jour ?",
+        correctAnswer: 9.2,
+        unit: "%",
+        explanation: "Environ 9,2% de la population mondiale vit avec moins de 2 dollars par jour selon la Banque mondiale."
+      },
+      {
+        question: "Combien de personnes vivent donc avec moins de 2 dollars par jour ?",
+        correctAnswer: 736,
+        unit: "millions",
+        explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage vivant avec moins de 2 dollars par jour (9,2%), on obtient environ 736 millions de personnes."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-006",
+    type: "multistep",
+    question: "Combien de mégapoles (villes de plus de 10 millions d'habitants) y a-t-il dans le monde ?",
+    finalExplanation: "Il existe 33 mégapoles dans le monde, ces immenses agglomérations de plus de 10 millions d'habitants concentrent une part croissante de la population mondiale.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population urbaine mondiale ?",
+        correctAnswer: 4544,
+        unit: "millions",
+        explanation: "La population urbaine mondiale est d'environ 4,544 milliards de personnes, soit environ 56,7% de la population totale."
+      },
+      {
+        question: "Quel pourcentage de la population urbaine vit dans des mégapoles (villes de plus de 10 millions d'habitants) ?",
+        correctAnswer: 7.3,
+        unit: "%",
+        explanation: "Environ 7,3% de la population urbaine mondiale vit dans des mégapoles."
+      },
+      {
+        question: "Quelle est la population moyenne d'une mégapole ?",
+        correctAnswer: 16.1,
+        unit: "millions",
+        explanation: "Une mégapole compte en moyenne 16,1 millions d'habitants."
+      },
+      {
+        question: "Combien y a-t-il donc de mégapoles dans le monde ?",
+        correctAnswer: 33,
+        unit: "mégapoles",
+        explanation: "En divisant la population totale des mégapoles (4 544 millions × 7,3% ≈ 332 millions) par la population moyenne d'une mégapole (16,1 millions), on obtient environ 33 mégapoles."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-007",
+    type: "multistep",
+    question: "Combien de kilos de plastique sont produits chaque année dans le monde ?",
+    finalExplanation: "Environ 380 millions de tonnes de plastique sont produites chaque année dans le monde, dont une grande partie finit en déchets non recyclés.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Combien de kilos de plastique sont produits par personne et par an en moyenne ?",
+        correctAnswer: 47.5,
+        unit: "kg",
+        explanation: "En moyenne, environ 47,5 kg de plastique sont produits par personne et par an dans le monde."
+      },
+      {
+        question: "Combien de kilos de plastique sont donc produits chaque année dans le monde ?",
+        correctAnswer: 380,
+        unit: "millions de tonnes",
+        explanation: "En multipliant la population mondiale (8 milliards) par la production annuelle par personne (47,5 kg), on obtient environ 380 millions de tonnes."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-008",
+    type: "multistep",
+    question: "Combien de personnes n'ont jamais utilisé internet dans le monde ?",
+    finalExplanation: "Environ 2,96 milliards de personnes n'ont jamais utilisé internet dans le monde, révélant une importante fracture numérique qui persiste.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population mondiale a déjà utilisé internet ?",
+        correctAnswer: 63,
+        unit: "%",
+        explanation: "Environ 63% de la population mondiale a déjà utilisé internet selon l'Union internationale des télécommunications."
+      },
+      {
+        question: "Combien de personnes n'ont donc jamais utilisé internet ?",
+        correctAnswer: 2960,
+        unit: "millions",
+        explanation: "En calculant le pourcentage de personnes n'ayant jamais utilisé internet (100% - 63% = 37%) et en multipliant par la population mondiale (8 milliards), on obtient environ 2,96 milliards de personnes."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-009",
+    type: "multistep",
+    question: "Combien d'emplois sont liés au tourisme dans le monde ?",
+    finalExplanation: "Environ 289 millions d'emplois sont liés directement ou indirectement au tourisme dans le monde, soit près de 10% de tous les emplois, soulignant l'importance économique de ce secteur.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale active (qui travaille ou cherche un emploi) ?",
+        correctAnswer: 3400,
+        unit: "millions",
+        explanation: "La population active mondiale est d'environ 3,4 milliards de personnes selon l'Organisation internationale du travail."
+      },
+      {
+        question: "Quel pourcentage de la population active travaille dans un emploi lié directement ou indirectement au tourisme ?",
+        correctAnswer: 8.5,
+        unit: "%",
+        explanation: "Environ 8,5% de la population active mondiale travaille dans un emploi lié directement ou indirectement au tourisme selon l'Organisation mondiale du tourisme."
+      },
+      {
+        question: "Combien d'emplois sont donc liés au tourisme dans le monde ?",
+        correctAnswer: 289,
+        unit: "millions",
+        explanation: "En multipliant la population active mondiale (3,4 milliards) par le pourcentage travaillant dans le tourisme (8,5%), on obtient environ 289 millions d'emplois."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-010",
+    type: "multistep",
+    question: "Combien de tonnes de nourriture sont gaspillées chaque année dans le monde ?",
+    finalExplanation: "Environ 1,3 milliard de tonnes de nourriture sont gaspillées chaque année dans le monde, soit près d'un tiers de la production alimentaire mondiale.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la production alimentaire mondiale annuelle (en tonnes) ?",
+        correctAnswer: 4000,
+        unit: "millions",
+        explanation: "La production alimentaire mondiale annuelle est d'environ 4 milliards de tonnes."
+      },
+      {
+        question: "Quel pourcentage de cette production est gaspillé ou perdu ?",
+        correctAnswer: 32.5,
+        unit: "%",
+        explanation: "Environ 32,5% de la production alimentaire mondiale est gaspillée ou perdue selon la FAO, que ce soit à la production, au transport, à la distribution ou à la consommation."
+      },
+      {
+        question: "Combien de tonnes de nourriture sont donc gaspillées chaque année ?",
+        correctAnswer: 1300,
+        unit: "millions",
+        explanation: "En multipliant la production alimentaire mondiale (4 milliards de tonnes) par le pourcentage gaspillé (32,5%), on obtient environ 1,3 milliard de tonnes."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-011",
+    type: "multistep",
+    question: "Combien d'humains ont vécu sur Terre depuis l'apparition de l'espèce humaine ?",
+    finalExplanation: "Environ 108 milliards d'humains ont vécu sur Terre depuis l'apparition de l'espèce humaine il y a environ 300 000 ans.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Depuis combien d'années l'espèce humaine existe-t-elle (Homo sapiens) ?",
+        correctAnswer: 300000,
+        unit: "années",
+        explanation: "L'espèce humaine moderne (Homo sapiens) existe depuis environ 300 000 ans selon les découvertes paléoanthropologiques les plus récentes."
+      },
+      {
+        question: "Quelle a été la population mondiale moyenne sur cette période ?",
+        correctAnswer: 360,
+        unit: "millions",
+        explanation: "La population mondiale moyenne sur cette période est estimée à environ 360 millions de personnes, bien que ce chiffre ait considérablement varié au cours du temps."
+      },
+      {
+        question: "Quelle est l'espérance de vie moyenne sur toute cette période ?",
+        correctAnswer: 33,
+        unit: "années",
+        explanation: "L'espérance de vie moyenne sur toute cette période est estimée à environ 33 ans, avec de grandes variations selon les époques."
+      },
+      {
+        question: "Combien d'humains ont donc vécu sur Terre depuis l'apparition de l'espèce humaine ?",
+        correctAnswer: 108,
+        unit: "milliards",
+        explanation: "En divisant la durée d'existence de l'espèce par l'espérance de vie moyenne et en multipliant par la population moyenne, on peut estimer qu'environ 108 milliards d'humains ont vécu sur Terre."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-012",
+    type: "multistep",
+    question: "Combien de kilomètres carrés de terres sont consacrés à l'agriculture dans le monde ?",
+    finalExplanation: "Environ 48,6 millions de kilomètres carrés de terres sont consacrés à l'agriculture dans le monde, soit près de 37% des terres émergées.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la superficie totale des terres émergées sur Terre ?",
+        correctAnswer: 149,
+        unit: "millions de km²",
+        explanation: "Les terres émergées représentent environ 149 millions de km² sur la surface totale de la Terre qui est de 510 millions de km²."
+      },
+      {
+        question: "Quel pourcentage des terres émergées est consacré à l'agriculture (cultures et pâturages) ?",
+        correctAnswer: 32.6,
+        unit: "%",
+        explanation: "Environ 32,6% des terres émergées dans le monde sont consacrées à l'agriculture, selon la FAO."
+      },
+      {
+        question: "Combien de kilomètres carrés de terres sont donc consacrées à l'agriculture ?",
+        correctAnswer: 48.6,
+        unit: "millions de km²",
+        explanation: "En multipliant la superficie des terres émergées (149 millions de km²) par le pourcentage consacré à l'agriculture (32,6%), on obtient environ 48,6 millions de km²."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-013",
+    type: "multistep",
+    question: "Combien d'automobiles circulent dans le monde ?",
+    finalExplanation: "Environ 1,4 milliard d'automobiles circulent dans le monde, un nombre qui continue d'augmenter notamment dans les économies émergentes.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Combien y a-t-il de voitures en moyenne pour 1000 habitants dans le monde ?",
+        correctAnswer: 175,
+        unit: "voitures",
+        explanation: "On compte en moyenne 175 voitures pour 1000 habitants dans le monde, avec d'importantes disparités régionales."
+      },
+      {
+        question: "Combien d'automobiles circulent donc dans le monde ?",
+        correctAnswer: 1400,
+        unit: "millions",
+        explanation: "En multipliant la population mondiale (8 milliards) par le taux de motorisation (175/1000), on obtient environ 1,4 milliard d'automobiles."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-014",
+    type: "multistep",
+    question: "Combien de smartphones sont actuellement utilisés dans le monde ?",
+    finalExplanation: "Environ 6,8 milliards de smartphones sont actuellement utilisés dans le monde, illustrant la pénétration massive de cette technologie dans la vie quotidienne.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population mondiale utilise un smartphone ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Environ 85% de la population mondiale utilise un smartphone, selon les dernières estimations."
+      },
+      {
+        question: "Combien de smartphones sont donc actuellement utilisés dans le monde ?",
+        correctAnswer: 6800,
+        unit: "millions",
+        explanation: "En multipliant la population mondiale (8 milliards) par le taux d'utilisation des smartphones (85%), on obtient environ 6,8 milliards de smartphones."
+      }
+    ]
+  },
+  {
+    id: "mon-ms-015",
+    type: "multistep",
+    question: "Combien de personnes vivent à plus de 2 500 mètres d'altitude dans le monde ?",
+    finalExplanation: "Environ 140 millions de personnes vivent à plus de 2 500 mètres d'altitude dans le monde, principalement dans les régions montagneuses d'Amérique du Sud, d'Asie et d'Afrique.",
+    theme: "monde",
+    steps: [
+      {
+        question: "Quelle est la population mondiale actuelle ?",
+        correctAnswer: 8000,
+        unit: "millions",
+        explanation: "La population mondiale est d'environ 8 milliards de personnes."
+      },
+      {
+        question: "Quel pourcentage de la surface terrestre se trouve à plus de 2 500 mètres d'altitude ?",
+        correctAnswer: 2.8,
+        unit: "%",
+        explanation: "Environ 2,8% de la surface terrestre se trouve à plus de 2 500 mètres d'altitude."
+      },
+      {
+        question: "Quelle est la densité de population moyenne dans ces zones de haute altitude par rapport à la moyenne mondiale ?",
+        correctAnswer: 0.625,
+        unit: "ratio",
+        explanation: "La densité de population dans les zones de haute altitude est en moyenne 0,625 fois la densité mondiale moyenne."
+      },
+      {
+        question: "Combien de personnes vivent donc à plus de 2 500 mètres d'altitude ?",
+        correctAnswer: 140,
+        unit: "millions",
+        explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage de terres à haute altitude (2,8%) et par le ratio de densité (0,625), on obtient environ 140 millions de personnes."
+      }
+    ]
+  },
+  
+  // Nouvelles questions simples
+  {
+    id: "mon-s-001",
+    type: "simple",
+    question: "Quelle est la population totale de l'Inde ?",
+    correctAnswer: 1428,
+    unit: "millions",
+    explanation: "L'Inde compte environ 1,428 milliard d'habitants, ce qui en fait le pays le plus peuplé du monde.",
+    theme: "monde"
+  },
+  {
+    id: "mon-s-002",
+    type: "simple",
+    question: "Combien de personnes vivent en Afrique ?",
+    correctAnswer: 1400,
+    unit: "millions",
+    explanation: "Le continent africain compte environ 1,4 milliard d'habitants.",
+    theme: "monde"
+  },
+  {
+    id: "mon-s-003",
+    type: "simple",
+    question: "Combien de personnes parlent le mandarin comme langue maternelle ?",
+    correctAnswer: 920,
+    unit: "millions",
+    explanation: "Environ 920 millions de personnes parlent le mandarin comme langue maternelle, ce qui en fait la langue la plus parlée au monde.",
+    theme: "monde"
+  },
+  {
+    id: "mon-s-004",
+    type: "simple",
+    question: "Quelle est la superficie du Brésil ?",
+    correctAnswer: 8.5,
+    unit: "millions de km²",
+    explanation: "Le Brésil a une superficie d'environ 8,

@@ -477,5 +477,246 @@ export const transportQuestions: (Question | MultiStepQuestion)[] = [
     unit: "ans",
     explanation: "L'âge moyen des véhicules du parc automobile français est d'environ 10,5 ans.",
     theme: "transport"
-  }
-];
+  },
+  
+  // Nouvelles questions à étapes
+  {
+    id: "tr-ms-001",
+    type: "multistep",
+    question: "Combien de kilomètres de routes y a-t-il en France ?",
+    finalExplanation: "Le réseau routier français compte environ 1,1 million de kilomètres, ce qui en fait l'un des plus denses d'Europe.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Quelle est la superficie de la France métropolitaine ?",
+        correctAnswer: 551695,
+        unit: "km²",
+        explanation: "La France métropolitaine couvre une superficie d'environ 551 695 km²."
+      },
+      {
+        question: "Quelle est la densité moyenne du réseau routier français (kilomètres de route par km²) ?",
+        correctAnswer: 1.99,
+        unit: "km/km²",
+        explanation: "La densité moyenne du réseau routier français est d'environ 1,99 km de route par km²."
+      },
+      {
+        question: "Combien de kilomètres de routes y a-t-il donc en France ?",
+        correctAnswer: 1100000,
+        unit: "km",
+        explanation: "En multipliant la superficie (551 695 km²) par la densité routière (1,99 km/km²), on obtient environ 1,1 million de kilomètres de routes."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-002",
+    type: "multistep",
+    question: "Combien de passagers voyagent en TGV chaque jour en France ?",
+    finalExplanation: "Environ 350 000 passagers voyagent quotidiennement en TGV en France, ce qui représente une part importante du trafic ferroviaire national.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de TGV circulent chaque jour en France ?",
+        correctAnswer: 700,
+        unit: "trains",
+        explanation: "Environ 700 TGV circulent quotidiennement sur le réseau français."
+      },
+      {
+        question: "Combien de sièges compte un TGV en moyenne ?",
+        correctAnswer: 510,
+        unit: "sièges",
+        explanation: "Un TGV compte en moyenne 510 sièges, selon les modèles et les configurations."
+      },
+      {
+        question: "Quel est le taux d'occupation moyen des TGV ?",
+        correctAnswer: 70,
+        unit: "%",
+        explanation: "Le taux d'occupation moyen des TGV est d'environ 70%."
+      },
+      {
+        question: "Combien de passagers voyagent donc en TGV chaque jour ?",
+        correctAnswer: 350000,
+        unit: "passagers",
+        explanation: "En multipliant le nombre de TGV (700) par le nombre moyen de sièges (510) et par le taux d'occupation (70%), on obtient environ 350 000 passagers quotidiens."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-003",
+    type: "multistep",
+    question: "Combien de litres de carburant sont consommés chaque jour par les automobilistes français ?",
+    finalExplanation: "Environ 64 millions de litres de carburant sont consommés quotidiennement par les automobilistes français, ce qui représente un enjeu économique et environnemental majeur.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de véhicules particuliers circulent en France ?",
+        correctAnswer: 40,
+        unit: "millions",
+        explanation: "La France compte environ 40 millions de véhicules particuliers en circulation."
+      },
+      {
+        question: "Quelle proportion de ces véhicules est utilisée chaque jour ?",
+        correctAnswer: 80,
+        unit: "%",
+        explanation: "Environ 80% des véhicules particuliers sont utilisés quotidiennement."
+      },
+      {
+        question: "Combien de kilomètres parcourt en moyenne un véhicule par jour d'utilisation ?",
+        correctAnswer: 27,
+        unit: "km",
+        explanation: "Un véhicule parcourt en moyenne 27 km par jour d'utilisation."
+      },
+      {
+        question: "Quelle est la consommation moyenne de carburant (en litres pour 100 km) ?",
+        correctAnswer: 7.4,
+        unit: "L/100km",
+        explanation: "La consommation moyenne des véhicules en France est d'environ 7,4 litres aux 100 km."
+      },
+      {
+        question: "Combien de litres de carburant sont donc consommés chaque jour ?",
+        correctAnswer: 64,
+        unit: "millions de litres",
+        explanation: "En multipliant le nombre de véhicules (40 millions) par le taux d'utilisation (80%) par la distance quotidienne (27 km) par la consommation (7,4 L/100km), on obtient environ 64 millions de litres par jour."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-004",
+    type: "multistep",
+    question: "Combien de personnes empruntent le métro parisien chaque année ?",
+    finalExplanation: "Environ 1,8 milliard de trajets sont effectués sur le réseau du métro parisien chaque année, ce qui en fait l'un des réseaux les plus fréquentés au monde.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de stations composent le réseau du métro parisien ?",
+        correctAnswer: 308,
+        unit: "stations",
+        explanation: "Le métro parisien compte 308 stations réparties sur 16 lignes."
+      },
+      {
+        question: "Combien de personnes en moyenne fréquentent chaque station par jour ?",
+        correctAnswer: 16000,
+        unit: "personnes",
+        explanation: "En moyenne, environ 16 000 personnes fréquentent chaque station du métro parisien quotidiennement."
+      },
+      {
+        question: "Combien de jours par an le métro parisien est-il en service ?",
+        correctAnswer: 365,
+        unit: "jours",
+        explanation: "Le métro parisien fonctionne 365 jours par an, même si les horaires peuvent varier selon les jours."
+      },
+      {
+        question: "Combien de trajets sont donc effectués sur le métro parisien chaque année ?",
+        correctAnswer: 1.8,
+        unit: "milliard",
+        explanation: "En multipliant le nombre de stations (308) par la fréquentation moyenne (16 000 personnes) par le nombre de jours d'exploitation (365), on obtient environ 1,8 milliard de trajets annuels."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-005",
+    type: "multistep",
+    question: "Combien de kilomètres sont parcourus par les trains de marchandises en France chaque année ?",
+    finalExplanation: "Les trains de marchandises parcourent environ 36 millions de kilomètres chaque année en France, contribuant significativement au transport de fret du pays.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de trains de marchandises circulent quotidiennement en France ?",
+        correctAnswer: 700,
+        unit: "trains",
+        explanation: "Environ 700 trains de marchandises circulent chaque jour sur le réseau ferroviaire français."
+      },
+      {
+        question: "Quelle distance parcourt en moyenne un train de marchandises par jour ?",
+        correctAnswer: 140,
+        unit: "km",
+        explanation: "Un train de marchandises parcourt en moyenne 140 km par jour en France."
+      },
+      {
+        question: "Combien de jours par an les trains de marchandises circulent-ils ?",
+        correctAnswer: 365,
+        unit: "jours",
+        explanation: "Les trains de marchandises circulent 365 jours par an, bien que le volume puisse varier selon les périodes."
+      },
+      {
+        question: "Combien de kilomètres sont donc parcourus par les trains de marchandises chaque année ?",
+        correctAnswer: 36,
+        unit: "millions",
+        explanation: "En multipliant le nombre de trains (700) par la distance moyenne quotidienne (140 km) par le nombre de jours d'exploitation (365), on obtient environ 36 millions de kilomètres par an."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-006",
+    type: "multistep",
+    question: "Combien de kilomètres sont parcourus par les Français en avion chaque année ?",
+    finalExplanation: "Les Français parcourent environ 174 milliards de kilomètres en avion chaque année, reflétant l'importance du transport aérien dans les déplacements nationaux et internationaux.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Combien de voyages en avion les Français effectuent-ils en moyenne chaque année ?",
+        correctAnswer: 145,
+        unit: "millions",
+        explanation: "Les Français effectuent environ 145 millions de voyages en avion par an (vols nationaux et internationaux)."
+      },
+      {
+        question: "Quelle est la distance moyenne d'un voyage en avion pour un Français ?",
+        correctAnswer: 1200,
+        unit: "km",
+        explanation: "La distance moyenne d'un voyage en avion pour un Français est d'environ 1 200 km."
+      },
+      {
+        question: "Combien de kilomètres sont donc parcourus par les Français en avion chaque année ?",
+        correctAnswer: 174,
+        unit: "milliards",
+        explanation: "En multipliant le nombre de voyages (145 millions) par la distance moyenne (1 200 km), on obtient environ 174 milliards de kilomètres par an."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-007",
+    type: "multistep",
+    question: "Combien de vélos sont vendus chaque année en France ?",
+    finalExplanation: "Environ 2,7 millions de vélos sont vendus chaque année en France, un chiffre en augmentation avec l'intérêt croissant pour les mobilités douces.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Quelle est la population de la France ?",
+        correctAnswer: 68,
+        unit: "millions",
+        explanation: "La France compte environ 68 millions d'habitants."
+      },
+      {
+        question: "Quel est le taux de renouvellement annuel du parc de vélos en France (pourcentage de la population qui achète un vélo neuf chaque année) ?",
+        correctAnswer: 3.97,
+        unit: "%",
+        explanation: "Environ 3,97% de la population française achète un vélo neuf chaque année."
+      },
+      {
+        question: "Combien de vélos sont donc vendus chaque année en France ?",
+        correctAnswer: 2.7,
+        unit: "millions",
+        explanation: "En multipliant la population (68 millions) par le taux d'achat annuel (3,97%), on obtient environ 2,7 millions de vélos vendus par an."
+      }
+    ]
+  },
+  {
+    id: "tr-ms-008",
+    type: "multistep",
+    question: "Combien de voyageurs utilisent les transports en commun en France chaque jour ?",
+    finalExplanation: "Environ 16 millions de voyageurs utilisent les transports en commun chaque jour en France, une part significative de la mobilité quotidienne.",
+    theme: "transport",
+    steps: [
+      {
+        question: "Quelle est la population active de la France ?",
+        correctAnswer: 29,
+        unit: "millions",
+        explanation: "La France compte environ 29 millions d'actifs (personnes en emploi ou cherchant un emploi)."
+      },
+      {
+        question: "Quel pourcentage des actifs utilise les transports en commun pour se rendre au travail ?",
+        correctAnswer: 16.5,
+        unit: "%",
+        explanation: "Environ 16,5% des actifs utilisent les transports en commun comme mode principal pour se rendre au travail."
+      },
+      {
+        question: "En plus des trajets domicile-travail, combien
