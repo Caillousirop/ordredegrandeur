@@ -715,5 +715,395 @@ export const santeHospitaliereQuestions: (Question | MultiStepQuestion)[] = [
     unit: "tonnes",
     explanation: "Les blanchisseries hospitalières françaises traitent environ 320 000 tonnes de linge par an, soit près d'une tonne par jour et par établissement en moyenne.",
     theme: "santé"
+  },
+  {
+    id: "sante-multistep-hosp-1",
+    type: "multistep",
+    question: "Combien de chambres individuelles faut-il pour équiper tous les hôpitaux français ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien y a-t-il de lits d'hospitalisation en France ?",
+        correctAnswer: 395000,
+        unit: "lits",
+        explanation: "La France compte environ 395 000 lits d'hospitalisation, tous établissements confondus."
+      },
+      {
+        question: "Quel pourcentage de ces lits sont déjà en chambre individuelle ?",
+        correctAnswer: 45,
+        unit: "%",
+        explanation: "Environ 45% des lits d'hospitalisation sont déjà en chambre individuelle."
+      },
+      {
+        question: "Combien de lits sont donc en chambres partagées ?",
+        correctAnswer: 217250,
+        unit: "lits",
+        explanation: "En soustrayant les lits déjà en chambre individuelle (395 000 × 45% = 177 750) du total, on obtient 217 250 lits en chambres partagées."
+      },
+      {
+        question: "Combien de chambres individuelles faut-il pour équiper tous les hôpitaux français ?",
+        correctAnswer: 217250,
+        unit: "chambres",
+        explanation: "Il faudrait donc 217 250 chambres individuelles supplémentaires pour que tous les patients hospitalisés puissent bénéficier d'une chambre privative."
+      }
+    ],
+    finalExplanation: "Pour équiper tous les hôpitaux français en chambres individuelles, il faudrait créer 217 250 chambres supplémentaires, ce qui représenterait un investissement immobilier et technique considérable pour le système hospitalier."
+  },
+  {
+    id: "sante-multistep-hosp-2",
+    type: "multistep",
+    question: "Combien de personnes travaillent dans le secteur hospitalier en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien d'établissements hospitaliers y a-t-il en France ?",
+        correctAnswer: 3000,
+        unit: "établissements",
+        explanation: "La France compte environ 3 000 établissements hospitaliers, publics et privés confondus."
+      },
+      {
+        question: "Combien de personnes travaillent en moyenne dans un établissement hospitalier ?",
+        correctAnswer: 520,
+        unit: "personnes",
+        explanation: "En moyenne, 520 personnes travaillent dans un établissement hospitalier en France, tous métiers confondus."
+      },
+      {
+        question: "Combien de personnes travaillent dans le secteur hospitalier en France ?",
+        correctAnswer: 1560000,
+        unit: "personnes",
+        explanation: "En multipliant le nombre d'établissements (3 000) par le nombre moyen de personnes par établissement (520), on obtient environ 1,56 million de personnes travaillant dans le secteur hospitalier."
+      }
+    ],
+    finalExplanation: "En France, environ 1,56 million de personnes travaillent dans le secteur hospitalier, ce qui représente un des plus grands employeurs du pays, regroupant des métiers très variés (soignants, administratifs, techniques, logistiques)."
+  },
+  {
+    id: "sante-multistep-hosp-3",
+    type: "multistep",
+    question: "Combien de patients reçoivent une transfusion sanguine chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de poches de sang sont collectées chaque année en France ?",
+        correctAnswer: 3000000,
+        unit: "poches",
+        explanation: "Environ 3 millions de poches de sang sont collectées chaque année en France par l'Établissement Français du Sang (EFS)."
+      },
+      {
+        question: "Quel est le pourcentage de ces poches effectivement utilisées pour des transfusions ?",
+        correctAnswer: 92,
+        unit: "%",
+        explanation: "Environ 92% des poches de sang collectées sont effectivement utilisées pour des transfusions sanguines."
+      },
+      {
+        question: "Combien de poches de sang sont utilisées en moyenne par patient transfusé ?",
+        correctAnswer: 3.5,
+        unit: "poches",
+        explanation: "En moyenne, 3,5 poches de sang sont utilisées par patient transfusé."
+      },
+      {
+        question: "Combien de patients reçoivent une transfusion sanguine chaque année en France ?",
+        correctAnswer: 788571,
+        unit: "patients",
+        explanation: "En divisant le nombre de poches utilisées (3 millions × 92% = 2,76 millions) par le nombre moyen de poches par patient (3,5), on obtient environ 788 571 patients transfusés."
+      }
+    ],
+    finalExplanation: "En France, environ 788 571 patients reçoivent une transfusion sanguine chaque année, soulignant l'importance des dons de sang réguliers pour maintenir des réserves suffisantes."
+  },
+  {
+    id: "sante-multistep-hosp-4",
+    type: "multistep",
+    question: "Combien d'opérations chirurgicales sont réalisées chaque jour en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien d'opérations chirurgicales sont réalisées chaque année en France ?",
+        correctAnswer: 9300000,
+        unit: "opérations",
+        explanation: "Environ 9,3 millions d'opérations chirurgicales sont réalisées chaque année en France."
+      },
+      {
+        question: "Combien de jours par an les blocs opératoires fonctionnent-ils ?",
+        correctAnswer: 260,
+        unit: "jours",
+        explanation: "Les blocs opératoires fonctionnent environ 260 jours par an, en tenant compte des week-ends et des périodes de moindre activité."
+      },
+      {
+        question: "Combien d'opérations chirurgicales sont réalisées chaque jour en France ?",
+        correctAnswer: 35770,
+        unit: "opérations",
+        explanation: "En divisant le nombre annuel d'opérations (9,3 millions) par le nombre de jours d'activité (260), on obtient environ 35 770 opérations chirurgicales par jour."
+      }
+    ],
+    finalExplanation: "En France, environ 35 770 opérations chirurgicales sont réalisées chaque jour, allant des interventions mineures aux opérations les plus complexes, témoignant de l'activité intense des blocs opératoires."
+  },
+  {
+    id: "sante-multistep-hosp-5",
+    type: "multistep",
+    question: "Quelle est la consommation électrique annuelle d'un hôpital moyen en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la superficie moyenne d'un hôpital en France ?",
+        correctAnswer: 25000,
+        unit: "m²",
+        explanation: "Un hôpital moyen en France a une superficie d'environ 25 000 m²."
+      },
+      {
+        question: "Quelle est la consommation électrique moyenne par m² dans un hôpital ?",
+        correctAnswer: 280,
+        unit: "kWh/m²/an",
+        explanation: "La consommation électrique moyenne dans un hôpital est d'environ 280 kWh par m² et par an."
+      },
+      {
+        question: "Quelle est la consommation électrique annuelle d'un hôpital moyen en France ?",
+        correctAnswer: 7000000,
+        unit: "kWh",
+        explanation: "En multipliant la superficie (25 000 m²) par la consommation par m² (280 kWh), on obtient 7 000 000 kWh, soit 7 GWh de consommation électrique annuelle pour un hôpital moyen."
+      }
+    ],
+    finalExplanation: "Un hôpital moyen en France consomme environ 7 GWh d'électricité par an, soit l'équivalent de la consommation annuelle de 1 500 foyers, ce qui en fait une installation très énergivore."
+  },
+  {
+    id: "sante-multistep-hosp-6",
+    type: "multistep",
+    question: "Combien de tonnes de déchets médicaux sont produites par les hôpitaux français par an ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de lits d'hospitalisation y a-t-il en France ?",
+        correctAnswer: 395000,
+        unit: "lits",
+        explanation: "La France compte environ 395 000 lits d'hospitalisation, tous établissements confondus."
+      },
+      {
+        question: "Quel est le taux d'occupation moyen des lits hospitaliers en France ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Le taux d'occupation moyen des lits hospitaliers en France est d'environ 85%."
+      },
+      {
+        question: "Combien de tonnes de déchets médicaux sont produites par les hôpitaux français par an ?",
+        correctAnswer: 391000,
+        unit: "tonnes",
+        explanation: "En multipliant le nombre de lits (395 000) par le taux d'occupation (85%) par le nombre de jours (365), on obtient environ 391 000 tonnes de déchets médicaux par an."
+      }
+    ],
+    finalExplanation: "Les hôpitaux français produisent environ 391 000 tonnes de déchets médicaux par an, dont une partie importante nécessite des traitements spéciaux en raison des risques infectieux ou chimiques qu'ils représentent."
+  },
+  {
+    id: "sante-multistep-hosp-7",
+    type: "multistep",
+    question: "Combien de repas sont servis chaque jour dans les hôpitaux français ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de lits d'hospitalisation y a-t-il en France ?",
+        correctAnswer: 395000,
+        unit: "lits",
+        explanation: "La France compte environ 395 000 lits d'hospitalisation, tous établissements confondus."
+      },
+      {
+        question: "Quel est le taux d'occupation moyen des lits hospitaliers ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Le taux d'occupation moyen des lits hospitaliers est d'environ 85%."
+      },
+      {
+        question: "Combien de repas sont servis par jour et par patient hospitalisé en moyenne ?",
+        correctAnswer: 2.8,
+        unit: "repas",
+        explanation: "En moyenne, 2,8 repas sont servis par jour et par patient hospitalisé (petit-déjeuner, déjeuner, dîner et collations)."
+      },
+      {
+        question: "Combien de repas sont servis chaque jour dans les hôpitaux français ?",
+        correctAnswer: 940520,
+        unit: "repas",
+        explanation: "En multipliant le nombre de lits (395 000) par le taux d'occupation (85%) par le nombre de repas par patient (2,8), on obtient environ 940 520 repas servis par jour."
+      }
+    ],
+    finalExplanation: "Dans les hôpitaux français, environ 940 520 repas sont servis chaque jour aux patients hospitalisés, ce qui représente un défi logistique et nutritionnel important pour les établissements de santé."
+  },
+  {
+    id: "sante-multistep-hosp-8",
+    type: "multistep",
+    question: "Combien de lits de réanimation sont disponibles en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien d'hôpitaux en France disposent d'un service de réanimation ?",
+        correctAnswer: 380,
+        unit: "hôpitaux",
+        explanation: "Environ 380 hôpitaux en France disposent d'un service de réanimation."
+      },
+      {
+        question: "Combien de lits de réanimation compte en moyenne chaque service ?",
+        correctAnswer: 14,
+        unit: "lits",
+        explanation: "Un service de réanimation compte en moyenne 14 lits."
+      },
+      {
+        question: "Combien de lits de réanimation sont disponibles en France ?",
+        correctAnswer: 5320,
+        unit: "lits",
+        explanation: "En multipliant le nombre d'hôpitaux avec service de réanimation (380) par le nombre moyen de lits par service (14), on obtient environ 5 320 lits de réanimation."
+      }
+    ],
+    finalExplanation: "La France dispose d'environ 5 320 lits de réanimation, un chiffre qui peut être augmenté temporairement en cas de crise sanitaire (comme observé pendant la pandémie de COVID-19) grâce à des réorganisations des services hospitaliers."
+  },
+  {
+    id: "sante-multistep-hosp-9",
+    type: "multistep",
+    question: "Combien de consultations ont lieu dans les services d'urgence chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de services d'urgence y a-t-il en France ?",
+        correctAnswer: 650,
+        unit: "services",
+        explanation: "La France compte environ 650 services d'urgence hospitaliers."
+      },
+      {
+        question: "Combien de patients en moyenne un service d'urgence reçoit-il par jour ?",
+        correctAnswer: 80,
+        unit: "patients",
+        explanation: "Un service d'urgence reçoit en moyenne 80 patients par jour, avec d'importantes variations selon la localisation et la taille de l'établissement."
+      },
+      {
+        question: "Combien de jours par an les services d'urgence sont-ils ouverts ?",
+        correctAnswer: 365,
+        unit: "jours",
+        explanation: "Les services d'urgence sont ouverts 365 jours par an, 24 heures sur 24."
+      },
+      {
+        question: "Combien de consultations ont lieu dans les services d'urgence chaque année ?",
+        correctAnswer: 18980000,
+        unit: "consultations",
+        explanation: "En multipliant le nombre de services d'urgence (650) par le nombre moyen de patients quotidiens (80) par le nombre de jours d'ouverture (365), on obtient environ 18 980 000 consultations par an."
+      }
+    ],
+    finalExplanation: "En France, environ 18,98 millions de consultations ont lieu dans les services d'urgence chaque année, ce qui représente une charge importante pour ces services et explique en partie les problèmes d'engorgement souvent rencontrés."
+  },
+  {
+    id: "sante-multistep-hosp-10",
+    type: "multistep",
+    question: "Combien de litres d'eau sont consommés chaque jour dans les hôpitaux français ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de lits d'hospitalisation y a-t-il en France ?",
+        correctAnswer: 395000,
+        unit: "lits",
+        explanation: "La France compte environ 395 000 lits d'hospitalisation, tous établissements confondus."
+      },
+      {
+        question: "Quel est le taux d'occupation moyen des lits hospitaliers ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Le taux d'occupation moyen des lits hospitaliers est d'environ 85%."
+      },
+      {
+        question: "Quelle est la consommation d'eau moyenne par lit occupé et par jour ?",
+        correctAnswer: 450,
+        unit: "litres",
+        explanation: "La consommation d'eau moyenne est d'environ 450 litres par lit occupé et par jour dans un hôpital."
+      },
+      {
+        question: "Combien de litres d'eau sont consommés chaque jour dans les hôpitaux français ?",
+        correctAnswer: 151088750,
+        unit: "litres",
+        explanation: "En multipliant le nombre de lits (395 000) par le taux d'occupation (85%) par la consommation quotidienne par lit (450 litres), on obtient environ 151 088 750 litres d'eau consommés par jour."
+      }
+    ],
+    finalExplanation: "Les hôpitaux français consomment environ 151,1 millions de litres d'eau chaque jour, soit l'équivalent de la consommation quotidienne d'une ville de 800 000 habitants, ce qui en fait des établissements très consommateurs en ressources hydriques."
+  },
+  {
+    id: "sante-simple-hosp-1",
+    type: "simple",
+    question: "Quelle est la durée moyenne d'attente avant une opération chirurgicale programmée en France ?",
+    correctAnswer: 61,
+    unit: "jours",
+    explanation: "La durée moyenne d'attente avant une opération chirurgicale programmée en France est de 61 jours.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-2",
+    type: "simple",
+    question: "Quel est le nombre moyen d'infirmier(ère)s par lit d'hospitalisation en France ?",
+    correctAnswer: 0.8,
+    unit: "infirmier(ère)s",
+    explanation: "On compte environ 0,8 infirmier(ère) par lit d'hospitalisation en France, ce qui correspond à un ratio de 1 infirmier(ère) pour 1,25 lit.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-3",
+    type: "simple",
+    question: "Quel pourcentage des naissances en France a lieu dans un hôpital public ?",
+    correctAnswer: 71,
+    unit: "%",
+    explanation: "Environ 71% des naissances en France ont lieu dans un hôpital public, contre 29% dans le secteur privé.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-4",
+    type: "simple",
+    question: "Quelle est la température moyenne maintenue dans un bloc opératoire ?",
+    correctAnswer: 19.5,
+    unit: "°C",
+    explanation: "La température moyenne maintenue dans un bloc opératoire est d'environ 19,5°C pour limiter la prolifération bactérienne et assurer le confort de l'équipe chirurgicale.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-5",
+    type: "simple",
+    question: "Quel est le pourcentage de patients qui contractent une infection nosocomiale pendant leur séjour à l'hôpital en France ?",
+    correctAnswer: 4.8,
+    unit: "%",
+    explanation: "Environ 4,8% des patients hospitalisés contractent une infection nosocomiale pendant leur séjour à l'hôpital en France.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-6",
+    type: "simple",
+    question: "Quelle est la surface moyenne d'une chambre d'hôpital en France ?",
+    correctAnswer: 18.5,
+    unit: "m²",
+    explanation: "Une chambre d'hôpital en France fait en moyenne 18,5 m².",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-7",
+    type: "simple",
+    question: "Quel est le budget moyen d'investissement annuel d'un hôpital universitaire en France ?",
+    correctAnswer: 43000000,
+    unit: "euros",
+    explanation: "Le budget moyen d'investissement annuel d'un hôpital universitaire en France est d'environ 43 millions d'euros.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-8",
+    type: "simple",
+    question: "Quelle est la durée moyenne d'une opération chirurgicale en France ?",
+    correctAnswer: 78.5,
+    unit: "minutes",
+    explanation: "La durée moyenne d'une opération chirurgicale en France est d'environ 78,5 minutes, tous types d'interventions confondus.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-9",
+    type: "simple",
+    question: "Quel est le pourcentage de lits d'hôpitaux privés en France ?",
+    correctAnswer: 37,
+    unit: "%",
+    explanation: "Environ 37% des lits d'hôpitaux en France sont dans des établissements privés (à but lucratif ou non).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-hosp-10",
+    type: "simple",
+    question: "Combien de médecins travaillent dans le secteur hospitalier public en France ?",
+    correctAnswer: 95000,
+    unit: "médecins",
+    explanation: "Environ 95 000 médecins travaillent dans le secteur hospitalier public en France.",
+    theme: "santé"
   }
-]
+];

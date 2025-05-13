@@ -355,7 +355,7 @@ export const santeStatistiquesQuestions: (Question | MultiStepQuestion)[] = [
         question: "Parmi ces personnes, quelle proportion bénéficie d'une reconnaissance administrative de leur handicap ?",
         correctAnswer: 56,
         unit: "%",
-        explanation: "Environ 56% des personnes se déclarant en situation de handicap bénéficient d'une reconnaissance administrative (allocation, carte d'invalidité, RQTH, etc.)."
+        explanation: "Environ 56% des personnes se déclarent en situation de handicap bénéficient d'une reconnaissance administrative (allocation, carte d'invalidité, RQTH, etc.)."
       },
       {
         question: "Combien de personnes vivent avec un handicap reconnu en France ?",
@@ -685,5 +685,431 @@ export const santeStatistiquesQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Environ 17% des Français souffrent d'arthrose, avec une prévalence qui augmente fortement avec l'âge.",
     theme: "santé"
+  },
+  {
+    id: "sante-multistep-stats-1",
+    type: "multistep",
+    question: "Combien de litres de solution hydroalcoolique sont utilisés chaque année dans les hôpitaux français ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien d'hôpitaux y a-t-il en France ?",
+        correctAnswer: 3000,
+        unit: "hôpitaux",
+        explanation: "La France compte environ 3 000 établissements hospitaliers publics et privés."
+      },
+      {
+        question: "Combien de lits d'hospitalisation y a-t-il en moyenne par hôpital ?",
+        correctAnswer: 175,
+        unit: "lits",
+        explanation: "Il y a en moyenne 175 lits d'hospitalisation par établissement hospitalier en France."
+      },
+      {
+        question: "Combien de litres de solution hydroalcoolique sont utilisés par lit d'hospitalisation et par an ?",
+        correctAnswer: 12,
+        unit: "litres",
+        explanation: "Environ 12 litres de solution hydroalcoolique sont utilisés par lit d'hospitalisation et par an."
+      },
+      {
+        question: "Combien de litres de solution hydroalcoolique sont utilisés chaque année dans les hôpitaux français ?",
+        correctAnswer: 6300000,
+        unit: "litres",
+        explanation: "En multipliant le nombre d'hôpitaux (3 000) par le nombre moyen de lits (175) par la consommation par lit (12 litres), on obtient environ 6,3 millions de litres de solution hydroalcoolique utilisés annuellement."
+      }
+    ],
+    finalExplanation: "Les hôpitaux français consomment environ 6,3 millions de litres de solution hydroalcoolique chaque année pour l'hygiène des mains du personnel soignant et des visiteurs, ce qui est essentiel pour prévenir les infections nosocomiales."
+  },
+  {
+    id: "sante-multistep-stats-2",
+    type: "multistep",
+    question: "Combien d'IRM sont réalisées chaque année en France ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien y a-t-il d'appareils d'IRM en France ?",
+        correctAnswer: 950,
+        unit: "appareils",
+        explanation: "La France dispose d'environ 950 appareils d'IRM répartis sur tout le territoire."
+      },
+      {
+        question: "Combien d'examens un appareil d'IRM réalise-t-il en moyenne par jour ?",
+        correctAnswer: 15,
+        unit: "examens",
+        explanation: "Un appareil d'IRM réalise en moyenne 15 examens par jour."
+      },
+      {
+        question: "Combien de jours par an un appareil d'IRM est-il en fonctionnement ?",
+        correctAnswer: 290,
+        unit: "jours",
+        explanation: "Un appareil d'IRM fonctionne en moyenne 290 jours par an, en tenant compte des périodes de maintenance."
+      },
+      {
+        question: "Combien d'IRM sont réalisées chaque année en France ?",
+        correctAnswer: 4132500,
+        unit: "examens",
+        explanation: "En multipliant le nombre d'appareils (950) par le nombre d'examens quotidiens (15) par le nombre de jours de fonctionnement (290), on obtient environ 4 132 500 examens d'IRM par an."
+      }
+    ],
+    finalExplanation: "En France, environ 4,13 millions d'examens d'IRM sont réalisés chaque année, ce qui représente un outil diagnostique majeur dans la médecine moderne."
+  },
+  {
+    id: "sante-multistep-stats-3",
+    type: "multistep",
+    question: "Combien de seringues sont utilisées chaque année dans le système de santé français ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de jours d'hospitalisation sont comptabilisés par an en France ?",
+        correctAnswer: 120000000,
+        unit: "journées",
+        explanation: "La France compte environ 120 millions de journées d'hospitalisation par an."
+      },
+      {
+        question: "Combien de seringues sont utilisées en moyenne par jour d'hospitalisation ?",
+        correctAnswer: 3.2,
+        unit: "seringues",
+        explanation: "Environ 3,2 seringues sont utilisées en moyenne par jour d'hospitalisation."
+      },
+      {
+        question: "Combien d'injections sont réalisées en médecine de ville chaque année ?",
+        correctAnswer: 325000000,
+        unit: "injections",
+        explanation: "Environ 325 millions d'injections sont réalisées chaque année en médecine de ville (vaccinations, traitements, etc.)."
+      },
+      {
+        question: "Combien de seringues sont utilisées chaque année dans le système de santé français ?",
+        correctAnswer: 709000000,
+        unit: "seringues",
+        explanation: "En additionnant les seringues utilisées à l'hôpital (120 millions × 3,2 = 384 millions) et celles utilisées en médecine de ville (325 millions), on obtient environ 709 millions de seringues par an."
+      }
+    ],
+    finalExplanation: "Le système de santé français utilise environ 709 millions de seringues chaque année, pour les hospitalisations et les soins en médecine de ville, ce qui souligne l'importance de la gestion des déchets médicaux."
+  },
+  {
+    id: "sante-multistep-stats-4",
+    type: "multistep",
+    question: "Combien de tensiomètres sont vendus aux particuliers chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de personnes atteintes d'hypertension artérielle en France ?",
+        correctAnswer: 15000000,
+        unit: "personnes",
+        explanation: "Environ 15 millions de personnes sont atteintes d'hypertension artérielle en France."
+      },
+      {
+        question: "Quel pourcentage de ces personnes possède un tensiomètre à domicile ?",
+        correctAnswer: 35,
+        unit: "%",
+        explanation: "Environ 35% des personnes hypertendues possèdent un tensiomètre à domicile pour surveiller leur tension artérielle."
+      },
+      {
+        question: "Quelle est la durée de vie moyenne d'un tensiomètre électronique grand public ?",
+        correctAnswer: 6,
+        unit: "années",
+        explanation: "Un tensiomètre électronique a une durée de vie moyenne de 6 ans avant remplacement."
+      },
+      {
+        question: "Combien de tensiomètres sont vendus aux particuliers chaque année ?",
+        correctAnswer: 875000,
+        unit: "tensiomètres",
+        explanation: "En divisant le nombre de personnes hypertendues possédant un tensiomètre (15 millions × 35% = 5,25 millions) par la durée de vie moyenne (6 ans), on obtient environ 875 000 tensiomètres vendus par an."
+      }
+    ],
+    finalExplanation: "Environ 875 000 tensiomètres sont vendus aux particuliers chaque année en France, principalement pour le suivi de l'hypertension artérielle à domicile, une pratique encouragée par les médecins."
+  },
+  {
+    id: "sante-multistep-stats-5",
+    type: "multistep",
+    question: "Quel est le besoin annuel en gants jetables dans un hôpital moyen ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de lits compte un hôpital moyen en France ?",
+        correctAnswer: 175,
+        unit: "lits",
+        explanation: "Un hôpital moyen en France compte environ 175 lits."
+      },
+      {
+        question: "Combien de soignants interviennent en moyenne auprès de chaque patient hospitalisé par jour ?",
+        correctAnswer: 8,
+        unit: "soignants",
+        explanation: "En moyenne, 8 soignants différents (médecins, infirmiers, aides-soignants, etc.) interviennent auprès de chaque patient hospitalisé chaque jour."
+      },
+      {
+        question: "Combien de paires de gants un soignant utilise-t-il en moyenne par patient et par intervention ?",
+        correctAnswer: 1.5,
+        unit: "paires",
+        explanation: "Un soignant utilise en moyenne 1,5 paire de gants par patient et par intervention."
+      },
+      {
+        question: "Combien de jours d'hospitalisation un hôpital moyen enregistre-t-il par an ?",
+        correctAnswer: 58000,
+        unit: "jours",
+        explanation: "Un hôpital moyen enregistre environ 58 000 journées d'hospitalisation par an (175 lits × taux d'occupation de 90% × 365 jours)."
+      },
+      {
+        question: "Quel est le besoin annuel en gants jetables dans un hôpital moyen ?",
+        correctAnswer: 696000,
+        unit: "paires",
+        explanation: "En multipliant le nombre de journées d'hospitalisation (58 000) par le nombre de soignants par patient (8) par le nombre de paires de gants par intervention (1,5), on obtient environ 696 000 paires de gants."
+      }
+    ],
+    finalExplanation: "Un hôpital moyen en France a besoin d'environ 696 000 paires de gants jetables par an pour assurer les soins aux patients hospitalisés, sans compter les consultations externes et les interventions chirurgicales."
+  },
+  {
+    id: "sante-multistep-stats-6",
+    type: "multistep",
+    question: "Combien de stéthoscopes sont vendus par an aux nouveaux médecins ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien de nouveaux médecins sont diplômés chaque année en France ?",
+        correctAnswer: 9500,
+        unit: "médecins",
+        explanation: "Environ 9 500 nouveaux médecins sont diplômés chaque année en France."
+      },
+      {
+        question: "Quel pourcentage de ces nouveaux médecins achète un stéthoscope dès la fin de leurs études ?",
+        correctAnswer: 92,
+        unit: "%",
+        explanation: "Environ 92% des nouveaux médecins achètent un stéthoscope dès la fin de leurs études."
+      },
+      {
+        question: "Combien de stéthoscopes par médecin sont achetés en moyenne lors de la première année d'exercice ?",
+        correctAnswer: 1.1,
+        unit: "stéthoscopes",
+        explanation: "Les nouveaux médecins achètent en moyenne 1,1 stéthoscope lors de leur première année d'exercice (certains en achètent un deuxième pour leur domicile ou en remplacement)."
+      },
+      {
+        question: "Combien de stéthoscopes sont vendus par an aux nouveaux médecins ?",
+        correctAnswer: 9614,
+        unit: "stéthoscopes",
+        explanation: "En multipliant le nombre de nouveaux médecins (9 500) par le pourcentage achetant un stéthoscope (92%) par le nombre moyen de stéthoscopes achetés (1,1), on obtient environ 9 614 stéthoscopes."
+      }
+    ],
+    finalExplanation: "Environ 9 614 stéthoscopes sont vendus chaque année aux nouveaux médecins en France, ce qui représente un marché important pour les fabricants de matériel médical."
+  },
+  {
+    id: "sante-multistep-stats-7",
+    type: "multistep",
+    question: "Combien d'analyses de sang sont réalisées chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 67500000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 67,5 millions de personnes."
+      },
+      {
+        question: "Combien d'analyses de sang une personne réalise-t-elle en moyenne par an ?",
+        correctAnswer: 2.3,
+        unit: "analyses",
+        explanation: "En moyenne, une personne réalise 2,3 analyses de sang par an en France."
+      },
+      {
+        question: "Quel pourcentage de la population effectue au moins une analyse de sang par an ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Environ 85% de la population française effectue au moins une analyse de sang par an."
+      },
+      {
+        question: "Combien d'analyses de sang sont réalisées chaque année en France ?",
+        correctAnswer: 131962500,
+        unit: "analyses",
+        explanation: "En multipliant la population (67,5 millions) par le pourcentage effectuant des analyses (85%) par le nombre moyen d'analyses par personne (2,3), on obtient environ 131 962 500 analyses de sang par an."
+      }
+    ],
+    finalExplanation: "En France, environ 132 millions d'analyses de sang sont réalisées chaque année, ce qui témoigne de l'importance de la biologie médicale dans le diagnostic et le suivi des patients."
+  },
+  {
+    id: "sante-multistep-stats-8",
+    type: "multistep",
+    question: "Combien de médecins travaillent dans les services d'urgence en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de services d'urgence en France ?",
+        correctAnswer: 650,
+        unit: "services",
+        explanation: "La France compte environ 650 services d'urgence hospitaliers."
+      },
+      {
+        question: "Combien de médecins urgentistes travaillent en moyenne dans chaque service d'urgence ?",
+        correctAnswer: 12.5,
+        unit: "médecins",
+        explanation: "En moyenne, 12,5 médecins urgentistes (équivalents temps plein) travaillent dans chaque service d'urgence."
+      },
+      {
+        question: "Quel est le pourcentage de médecins non-urgentistes (autres spécialités) intervenant régulièrement aux urgences ?",
+        correctAnswer: 15,
+        unit: "%",
+        explanation: "Environ 15% des médecins travaillant aux urgences sont des spécialistes d'autres disciplines intervenant régulièrement dans ces services."
+      },
+      {
+        question: "Combien de médecins travaillent dans les services d'urgence en France ?",
+        correctAnswer: 9431,
+        unit: "médecins",
+        explanation: "En multipliant le nombre de services d'urgence (650) par le nombre moyen de médecins urgentistes (12,5), puis en ajoutant 15% pour les autres spécialistes, on obtient environ 9 431 médecins."
+      }
+    ],
+    finalExplanation: "En France, environ 9 431 médecins travaillent dans les services d'urgence, assurant la prise en charge des patients 24 heures sur 24, 7 jours sur 7."
+  },
+  {
+    id: "sante-multistep-stats-9",
+    type: "multistep",
+    question: "Combien de consultations ophtalmologiques sont réalisées chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il d'ophtalmologistes en France ?",
+        correctAnswer: 5850,
+        unit: "ophtalmologistes",
+        explanation: "La France compte environ 5 850 ophtalmologistes en exercice."
+      },
+      {
+        question: "Combien de consultations un ophtalmologiste réalise-t-il en moyenne par jour ?",
+        correctAnswer: 22,
+        unit: "consultations",
+        explanation: "Un ophtalmologiste réalise en moyenne 22 consultations par jour."
+      },
+      {
+        question: "Combien de jours par an un ophtalmologiste travaille-t-il en moyenne ?",
+        correctAnswer: 215,
+        unit: "jours",
+        explanation: "Un ophtalmologiste travaille en moyenne 215 jours par an."
+      },
+      {
+        question: "Combien de consultations ophtalmologiques sont réalisées chaque année en France ?",
+        correctAnswer: 27599250,
+        unit: "consultations",
+        explanation: "En multipliant le nombre d'ophtalmologistes (5 850) par le nombre de consultations quotidiennes (22) par le nombre de jours travaillés (215), on obtient environ 27 599 250 consultations par an."
+      }
+    ],
+    finalExplanation: "En France, environ 27,6 millions de consultations ophtalmologiques sont réalisées chaque année, ce qui représente un enjeu important de santé publique compte tenu des délais d'attente souvent longs."
+  },
+  {
+    id: "sante-multistep-stats-10",
+    type: "multistep",
+    question: "Combien de personnes utilisent régulièrement des applications de suivi de leur activité physique en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la population française possédant un smartphone ?",
+        correctAnswer: 52000000,
+        unit: "personnes",
+        explanation: "Environ 52 millions de Français possèdent un smartphone."
+      },
+      {
+        question: "Quel pourcentage de ces utilisateurs de smartphone ont installé une application de suivi d'activité physique ?",
+        correctAnswer: 42,
+        unit: "%",
+        explanation: "Environ 42% des utilisateurs de smartphone ont installé une application de suivi d'activité physique."
+      },
+      {
+        question: "Parmi ces personnes ayant installé une application, quel pourcentage l'utilise régulièrement (au moins une fois par semaine) ?",
+        correctAnswer: 26,
+        unit: "%",
+        explanation: "Environ 26% des personnes ayant installé une application de suivi d'activité physique l'utilisent régulièrement (au moins une fois par semaine)."
+      },
+      {
+        question: "Combien de personnes utilisent régulièrement des applications de suivi de leur activité physique en France ?",
+        correctAnswer: 5678400,
+        unit: "personnes",
+        explanation: "En multipliant le nombre d'utilisateurs de smartphone (52 millions) par le pourcentage ayant installé une application (42%) par le pourcentage d'utilisateurs réguliers (26%), on obtient environ 5 678 400 personnes."
+      }
+    ],
+    finalExplanation: "En France, environ 5,68 millions de personnes utilisent régulièrement des applications de suivi de leur activité physique, ce qui témoigne de l'importance croissante des outils numériques dans la gestion de la santé."
+  },
+  {
+    id: "sante-simple-stats-1",
+    type: "simple",
+    question: "Quel pourcentage des Français souffre de troubles du sommeil ?",
+    correctAnswer: 36,
+    unit: "%",
+    explanation: "Environ 36% des Français souffrent de troubles du sommeil, allant de l'insomnie occasionnelle à chronique.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-2",
+    type: "simple",
+    question: "Quelle est la durée moyenne d'hospitalisation en France ?",
+    correctAnswer: 5.6,
+    unit: "jours",
+    explanation: "La durée moyenne d'hospitalisation en France est de 5,6 jours, tous services confondus.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-3",
+    type: "simple",
+    question: "Quel est le pourcentage de la population française portant des prothèses dentaires ?",
+    correctAnswer: 27,
+    unit: "%",
+    explanation: "Environ 27% de la population française porte une prothèse dentaire (couronne, bridge, appareil complet ou partiel).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-4",
+    type: "simple",
+    question: "Quelle est la proportion de naissances par césarienne en France ?",
+    correctAnswer: 20.4,
+    unit: "%",
+    explanation: "En France, 20,4% des naissances se font par césarienne, un taux inférieur à la moyenne européenne.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-5",
+    type: "simple",
+    question: "Quel est le nombre moyen de pas quotidiens effectués par un Français ?",
+    correctAnswer: 7100,
+    unit: "pas",
+    explanation: "Un Français effectue en moyenne 7 100 pas par jour, un chiffre en dessous des 10 000 pas recommandés par l'OMS.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-6",
+    type: "simple",
+    question: "Combien d'heures par semaine un médecin hospitalier travaille-t-il en moyenne ?",
+    correctAnswer: 48.5,
+    unit: "heures",
+    explanation: "Un médecin hospitalier travaille en moyenne 48,5 heures par semaine en France.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-7",
+    type: "simple",
+    question: "Quel est le pourcentage des Français souffrant d'allergies respiratoires ?",
+    correctAnswer: 30,
+    unit: "%",
+    explanation: "Environ 30% des Français souffrent d'allergies respiratoires (pollens, acariens, poils d'animaux, etc.).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-8",
+    type: "simple",
+    question: "Quelle est la distance moyenne parcourue par une ambulance pour une intervention ?",
+    correctAnswer: 15.7,
+    unit: "km",
+    explanation: "Une ambulance parcourt en moyenne 15,7 km pour une intervention en France.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-9",
+    type: "simple",
+    question: "Quel est le taux d'équipement en défibrillateurs automatiques dans les lieux publics en France ?",
+    correctAnswer: 3.8,
+    unit: "défibrillateurs pour 10 000 habitants",
+    explanation: "La France compte environ 3,8 défibrillateurs automatiques pour 10 000 habitants dans les lieux publics.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-stats-10",
+    type: "simple",
+    question: "Quel pourcentage des accouchements en France est assisté par une péridurale ?",
+    correctAnswer: 82.3,
+    unit: "%",
+    explanation: "Environ 82,3% des accouchements en France sont réalisés avec une analgésie péridurale, l'un des taux les plus élevés au monde.",
+    theme: "santé"
   }
-]
+];

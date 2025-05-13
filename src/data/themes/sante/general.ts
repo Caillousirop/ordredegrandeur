@@ -664,5 +664,433 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Les dépenses de santé représentent en moyenne 3,8% du budget des ménages français, un chiffre relativement stable grâce au système de protection sociale.",
     theme: "santé"
+  },
+  // Nouvelles questions à étapes
+  {
+    id: "sante-multistep-1",
+    type: "multistep",
+    question: "Combien de patients une clinique généraliste moyenne peut-elle traiter par an en France ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien y a-t-il de médecins généralistes en France ?",
+        correctAnswer: 87000,
+        unit: "médecins",
+        explanation: "La France compte environ 87 000 médecins généralistes en exercice."
+      },
+      {
+        question: "Combien de patients un médecin généraliste voit-il en moyenne par jour ?",
+        correctAnswer: 25,
+        unit: "patients",
+        explanation: "Un médecin généraliste voit en moyenne 25 patients par jour de consultation."
+      },
+      {
+        question: "Combien de jours par an un médecin généraliste travaille-t-il en moyenne ?",
+        correctAnswer: 220,
+        unit: "jours",
+        explanation: "Un médecin généraliste travaille en moyenne 220 jours par an, en tenant compte des congés et jours non travaillés."
+      },
+      {
+        question: "Combien de patients une clinique généraliste moyenne peut-elle traiter par an ?",
+        correctAnswer: 5500,
+        unit: "patients",
+        explanation: "En multipliant le nombre de patients quotidiens (25) par le nombre de jours travaillés (220), une clinique généraliste traite environ 5 500 patients par an."
+      }
+    ],
+    finalExplanation: "Une clinique généraliste moyenne en France peut traiter environ 5 500 patients par an, en tenant compte du nombre moyen de consultations quotidiennes et du nombre de jours travaillés."
+  },
+  {
+    id: "sante-multistep-2",
+    type: "multistep",
+    question: "Quel est le nombre total de consultations chez les généralistes en France chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de médecins généralistes en exercice en France ?",
+        correctAnswer: 87000,
+        unit: "médecins",
+        explanation: "La France compte environ 87 000 médecins généralistes en exercice."
+      },
+      {
+        question: "Combien de consultations un médecin généraliste réalise-t-il en moyenne par jour ?",
+        correctAnswer: 25,
+        unit: "consultations",
+        explanation: "Un médecin généraliste réalise en moyenne 25 consultations par jour."
+      },
+      {
+        question: "Combien de jours par an un médecin généraliste travaille-t-il en moyenne ?",
+        correctAnswer: 220,
+        unit: "jours",
+        explanation: "Un médecin généraliste travaille en moyenne 220 jours par an."
+      },
+      {
+        question: "Quel est le nombre total de consultations chez les généralistes en France chaque année ?",
+        correctAnswer: 478500000,
+        unit: "consultations",
+        explanation: "En multipliant le nombre de médecins (87 000) par le nombre de consultations quotidiennes (25) par le nombre de jours travaillés (220), on obtient environ 478,5 millions de consultations annuelles."
+      }
+    ],
+    finalExplanation: "En France, les médecins généralistes réalisent environ 478,5 millions de consultations chaque année, ce qui souligne l'importance de la médecine de premier recours dans le système de santé français."
+  },
+  {
+    id: "sante-multistep-3",
+    type: "multistep",
+    question: "Combien de téléconsultations sont réalisées chaque mois en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quel est le nombre total de consultations médicales en France par an ?",
+        correctAnswer: 550000000,
+        unit: "consultations",
+        explanation: "Le nombre total de consultations médicales en France est d'environ 550 millions par an."
+      },
+      {
+        question: "Quel pourcentage des consultations médicales sont des téléconsultations ?",
+        correctAnswer: 5.5,
+        unit: "%",
+        explanation: "Environ 5,5% des consultations médicales sont des téléconsultations en France."
+      },
+      {
+        question: "Combien de téléconsultations sont réalisées par an en France ?",
+        correctAnswer: 30250000,
+        unit: "téléconsultations",
+        explanation: "En multipliant le nombre total de consultations (550 millions) par le pourcentage de téléconsultations (5,5%), on obtient environ 30,25 millions de téléconsultations par an."
+      },
+      {
+        question: "Combien de téléconsultations sont réalisées chaque mois en France ?",
+        correctAnswer: 2520000,
+        unit: "téléconsultations",
+        explanation: "En divisant le nombre annuel de téléconsultations (30,25 millions) par 12 mois, on obtient environ 2,52 millions de téléconsultations par mois."
+      }
+    ],
+    finalExplanation: "En France, environ 2,52 millions de téléconsultations sont réalisées chaque mois, soit environ 30,25 millions par an, ce qui représente 5,5% de toutes les consultations médicales."
+  },
+  {
+    id: "sante-multistep-4",
+    type: "multistep",
+    question: "Combien de personnes utilisent une app de suivi de diabète en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de personnes diabétiques en France ?",
+        correctAnswer: 3700000,
+        unit: "personnes",
+        explanation: "La France compte environ 3,7 millions de personnes atteintes de diabète."
+      },
+      {
+        question: "Quel pourcentage des personnes diabétiques utilisent des outils numériques pour suivre leur maladie ?",
+        correctAnswer: 23,
+        unit: "%",
+        explanation: "Environ 23% des personnes diabétiques utilisent des outils numériques pour suivre leur maladie en France."
+      },
+      {
+        question: "Parmi ces utilisateurs d'outils numériques, quel pourcentage utilisent spécifiquement une application mobile de suivi ?",
+        correctAnswer: 78,
+        unit: "%",
+        explanation: "Environ 78% des diabétiques utilisant des outils numériques optent pour une application mobile de suivi."
+      },
+      {
+        question: "Combien de personnes utilisent donc une app de suivi de diabète en France ?",
+        correctAnswer: 665000,
+        unit: "personnes",
+        explanation: "En multipliant le nombre de diabétiques (3,7 millions) par le pourcentage utilisant des outils numériques (23%) par le pourcentage utilisant une app mobile (78%), on obtient environ 665 000 personnes."
+      }
+    ],
+    finalExplanation: "En France, environ 665 000 personnes diabétiques utilisent une application mobile pour suivre leur maladie, ce qui représente environ 18% de la population diabétique totale."
+  },
+  {
+    id: "sante-multistep-5",
+    type: "multistep",
+    question: "Quel est le marché potentiel des montres connectées santé chez les plus de 60 ans ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de personnes âgées de plus de 60 ans en France ?",
+        correctAnswer: 17500000,
+        unit: "personnes",
+        explanation: "La France compte environ 17,5 millions de personnes âgées de plus de 60 ans."
+      },
+      {
+        question: "Quel pourcentage de cette population est susceptible d'utiliser des appareils électroniques ?",
+        correctAnswer: 65,
+        unit: "%",
+        explanation: "Environ 65% des personnes de plus de 60 ans sont susceptibles d'utiliser des appareils électroniques."
+      },
+      {
+        question: "Parmi ces utilisateurs potentiels, quel pourcentage serait intéressé par une montre connectée dédiée à la santé ?",
+        correctAnswer: 28,
+        unit: "%",
+        explanation: "Environ 28% des seniors utilisateurs d'appareils électroniques seraient intéressés par une montre connectée santé."
+      },
+      {
+        question: "Quel est donc le marché potentiel des montres connectées santé chez les plus de 60 ans en France ?",
+        correctAnswer: 3185000,
+        unit: "personnes",
+        explanation: "En multipliant le nombre de personnes de plus de 60 ans (17,5 millions) par le pourcentage d'utilisateurs d'appareils électroniques (65%) par le pourcentage d'intéressés par les montres connectées santé (28%), on obtient environ 3,185 millions de personnes."
+      }
+    ],
+    finalExplanation: "Le marché potentiel des montres connectées santé chez les plus de 60 ans en France est d'environ 3,185 millions de personnes, ce qui représente un segment important pour les fabricants de ces appareils."
+  },
+  {
+    id: "sante-multistep-6",
+    type: "multistep",
+    question: "Combien de SMS de rappel de rendez-vous médicaux sont envoyés chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de consultations médicales en France par an ?",
+        correctAnswer: 550000000,
+        unit: "consultations",
+        explanation: "Il y a environ 550 millions de consultations médicales en France par an."
+      },
+      {
+        question: "Quel pourcentage de ces consultations sont planifiées à l'avance (et non en urgence) ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Environ 85% des consultations médicales sont planifiées à l'avance et non en urgence."
+      },
+      {
+        question: "Parmi ces consultations planifiées, pour quel pourcentage un SMS de rappel est-il envoyé ?",
+        correctAnswer: 62,
+        unit: "%",
+        explanation: "Pour environ 62% des consultations planifiées, un SMS de rappel est envoyé au patient."
+      },
+      {
+        question: "Combien de SMS de rappel de rendez-vous médicaux sont envoyés chaque année ?",
+        correctAnswer: 289850000,
+        unit: "SMS",
+        explanation: "En multipliant le nombre total de consultations (550 millions) par le pourcentage de consultations planifiées (85%) par le pourcentage avec SMS de rappel (62%), on obtient environ 289,85 millions de SMS envoyés."
+      }
+    ],
+    finalExplanation: "En France, environ 289,85 millions de SMS de rappel de rendez-vous médicaux sont envoyés chaque année, ce qui représente un outil important pour réduire les rendez-vous manqués dans le système de santé."
+  },
+  {
+    id: "sante-multistep-7",
+    type: "multistep",
+    question: "Combien de gigaoctets de données médicales sont générés chaque jour en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de consultations médicales ont lieu chaque jour en France ?",
+        correctAnswer: 1500000,
+        unit: "consultations",
+        explanation: "Environ 1,5 million de consultations médicales ont lieu chaque jour en France."
+      },
+      {
+        question: "Combien de gigaoctets de données médicales sont générés en moyenne par consultation ?",
+        correctAnswer: 0.05,
+        unit: "Go",
+        explanation: "Une consultation médicale génère en moyenne 0,05 gigaoctet de données (textes, images, résultats d'analyses)."
+      },
+      {
+        question: "Combien d'examens d'imagerie médicale sont réalisés chaque jour en France ?",
+        correctAnswer: 80000,
+        unit: "examens",
+        explanation: "Environ 80 000 examens d'imagerie médicale (radiographies, IRM, scanners) sont réalisés chaque jour en France."
+      },
+      {
+        question: "Combien de gigaoctets de données sont générés en moyenne par un examen d'imagerie médicale ?",
+        correctAnswer: 0.5,
+        unit: "Go",
+        explanation: "Un examen d'imagerie médicale génère en moyenne 0,5 gigaoctet de données."
+      },
+      {
+        question: "Combien de gigaoctets de données médicales sont générés chaque jour en France ?",
+        correctAnswer: 115000,
+        unit: "Go",
+        explanation: "En additionnant les données des consultations (1,5 million × 0,05 Go = 75 000 Go) et des examens d'imagerie (80 000 × 0,5 Go = 40 000 Go), on obtient environ 115 000 Go de données générées par jour."
+      }
+    ],
+    finalExplanation: "En France, environ 115 000 gigaoctets (115 téraoctets) de données médicales sont générés chaque jour, illustrant le défi de la gestion et du stockage des données dans le système de santé moderne."
+  },
+  {
+    id: "sante-multistep-8",
+    type: "multistep",
+    question: "Combien d'infirmier(ère)s exercent à domicile chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il d'infirmier(ère)s en France au total ?",
+        correctAnswer: 700000,
+        unit: "infirmier(ère)s",
+        explanation: "Il y a environ 700 000 infirmier(ère)s en France, tous modes d'exercice confondus."
+      },
+      {
+        question: "Quel pourcentage des infirmier(ère)s travaillent en libéral ?",
+        correctAnswer: 18,
+        unit: "%",
+        explanation: "Environ 18% des infirmier(ère)s travaillent en libéral en France."
+      },
+      {
+        question: "Parmi les infirmier(ère)s libéraux, quel pourcentage exercent principalement à domicile ?",
+        correctAnswer: 92,
+        unit: "%",
+        explanation: "Environ 92% des infirmier(ère)s libéraux exercent principalement à domicile."
+      },
+      {
+        question: "Combien d'infirmier(ère)s exercent donc à domicile en France ?",
+        correctAnswer: 115920,
+        unit: "infirmier(ère)s",
+        explanation: "En multipliant le nombre total d'infirmier(ère)s (700 000) par le pourcentage en libéral (18%) par le pourcentage exerçant à domicile (92%), on obtient environ 115 920 infirmier(ère)s."
+      }
+    ],
+    finalExplanation: "En France, environ 115 920 infirmier(ère)s exercent principalement à domicile, ce qui représente une ressource essentielle pour les soins de proximité, notamment pour les personnes âgées ou dépendantes."
+  },
+  {
+    id: "sante-multistep-9",
+    type: "multistep",
+    question: "Combien de médicaments sont consommés quotidiennement par les Français de plus de 65 ans ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il de personnes âgées de plus de 65 ans en France ?",
+        correctAnswer: 14000000,
+        unit: "personnes",
+        explanation: "La France compte environ 14 millions de personnes âgées de plus de 65 ans."
+      },
+      {
+        question: "Combien de médicaments différents une personne de plus de 65 ans prend-elle en moyenne par jour ?",
+        correctAnswer: 3.9,
+        unit: "médicaments",
+        explanation: "Une personne de plus de 65 ans prend en moyenne 3,9 médicaments différents par jour."
+      },
+      {
+        question: "Quel pourcentage des personnes de plus de 65 ans prend au moins un médicament quotidiennement ?",
+        correctAnswer: 92,
+        unit: "%",
+        explanation: "Environ 92% des personnes de plus de 65 ans prennent au moins un médicament quotidiennement."
+      },
+      {
+        question: "Combien de médicaments sont consommés quotidiennement par les Français de plus de 65 ans ?",
+        correctAnswer: 50232000,
+        unit: "médicaments",
+        explanation: "En multipliant le nombre de personnes de plus de 65 ans (14 millions) par le taux de consommation de médicaments (92%) par le nombre moyen de médicaments (3,9), on obtient environ 50,232 millions de médicaments consommés quotidiennement."
+      }
+    ],
+    finalExplanation: "Les Français de plus de 65 ans consomment environ 50,232 millions de médicaments chaque jour, ce qui souligne l'importance de la polymédication chez les personnes âgées et les enjeux associés à sa gestion."
+  },
+  {
+    id: "sante-multistep-10",
+    type: "multistep",
+    question: "Combien de kilomètres parcourent les ambulances en France chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien y a-t-il d'ambulances en service en France ?",
+        correctAnswer: 7500,
+        unit: "ambulances",
+        explanation: "La France dispose d'environ 7 500 ambulances en service."
+      },
+      {
+        question: "Combien de kilomètres une ambulance parcourt-elle en moyenne par jour ?",
+        correctAnswer: 150,
+        unit: "km",
+        explanation: "Une ambulance parcourt en moyenne 150 kilomètres par jour."
+      },
+      {
+        question: "Combien de jours par an une ambulance est-elle en service en moyenne ?",
+        correctAnswer: 330,
+        unit: "jours",
+        explanation: "Une ambulance est en service en moyenne 330 jours par an, en tenant compte des périodes de maintenance."
+      },
+      {
+        question: "Combien de kilomètres parcourent les ambulances en France chaque année ?",
+        correctAnswer: 371250000,
+        unit: "km",
+        explanation: "En multipliant le nombre d'ambulances (7 500) par la distance quotidienne (150 km) par le nombre de jours de service (330), on obtient environ 371,25 millions de kilomètres parcourus par an."
+      }
+    ],
+    finalExplanation: "Les ambulances en France parcourent environ 371,25 millions de kilomètres chaque année, soit près de 10 000 fois le tour de la Terre, pour assurer le transport des patients."
+  },
+  // Nouvelles questions simples
+  {
+    id: "sante-simple-1",
+    type: "simple",
+    question: "Quel est le nombre moyen d'années d'études pour devenir médecin en France ?",
+    correctAnswer: 9.5,
+    unit: "années",
+    explanation: "En France, il faut en moyenne 9,5 années d'études pour devenir médecin, incluant le premier et le deuxième cycle des études médicales.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-2",
+    type: "simple",
+    question: "Quel est le pourcentage de patients qui suivent correctement leur traitement médical prescrit ?",
+    correctAnswer: 68,
+    unit: "%",
+    explanation: "Environ 68% des patients suivent correctement leur traitement médical prescrit, selon les études sur l'observance thérapeutique.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-3",
+    type: "simple",
+    question: "Combien de prises de sang sont réalisées chaque jour en France ?",
+    correctAnswer: 450000,
+    unit: "prises de sang",
+    explanation: "Environ 450 000 prises de sang sont réalisées quotidiennement en France, dans les laboratoires d'analyses et les hôpitaux.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-4",
+    type: "simple",
+    question: "Quel est le coût moyen d'une journée d'hospitalisation en France ?",
+    correctAnswer: 1400,
+    unit: "euros",
+    explanation: "Le coût moyen d'une journée d'hospitalisation en France est d'environ 1 400 euros, tous services confondus.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-5",
+    type: "simple",
+    question: "Combien de minutes dure en moyenne une consultation chez un médecin généraliste ?",
+    correctAnswer: 17.5,
+    unit: "minutes",
+    explanation: "Une consultation chez un médecin généraliste dure en moyenne 17,5 minutes en France.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-6",
+    type: "simple",
+    question: "Quel pourcentage des Français portent des lunettes ou des lentilles de contact ?",
+    correctAnswer: 71,
+    unit: "%",
+    explanation: "Environ 71% des Français portent des lunettes ou des lentilles de contact pour corriger leur vision.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-7",
+    type: "simple",
+    question: "Combien d'euros sont remboursés en moyenne par la Sécurité Sociale par assuré et par an ?",
+    correctAnswer: 2800,
+    unit: "euros",
+    explanation: "La Sécurité Sociale rembourse en moyenne 2 800 euros par assuré et par an pour les frais de santé.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-8",
+    type: "simple",
+    question: "Quel est le nombre moyen de visites annuelles chez le dentiste par Français ?",
+    correctAnswer: 1.2,
+    unit: "visites",
+    explanation: "Les Français se rendent chez le dentiste en moyenne 1,2 fois par an.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-9",
+    type: "simple",
+    question: "Quel pourcentage des Français ont une complémentaire santé (mutuelle) ?",
+    correctAnswer: 95,
+    unit: "%",
+    explanation: "Environ 95% des Français bénéficient d'une complémentaire santé (mutuelle) pour compléter les remboursements de la Sécurité Sociale.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-10",
+    type: "simple",
+    question: "Quel est le temps d'attente moyen aux urgences en France ?",
+    correctAnswer: 4.3,
+    unit: "heures",
+    explanation: "Le temps d'attente moyen aux urgences en France est d'environ 4,3 heures, avec de fortes variations selon les établissements et la période.",
+    theme: "santé"
   }
-]
+];

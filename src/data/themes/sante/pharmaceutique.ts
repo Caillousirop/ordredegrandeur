@@ -667,5 +667,399 @@ export const santePharmaQuestions: (Question | MultiStepQuestion)[] = [
     unit: "jours",
     explanation: "Lorsqu'un médicament est en rupture de stock, le délai moyen pour le réapprovisionner est d'environ 18 jours, bien que ce délai puisse varier considérablement selon les produits.",
     theme: "santé"
+  },
+
+  // Nouvelles questions à étapes
+  {
+    id: "sante-multistep-pharma-1",
+    type: "multistep",
+    question: "Combien de boîtes de Doliprane sont vendues chaque année en France ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 67500000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 67,5 millions de personnes."
+      },
+      {
+        question: "Combien de boîtes de paracétamol (dont le Doliprane) une personne consomme-t-elle en moyenne par an ?",
+        correctAnswer: 3.8,
+        unit: "boîtes",
+        explanation: "En moyenne, une personne consomme 3,8 boîtes de paracétamol par an en France."
+      },
+      {
+        question: "Quelle est la part de marché du Doliprane parmi les médicaments à base de paracétamol ?",
+        correctAnswer: 75,
+        unit: "%",
+        explanation: "Le Doliprane détient environ 75% de part de marché parmi les médicaments à base de paracétamol en France."
+      },
+      {
+        question: "Combien de boîtes de Doliprane sont vendues chaque année en France ?",
+        correctAnswer: 192375000,
+        unit: "boîtes",
+        explanation: "En multipliant la population (67,5 millions) par la consommation moyenne de paracétamol (3,8 boîtes) par la part de marché du Doliprane (75%), on obtient environ 192,375 millions de boîtes de Doliprane vendues par an."
+      }
+    ],
+    finalExplanation: "En France, environ 192,375 millions de boîtes de Doliprane sont vendues chaque année, ce qui en fait l'un des médicaments les plus consommés dans le pays."
+  },
+  {
+    id: "sante-multistep-pharma-2",
+    type: "multistep",
+    question: "Quel est le chiffre d'affaires moyen d'une pharmacie française ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien y a-t-il de pharmacies en France ?",
+        correctAnswer: 21000,
+        unit: "pharmacies",
+        explanation: "Il y a environ 21 000 pharmacies en France."
+      },
+      {
+        question: "Quel est le chiffre d'affaires total des pharmacies en France ?",
+        correctAnswer: 38000000000,
+        unit: "euros",
+        explanation: "Le chiffre d'affaires total des pharmacies en France est d'environ 38 milliards d'euros."
+      },
+      {
+        question: "Quel est le chiffre d'affaires moyen d'une pharmacie française ?",
+        correctAnswer: 1810000,
+        unit: "euros",
+        explanation: "En divisant le chiffre d'affaires total (38 milliards d'euros) par le nombre de pharmacies (21 000), on obtient un chiffre d'affaires moyen de 1,81 million d'euros par pharmacie."
+      }
+    ],
+    finalExplanation: "En France, une pharmacie réalise en moyenne 1,81 million d'euros de chiffre d'affaires annuel, avec toutefois de grandes disparités selon la localisation et la taille de l'officine."
+  },
+  {
+    id: "sante-multistep-pharma-3",
+    type: "multistep",
+    question: "Combien de prescriptions médicales sont remplies chaque année en France ?",
+    theme: "sante",
+    steps: [
+      {
+        question: "Combien de consultations médicales sont réalisées chaque année en France ?",
+        correctAnswer: 550000000,
+        unit: "consultations",
+        explanation: "Environ 550 millions de consultations médicales sont réalisées chaque année en France."
+      },
+      {
+        question: "Quel pourcentage des consultations médicales donne lieu à une prescription de médicaments ?",
+        correctAnswer: 85,
+        unit: "%",
+        explanation: "Environ 85% des consultations médicales donnent lieu à une prescription de médicaments en France."
+      },
+      {
+        question: "Combien de prescriptions médicales sont remplies chaque année en France ?",
+        correctAnswer: 467500000,
+        unit: "prescriptions",
+        explanation: "En multipliant le nombre de consultations (550 millions) par le pourcentage donnant lieu à une prescription (85%), on obtient environ 467,5 millions de prescriptions par an."
+      }
+    ],
+    finalExplanation: "En France, environ 467,5 millions de prescriptions médicales sont remplies chaque année, ce qui reflète l'importance de la prescription médicamenteuse dans le système de santé français."
+  },
+  {
+    id: "sante-multistep-pharma-4",
+    type: "multistep",
+    question: "Combien de vaccins contre la grippe sont administrés chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 67500000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 67,5 millions de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population est ciblé par les recommandations de vaccination contre la grippe ?",
+        correctAnswer: 26,
+        unit: "%",
+        explanation: "Environ 26% de la population française est ciblée par les recommandations de vaccination contre la grippe (personnes âgées, malades chroniques, femmes enceintes, etc.)."
+      },
+      {
+        question: "Quel est le taux de couverture vaccinale contre la grippe parmi cette population cible ?",
+        correctAnswer: 52,
+        unit: "%",
+        explanation: "Le taux de couverture vaccinale contre la grippe est d'environ 52% parmi la population cible en France."
+      },
+      {
+        question: "Combien de vaccins contre la grippe sont administrés chaque année en France ?",
+        correctAnswer: 9126000,
+        unit: "vaccins",
+        explanation: "En multipliant la population (67,5 millions) par le pourcentage ciblé (26%) par le taux de couverture (52%), on obtient environ 9,126 millions de vaccins administrés par an."
+      }
+    ],
+    finalExplanation: "En France, environ 9,13 millions de vaccins contre la grippe sont administrés chaque année, principalement aux personnes âgées et aux personnes atteintes de maladies chroniques."
+  },
+  {
+    id: "sante-multistep-pharma-5",
+    type: "multistep",
+    question: "Combien de boîtes de médicaments un senior consomme-t-il par an en moyenne ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de médicaments différents un senior (plus de 65 ans) prend-il quotidiennement en moyenne ?",
+        correctAnswer: 3.9,
+        unit: "médicaments",
+        explanation: "En moyenne, un senior prend 3,9 médicaments différents par jour."
+      },
+      {
+        question: "Combien de boîtes de médicaments cela représente-t-il par mois ?",
+        correctAnswer: 4.2,
+        unit: "boîtes",
+        explanation: "Cela représente en moyenne 4,2 boîtes de médicaments par mois, car certains médicaments sont prescrits pour plusieurs mois."
+      },
+      {
+        question: "Combien de boîtes de médicaments un senior consomme-t-il par an en moyenne ?",
+        correctAnswer: 50.4,
+        unit: "boîtes",
+        explanation: "En multipliant le nombre mensuel de boîtes (4,2) par 12 mois, on obtient environ 50,4 boîtes de médicaments par an."
+      }
+    ],
+    finalExplanation: "En France, un senior consomme en moyenne 50,4 boîtes de médicaments par an, ce qui illustre l'importance de la polymédication chez les personnes âgées et ses enjeux en termes de santé publique."
+  },
+  {
+    id: "sante-multistep-pharma-6",
+    type: "multistep",
+    question: "Combien d'antibiotiques sont prescrits chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 67500000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 67,5 millions de personnes."
+      },
+      {
+        question: "Quel pourcentage de la population reçoit au moins une prescription d'antibiotiques par an ?",
+        correctAnswer: 40,
+        unit: "%",
+        explanation: "Environ 40% de la population française reçoit au moins une prescription d'antibiotiques par an."
+      },
+      {
+        question: "Combien de prescriptions d'antibiotiques une personne traitée reçoit-elle en moyenne par an ?",
+        correctAnswer: 1.8,
+        unit: "prescriptions",
+        explanation: "En moyenne, une personne recevant des antibiotiques obtient 1,8 prescription par an."
+      },
+      {
+        question: "Combien d'antibiotiques sont prescrits chaque année en France ?",
+        correctAnswer: 48600000,
+        unit: "prescriptions",
+        explanation: "En multipliant la population (67,5 millions) par le pourcentage recevant des antibiotiques (40%) par le nombre moyen de prescriptions (1,8), on obtient environ 48,6 millions de prescriptions d'antibiotiques par an."
+      }
+    ],
+    finalExplanation: "En France, environ 48,6 millions de prescriptions d'antibiotiques sont délivrées chaque année, plaçant le pays parmi les plus gros consommateurs d'antibiotiques en Europe, ce qui soulève des questions sur la résistance antimicrobienne."
+  },
+  {
+    id: "sante-multistep-pharma-7",
+    type: "multistep",
+    question: "Combien de médicaments sont remboursés par la Sécurité Sociale en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de médicaments différents sont commercialisés en France ?",
+        correctAnswer: 11000,
+        unit: "médicaments",
+        explanation: "Environ 11 000 médicaments différents sont commercialisés en France (en considérant les différentes présentations et dosages)."
+      },
+      {
+        question: "Quel pourcentage de ces médicaments est inscrit sur la liste des médicaments remboursables ?",
+        correctAnswer: 73,
+        unit: "%",
+        explanation: "Environ 73% des médicaments commercialisés sont inscrits sur la liste des médicaments remboursables par la Sécurité Sociale."
+      },
+      {
+        question: "Combien de médicaments sont remboursés par la Sécurité Sociale en France ?",
+        correctAnswer: 8030,
+        unit: "médicaments",
+        explanation: "En multipliant le nombre total de médicaments (11 000) par le pourcentage de médicaments remboursables (73%), on obtient environ 8 030 médicaments remboursés."
+      }
+    ],
+    finalExplanation: "En France, environ 8 030 médicaments sont remboursés par la Sécurité Sociale, selon différents taux de remboursement (15%, 30%, 65% ou 100%) en fonction de leur service médical rendu."
+  },
+  {
+    id: "sante-multistep-pharma-8",
+    type: "multistep",
+    question: "Combien de médicaments génériques sont vendus chaque année en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Combien de boîtes de médicaments sont vendues chaque année en France ?",
+        correctAnswer: 3000000000,
+        unit: "boîtes",
+        explanation: "Environ 3 milliards de boîtes de médicaments sont vendues chaque année en France."
+      },
+      {
+        question: "Quelle est la part de marché des médicaments génériques en volume (nombre de boîtes) ?",
+        correctAnswer: 39,
+        unit: "%",
+        explanation: "Les médicaments génériques représentent environ 39% du volume total des médicaments vendus en France."
+      },
+      {
+        question: "Combien de médicaments génériques sont vendus chaque année en France ?",
+        correctAnswer: 1170000000,
+        unit: "boîtes",
+        explanation: "En multipliant le nombre total de boîtes vendues (3 milliards) par la part de marché des génériques (39%), on obtient environ 1,17 milliard de boîtes de médicaments génériques."
+      }
+    ],
+    finalExplanation: "En France, environ 1,17 milliard de boîtes de médicaments génériques sont vendues chaque année, permettant d'importantes économies pour le système de santé tout en maintenant la qualité des soins."
+  },
+  {
+    id: "sante-multistep-pharma-9",
+    type: "multistep",
+    question: "Combien coûtent les médicaments remboursés aux français chaque année ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quel est le montant total des dépenses de médicaments en France par an ?",
+        correctAnswer: 32000000000,
+        unit: "euros",
+        explanation: "Les dépenses totales de médicaments en France s'élèvent à environ 32 milliards d'euros par an."
+      },
+      {
+        question: "Quel pourcentage de ces dépenses concerne des médicaments remboursables ?",
+        correctAnswer: 91,
+        unit: "%",
+        explanation: "Environ 91% des dépenses de médicaments concernent des médicaments remboursables par l'Assurance Maladie."
+      },
+      {
+        question: "Quel est le taux de remboursement moyen des médicaments remboursables ?",
+        correctAnswer: 72,
+        unit: "%",
+        explanation: "Le taux de remboursement moyen des médicaments remboursables est d'environ 72% en France."
+      },
+      {
+        question: "Combien coûtent les médicaments remboursés aux français chaque année ?",
+        correctAnswer: 20995200000,
+        unit: "euros",
+        explanation: "En multipliant le montant total des dépenses (32 milliards) par le pourcentage de médicaments remboursables (91%) par le taux de remboursement moyen (72%), on obtient environ 20,995 milliards d'euros."
+      }
+    ],
+    finalExplanation: "En France, les médicaments remboursés coûtent environ 20,995 milliards d'euros par an à l'Assurance Maladie, ce qui représente une part significative des dépenses de santé."
+  },
+  {
+    id: "sante-multistep-pharma-10",
+    type: "multistep",
+    question: "Combien de patients suivent un traitement pour l'hypertension en France ?",
+    theme: "santé",
+    steps: [
+      {
+        question: "Quelle est la population adulte française (18 ans et plus) ?",
+        correctAnswer: 52000000,
+        unit: "personnes",
+        explanation: "La population adulte française (18 ans et plus) est d'environ 52 millions de personnes."
+      },
+      {
+        question: "Quel est le taux de prévalence de l'hypertension artérielle chez les adultes en France ?",
+        correctAnswer: 30.6,
+        unit: "%",
+        explanation: "Le taux de prévalence de l'hypertension artérielle chez les adultes français est d'environ 30,6%."
+      },
+      {
+        question: "Parmi les personnes hypertendues, quel pourcentage est diagnostiqué et traité ?",
+        correctAnswer: 65,
+        unit: "%",
+        explanation: "Environ 65% des personnes hypertendues sont diagnostiquées et traitées en France."
+      },
+      {
+        question: "Combien de patients suivent un traitement pour l'hypertension en France ?",
+        correctAnswer: 10340800,
+        unit: "patients",
+        explanation: "En multipliant la population adulte (52 millions) par le taux de prévalence (30,6%) par le pourcentage de patients diagnostiqués et traités (65%), on obtient environ 10 340 800 patients."
+      }
+    ],
+    finalExplanation: "En France, environ 10,34 millions de patients suivent un traitement pour l'hypertension artérielle, ce qui représente le traitement chronique le plus prescrit dans le pays."
+  },
+
+  // Nouvelles questions simples
+  {
+    id: "sante-simple-pharma-1",
+    type: "simple",
+    question: "Quel est le prix moyen d'une boîte de médicament remboursable en France ?",
+    correctAnswer: 10.2,
+    unit: "euros",
+    explanation: "Le prix moyen d'une boîte de médicament remboursable en France est d'environ 10,20 euros.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-2",
+    type: "simple",
+    question: "Quel pourcentage des médicaments vendus en France sont des médicaments sans ordonnance ?",
+    correctAnswer: 18.5,
+    unit: "%",
+    explanation: "Environ 18,5% des médicaments vendus en France sont des médicaments sans ordonnance (OTC - Over The Counter).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-3",
+    type: "simple",
+    question: "Combien de pharmaciens exercent en France ?",
+    correctAnswer: 74000,
+    unit: "pharmaciens",
+    explanation: "Environ 74 000 pharmaciens exercent en France, tous modes d'exercice confondus (officine, hôpital, industrie, etc.).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-4",
+    type: "simple",
+    question: "Quelle est la durée moyenne d'un traitement antibiotique en France ?",
+    correctAnswer: 6.8,
+    unit: "jours",
+    explanation: "La durée moyenne d'un traitement antibiotique en France est de 6,8 jours.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-5",
+    type: "simple",
+    question: "Quel pourcentage des dépenses de santé est consacré aux médicaments en France ?",
+    correctAnswer: 16.9,
+    unit: "%",
+    explanation: "Environ 16,9% des dépenses de santé en France sont consacrées aux médicaments.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-6",
+    type: "simple",
+    question: "Quelle est la part de marché des médicaments génériques en France en valeur ?",
+    correctAnswer: 20.5,
+    unit: "%",
+    explanation: "Les médicaments génériques représentent environ 20,5% du marché pharmaceutique français en valeur (euros).",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-7",
+    type: "simple",
+    question: "Combien de préparateurs en pharmacie travaillent en France ?",
+    correctAnswer: 35000,
+    unit: "préparateurs",
+    explanation: "Environ 35 000 préparateurs en pharmacie travaillent en France, majoritairement en officine.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-8",
+    type: "simple",
+    question: "Quelle est la consommation moyenne d'antidépresseurs par habitant en France ?",
+    correctAnswer: 50,
+    unit: "doses journalières pour 1000 habitants",
+    explanation: "La consommation moyenne d'antidépresseurs en France est d'environ 50 doses journalières pour 1000 habitants.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-9",
+    type: "simple",
+    question: "Quel est le budget moyen consacré aux médicaments par an et par Français ?",
+    correctAnswer: 475,
+    unit: "euros",
+    explanation: "Un Français dépense en moyenne 475 euros par an en médicaments, remboursés ou non.",
+    theme: "santé"
+  },
+  {
+    id: "sante-simple-pharma-10",
+    type: "simple",
+    question: "Quel pourcentage des Français achète des médicaments en ligne ?",
+    correctAnswer: 7.5,
+    unit: "%",
+    explanation: "Environ 7,5% des Français achètent des médicaments en ligne via des pharmacies en ligne agréées.",
+    theme: "santé"
   }
-]
+];
