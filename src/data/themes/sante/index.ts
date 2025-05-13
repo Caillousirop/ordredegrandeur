@@ -1,12 +1,14 @@
 
+import { Question, MultiStepQuestion } from "@/components/types";
 import { santeGeneralQuestions } from "./general";
-import { santeStatistiquesQuestions } from "./statistiques";
-import { santePharmaQuestions } from "./pharmaceutique";
 import { santeHospitaliereQuestions } from "./hospitaliere";
+import { santePharmaQuestions } from "./pharmaceutique";
+import { santeStatistiquesQuestions } from "./statistiques";
 
-export const santeQuestions = [
+// Combiner toutes les questions de santé
+export const santeQuestions: (Question | MultiStepQuestion)[] = [
   ...santeGeneralQuestions,
-  ...santeStatistiquesQuestions,
+  ...santeHospitaliereQuestions,
   ...santePharmaQuestions,
-  ...santeHospitaliereQuestions
+  ...santeStatistiquesQuestions
 ];
