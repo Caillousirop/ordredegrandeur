@@ -16,6 +16,11 @@ export const useQuiz = () => {
 
   // Filter questions based on theme, type, and search query
   useEffect(() => {
+    console.log("Filtering with search query:", searchQuery);
+    console.log("Current theme:", selectedTheme?.id);
+    console.log("Current type:", selectedType);
+    
+    // Start with all questions
     let filtered = [...questions];
     
     // Filter by theme if selected (except for random theme)
@@ -29,11 +34,12 @@ export const useQuiz = () => {
     }
     
     // Apply search filter if there's a query
-    if (searchQuery) {
-      const lowerCaseQuery = searchQuery.toLowerCase();
+    if (searchQuery && searchQuery.trim() !== "") {
+      const lowerCaseQuery = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(q => 
         q.question.toLowerCase().includes(lowerCaseQuery)
       );
+      console.log("After search filter, questions count:", filtered.length);
     }
     
     // For random theme, just shuffle the questions
@@ -41,11 +47,13 @@ export const useQuiz = () => {
       filtered = filtered.sort(() => Math.random() - 0.5);
     }
     
+    console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
   }, [selectedTheme, selectedType, searchQuery]);
 
   const handleSearch = (query: string) => {
+    console.log("Search query received:", query);
     setSearchQuery(query);
   };
 

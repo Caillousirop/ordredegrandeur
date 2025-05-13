@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
@@ -10,6 +10,15 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [query, setQuery] = useState("");
+  
+  // Add debounce functionality to avoid too many search requests
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onSearch(query);
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  }, [query, onSearch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,8 +28,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
-    // Rechercher au fur et à mesure que l'utilisateur tape
-    onSearch(newQuery);
   };
 
   return (

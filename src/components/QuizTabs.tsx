@@ -2,7 +2,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "./ui/badge";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Search } from "lucide-react";
 import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
 import { QuizTheme } from "./types";
@@ -48,7 +48,8 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
       className="w-full"
     >
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="setup">
+        <TabsTrigger value="setup" className="flex items-center gap-2">
+          <Search size={16} />
           Configuration
         </TabsTrigger>
         <TabsTrigger value="questions" disabled={filteredQuestions.length === 0} className="flex items-center gap-2">
