@@ -19,7 +19,7 @@ const Index = () => {
       
       {showDebug && (
         <div className="fixed bottom-10 right-2 bg-black/90 text-white p-3 rounded text-xs max-w-xs max-h-60 overflow-auto z-50">
-          <p>Search: "{quizState.searchQuery || ""}"</p>
+          <p>Search: "{quizState.searchQuery !== undefined ? quizState.searchQuery : ""}"</p>
           <p>Theme: {quizState.selectedTheme?.id || "none"}</p>
           <p>Type: {quizState.selectedType}</p>
           <p>Questions: {quizState.filteredQuestions.length}</p>
