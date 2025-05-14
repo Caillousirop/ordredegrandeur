@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 // Basic world statistics and general knowledge
@@ -7,9 +6,9 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "mon-101",
     type: "simple",
     question: "Quelle est la population mondiale actuelle ?",
-    correctAnswer: 8000000000,
+    correctAnswer: 8200000000,
     unit: "personnes",
-    explanation: "La population mondiale est d'environ 8 milliards d'habitants selon les dernières estimations des Nations Unies.",
+    explanation: "La population mondiale est de 8,2 milliards d'habitants en 2024 selon les données de l'INED (Institut National d'Études Démographiques).",
     theme: "monde"
   },
   {

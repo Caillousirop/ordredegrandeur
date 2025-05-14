@@ -25,11 +25,11 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       
       // Compute order of magnitude difference
       const orderOfMagnitudeDifference = Math.abs(
-        Math.floor(Math.log10(Math.abs(userAnswer))) - 
-        Math.floor(Math.log10(Math.abs(correctAnswer)))
+        Math.floor(Math.log10(Math.abs(userAnswer) || 1)) - 
+        Math.floor(Math.log10(Math.abs(correctAnswer) || 1))
       );
       
-      // Calculate relative difference
+      // Calculate relative difference as a percentage
       const relativeDifference = Math.abs(userAnswer - correctAnswer) / correctAnswer;
       
       let calculatedAccuracy = 0;
@@ -38,38 +38,40 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       if (exactMatch) {
         calculatedAccuracy = 100; // Only perfect match gets 100%
       }
-      // Order of magnitude is correct (or very close)
+      // Order of magnitude is correct
       else if (orderOfMagnitudeDifference === 0) {
-        // Give higher scores when the order of magnitude is correct
-        if (relativeDifference < 0.05) {
-          calculatedAccuracy = 99; // Very close but not exact
+        // More granular scaling for better accuracy representation
+        if (relativeDifference < 0.01) {
+          calculatedAccuracy = 99; // Within 1%
+        } else if (relativeDifference < 0.05) {
+          calculatedAccuracy = 95; // Within 5%
+        } else if (relativeDifference < 0.10) {
+          calculatedAccuracy = 90; // Within 10%
         } else if (relativeDifference < 0.15) {
-          calculatedAccuracy = 95; // Very good
-        } else if (relativeDifference < 0.25) {
-          calculatedAccuracy = 90; // Very good
-        } else if (relativeDifference < 0.4) {
-          calculatedAccuracy = 85; // Very good
-        } else if (relativeDifference < 0.5) {
-          calculatedAccuracy = 80; // Good
+          calculatedAccuracy = 85; // Within 15%
+        } else if (relativeDifference < 0.20) {
+          calculatedAccuracy = 80; // Within 20%
+        } else if (relativeDifference < 0.30) {
+          calculatedAccuracy = 70; // Within 30%
+        } else if (relativeDifference < 0.50) {
+          calculatedAccuracy = 60; // Within 50%
         } else if (relativeDifference < 0.75) {
-          calculatedAccuracy = 75; // Acceptable
-        } else if (relativeDifference < 1) {
-          calculatedAccuracy = 70; // Acceptable
+          calculatedAccuracy = 50; // Within 75%
         } else {
-          calculatedAccuracy = 65; // Same order of magnitude but quite off
+          calculatedAccuracy = 40; // Same order of magnitude but quite off
         }
       } 
       // One order of magnitude off
       else if (orderOfMagnitudeDifference === 1) {
-        calculatedAccuracy = 45;
+        calculatedAccuracy = Math.max(10, 35 - (relativeDifference * 10));
       } 
       // More than one order of magnitude off
       else {
-        calculatedAccuracy = Math.max(0, 30 - (orderOfMagnitudeDifference - 1) * 10);
+        calculatedAccuracy = Math.max(0, 20 - (orderOfMagnitudeDifference * 5));
       }
       
       // Clamp between 0-100
-      const clampedAccuracy = Math.min(100, Math.max(0, calculatedAccuracy));
+      const clampedAccuracy = Math.min(100, Math.max(0, Math.round(calculatedAccuracy)));
       
       // Animate the progress
       setProgress(0);
