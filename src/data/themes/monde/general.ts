@@ -6,64 +6,64 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
   {
     id: "mon-101",
     type: "simple",
-    question: "Quelle est la population mondiale actuelle ?",
+    question: "Quelle était la population mondiale en 2024 ?",
     correctAnswer: 8200000000,
     unit: "personnes",
-    explanation: "La population mondiale est de 8,2 milliards d'habitants en 2024 selon les données de l'INED (Institut National d'Études Démographiques).",
+    explanation: "La population mondiale était de 8,2 milliards d'habitants en 2024 selon les données de l'INED (Institut National d'Études Démographiques).",
     theme: "monde"
   },
   {
     id: "mon-102",
     type: "simple",
-    question: "Quel est le PIB mondial total ?",
+    question: "Quel était le PIB mondial total en 2023 ?",
     correctAnswer: 101000000000000,
     unit: "dollars",
-    explanation: "Le PIB mondial total est d'environ 101 000 milliards de dollars selon les données de la Banque mondiale.",
+    explanation: "Le PIB mondial total était d'environ 101 000 milliards de dollars en 2023 selon les données de la Banque mondiale.",
     theme: "monde"
   },
   {
     id: "mon-103",
     type: "simple",
-    question: "Quel pourcentage de la population mondiale vit dans les villes ?",
+    question: "Quel pourcentage de la population mondiale vivait dans les villes en 2023 ?",
     correctAnswer: 56.7,
     unit: "%",
-    explanation: "Environ 56,7% de la population mondiale vit dans des zones urbaines, une proportion en augmentation constante.",
+    explanation: "Environ 56,7% de la population mondiale vivait dans des zones urbaines en 2023, une proportion en augmentation constante.",
     theme: "monde"
   },
   {
     id: "mon-104",
     type: "simple",
-    question: "Quelle est la durée de vie moyenne mondiale ?",
+    question: "Quelle était l'espérance de vie moyenne mondiale en 2023 ?",
     correctAnswer: 72.7,
     unit: "ans",
-    explanation: "L'espérance de vie moyenne mondiale est de 72,7 ans, tous pays confondus.",
+    explanation: "L'espérance de vie moyenne mondiale était de 72,7 ans en 2023, tous pays confondus.",
     theme: "monde"
   },
   {
     id: "mon-105",
     type: "simple",
-    question: "Quel pourcentage de la population mondiale a accès à Internet ?",
+    question: "Quel pourcentage de la population mondiale avait accès à Internet en 2023 ?",
     correctAnswer: 63,
     unit: "%",
-    explanation: "Environ 63% de la population mondiale a accès à Internet, avec de fortes disparités entre pays développés et en développement.",
+    explanation: "Environ 63% de la population mondiale avait accès à Internet en 2023, avec de fortes disparités entre pays développés et en développement.",
     theme: "monde"
   },
   {
     id: "mon-106",
     type: "simple",
-    question: "Quelle part de l'électricité mondiale est produite à partir d'énergies renouvelables ?",
+    question: "Quelle part de l'électricité mondiale était produite à partir d'énergies renouvelables en 2023 ?",
     correctAnswer: 29,
     unit: "%",
-    explanation: "Environ 29% de l'électricité mondiale est produite à partir de sources d'énergies renouvelables (hydraulique, éolien, solaire, biomasse, etc.).",
+    explanation: "Environ 29% de l'électricité mondiale était produite à partir de sources d'énergies renouvelables en 2023 (hydraulique, éolien, solaire, biomasse, etc.).",
     theme: "monde"
   },
   {
     id: "mon-107",
     type: "simple",
-    question: "Quel pourcentage de la population mondiale vit avec moins de 2 dollars par jour ?",
+    question: "Quel pourcentage de la population mondiale vivait avec moins de 2 dollars par jour en 2022 ?",
     correctAnswer: 9.2,
     unit: "%",
-    explanation: "Environ 9,2% de la population mondiale vit dans l'extrême pauvreté, avec moins de 2 dollars par jour.",
+    explanation: "Environ 9,2% de la population mondiale vivait dans l'extrême pauvreté en 2022, avec moins de 2 dollars par jour.",
     theme: "monde"
   },
   {
@@ -78,19 +78,19 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
   {
     id: "mon-109",
     type: "simple",
-    question: "Quel est le taux d'alphabétisation mondial des adultes ?",
+    question: "Quel était le taux d'alphabétisation mondial des adultes en 2023 ?",
     correctAnswer: 86.5,
     unit: "%",
-    explanation: "Le taux d'alphabétisation mondial des adultes est d'environ 86,5%, selon les données de l'UNESCO.",
+    explanation: "Le taux d'alphabétisation mondial des adultes était d'environ 86,5% en 2023, selon les données de l'UNESCO.",
     theme: "monde"
   },
   {
     id: "mon-110",
     type: "simple",
-    question: "Quelle est la proportion de la population mondiale âgée de moins de 15 ans ?",
+    question: "Quelle était la proportion de la population mondiale âgée de moins de 15 ans en 2023 ?",
     correctAnswer: 25.4,
     unit: "%",
-    explanation: "Environ 25,4% de la population mondiale est âgée de moins de 15 ans.",
+    explanation: "Environ 25,4% de la population mondiale était âgée de moins de 15 ans en 2023.",
     theme: "monde"
   }
 ];

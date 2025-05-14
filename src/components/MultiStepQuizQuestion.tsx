@@ -31,6 +31,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   const [skippedSteps, setSkippedSteps] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [calculatorOpen, setCalculatorOpen] = useState(false);
+  const [anyStepSubmitted, setAnyStepSubmitted] = useState(false); // Track if any step has been submitted
 
   // Find theme
   const theme = themes.find(t => t.id === question.theme);
@@ -58,6 +59,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     const newSubmitted = [...submitted];
     newSubmitted[stepIndex] = true;
     setSubmitted(newSubmitted);
+    setAnyStepSubmitted(true); // Mark that at least one step has been submitted
 
     // Calculate accuracy for this step
     const step = question.steps[stepIndex];
@@ -81,6 +83,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
       return;
     }
     setFinalSubmitted(true);
+    setAnyStepSubmitted(true); // Mark that an answer has been submitted
 
     // Calculate accuracy compared to the last step's correct answer
     const finalStep = question.steps[question.steps.length - 1];
@@ -152,8 +155,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     if (onNext) onNext();
   };
 
-  const allStepsCompleted = submitted.every(step => step === true);
-
   return (
     <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
       <CardHeader className="border-b border-border/50">
@@ -169,7 +170,18 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-6 bg-transparent">
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <div>
+            {anyStepSubmitted && (
+              <Button 
+                onClick={handleNextQuestion} 
+                variant="outline" 
+                className="text-sm"
+              >
+                Question suivante
+              </Button>
+            )}
+          </div>
           <Button onClick={handleDirectFinalToggle} variant={directFinalMode ? "secondary" : "outline"} size="sm">
             {directFinalMode ? "Résoudre par étapes" : "Réponse directe"}
           </Button>
@@ -206,7 +218,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         </div>
 
         {/* Final explanation or next question button */}
-        {(allStepsCompleted || finalSubmitted && showAnswer) && (
+        {(finalSubmitted && showAnswer) && (
           <FinalExplanation
             finalExplanation={question.finalExplanation}
             onNextQuestion={handleNextQuestion}
