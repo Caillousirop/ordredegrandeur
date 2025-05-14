@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { MultiStepQuestion, QuizScore } from "./types";
 import MultiStepQuizManager from "./quiz/MultiStepQuizManager";
 import DirectAnswerSection from "./quiz/DirectAnswerSection";
