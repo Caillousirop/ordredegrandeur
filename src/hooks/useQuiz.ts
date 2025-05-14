@@ -134,6 +134,7 @@ export const useQuiz = () => {
     selectedType,
     questionsCompleted,
     scores,
+    searchQuery,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,
