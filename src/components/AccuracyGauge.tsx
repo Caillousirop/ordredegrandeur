@@ -17,6 +17,19 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   const [progress, setProgress] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
   
+  // Format large numbers to be more readable
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000000) {
+      return `${(num / 1000000000).toLocaleString()} milliards`;
+    } else if (num >= 1000000) {
+      return `${(num / 1000000).toLocaleString()} millions`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toLocaleString()} milliers`;
+    } else {
+      return num.toLocaleString();
+    }
+  };
+  
   // Calculate the accuracy with higher rewards for correct order of magnitude
   useEffect(() => {
     if (answerSubmitted) {
@@ -119,8 +132,8 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       </div>
       {answerSubmitted && (
         <div className="flex justify-between text-sm pt-1">
-          <span className="text-muted-foreground">Votre réponse: {userAnswer}</span>
-          <span className="font-medium">Réponse correcte: {correctAnswer}</span>
+          <span className="text-muted-foreground">Votre réponse: {formatNumber(userAnswer)}</span>
+          <span className="font-medium">Réponse correcte: {formatNumber(correctAnswer)}</span>
         </div>
       )}
     </div>

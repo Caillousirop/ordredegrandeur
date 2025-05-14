@@ -1,3 +1,4 @@
+
 import { Question, MultiStepQuestion } from "@/components/types";
 
 // Basic world statistics and general knowledge
@@ -92,5 +93,4 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     explanation: "Environ 25,4% de la population mondiale est âgée de moins de 15 ans.",
     theme: "monde"
   }
-  // J'ai supprimé les questions mon-s-001 à mon-s-004 car elles ressemblaient à des questions à étapes nécessitant des calculs
 ];

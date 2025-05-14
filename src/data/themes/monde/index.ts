@@ -1,14 +1,12 @@
 
-import { Question, MultiStepQuestion } from "@/components/types";
 import { mondeGeneralQuestions } from "./general";
 import { mondeDemographieQuestions } from "./demographie";
-import { mondeEnvironnementQuestions } from "./environnement";
 import { mondeEconomieQuestions } from "./economie";
+import { mondeEnvironnementQuestions } from "./environnement";
 
-// Combine all monde questions
-export const mondeQuestions: (Question | MultiStepQuestion)[] = [
+export const mondeQuestions = [
   ...mondeGeneralQuestions,
   ...mondeDemographieQuestions,
-  ...mondeEnvironnementQuestions,
-  ...mondeEconomieQuestions
+  ...mondeEconomieQuestions,
+  ...mondeEnvironnementQuestions
 ];

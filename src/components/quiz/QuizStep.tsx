@@ -15,6 +15,19 @@ interface QuizStepProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
+// Helper function to format large numbers
+const formatNumber = (num: number): string => {
+  if (num >= 1000000000) {
+    return `${(num / 1000000000).toLocaleString()} milliards`;
+  } else if (num >= 1000000) {
+    return `${(num / 1000000).toLocaleString()} millions`;
+  } else if (num >= 1000) {
+    return `${(num / 1000).toLocaleString()} milliers`;
+  } else {
+    return num.toLocaleString();
+  }
+};
+
 const QuizStep: React.FC<QuizStepProps> = ({
   step,
   index,
@@ -45,6 +58,9 @@ const QuizStep: React.FC<QuizStepProps> = ({
                 placeholder="Votre réponse" 
                 className="flex-grow" 
               />
+              {step.unit && (
+                <span className="text-sm text-muted-foreground">{step.unit}</span>
+              )}
             </div>
             <Button type="submit" className="w-full">Valider</Button>
           </form>
