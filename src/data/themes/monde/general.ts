@@ -92,41 +92,6 @@ export const mondeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Environ 25,4% de la population mondiale est âgée de moins de 15 ans.",
     theme: "monde"
-  },
-  {
-    id: "mon-s-001",
-    type: "simple",
-    question: "Quelle est la population totale de l'Inde ?",
-    correctAnswer: 1428000000,
-    unit: "personnes",
-    explanation: "L'Inde compte environ 1,428 milliard d'habitants, ce qui en fait le pays le plus peuplé du monde.",
-    theme: "monde"
-  },
-  {
-    id: "mon-s-002",
-    type: "simple",
-    question: "Combien de personnes vivent en Afrique ?",
-    correctAnswer: 1400000000,
-    unit: "personnes",
-    explanation: "Le continent africain compte environ 1,4 milliard d'habitants.",
-    theme: "monde"
-  },
-  {
-    id: "mon-s-003",
-    type: "simple",
-    question: "Combien de personnes parlent le mandarin comme langue maternelle ?",
-    correctAnswer: 920000000,
-    unit: "personnes",
-    explanation: "Environ 920 millions de personnes parlent le mandarin comme langue maternelle, ce qui en fait la langue la plus parlée au monde.",
-    theme: "monde"
-  },
-  {
-    id: "mon-s-004",
-    type: "simple",
-    question: "Quelle est la superficie du Brésil ?",
-    correctAnswer: 8500000,
-    unit: "km²",
-    explanation: "Le Brésil a une superficie d'environ 8,5 millions de kilomètres carrés, ce qui en fait le cinquième plus grand pays du monde.",
-    theme: "monde"
   }
+  // J'ai supprimé les questions mon-s-001 à mon-s-004 car elles ressemblaient à des questions à étapes nécessitant des calculs
 ];

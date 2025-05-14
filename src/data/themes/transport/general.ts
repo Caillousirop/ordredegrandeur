@@ -12,15 +12,6 @@ export const generalTransportQuestions: (Question | MultiStepQuestion)[] = [
     theme: "transport"
   },
   {
-    id: "2",
-    question: "Quel est le nombre de voitures en circulation en France ?",
-    correctAnswer: 39000000,
-    unit: "voitures",
-    explanation: "Il y a environ 39 millions de voitures en circulation en France selon l'INSEE.",
-    type: "simple",
-    theme: "transport"
-  },
-  {
     id: "3",
     question: "Combien de gares SNCF y a-t-il en France ?",
     correctAnswer: 3000,
@@ -57,15 +48,6 @@ export const generalTransportQuestions: (Question | MultiStepQuestion)[] = [
     theme: "transport"
   },
   {
-    id: "7",
-    question: "Combien de deux-roues motorisés sont immatriculés en France ?",
-    correctAnswer: 3000000,
-    unit: "deux-roues",
-    explanation: "Environ 3 millions de deux-roues motorisés sont immatriculés en France.",
-    type: "simple",
-    theme: "transport"
-  },
-  {
     id: "8",
     question: "Quelle est la part du transport ferroviaire dans le transport de marchandises en France ?",
     correctAnswer: 10,
@@ -73,23 +55,6 @@ export const generalTransportQuestions: (Question | MultiStepQuestion)[] = [
     explanation: "Le transport ferroviaire représente environ 10% du transport de marchandises en France.",
     type: "simple",
     theme: "transport"
-  },
-  {
-    id: "9",
-    question: "Combien de véhicules électriques sont en circulation en France ?",
-    correctAnswer: 600000,
-    unit: "véhicules",
-    explanation: "Plus de 600 000 véhicules électriques circulent en France.",
-    type: "simple",
-    theme: "transport"
-  },
-  {
-    id: "10",
-    question: "Quelle est la fréquentation annuelle du métro parisien ?",
-    correctAnswer: 1500000000,
-    unit: "voyageurs",
-    explanation: "Le métro parisien accueille environ 1,5 milliard de voyageurs chaque année.",
-    type: "simple",
-    theme: "transport"
   }
+  // J'ai supprimé les questions 2, 7, 9 et 10 car elles ressemblaient à des questions à étapes nécessitant des calculs
 ];

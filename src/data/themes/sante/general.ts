@@ -3,22 +3,13 @@ import { Question, MultiStepQuestion } from "@/components/types";
 // Questions générales sur la santé (docteurs, consultations, etc.)
 export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
   {
-    id: "8",
-    question: "Quel est le nombre moyen de médecins pour 1000 habitants en France ?",
-    correctAnswer: 3.4,
-    unit: "médecins",
-    explanation: "Selon les données de l'INSEE, la France compte en moyenne 3,4 médecins pour 1000 habitants en 2023.",
-    type: "simple",
-    theme: "santé"
-  },
-  {
     id: "9",
     question: "Quelle est l'espérance de vie moyenne en France en 2023 ?",
     correctAnswer: 82.9,
     unit: "ans",
     explanation: "L'espérance de vie moyenne en France en 2023 est de 82,9 ans selon les données de l'INSEE (85,7 ans pour les femmes et 79,8 ans pour les hommes).",
     type: "simple",
-    theme: "santé"
+    theme: "sante"
   },
   {
     id: "29",
@@ -27,14 +18,14 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Selon les données de l'Ordre des Médecins et de l'INSEE, 44,3% des médecins en France sont des généralistes.",
     type: "simple",
-    theme: "santé"
+    theme: "sante"
   },
   {
     id: "101",
     type: "multistep",
     question: "Combien de consultations médicales sont réalisées chaque jour en France par des généralistes ?",
     finalExplanation: "Les médecins généralistes français réalisent environ 930 000 consultations par jour, ce qui témoigne de leur rôle central dans le système de santé français.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de médecins généralistes exercent en France ?",
@@ -67,7 +58,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de téléconsultations médicales ont lieu chaque semaine ?",
     finalExplanation: "Environ 500 000 téléconsultations médicales ont lieu chaque semaine en France, un chiffre qui a fortement augmenté depuis la crise sanitaire du COVID-19.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de consultations médicales ont lieu chaque semaine en France, tous modes confondus ?",
@@ -94,7 +85,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de rendez-vous sont pris chaque jour sur Doctolib ?",
     finalExplanation: "Avec environ 2 millions de rendez-vous quotidiens, Doctolib est devenu un acteur majeur de la prise de rendez-vous médicaux en ligne en France.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de professionnels de santé sont inscrits sur Doctolib en France ?",
@@ -123,38 +114,11 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     ]
   },
   {
-    id: "104",
-    type: "multistep",
-    question: "Combien de Français consultent un psychologue au moins une fois par an ?",
-    finalExplanation: "Environ 5,4 millions de Français consultent un psychologue au moins une fois par an, un chiffre qui est en augmentation constante depuis quelques années, notamment depuis la crise sanitaire.",
-    theme: "santé",
-    steps: [
-      {
-        question: "Quelle est la population adulte en France ?",
-        correctAnswer: 54,
-        unit: "millions",
-        explanation: "La France compte environ 54 millions d'adultes (personnes de 18 ans et plus)."
-      },
-      {
-        question: "Quel pourcentage de la population adulte déclare avoir consulté un psychologue au cours des 12 derniers mois ?",
-        correctAnswer: 10,
-        unit: "%",
-        explanation: "Selon les enquêtes de santé publique, environ 10% des adultes déclarent avoir consulté un psychologue au moins une fois au cours de l'année écoulée."
-      },
-      {
-        question: "Combien de Français consultent un psychologue au moins une fois par an ?",
-        correctAnswer: 5.4,
-        unit: "millions",
-        explanation: "En multipliant la population adulte (54 millions) par le pourcentage de consultation (10%), on obtient 5,4 millions de personnes."
-      }
-    ]
-  },
-  {
     id: "g1",
     type: "multistep",
     question: "Combien de médecins exercent en zone rurale en France ?",
     finalExplanation: "Environ 18 000 médecins exercent en zone rurale en France, un chiffre en baisse ces dernières années malgré les incitations à l'installation dans ces territoires.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de médecins en activité compte la France ?",
@@ -187,7 +151,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien d'actes de chirurgie plastique sont pratiqués chaque année en France ?",
     finalExplanation: "Environ 320 000 actes de chirurgie plastique sont pratiqués chaque année en France, dont environ un tiers à visée purement esthétique et deux tiers à visée reconstructrice ou réparatrice.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de chirurgiens plasticiens exercent en France ?",
@@ -214,7 +178,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien d'auxiliaires médicaux (infirmiers, kinés, etc.) exercent en France ?",
     finalExplanation: "Environ 820 000 auxiliaires médicaux exercent en France, constituant un maillon essentiel du système de santé français.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien d'infirmiers et infirmières sont en exercice en France ?",
@@ -247,7 +211,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Quel est le budget annuel de l'Assurance Maladie pour les remboursements de soins ?",
     finalExplanation: "Le budget annuel de l'Assurance Maladie pour les remboursements de soins s'élève à environ 200 milliards d'euros, ce qui en fait l'un des postes de dépenses publiques les plus importants en France.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Quel est le PIB de la France ?",
@@ -280,7 +244,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Quel est le nombre total d'étudiants en médecine en France ?",
     finalExplanation: "Environ 240 000 étudiants suivent des études de médecine en France, toutes années et toutes filières confondues, représentant un vivier important de futurs professionnels pour le système de santé.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien d'étudiants sont admis chaque année en deuxième année de médecine (après la réforme du numerus clausus) ?",
@@ -319,7 +283,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de chirurgiens-dentistes exercent en France ?",
     finalExplanation: "Environ 42 000 chirurgiens-dentistes exercent en France, principalement en libéral, mais ce chiffre reste insuffisant face aux besoins de la population.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Quel est le nombre d'habitants en France ?",
@@ -346,7 +310,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de médecins étrangers exercent en France ?",
     finalExplanation: "Environ 28 000 médecins formés à l'étranger exercent en France, représentant une part significative du corps médical français et contribuant à pallier certaines pénuries dans les territoires sous-dotés.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de médecins actifs y a-t-il au total en France ?",
@@ -373,7 +337,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de Français portent des lunettes ou des lentilles de contact ?",
     finalExplanation: "Environ 40 millions de Français portent des lunettes ou des lentilles de contact, soit près de 6 personnes sur 10, témoignant de l'importance des troubles de la vision dans la population.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Quelle est la population française totale ?",
@@ -412,7 +376,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien d'ostéopathes sont en activité en France ?",
     finalExplanation: "Environ 30 000 ostéopathes exercent en France, ce qui en fait l'un des pays avec la plus forte densité de praticiens de cette discipline au monde.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien d'écoles d'ostéopathie sont agréées en France ?",
@@ -451,7 +415,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de Français sont équipés d'une complémentaire santé ?",
     finalExplanation: "Environ 60 millions de Français bénéficient d'une complémentaire santé, soit près de 95% de la population, ce qui témoigne de l'importance de ce dispositif dans le système de santé français.",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Quelle est la population française totale ?",
@@ -486,186 +450,23 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     ]
   },
   {
-    id: "g11",
+    id: "sante-simple-6",
     type: "simple",
-    question: "Quel est le délai moyen pour obtenir un rendez-vous chez un ophtalmologiste en France ?",
-    correctAnswer: 80,
-    unit: "jours",
-    explanation: "Le délai moyen pour obtenir un rendez-vous chez un ophtalmologiste en France est d'environ 80 jours, avec de fortes disparités régionales.",
-    theme: "santé"
-  },
-  {
-    id: "g12",
-    type: "simple",
-    question: "Combien d'infirmiers libéraux exercent en France ?",
-    correctAnswer: 145000,
-    unit: "infirmiers",
-    explanation: "Environ 145 000 infirmiers exercent en libéral en France, assurant notamment les soins à domicile et en cabinet.",
-    theme: "santé"
-  },
-  {
-    id: "g13",
-    type: "simple",
-    question: "Quel est le nombre de consultations médicales par habitant et par an en France ?",
-    correctAnswer: 6.8,
-    unit: "consultations",
-    explanation: "Un Français consulte un médecin en moyenne 6,8 fois par an, tous types de consultation confondus.",
-    theme: "santé"
-  },
-  {
-    id: "g14",
-    type: "simple",
-    question: "Quelle est la proportion de femmes parmi les médecins en France ?",
-    correctAnswer: 52,
+    question: "Quel pourcentage des Français portent des lunettes ou des lentilles de contact ?",
+    correctAnswer: 71,
     unit: "%",
-    explanation: "Les femmes représentent environ 52% des médecins en France, une proportion qui continue d'augmenter avec le renouvellement des générations.",
-    theme: "santé"
+    explanation: "Environ 71% des Français portent des lunettes ou des lentilles de contact pour corriger leur vision.",
+    theme: "sante"
   },
   {
-    id: "g15",
+    id: "sante-simple-9",
     type: "simple",
-    question: "Quel est le nombre de sages-femmes en exercice en France ?",
-    correctAnswer: 24500,
-    unit: "sages-femmes",
-    explanation: "Environ 24 500 sages-femmes exercent en France, que ce soit en établissement ou en libéral.",
-    theme: "santé"
-  },
-  {
-    id: "g16",
-    type: "simple",
-    question: "Combien de médecins exercent en libéral en France ?",
-    correctAnswer: 125000,
-    unit: "médecins",
-    explanation: "Environ 125 000 médecins exercent en libéral (exclusif ou mixte) en France, soit environ 58% du total des médecins.",
-    theme: "santé"
-  },
-  {
-    id: "g17",
-    type: "simple",
-    question: "Quelle est la durée moyenne d'une consultation chez un médecin généraliste ?",
-    correctAnswer: 17.5,
-    unit: "minutes",
-    explanation: "Une consultation chez un médecin généraliste dure en moyenne 17,5 minutes en France.",
-    theme: "santé"
-  },
-  {
-    id: "g18",
-    type: "simple",
-    question: "Quel est le taux de médecins pratiquant des dépassements d'honoraires en France ?",
-    correctAnswer: 23.7,
+    question: "Quel pourcentage des Français ont une complémentaire santé (mutuelle) ?",
+    correctAnswer: 95,
     unit: "%",
-    explanation: "Environ 23,7% des médecins pratiquent des dépassements d'honoraires en France (principalement des spécialistes en secteur 2).",
-    theme: "santé"
+    explanation: "Environ 95% des Français bénéficient d'une complémentaire santé (mutuelle) pour compléter les remboursements de la Sécurité Sociale.",
+    theme: "sante"
   },
-  {
-    id: "g19",
-    type: "simple",
-    question: "Combien d'orthophonistes exercent en France ?",
-    correctAnswer: 27500,
-    unit: "orthophonistes",
-    explanation: "La France compte environ 27 500 orthophonistes en exercice, principalement en libéral.",
-    theme: "santé"
-  },
-  {
-    id: "g20",
-    type: "simple",
-    question: "Quel est l'âge moyen des médecins en France ?",
-    correctAnswer: 51.2,
-    unit: "ans",
-    explanation: "L'âge moyen des médecins en France est de 51,2 ans, avec une tendance au vieillissement qui pose la question du renouvellement générationnel.",
-    theme: "santé"
-  },
-  {
-    id: "g21",
-    type: "simple",
-    question: "Quel est le coût moyen annuel d'une complémentaire santé par personne ?",
-    correctAnswer: 720,
-    unit: "euros",
-    explanation: "Une complémentaire santé coûte en moyenne 720 euros par personne et par an en France, avec de fortes variations selon l'âge et le niveau de couverture.",
-    theme: "santé"
-  },
-  {
-    id: "g22",
-    type: "simple",
-    question: "Combien de diététiciens-nutritionnistes exercent en France ?",
-    correctAnswer: 12500,
-    unit: "diététiciens",
-    explanation: "Environ 12 500 diététiciens-nutritionnistes exercent en France, majoritairement en libéral.",
-    theme: "santé"
-  },
-  {
-    id: "g23",
-    type: "simple",
-    question: "Quel est le pourcentage de Français portant un appareil dentaire au cours de leur vie ?",
-    correctAnswer: 35,
-    unit: "%",
-    explanation: "Environ 35% des Français portent un appareil dentaire à un moment de leur vie, principalement pendant l'enfance ou l'adolescence.",
-    theme: "santé"
-  },
-  {
-    id: "g24",
-    type: "simple",
-    question: "Combien de personnes sont couvertes par la CMU-C (devenue CSS) en France ?",
-    correctAnswer: 5.9,
-    unit: "millions",
-    explanation: "Environ 5,9 millions de personnes bénéficient de la Complémentaire Santé Solidaire (ex-CMU-C) en France.",
-    theme: "santé"
-  },
-  {
-    id: "g25",
-    type: "simple",
-    question: "Quel est le nombre d'ostéopathes pour 100 000 habitants en France ?",
-    correctAnswer: 45,
-    unit: "ostéopathes",
-    explanation: "La France compte environ 45 ostéopathes pour 100 000 habitants, ce qui en fait l'un des pays avec la plus forte densité au monde pour cette profession.",
-    theme: "santé"
-  },
-  {
-    id: "g26",
-    type: "simple",
-    question: "Quelle proportion des dépenses de santé reste à la charge des ménages en France ?",
-    correctAnswer: 7.5,
-    unit: "%",
-    explanation: "Environ 7,5% des dépenses de santé restent à la charge directe des ménages français après remboursements de la Sécurité sociale et des complémentaires, l'un des taux les plus bas des pays de l'OCDE.",
-    theme: "santé"
-  },
-  {
-    id: "g27",
-    type: "simple",
-    question: "Combien de podologues exercent en France ?",
-    correctAnswer: 14200,
-    unit: "podologues",
-    explanation: "Environ 14 200 pédicures-podologues exercent en France, presque exclusivement en libéral.",
-    theme: "santé"
-  },
-  {
-    id: "g28",
-    type: "simple",
-    question: "Quel est le pourcentage de naissances ayant lieu avec péridurale en France ?",
-    correctAnswer: 82,
-    unit: "%",
-    explanation: "Environ 82% des accouchements en France se déroulent avec une analgésie péridurale, l'un des taux les plus élevés au monde.",
-    theme: "santé"
-  },
-  {
-    id: "g29",
-    type: "simple",
-    question: "Quel est le nombre de psychologues en France ?",
-    correctAnswer: 75000,
-    unit: "psychologues",
-    explanation: "On compte environ 75 000 psychologues en France, exerçant dans divers secteurs (santé, éducation, entreprises, libéral...).",
-    theme: "santé"
-  },
-  {
-    id: "g30",
-    type: "simple",
-    question: "Quelle est la part des dépenses de santé dans le budget des ménages français ?",
-    correctAnswer: 3.8,
-    unit: "%",
-    explanation: "Les dépenses de santé représentent en moyenne 3,8% du budget des ménages français, un chiffre relativement stable grâce au système de protection sociale.",
-    theme: "santé"
-  },
-  // Nouvelles questions à étapes
   {
     id: "sante-multistep-1",
     type: "multistep",
@@ -703,7 +504,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-2",
     type: "multistep",
     question: "Quel est le nombre total de consultations chez les généralistes en France chaque année ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il de médecins généralistes en exercice en France ?",
@@ -736,7 +537,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-3",
     type: "multistep",
     question: "Combien de téléconsultations sont réalisées chaque mois en France ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Quel est le nombre total de consultations médicales en France par an ?",
@@ -769,7 +570,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-4",
     type: "multistep",
     question: "Combien de personnes utilisent une app de suivi de diabète en France ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il de personnes diabétiques en France ?",
@@ -802,7 +603,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-5",
     type: "multistep",
     question: "Quel est le marché potentiel des montres connectées santé chez les plus de 60 ans ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il de personnes âgées de plus de 60 ans en France ?",
@@ -835,7 +636,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-6",
     type: "multistep",
     question: "Combien de SMS de rappel de rendez-vous médicaux sont envoyés chaque année ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il de consultations médicales en France par an ?",
@@ -868,7 +669,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-7",
     type: "multistep",
     question: "Combien de gigaoctets de données médicales sont générés chaque jour en France ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien de consultations médicales ont lieu chaque jour en France ?",
@@ -907,7 +708,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-8",
     type: "multistep",
     question: "Combien d'infirmier(ère)s exercent à domicile chaque année en France ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il d'infirmier(ère)s en France au total ?",
@@ -940,7 +741,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-9",
     type: "multistep",
     question: "Combien de médicaments sont consommés quotidiennement par les Français de plus de 65 ans ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il de personnes âgées de plus de 65 ans en France ?",
@@ -973,7 +774,7 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
     id: "sante-multistep-10",
     type: "multistep",
     question: "Combien de kilomètres parcourent les ambulances en France chaque année ?",
-    theme: "santé",
+    theme: "sante",
     steps: [
       {
         question: "Combien y a-t-il d'ambulances en service en France ?",
@@ -1001,96 +802,5 @@ export const santeGeneralQuestions: (Question | MultiStepQuestion)[] = [
       }
     ],
     finalExplanation: "Les ambulances en France parcourent environ 371,25 millions de kilomètres chaque année, soit près de 10 000 fois le tour de la Terre, pour assurer le transport des patients."
-  },
-  // Nouvelles questions simples
-  {
-    id: "sante-simple-1",
-    type: "simple",
-    question: "Quel est le nombre moyen d'années d'études pour devenir médecin en France ?",
-    correctAnswer: 9.5,
-    unit: "années",
-    explanation: "En France, il faut en moyenne 9,5 années d'études pour devenir médecin, incluant le premier et le deuxième cycle des études médicales.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-2",
-    type: "simple",
-    question: "Quel est le pourcentage de patients qui suivent correctement leur traitement médical prescrit ?",
-    correctAnswer: 68,
-    unit: "%",
-    explanation: "Environ 68% des patients suivent correctement leur traitement médical prescrit, selon les études sur l'observance thérapeutique.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-3",
-    type: "simple",
-    question: "Combien de prises de sang sont réalisées chaque jour en France ?",
-    correctAnswer: 450000,
-    unit: "prises de sang",
-    explanation: "Environ 450 000 prises de sang sont réalisées quotidiennement en France, dans les laboratoires d'analyses et les hôpitaux.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-4",
-    type: "simple",
-    question: "Quel est le coût moyen d'une journée d'hospitalisation en France ?",
-    correctAnswer: 1400,
-    unit: "euros",
-    explanation: "Le coût moyen d'une journée d'hospitalisation en France est d'environ 1 400 euros, tous services confondus.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-5",
-    type: "simple",
-    question: "Combien de minutes dure en moyenne une consultation chez un médecin généraliste ?",
-    correctAnswer: 17.5,
-    unit: "minutes",
-    explanation: "Une consultation chez un médecin généraliste dure en moyenne 17,5 minutes en France.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-6",
-    type: "simple",
-    question: "Quel pourcentage des Français portent des lunettes ou des lentilles de contact ?",
-    correctAnswer: 71,
-    unit: "%",
-    explanation: "Environ 71% des Français portent des lunettes ou des lentilles de contact pour corriger leur vision.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-7",
-    type: "simple",
-    question: "Combien d'euros sont remboursés en moyenne par la Sécurité Sociale par assuré et par an ?",
-    correctAnswer: 2800,
-    unit: "euros",
-    explanation: "La Sécurité Sociale rembourse en moyenne 2 800 euros par assuré et par an pour les frais de santé.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-8",
-    type: "simple",
-    question: "Quel est le nombre moyen de visites annuelles chez le dentiste par Français ?",
-    correctAnswer: 1.2,
-    unit: "visites",
-    explanation: "Les Français se rendent chez le dentiste en moyenne 1,2 fois par an.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-9",
-    type: "simple",
-    question: "Quel pourcentage des Français ont une complémentaire santé (mutuelle) ?",
-    correctAnswer: 95,
-    unit: "%",
-    explanation: "Environ 95% des Français bénéficient d'une complémentaire santé (mutuelle) pour compléter les remboursements de la Sécurité Sociale.",
-    theme: "santé"
-  },
-  {
-    id: "sante-simple-10",
-    type: "simple",
-    question: "Quel est le temps d'attente moyen aux urgences en France ?",
-    correctAnswer: 4.3,
-    unit: "heures",
-    explanation: "Le temps d'attente moyen aux urgences en France est d'environ 4,3 heures, avec de fortes variations selon les établissements et la période.",
-    theme: "santé"
   }
 ];
