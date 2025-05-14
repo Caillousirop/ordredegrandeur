@@ -80,13 +80,15 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             />
 
             {/* Step-by-Step Section */}
-            <QuizStepsList 
-              steps={question.steps}
-              submitted={submitted}
-              answers={answers}
-              handleInputChange={handleInputChange}
-              handleStepSubmit={handleStepSubmit}
-            />
+            {!directFinalMode && (
+              <QuizStepsList 
+                steps={question.steps}
+                submitted={submitted}
+                answers={answers}
+                handleInputChange={handleInputChange}
+                handleStepSubmit={handleStepSubmit}
+              />
+            )}
 
             {/* Final explanation or next question button */}
             {(finalSubmitted && showAnswer) && (
@@ -94,6 +96,19 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                 finalExplanation={question.finalExplanation}
                 onNextQuestion={handleNextQuestion}
               />
+            )}
+            
+            {/* Extra Next Question button at the bottom if any step is submitted */}
+            {anyStepSubmitted && (
+              <div className="mt-6 flex justify-center">
+                <Button 
+                  onClick={handleNextQuestion} 
+                  variant="outline" 
+                  className="px-6"
+                >
+                  Question suivante
+                </Button>
+              </div>
             )}
           </CardContent>
           

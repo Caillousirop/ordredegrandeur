@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { MultiStepQuestion, QuizScore } from "../types";
 import { calculateAccuracy } from "./CalculateAccuracy";
@@ -93,6 +92,11 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
         directFinalAnswer: false
       });
     }
+    
+    // Show next question button immediately after answering any step
+    toast.success("Réponse enregistrée ! Vous pouvez passer à la question suivante.", {
+      duration: 3000
+    });
   };
 
   const handleDirectFinalSubmit = (e: React.FormEvent) => {
@@ -114,6 +118,11 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     if (accuracy >= 80) {
       toast.success("🎉 Bravo ! Excellente réponse directe !", {
         duration: 5000
+      });
+    } else {
+      // Show next question notification for other cases
+      toast.success("Réponse enregistrée ! Vous pouvez passer à la question suivante.", {
+        duration: 3000
       });
     }
 

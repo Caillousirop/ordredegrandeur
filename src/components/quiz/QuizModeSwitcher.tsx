@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { ArrowRightIcon } from "lucide-react";
 
 interface QuizModeSwitcherProps {
   directFinalMode: boolean;
@@ -21,10 +22,11 @@ const QuizModeSwitcher: React.FC<QuizModeSwitcherProps> = ({
         {anyStepSubmitted && (
           <Button 
             onClick={onNextQuestion} 
-            variant="outline" 
-            className="text-sm"
+            variant="default"
+            className="text-sm flex items-center gap-1"
           >
             Question suivante
+            <ArrowRightIcon size={16} />
           </Button>
         )}
       </div>
