@@ -38,10 +38,6 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
         selectedType={selectedType}
       />
       
-      <div className="mt-6">
-        <SearchBar onSearch={onSearch} />
-      </div>
-      
       {/* Bouton Commencer le test */}
       <div className="flex justify-center mt-8">
         <Button 
@@ -52,6 +48,11 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
         >
           Commencer le test <ArrowRight className="ml-2" />
         </Button>
+      </div>
+      
+      {/* Moved search bar below the button */}
+      <div className="mt-4 flex justify-center">
+        <SearchBar onSearch={onSearch} />
       </div>
     </div>
   );

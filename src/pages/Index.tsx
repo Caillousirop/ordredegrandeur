@@ -2,6 +2,7 @@
 import { useState } from "react";
 import QuizContainer from "@/components/QuizContainer";
 import { useQuiz } from "@/hooks/useQuiz";
+import UserSpace from "@/components/UserSpace";
 
 const Index = () => {
   const [showDebug, setShowDebug] = useState(false);
@@ -9,6 +10,11 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 flex flex-col items-center py-10">
+      {/* User Space component in the top right */}
+      <div className="fixed top-4 right-4 z-10">
+        <UserSpace questionsCompleted={quizState.questionsCompleted} />
+      </div>
+      
       {/* Debug toggle button */}
       <button 
         onClick={() => setShowDebug(!showDebug)} 
