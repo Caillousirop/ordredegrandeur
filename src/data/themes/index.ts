@@ -8,6 +8,7 @@ import { mondeQuestions } from "./monde";
 import { santeQuestions } from "./sante";
 import { technologieQuestions } from "./technologie";
 import { transportQuestions } from "./transport";
+import { insoliteQuestions } from "./insolite";
 import { QuizTheme } from "@/components/types";
 
 // Combiner toutes les questions
@@ -20,7 +21,8 @@ export const questions = [
   ...mondeQuestions,
   ...santeQuestions,
   ...technologieQuestions,
-  ...transportQuestions
+  ...transportQuestions,
+  ...insoliteQuestions
 ];
 
 // Définir les thèmes disponibles
@@ -87,5 +89,12 @@ export const themes: QuizTheme[] = [
     description: "Questions sur les moyens de transport et les infrastructures",
     color: "from-orange-500 to-orange-400",
     icon: "Car"
+  },
+  {
+    id: "insolite",
+    name: "Insolite",
+    description: "Questions surprenantes sur des faits étonnants et inhabituels",
+    color: "from-purple-500 to-pink-400",
+    icon: "Sparkles"
   }
 ];
