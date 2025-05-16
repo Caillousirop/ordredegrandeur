@@ -79,80 +79,94 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 py-10 px-4">
       <div className="container mx-auto max-w-4xl">
         <div className="mb-6 flex items-center">
           <Button 
             variant="ghost" 
             onClick={() => navigate("/")} 
-            className="mr-2"
+            className="mr-2 hover:bg-primary/10"
           >
             <ArrowLeft size={18} />
           </Button>
-          <h1 className="text-2xl md:text-3xl font-bold">Mon Profil</h1>
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">Mon Profil</h1>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* User stats card */}
-          <Card className="col-span-1 md:col-span-2 border-[1px] border-secondary/50">
-            <CardHeader>
+          <Card className="col-span-1 md:col-span-2 border-[1px] border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-purple-400 to-primary/30"></div>
+            <CardHeader className="pb-2">
               <CardTitle className="flex items-center justify-between">
-                <span>Statistiques</span>
+                <span className="text-gradient">Statistiques</span>
                 <UserLevelBadge level={userLevel} />
               </CardTitle>
-              <CardDescription className="flex items-center gap-2">
+              <CardDescription className="flex items-center gap-2 bg-secondary/30 p-2 rounded-lg animate-pulse-scale">
                 {funnyMessage.icon} {funnyMessage.text}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <div className="bg-secondary/10 p-4 rounded-lg text-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="bg-gradient-to-br from-blue-500/10 to-blue-400/5 p-4 rounded-lg text-center border border-blue-500/20 shadow-sm">
                     <p className="text-muted-foreground text-sm">Questions</p>
-                    <p className="text-2xl font-bold">{questionsCompleted}</p>
+                    <p className="text-2xl font-bold text-blue-500">{questionsCompleted}</p>
                     <p className="text-xs text-muted-foreground">
                       {questionsCompleted < 5 ? "Vous débutez à peine !" : "Quelle persévérance !"}
                     </p>
                   </div>
-                  <div className="bg-secondary/10 p-4 rounded-lg text-center">
+                  <div className="bg-gradient-to-br from-green-500/10 to-green-400/5 p-4 rounded-lg text-center border border-green-500/20 shadow-sm">
                     <p className="text-muted-foreground text-sm">Précision</p>
-                    <p className="text-2xl font-bold">{correctPercentage}%</p>
+                    <p className="text-2xl font-bold text-green-500">{correctPercentage}%</p>
                     <p className="text-xs text-muted-foreground">
                       {correctPercentage > 70 ? "Champion !" : "Peut mieux faire..."}
                     </p>
                   </div>
-                  <div className="bg-secondary/10 p-4 rounded-lg text-center">
+                  <div className="bg-gradient-to-br from-purple-500/10 to-purple-400/5 p-4 rounded-lg text-center border border-purple-500/20 shadow-sm">
                     <p className="text-muted-foreground text-sm">Points</p>
-                    <p className="text-2xl font-bold">{totalPoints}</p>
+                    <p className="text-2xl font-bold text-purple-500">{totalPoints}</p>
                     <p className="text-xs text-muted-foreground">
                       Niveau: {getLevelTitle()}
                     </p>
                   </div>
                 </div>
                 
-                <div className="mt-6">
-                  <h3 className="font-medium mb-3">Détails (pour les curieux)</h3>
-                  <ul className="space-y-2">
-                    <li className="flex justify-between">
-                      <span className="text-muted-foreground">Réponses directes</span>
-                      <span>
-                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length} 
-                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length > 5 ? " (Impressionnant !)" : ""}
+                <div className="mt-6 bg-secondary/20 p-4 rounded-lg border border-secondary">
+                  <h3 className="font-medium mb-3 text-primary/80">Détails (pour les curieux)</h3>
+                  <ul className="space-y-3">
+                    <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+                      <span className="text-muted-foreground flex items-center">
+                        <Trophy size={16} className="mr-2 text-amber-500" />
+                        Réponses directes
                       </span>
+                      <Badge variant="outline" className="bg-amber-50">
+                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length} 
+                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length > 5 ? " 🌟" : ""}
+                      </Badge>
                     </li>
-                    <li className="flex justify-between">
-                      <span className="text-muted-foreground">Réponses étape par étape</span>
-                      <span>{scores.filter(s => s.isMultiStep && !s.directFinalAnswer).length}</span>
+                    <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+                      <span className="text-muted-foreground flex items-center">
+                        <Award size={16} className="mr-2 text-blue-500" />
+                        Réponses étape par étape
+                      </span>
+                      <Badge variant="outline" className="bg-blue-50">
+                        {scores.filter(s => s.isMultiStep && !s.directFinalAnswer).length}
+                      </Badge>
                     </li>
-                    <li className="flex justify-between">
-                      <span className="text-muted-foreground">Questions simples</span>
-                      <span>{scores.filter(s => !s.isMultiStep).length}</span>
+                    <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+                      <span className="text-muted-foreground flex items-center">
+                        <Star size={16} className="mr-2 text-green-500" />
+                        Questions simples
+                      </span>
+                      <Badge variant="outline" className="bg-green-50">
+                        {scores.filter(s => !s.isMultiStep).length}
+                      </Badge>
                     </li>
                   </ul>
                 </div>
                 
-                <div className="p-4 bg-primary/10 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Le saviez-vous ?</p>
+                <div className="p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg mt-4 border border-primary/10 shadow-inner">
+                  <p className="text-sm font-medium text-primary">Le saviez-vous ?</p>
                   <p className="text-xs text-muted-foreground">
                     Les réponses directes correctes aux questions à étapes vous rapportent 50% de points bonus. 
                     {totalPoints > 100 ? " À ce rythme, vous serez bientôt recruté par l'INSEE !" : " Essayez pour grimper plus vite dans le classement !"}
@@ -163,9 +177,10 @@ const Profile = () => {
           </Card>
           
           {/* Achievements card */}
-          <Card className="border-[1px] border-secondary/50">
-            <CardHeader>
-              <CardTitle>Badges</CardTitle>
+          <Card className="border-[1px] border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-purple-400 to-primary/30"></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-gradient">Badges</CardTitle>
               <CardDescription>
                 Récompenses débloquées (ou pas encore...)
               </CardDescription>
@@ -175,13 +190,15 @@ const Profile = () => {
                 {achievements.map((achievement, index) => (
                   <li 
                     key={index} 
-                    className={`flex items-center p-2 rounded-md ${
-                      achievement.unlocked ? "bg-primary/10" : "bg-muted/50 opacity-60"
+                    className={`flex items-center p-3 rounded-md transition-all duration-300 hover:translate-y-[-2px] ${
+                      achievement.unlocked 
+                        ? "bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20" 
+                        : "bg-muted/50 opacity-60 border border-muted"
                     }`}
                   >
-                    <div className={`w-8 h-8 rounded-full ${
-                      achievement.unlocked ? "bg-background" : "bg-muted"
-                    } flex items-center justify-center mr-3`}>
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center mr-3 ${
+                      achievement.unlocked ? "bg-white shadow-md" : "bg-muted"
+                    }`}>
                       {achievement.icon}
                     </div>
                     <div>
@@ -189,14 +206,17 @@ const Profile = () => {
                       <p className="text-xs text-muted-foreground">{achievement.description}</p>
                     </div>
                     {!achievement.unlocked && (
-                      <span className="ml-auto text-xs text-muted-foreground">Bientôt !</span>
+                      <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">Bientôt !</span>
                     )}
                   </li>
                 ))}
                 {achievements.filter(a => a.unlocked).length === 0 && (
-                  <p className="text-center text-xs text-muted-foreground py-4">
-                    Pas encore de badges ? Ne vous inquiétez pas, même Einstein a commencé quelque part !
-                  </p>
+                  <div className="text-center py-6 px-4 bg-muted/20 rounded-lg border border-muted">
+                    <Frown className="mx-auto mb-2 text-muted-foreground" size={24} />
+                    <p className="text-sm text-muted-foreground">
+                      Pas encore de badges ? Ne vous inquiétez pas, même Einstein a commencé quelque part !
+                    </p>
+                  </div>
                 )}
               </ul>
             </CardContent>
