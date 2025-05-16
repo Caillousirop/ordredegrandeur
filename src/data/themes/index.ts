@@ -22,6 +22,7 @@ export const questions = [
   ...santeQuestions,
   ...technologieQuestions,
   ...transportQuestions,
+  // Le tableau insoliteQuestions est maintenant vide
   ...insoliteQuestions
 ];
 
