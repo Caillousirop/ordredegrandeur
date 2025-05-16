@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuiz } from "@/hooks/useQuiz";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Star, Trophy, Award } from "lucide-react";
+import { ArrowLeft, Star, Trophy, Award, Laugh, Frown, Smile } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UserLevelBadge from "@/components/UserLevelBadge";
 
@@ -30,27 +30,53 @@ const Profile = () => {
   // Calculate user level based on points
   const userLevel = Math.floor(totalPoints / 25) + 1;
   
-  // Achievements logic
+  // Funny messages based on performance
+  const getFunnyMessage = () => {
+    if (correctPercentage >= 80) return {
+      text: "Einstein serait jaloux de vos compétences !",
+      icon: <Laugh className="text-green-500" size={20} />
+    };
+    if (correctPercentage >= 50) return {
+      text: "Pas mal ! Votre cerveau fait de l'exercice.",
+      icon: <Smile className="text-amber-500" size={20} />
+    };
+    return {
+      text: "Les statistiques aussi trouvent ça difficile parfois...",
+      icon: <Frown className="text-blue-500" size={20} />
+    };
+  };
+  
+  const funnyMessage = getFunnyMessage();
+  
+  // More fun achievements
   const achievements = [
     {
-      title: "Débutant",
-      description: "A complété 5 questions",
+      title: "Débutant Intrépide",
+      description: "A survécu à 5 questions sans abandonner",
       unlocked: questionsCompleted >= 5,
       icon: <Star size={18} className="text-yellow-500" />
     },
     {
-      title: "Penseur Rapide",
-      description: "5 réponses directes correctes",
+      title: "Einstein des Temps Modernes",
+      description: "5 réponses directes sans calculatrice !",
       unlocked: scores.filter(s => s.isMultiStep && s.directFinalAnswer && s.accuracy >= 70).length >= 5,
       icon: <Trophy size={18} className="text-blue-500" />
     },
     {
-      title: "Expert",
-      description: "10 questions avec précision >80%",
+      title: "Maître des Chiffres",
+      description: "10 questions avec précision >80% (vous trichez ?)",
       unlocked: scores.filter(s => s.accuracy >= 80).length >= 10,
       icon: <Award size={18} className="text-purple-500" />
     }
   ];
+
+  // Funny level titles
+  const getLevelTitle = () => {
+    if (userLevel >= 10) return "Génie Statistique";
+    if (userLevel >= 7) return "Mathématicien Amateur";
+    if (userLevel >= 4) return "Compteur de Haricots";
+    return "Apprenti Calculateur";
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 py-10 px-4">
@@ -74,8 +100,8 @@ const Profile = () => {
                 <span>Statistiques</span>
                 <UserLevelBadge level={userLevel} />
               </CardTitle>
-              <CardDescription>
-                Récapitulatif de vos performances
+              <CardDescription className="flex items-center gap-2">
+                {funnyMessage.icon} {funnyMessage.text}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -84,23 +110,35 @@ const Profile = () => {
                   <div className="bg-secondary/10 p-4 rounded-lg text-center">
                     <p className="text-muted-foreground text-sm">Questions</p>
                     <p className="text-2xl font-bold">{questionsCompleted}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {questionsCompleted < 5 ? "Vous débutez à peine !" : "Quelle persévérance !"}
+                    </p>
                   </div>
                   <div className="bg-secondary/10 p-4 rounded-lg text-center">
                     <p className="text-muted-foreground text-sm">Précision</p>
                     <p className="text-2xl font-bold">{correctPercentage}%</p>
+                    <p className="text-xs text-muted-foreground">
+                      {correctPercentage > 70 ? "Champion !" : "Peut mieux faire..."}
+                    </p>
                   </div>
                   <div className="bg-secondary/10 p-4 rounded-lg text-center">
                     <p className="text-muted-foreground text-sm">Points</p>
                     <p className="text-2xl font-bold">{totalPoints}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Niveau: {getLevelTitle()}
+                    </p>
                   </div>
                 </div>
                 
                 <div className="mt-6">
-                  <h3 className="font-medium mb-3">Détails</h3>
+                  <h3 className="font-medium mb-3">Détails (pour les curieux)</h3>
                   <ul className="space-y-2">
                     <li className="flex justify-between">
                       <span className="text-muted-foreground">Réponses directes</span>
-                      <span>{scores.filter(s => s.isMultiStep && s.directFinalAnswer).length}</span>
+                      <span>
+                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length} 
+                        {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length > 5 ? " (Impressionnant !)" : ""}
+                      </span>
                     </li>
                     <li className="flex justify-between">
                       <span className="text-muted-foreground">Réponses étape par étape</span>
@@ -112,6 +150,14 @@ const Profile = () => {
                     </li>
                   </ul>
                 </div>
+                
+                <div className="p-4 bg-primary/10 rounded-lg mt-4">
+                  <p className="text-sm font-medium">Le saviez-vous ?</p>
+                  <p className="text-xs text-muted-foreground">
+                    Les réponses directes correctes aux questions à étapes vous rapportent 50% de points bonus. 
+                    {totalPoints > 100 ? " À ce rythme, vous serez bientôt recruté par l'INSEE !" : " Essayez pour grimper plus vite dans le classement !"}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -121,7 +167,7 @@ const Profile = () => {
             <CardHeader>
               <CardTitle>Badges</CardTitle>
               <CardDescription>
-                Récompenses débloquées
+                Récompenses débloquées (ou pas encore...)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -142,8 +188,16 @@ const Profile = () => {
                       <p className="font-medium text-sm">{achievement.title}</p>
                       <p className="text-xs text-muted-foreground">{achievement.description}</p>
                     </div>
+                    {!achievement.unlocked && (
+                      <span className="ml-auto text-xs text-muted-foreground">Bientôt !</span>
+                    )}
                   </li>
                 ))}
+                {achievements.filter(a => a.unlocked).length === 0 && (
+                  <p className="text-center text-xs text-muted-foreground py-4">
+                    Pas encore de badges ? Ne vous inquiétez pas, même Einstein a commencé quelque part !
+                  </p>
+                )}
               </ul>
             </CardContent>
           </Card>
