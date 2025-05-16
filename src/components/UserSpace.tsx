@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   UserRound, 
@@ -53,8 +54,10 @@ const UserSpace: React.FC<UserSpaceProps> = ({
           <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer">
-            <UserRound className="mr-2" size={16} />
-            <span>Profil</span>
+            <Link to="/profile" className="flex items-center w-full">
+              <UserRound className="mr-2" size={16} />
+              <span>Profil</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <Trophy className="mr-2" size={16} />
