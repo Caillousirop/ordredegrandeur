@@ -30,7 +30,15 @@ const QuizModeSwitcher: React.FC<QuizModeSwitcherProps> = ({
           </Button>
         )}
       </div>
-      <Button onClick={onToggle} variant={directFinalMode ? "secondary" : "outline"} size="sm">
+      <Button 
+        onClick={onToggle} 
+        variant={directFinalMode ? "secondary" : "outline"} 
+        size="sm"
+        className={!directFinalMode ? 
+          "bg-gradient-to-r from-purple-500 to-pink-400 text-white hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-500 border-purple-300 font-medium shadow-sm animate-pulse-scale" : 
+          ""
+        }
+      >
         {directFinalMode ? "Résoudre par étapes" : "Réponse directe"}
       </Button>
     </div>
