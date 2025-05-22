@@ -1,3 +1,4 @@
+
 import { Question, MultiStepQuestion } from "@/components/types";
 
 // Questions simples sur l'économie
@@ -469,8 +470,8 @@ export const economieQuestionsOriginal: (Question | MultiStepQuestion)[] = [
   }
 ];
 
-// Questions d'emploi intégrées directement (anciennement dans le fichier emploi.ts)
-export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
+// Questions d'emploi intégrées dans l'économie
+export const emploiQuestions: (Question | MultiStepQuestion)[] = [
   {
     id: "emp1",
     question: "Combien y a-t-il de travailleurs en France ?",
@@ -478,7 +479,7 @@ export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
     unit: "millions",
     explanation: "La France compte environ 30 millions de personnes en emploi.",
     type: "simple",
-    theme: "economie"  // Thème changé en économie
+    theme: "economie"
   },
   {
     id: "emp2",
@@ -487,14 +488,14 @@ export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
     unit: "€",
     explanation: "Le SMIC horaire brut en France est de 11,52 € en 2024.",
     type: "simple",
-    theme: "economie"  // Thème changé en économie
+    theme: "economie"
   },
   {
     id: "emp3",
     type: "multistep",
     question: "Combien d'heures sont travaillées en France chaque jour ?",
     finalExplanation: "Les Français travaillent environ 237 millions d'heures par jour ouvrable, un chiffre qui montre l'ampleur de l'activité économique du pays.",
-    theme: "economie", // Thème changé en économie
+    theme: "economie",
     steps: [
       {
         question: "Combien y a-t-il de personnes qui travaillent en France ?",
@@ -521,7 +522,7 @@ export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
     type: "multistep",
     question: "Combien de jours de congés payés sont pris par les Français chaque année ?",
     finalExplanation: "Les Français prennent environ 770 millions de jours de congés payés par an, ce qui reflète l'importance des vacances et du temps de repos dans la culture française.",
-    theme: "economie", // Thème changé en économie
+    theme: "economie",
     steps: [
       {
         question: "Combien de jours de congés payés les salariés français ont-ils droit par an ?",
@@ -551,8 +552,8 @@ export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
   }
 ];
 
-// Combinaison des questions économie originales et emploi
+// Combinaison des questions économie et emploi
 export const economieQuestions = [
   ...economieQuestionsOriginal,
-  ...emploiQuestionsImported
+  ...emploiQuestions
 ];
