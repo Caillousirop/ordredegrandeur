@@ -1,10 +1,9 @@
 
-import { mondeEconomieQuestions } from './economie';
-import { mondeDemographieQuestions } from './demographie';
-import { mondeEnvironnementQuestions } from './environnement';
-import { mondeGeneralQuestions } from './general';
+import { mondeGeneralQuestions } from "./general";
+import { mondeDemographieQuestions } from "./demographie";
+import { mondeEconomieQuestions } from "./economie";
+import { mondeEnvironnementQuestions } from "./environnement";
 
-// Export all questions from the monde theme
 export const mondeQuestions = [
   ...mondeGeneralQuestions,
   ...mondeDemographieQuestions,
