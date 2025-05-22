@@ -6,6 +6,7 @@ import { themes } from "@/data/themes";
 import { Question, MultiStepQuestion } from "@/components/types";
 import { generateId } from "@/utils/questionImporter";
 import { Badge } from "@/components/ui/badge";
+import { AlertCircle, BrainCircuit } from "lucide-react";
 
 interface QuestionSchedulerProps {
   onNewQuestionsGenerated: (questions: (Question | MultiStepQuestion)[]) => void;
@@ -129,14 +130,24 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
   return (
     <div className="p-4 border rounded-md mb-6 bg-muted/20">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-medium">Génération automatique de questions</h3>
+        <h3 className="text-lg font-medium flex items-center gap-2">
+          <BrainCircuit className="h-5 w-5" />
+          Génération automatique de questions
+        </h3>
         <Badge variant="outline" className="bg-yellow-100 text-yellow-800">Version préliminaire</Badge>
       </div>
       
-      <p className="text-sm mb-4 text-muted-foreground">
-        Cette fonctionnalité génère actuellement des propositions de questions à compléter manuellement. 
-        Une future mise à jour pourra intégrer l'IA pour générer des questions pertinentes par thème.
-      </p>
+      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md flex gap-2">
+        <AlertCircle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+        <div className="text-sm text-blue-700">
+          <p className="font-medium mb-1">Intégration future avec une IA</p>
+          <p>
+            Cette fonctionnalité génère actuellement des propositions de questions à compléter manuellement. 
+            Une future intégration avec un service d'IA pourra générer des questions pertinentes par thème 
+            basées sur des données récentes et adaptées à votre application.
+          </p>
+        </div>
+      </div>
       
       <div className="space-y-2 mb-4">
         {lastGenerationDate && (
@@ -155,6 +166,7 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
         onClick={generateQuestions} 
         disabled={isGenerating}
         className="w-full"
+        variant="default"
       >
         {isGenerating ? "Génération en cours..." : "Générer des propositions de questions"}
       </Button>
