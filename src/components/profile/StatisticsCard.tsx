@@ -21,31 +21,31 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
   totalPoints, 
   userLevel 
 }) => {
-  // Funny messages based on performance
-  const getFunnyMessage = () => {
+  // Messages basés sur la performance
+  const getMessage = () => {
     if (correctPercentage >= 80) return {
-      text: "Einstein serait jaloux de vos compétences !",
+      text: "Excellente précision dans vos réponses.",
       icon: <Laugh className="text-green-500" size={20} />
     };
     if (correctPercentage >= 50) return {
-      text: "Pas mal ! Votre cerveau fait de l'exercice.",
+      text: "Bonne progression dans l'apprentissage.",
       icon: <Smile className="text-amber-500" size={20} />
     };
     return {
-      text: "Les statistiques aussi trouvent ça difficile parfois...",
+      text: "Continuez à progresser, la statistique demande de la pratique.",
       icon: <Frown className="text-blue-500" size={20} />
     };
   };
 
-  // Funny level titles
+  // Titres des niveaux
   const getLevelTitle = () => {
-    if (userLevel >= 10) return "Génie Statistique";
-    if (userLevel >= 7) return "Mathématicien Amateur";
-    if (userLevel >= 4) return "Compteur de Haricots";
-    return "Apprenti Calculateur";
+    if (userLevel >= 10) return "Expert en Statistique";
+    if (userLevel >= 7) return "Mathématicien Confirmé";
+    if (userLevel >= 4) return "Analyste en Progression";
+    return "Statisticien Débutant";
   };
   
-  const funnyMessage = getFunnyMessage();
+  const message = getMessage();
   
   return (
     <Card className="col-span-1 md:col-span-2 border-[1px] border-primary/20 shadow-lg shadow-primary/5 overflow-hidden">
@@ -56,7 +56,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
           <UserLevelBadge level={userLevel} />
         </CardTitle>
         <CardDescription className="flex items-center gap-2 bg-secondary/30 p-2 rounded-lg animate-pulse-scale">
-          {funnyMessage.icon} {funnyMessage.text}
+          {message.icon} {message.text}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -66,14 +66,14 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
               <p className="text-muted-foreground text-sm">Questions</p>
               <p className="text-2xl font-bold text-blue-500">{questionsCompleted}</p>
               <p className="text-xs text-muted-foreground">
-                {questionsCompleted < 5 ? "Vous débutez à peine !" : "Quelle persévérance !"}
+                {questionsCompleted < 5 ? "Début de parcours" : "Progression constante"}
               </p>
             </div>
             <div className="bg-gradient-to-br from-green-500/10 to-green-400/5 p-4 rounded-lg text-center border border-green-500/20 shadow-sm">
               <p className="text-muted-foreground text-sm">Précision</p>
               <p className="text-2xl font-bold text-green-500">{correctPercentage}%</p>
               <p className="text-xs text-muted-foreground">
-                {correctPercentage > 70 ? "Champion !" : "Peut mieux faire..."}
+                {correctPercentage > 70 ? "Performance notable" : "En progression"}
               </p>
             </div>
             <div className="bg-gradient-to-br from-purple-500/10 to-purple-400/5 p-4 rounded-lg text-center border border-purple-500/20 shadow-sm">
@@ -86,33 +86,33 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
           </div>
           
           <div className="mt-6 bg-secondary/20 p-4 rounded-lg border border-secondary">
-            <h3 className="font-medium mb-3 text-primary/80">Détails (pour les curieux)</h3>
+            <h3 className="font-medium mb-3 text-primary/80">Détails des réponses</h3>
             <ul className="space-y-3">
-              <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+              <li className="flex justify-between items-center bg-white/50 dark:bg-gray-800/50 p-2 rounded-md">
                 <span className="text-muted-foreground flex items-center">
                   <Trophy size={16} className="mr-2 text-amber-500" />
                   Réponses directes
                 </span>
-                <Badge variant="outline" className="bg-amber-50">
+                <Badge variant="outline" className="bg-amber-50 dark:bg-amber-900/30">
                   {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length} 
-                  {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length > 5 ? " 🌟" : ""}
+                  {scores.filter(s => s.isMultiStep && s.directFinalAnswer).length > 5 ? " ★" : ""}
                 </Badge>
               </li>
-              <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+              <li className="flex justify-between items-center bg-white/50 dark:bg-gray-800/50 p-2 rounded-md">
                 <span className="text-muted-foreground flex items-center">
                   <Award size={16} className="mr-2 text-blue-500" />
                   Réponses étape par étape
                 </span>
-                <Badge variant="outline" className="bg-blue-50">
+                <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/30">
                   {scores.filter(s => s.isMultiStep && !s.directFinalAnswer).length}
                 </Badge>
               </li>
-              <li className="flex justify-between items-center bg-white/50 p-2 rounded-md">
+              <li className="flex justify-between items-center bg-white/50 dark:bg-gray-800/50 p-2 rounded-md">
                 <span className="text-muted-foreground flex items-center">
                   <Star size={16} className="mr-2 text-green-500" />
                   Questions simples
                 </span>
-                <Badge variant="outline" className="bg-green-50">
+                <Badge variant="outline" className="bg-green-50 dark:bg-green-900/30">
                   {scores.filter(s => !s.isMultiStep).length}
                 </Badge>
               </li>
@@ -120,10 +120,10 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
           </div>
           
           <div className="p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg mt-4 border border-primary/10 shadow-inner">
-            <p className="text-sm font-medium text-primary">Le saviez-vous ?</p>
+            <p className="text-sm font-medium text-primary">À noter</p>
             <p className="text-xs text-muted-foreground">
               Les réponses directes correctes aux questions à étapes vous rapportent 50% de points bonus. 
-              {totalPoints > 100 ? " À ce rythme, vous serez bientôt recruté par l'INSEE !" : " Essayez pour grimper plus vite dans le classement !"}
+              {totalPoints > 100 ? " Votre progression est remarquable." : " Une opportunité d'améliorer votre score global."}
             </p>
           </div>
         </div>

@@ -10,23 +10,23 @@ interface AchievementsCardProps {
 }
 
 const AchievementsCard: React.FC<AchievementsCardProps> = ({ scores, questionsCompleted }) => {
-  // More fun achievements
+  // Badges d'accomplissement
   const achievements = [
     {
-      title: "Débutant Intrépide",
-      description: "A survécu à 5 questions sans abandonner",
+      title: "Premiers Pas",
+      description: "Complétion de 5 questions statistiques",
       unlocked: questionsCompleted >= 5,
       icon: <Star size={18} className="text-yellow-500" />
     },
     {
-      title: "Einstein des Temps Modernes",
-      description: "5 réponses directes sans calculatrice !",
+      title: "Analyste Perspicace",
+      description: "5 réponses directes avec précision élevée",
       unlocked: scores.filter(s => s.isMultiStep && s.directFinalAnswer && s.accuracy >= 70).length >= 5,
       icon: <Trophy size={18} className="text-blue-500" />
     },
     {
-      title: "Maître des Chiffres",
-      description: "10 questions avec précision >80% (vous trichez ?)",
+      title: "Expert en Chiffres",
+      description: "10 questions avec précision supérieure à 80%",
       unlocked: scores.filter(s => s.accuracy >= 80).length >= 10,
       icon: <Award size={18} className="text-purple-500" />
     }
@@ -38,7 +38,7 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ scores, questionsCo
       <CardHeader className="pb-2">
         <CardTitle className="text-gradient">Badges</CardTitle>
         <CardDescription>
-          Récompenses débloquées (ou pas encore...)
+          Accomplissements débloqués et à venir
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -53,7 +53,7 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ scores, questionsCo
               }`}
             >
               <div className={`w-9 h-9 rounded-full flex items-center justify-center mr-3 ${
-                achievement.unlocked ? "bg-white shadow-md" : "bg-muted"
+                achievement.unlocked ? "bg-white dark:bg-gray-800 shadow-md" : "bg-muted"
               }`}>
                 {achievement.icon}
               </div>
@@ -62,7 +62,7 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ scores, questionsCo
                 <p className="text-xs text-muted-foreground">{achievement.description}</p>
               </div>
               {!achievement.unlocked && (
-                <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">Bientôt !</span>
+                <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">À débloquer</span>
               )}
             </li>
           ))}
@@ -70,7 +70,7 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ scores, questionsCo
             <div className="text-center py-6 px-4 bg-muted/20 rounded-lg border border-muted">
               <Frown className="mx-auto mb-2 text-muted-foreground" size={24} />
               <p className="text-sm text-muted-foreground">
-                Pas encore de badges ? Ne vous inquiétez pas, même Einstein a commencé quelque part !
+                Aucun badge n'a encore été débloqué. Continuez à progresser pour obtenir vos premiers accomplissements.
               </p>
             </div>
           )}

@@ -13,7 +13,7 @@ const Profile = () => {
   const { correctPercentage, totalPoints, userLevel } = calculateProfileStats(scores, questionsCompleted);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 dark:from-primary/10 dark:to-primary/5 py-10 px-4">
       <div className="container mx-auto max-w-4xl">
         <ProfileHeader />
         
