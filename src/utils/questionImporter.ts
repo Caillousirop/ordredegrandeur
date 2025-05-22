@@ -232,6 +232,3 @@ export const sampleJSONFormat = {
     }
   ]
 };
-
-<lov-add-dependency>uuid@latest</lov-add-dependency>
-

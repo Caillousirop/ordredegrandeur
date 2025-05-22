@@ -13,7 +13,7 @@ import { QuizTheme } from "@/components/types";
 // Combiner toutes les questions
 export const questions = [
   ...demographieQuestions,
-  ...economieQuestions, // Contient maintenant les questions emploi
+  ...economieQuestions, // Contient maintenant les anciennes questions emploi
   ...educationQuestions,
   ...environnementQuestions, 
   ...mondeQuestions,
