@@ -18,18 +18,28 @@ export const useQuiz = () => {
     console.log("Filtering with search query:", searchQuery);
     console.log("Current theme:", selectedTheme?.id);
     console.log("Current type:", selectedType);
+    console.log("Total available questions:", questions.length);
     
     // Start with all questions
     let filtered = [...questions];
     
+    // Log the count of questions by theme to debug
+    const themeCounts = {};
+    questions.forEach(q => {
+      themeCounts[q.theme] = (themeCounts[q.theme] || 0) + 1;
+    });
+    console.log("Questions by theme:", themeCounts);
+    
     // Filter by theme if selected (except for random theme)
     if (selectedTheme && selectedTheme.id !== "random") {
       filtered = filtered.filter(q => q.theme === selectedTheme.id);
+      console.log(`Questions after ${selectedTheme.id} theme filter:`, filtered.length);
     }
     
     // Filter by question type if selected
     if (selectedType !== "all") {
       filtered = filtered.filter(q => q.type === selectedType);
+      console.log(`Questions after ${selectedType} type filter:`, filtered.length);
     }
     
     // Apply search filter if there's a query
