@@ -9,12 +9,15 @@ import { parseQuestionsFromJSON, sampleImportFormat } from "@/utils/questionImpo
 import { toast } from "sonner";
 import { Question, MultiStepQuestion } from "@/components/types";
 import AdminQuestionsList from "@/components/quiz/AdminQuestionsList";
+import QuestionForm from "@/components/quiz/QuestionForm";
 
 const Admin = () => {
   const navigate = useNavigate();
   const [jsonInput, setJsonInput] = useState("");
   const [simpleQuestions, setSimpleQuestions] = useState<Question[]>([]);
   const [multiStepQuestions, setMultiStepQuestions] = useState<MultiStepQuestion[]>([]);
+  const [isQuestionFormOpen, setIsQuestionFormOpen] = useState(false);
+  const [currentEditQuestion, setCurrentEditQuestion] = useState<Question | MultiStepQuestion | undefined>(undefined);
   
   // Load questions from localStorage on component mount
   useEffect(() => {
@@ -109,6 +112,40 @@ const Admin = () => {
       toast.success("Toutes les questions ont été supprimées!");
     }
   };
+  
+  const handleEditQuestion = (question: Question | MultiStepQuestion) => {
+    setCurrentEditQuestion(question);
+    setIsQuestionFormOpen(true);
+  };
+  
+  const handleAddQuestion = () => {
+    setCurrentEditQuestion(undefined);
+    setIsQuestionFormOpen(true);
+  };
+  
+  const handleSaveQuestion = (question: Question | MultiStepQuestion) => {
+    if (question.type === "simple") {
+      // If editing an existing question, update it, otherwise add it as new
+      if (currentEditQuestion) {
+        setSimpleQuestions(prev => 
+          prev.map(q => q.id === question.id ? question as Question : q)
+        );
+      } else {
+        setSimpleQuestions(prev => [...prev, question as Question]);
+      }
+    } else {
+      // Same for multi-step questions
+      if (currentEditQuestion) {
+        setMultiStepQuestions(prev => 
+          prev.map(q => q.id === question.id ? question as MultiStepQuestion : q)
+        );
+      } else {
+        setMultiStepQuestions(prev => [...prev, question as MultiStepQuestion]);
+      }
+    }
+    
+    toast.success(currentEditQuestion ? "Question mise à jour avec succès!" : "Question ajoutée avec succès!");
+  };
 
   return (
     <div className="container px-4 py-8">
@@ -124,17 +161,28 @@ const Admin = () => {
           <h1 className="text-2xl md:text-3xl font-bold">Administration</h1>
         </div>
         
-        {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
+        <div className="flex gap-2">
           <Button 
-            variant="destructive" 
-            onClick={handleDeleteAllQuestions} 
-            size="sm"
+            variant="outline" 
+            onClick={handleAddQuestion}
             className="flex items-center gap-1"
           >
-            <Trash size={16} />
-            Supprimer tout
+            <Plus size={16} />
+            Créer une question
           </Button>
-        )}
+          
+          {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
+            <Button 
+              variant="destructive" 
+              onClick={handleDeleteAllQuestions} 
+              size="sm"
+              className="flex items-center gap-1"
+            >
+              <Trash size={16} />
+              Supprimer tout
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -197,8 +245,16 @@ const Admin = () => {
           simpleQuestions={simpleQuestions}
           multiStepQuestions={multiStepQuestions}
           onDelete={handleDeleteQuestion}
+          onEdit={handleEditQuestion}
         />
       )}
+      
+      <QuestionForm 
+        isOpen={isQuestionFormOpen}
+        onClose={() => setIsQuestionFormOpen(false)}
+        onSave={handleSaveQuestion}
+        initialQuestion={currentEditQuestion}
+      />
     </div>
   );
 };

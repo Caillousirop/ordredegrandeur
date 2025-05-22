@@ -16,12 +16,14 @@ interface AdminQuestionsListProps {
   simpleQuestions: Question[];
   multiStepQuestions: MultiStepQuestion[];
   onDelete: (id: string, type: "simple" | "multistep") => void;
+  onEdit: (question: Question | MultiStepQuestion) => void;
 }
 
 const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
   simpleQuestions,
   multiStepQuestions,
-  onDelete
+  onDelete,
+  onEdit
 }) => {
   const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
 
@@ -54,14 +56,24 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                 <TableCell>Simple</TableCell>
                 <TableCell>{question.theme}</TableCell>
                 <TableCell className="text-right">
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => onDelete(question.id, "simple")}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                  <div className="flex justify-end gap-1">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => onEdit(question)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => onDelete(question.id, "simple")}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -79,14 +91,24 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                   <TableCell>Multi-étapes ({question.steps.length})</TableCell>
                   <TableCell>{question.theme}</TableCell>
                   <TableCell className="text-right">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => onDelete(question.id, "multistep")}
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
+                    <div className="flex justify-end gap-1">
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => onEdit(question)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => onDelete(question.id, "multistep")}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 {expandedQuestionId === question.id && (
