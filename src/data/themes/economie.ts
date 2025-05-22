@@ -811,5 +811,605 @@ export const economieQuestions: (Question | MultiStepQuestion)[] = [
     unit: "%",
     explanation: "Environ 14,6% de la population française vit sous le seuil de pauvreté, défini à 60% du revenu médian.",
     theme: "economie"
+  },
+  {
+    id: "eco-ms-001",
+    type: "multistep",
+    question: "Quel est le PIB généré par le secteur agricole en France sur une année ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le PIB total de la France ?",
+        correctAnswer: 2500000000000,
+        unit: "€",
+        explanation: "Le PIB de la France est d'environ 2 500 milliards d'euros."
+      },
+      {
+        question: "Quel pourcentage du PIB français est généré par le secteur agricole ?",
+        correctAnswer: 1.6,
+        unit: "%",
+        explanation: "Le secteur agricole représente environ 1,6% du PIB français."
+      },
+      {
+        question: "Quel est donc le PIB généré par le secteur agricole en France sur une année ?",
+        correctAnswer: 40000000000,
+        unit: "€",
+        explanation: "En multipliant le PIB total (2 500 milliards €) par la part du secteur agricole (1,6%), on obtient 40 milliards d'euros."
+      }
+    ],
+    finalExplanation: "Le secteur agricole français génère environ 40 milliards d'euros par an, soit 1,6% du PIB total de la France qui s'élève à environ 2 500 milliards d'euros."
+  },
+  {
+    id: "eco-ms-002",
+    type: "multistep",
+    question: "Quelle est la valeur annuelle des exportations de biens industriels français vers l'Union européenne ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la valeur totale des exportations françaises par an ?",
+        correctAnswer: 540000000000,
+        unit: "€",
+        explanation: "La France exporte pour environ 540 milliards d'euros de biens et services chaque année."
+      },
+      {
+        question: "Quel pourcentage des exportations françaises est destiné à l'Union européenne ?",
+        correctAnswer: 59,
+        unit: "%",
+        explanation: "Environ 59% des exportations françaises sont destinées à l'Union européenne."
+      },
+      {
+        question: "Quel pourcentage des exportations françaises concerne des biens industriels ?",
+        correctAnswer: 70,
+        unit: "%",
+        explanation: "Les biens industriels représentent environ 70% des exportations françaises."
+      },
+      {
+        question: "Quelle est donc la valeur annuelle des exportations de biens industriels français vers l'Union européenne ?",
+        correctAnswer: 223000000000,
+        unit: "€",
+        explanation: "En multipliant les exportations totales (540 milliards €) par la part destinée à l'UE (59%) puis par la part des biens industriels (70%), on obtient 223 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La France exporte chaque année environ 223 milliards d'euros de biens industriels vers l'Union européenne, ce qui représente une part significative de son commerce extérieur."
+  },
+  {
+    id: "eco-ms-003",
+    type: "multistep",
+    question: "Combien de logements sociaux faut-il construire pour loger 10 % de la population française sous le seuil de pauvreté ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la population française actuelle ?",
+        correctAnswer: 68000000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 68 millions d'habitants."
+      },
+      {
+        question: "Combien de personnes représentent 10% de la population française ?",
+        correctAnswer: 6800000,
+        unit: "personnes",
+        explanation: "10% de la population française représente 6,8 millions de personnes."
+      },
+      {
+        question: "Combien y a-t-il de personnes en moyenne par ménage en France ?",
+        correctAnswer: 2.2,
+        unit: "personnes",
+        explanation: "Il y a en moyenne 2,2 personnes par ménage en France."
+      },
+      {
+        question: "Combien de logements sociaux faut-il donc construire pour loger 10% de la population française sous le seuil de pauvreté ?",
+        correctAnswer: 3090000,
+        unit: "logements",
+        explanation: "En divisant le nombre de personnes à loger (6,8 millions) par le nombre moyen de personnes par ménage (2,2), on obtient environ 3,09 millions de logements nécessaires."
+      }
+    ],
+    finalExplanation: "Pour loger 10% de la population française sous le seuil de pauvreté, soit environ 6,8 millions de personnes, il faudrait construire environ 3,09 millions de logements sociaux, en considérant une taille moyenne de 2,2 personnes par ménage."
+  },
+  {
+    id: "eco-ms-004",
+    type: "multistep",
+    question: "Quelle est la masse salariale annuelle totale du secteur public en France ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien de fonctionnaires compte la France ?",
+        correctAnswer: 5700000,
+        unit: "personnes",
+        explanation: "La France compte environ 5,7 millions de fonctionnaires (fonction publique d'État, territoriale et hospitalière)."
+      },
+      {
+        question: "Quel est le salaire brut mensuel moyen dans la fonction publique ?",
+        correctAnswer: 2700,
+        unit: "€",
+        explanation: "Le salaire brut mensuel moyen dans la fonction publique est d'environ 2 700 euros."
+      },
+      {
+        question: "Quel est le salaire annuel moyen d'un fonctionnaire (incluant le 13e mois) ?",
+        correctAnswer: 32400,
+        unit: "€",
+        explanation: "Le salaire annuel moyen est de 2 700 € × 12 mois = 32 400 €."
+      },
+      {
+        question: "Quelle est donc la masse salariale annuelle totale du secteur public en France ?",
+        correctAnswer: 184680000000,
+        unit: "€",
+        explanation: "En multipliant le nombre de fonctionnaires (5,7 millions) par le salaire annuel moyen (32 400 €), on obtient 184,68 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La masse salariale annuelle totale du secteur public en France est d'environ 184,68 milliards d'euros, correspondant au salaire des 5,7 millions de fonctionnaires avec un salaire annuel moyen de 32 400 euros."
+  },
+  {
+    id: "eco-ms-005",
+    type: "multistep",
+    question: "Combien d'emplois seraient nécessaires pour réduire le taux de chômage de 1 point en France ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la population active en France ?",
+        correctAnswer: 30000000,
+        unit: "personnes",
+        explanation: "La population active en France est d'environ 30 millions de personnes."
+      },
+      {
+        question: "À combien de personnes correspond 1 point de chômage en France ?",
+        correctAnswer: 300000,
+        unit: "personnes",
+        explanation: "1 point de chômage correspond à 1% de la population active, soit 300 000 personnes."
+      },
+      {
+        question: "Combien d'emplois seraient donc nécessaires pour réduire le taux de chômage de 1 point en France ?",
+        correctAnswer: 300000,
+        unit: "emplois",
+        explanation: "Il faudrait créer 300 000 emplois pour réduire le taux de chômage de 1 point."
+      }
+    ],
+    finalExplanation: "Pour réduire le taux de chômage de 1 point en France, il faudrait créer environ 300 000 emplois, ce qui correspond à 1% de la population active française estimée à 30 millions de personnes."
+  },
+  {
+    id: "eco-ms-006",
+    type: "multistep",
+    question: "Quelle est la valeur totale du marché du logement en France (ventes immobilières annuelles) ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien de logements sont vendus chaque année en France ?",
+        correctAnswer: 1100000,
+        unit: "logements",
+        explanation: "Environ 1,1 million de logements sont vendus chaque année en France (neuf et ancien confondus)."
+      },
+      {
+        question: "Quel est le prix moyen d'un logement en France ?",
+        correctAnswer: 250000,
+        unit: "€",
+        explanation: "Le prix moyen d'un logement en France est d'environ 250 000 euros (tous types confondus)."
+      },
+      {
+        question: "Quelle est donc la valeur totale du marché du logement en France ?",
+        correctAnswer: 275000000000,
+        unit: "€",
+        explanation: "En multipliant le nombre de logements vendus (1,1 million) par le prix moyen (250 000 €), on obtient 275 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La valeur totale du marché du logement en France, représentée par les ventes immobilières annuelles, est d'environ 275 milliards d'euros, avec 1,1 million de logements vendus à un prix moyen de 250 000 euros."
+  },
+  {
+    id: "eco-ms-007",
+    type: "multistep",
+    question: "Quelle est la consommation totale d'énergie (en euros) des ménages français chaque année ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien de ménages y a-t-il en France ?",
+        correctAnswer: 30000000,
+        unit: "ménages",
+        explanation: "Il y a environ 30 millions de ménages en France."
+      },
+      {
+        question: "Quelle est la facture énergétique moyenne annuelle d'un ménage français (électricité, gaz, carburant...) ?",
+        correctAnswer: 3200,
+        unit: "€",
+        explanation: "La facture énergétique moyenne annuelle d'un ménage français est d'environ 3 200 euros."
+      },
+      {
+        question: "Quelle est donc la consommation totale d'énergie des ménages français chaque année ?",
+        correctAnswer: 96000000000,
+        unit: "€",
+        explanation: "En multipliant le nombre de ménages (30 millions) par la facture moyenne (3 200 €), on obtient 96 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La consommation totale d'énergie des ménages français s'élève à environ 96 milliards d'euros par an, calculée à partir des 30 millions de ménages et d'une facture énergétique moyenne de 3 200 euros par ménage."
+  },
+  {
+    id: "eco-ms-008",
+    type: "multistep",
+    question: "Quelle est la taille annuelle du marché publicitaire mondial ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le PIB mondial ?",
+        correctAnswer: 100000000000000,
+        unit: "€",
+        explanation: "Le PIB mondial est d'environ 100 000 milliards d'euros."
+      },
+      {
+        question: "Quel pourcentage du PIB mondial est consacré à la publicité ?",
+        correctAnswer: 0.7,
+        unit: "%",
+        explanation: "Environ 0,7% du PIB mondial est consacré à la publicité."
+      },
+      {
+        question: "Quelle est donc la taille annuelle du marché publicitaire mondial ?",
+        correctAnswer: 700000000000,
+        unit: "€",
+        explanation: "En multipliant le PIB mondial (100 000 milliards €) par le pourcentage consacré à la publicité (0,7%), on obtient 700 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La taille annuelle du marché publicitaire mondial est d'environ 700 milliards d'euros, ce qui représente 0,7% du PIB mondial estimé à 100 000 milliards d'euros."
+  },
+  {
+    id: "eco-ms-009",
+    type: "multistep",
+    question: "Combien de voitures électriques doivent être vendues chaque année pour atteindre 100 % du parc en 2050 ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le nombre total de voitures particulières en France ?",
+        correctAnswer: 38000000,
+        unit: "voitures",
+        explanation: "La France compte environ 38 millions de voitures particulières."
+      },
+      {
+        question: "Quelle est la durée de vie moyenne d'une voiture ?",
+        correctAnswer: 12,
+        unit: "années",
+        explanation: "La durée de vie moyenne d'une voiture est d'environ 12 ans."
+      },
+      {
+        question: "Combien de voitures sont renouvelées chaque année en moyenne ?",
+        correctAnswer: 3160000,
+        unit: "voitures",
+        explanation: "Environ 3,16 millions de voitures sont renouvelées chaque année (38 millions ÷ 12 ans)."
+      },
+      {
+        question: "Combien d'années reste-t-il jusqu'en 2050 ?",
+        correctAnswer: 25,
+        unit: "années",
+        explanation: "Il reste environ 25 ans jusqu'en 2050."
+      },
+      {
+        question: "Combien de voitures électriques doivent être vendues chaque année pour atteindre 100% du parc en 2050 ?",
+        correctAnswer: 1520000,
+        unit: "voitures",
+        explanation: "Pour remplacer l'ensemble du parc d'ici 2050, il faudrait vendre environ 1,52 million de voitures électriques par an (38 millions ÷ 25 ans)."
+      }
+    ],
+    finalExplanation: "Pour atteindre 100% de voitures électriques dans le parc automobile français d'ici 2050, il faudrait vendre environ 1,52 million de voitures électriques par an, en tenant compte du renouvellement naturel du parc et de l'objectif à atteindre sur 25 ans."
+  },
+  {
+    id: "eco-ms-010",
+    type: "multistep",
+    question: "Quelle est la dépense annuelle totale des administrations publiques françaises ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le PIB de la France ?",
+        correctAnswer: 2500000000000,
+        unit: "€",
+        explanation: "Le PIB de la France est d'environ 2 500 milliards d'euros."
+      },
+      {
+        question: "Quel pourcentage du PIB représentent les dépenses publiques en France ?",
+        correctAnswer: 58,
+        unit: "%",
+        explanation: "Les dépenses publiques représentent environ 58% du PIB français."
+      },
+      {
+        question: "Quelle est donc la dépense annuelle totale des administrations publiques françaises ?",
+        correctAnswer: 1450000000000,
+        unit: "€",
+        explanation: "En multipliant le PIB (2 500 milliards €) par le pourcentage des dépenses publiques (58%), on obtient 1 450 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La dépense annuelle totale des administrations publiques françaises s'élève à environ 1 450 milliards d'euros, ce qui représente 58% du PIB français estimé à 2 500 milliards d'euros."
+  },
+  {
+    id: "eco-ms-011",
+    type: "multistep",
+    question: "Quelle est la valeur du marché mondial du tourisme ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien de touristes voyagent à l'international chaque année ?",
+        correctAnswer: 1400000000,
+        unit: "personnes",
+        explanation: "Environ 1,4 milliard de personnes voyagent à l'international chaque année."
+      },
+      {
+        question: "Quelle est la dépense moyenne par touriste international ?",
+        correctAnswer: 1250,
+        unit: "€",
+        explanation: "La dépense moyenne par touriste international est d'environ 1 250 euros."
+      },
+      {
+        question: "Quelle est la part du tourisme domestique par rapport au tourisme international en termes de valeur ?",
+        correctAnswer: 1.5,
+        unit: "fois plus",
+        explanation: "Le tourisme domestique représente environ 1,5 fois la valeur du tourisme international."
+      },
+      {
+        question: "Quelle est donc la valeur du marché mondial du tourisme ?",
+        correctAnswer: 4375000000000,
+        unit: "€",
+        explanation: "En calculant d'abord la valeur du tourisme international (1,4 milliard × 1 250 € = 1 750 milliards €), puis en ajoutant le tourisme domestique (1,5 × 1 750 milliards € = 2 625 milliards €), on obtient un total de 4 375 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La valeur du marché mondial du tourisme est d'environ 4 375 milliards d'euros, incluant le tourisme international (1 750 milliards €) et le tourisme domestique (2 625 milliards €)."
+  },
+  {
+    id: "eco-ms-012",
+    type: "multistep",
+    question: "Quel est le budget total des ménages français alloué à l'alimentation par an ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien de ménages y a-t-il en France ?",
+        correctAnswer: 30000000,
+        unit: "ménages",
+        explanation: "Il y a environ 30 millions de ménages en France."
+      },
+      {
+        question: "Quel est le revenu disponible moyen d'un ménage français par an ?",
+        correctAnswer: 39000,
+        unit: "€",
+        explanation: "Le revenu disponible moyen d'un ménage français est d'environ 39 000 euros par an."
+      },
+      {
+        question: "Quel pourcentage du revenu disponible les ménages français consacrent-ils à l'alimentation ?",
+        correctAnswer: 16,
+        unit: "%",
+        explanation: "Les ménages français consacrent en moyenne 16% de leur revenu disponible à l'alimentation."
+      },
+      {
+        question: "Quel est donc le budget total des ménages français alloué à l'alimentation par an ?",
+        correctAnswer: 187200000000,
+        unit: "€",
+        explanation: "En multipliant le nombre de ménages (30 millions) par le revenu moyen (39 000 €) puis par le pourcentage consacré à l'alimentation (16%), on obtient 187,2 milliards d'euros."
+      }
+    ],
+    finalExplanation: "Le budget total des ménages français alloué à l'alimentation est d'environ 187,2 milliards d'euros par an, ce qui représente 16% du revenu disponible total des 30 millions de ménages français."
+  },
+  {
+    id: "eco-ms-013",
+    type: "multistep",
+    question: "Combien de tonnes de marchandises sont transportées chaque année sur le territoire français ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la population française ?",
+        correctAnswer: 68000000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 68 millions d'habitants."
+      },
+      {
+        question: "Quelle quantité de marchandises est transportée en moyenne par personne et par an en France ?",
+        correctAnswer: 43,
+        unit: "tonnes",
+        explanation: "En moyenne, environ 43 tonnes de marchandises sont transportées par personne et par an en France."
+      },
+      {
+        question: "Combien de tonnes de marchandises sont donc transportées chaque année sur le territoire français ?",
+        correctAnswer: 2924000000,
+        unit: "tonnes",
+        explanation: "En multipliant la population (68 millions) par la quantité moyenne par personne (43 tonnes), on obtient 2,924 milliards de tonnes."
+      }
+    ],
+    finalExplanation: "Environ 2,924 milliards de tonnes de marchandises sont transportées chaque année sur le territoire français, ce qui correspond à 43 tonnes par personne pour une population de 68 millions d'habitants."
+  },
+  {
+    id: "eco-ms-014",
+    type: "multistep",
+    question: "Quelle est la taille du marché mondial des énergies renouvelables ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la consommation mondiale d'énergie primaire ?",
+        correctAnswer: 14500,
+        unit: "Mtep",
+        explanation: "La consommation mondiale d'énergie primaire est d'environ 14 500 Mtep (millions de tonnes équivalent pétrole)."
+      },
+      {
+        question: "Quel pourcentage de cette énergie provient des sources renouvelables ?",
+        correctAnswer: 14,
+        unit: "%",
+        explanation: "Environ 14% de l'énergie mondiale provient de sources renouvelables."
+      },
+      {
+        question: "Quel est le prix moyen d'une tonne équivalent pétrole ?",
+        correctAnswer: 750,
+        unit: "€",
+        explanation: "Le prix moyen d'une tonne équivalent pétrole est d'environ 750 euros."
+      },
+      {
+        question: "Quelle est donc la taille du marché mondial des énergies renouvelables ?",
+        correctAnswer: 1522000000000,
+        unit: "€",
+        explanation: "En calculant d'abord la quantité d'énergie renouvelable (14 500 Mtep × 14% = 2 030 Mtep), puis en multipliant par le prix (2 030 millions × 750 € = 1 522,5 milliards €), on obtient environ 1 522 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La taille du marché mondial des énergies renouvelables est d'environ 1 522 milliards d'euros, représentant 14% de la consommation mondiale d'énergie primaire valorisée au prix moyen."
+  },
+  {
+    id: "eco-ms-015",
+    type: "multistep",
+    question: "Combien de nouveaux logements sont nécessaires par an pour suivre la croissance démographique en France ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le taux de croissance annuel de la population française ?",
+        correctAnswer: 0.3,
+        unit: "%",
+        explanation: "Le taux de croissance annuel de la population française est d'environ 0,3%."
+      },
+      {
+        question: "Quelle est la population française actuelle ?",
+        correctAnswer: 68000000,
+        unit: "personnes",
+        explanation: "La population française est d'environ 68 millions d'habitants."
+      },
+      {
+        question: "Combien de personnes supplémentaires cela représente-t-il chaque année ?",
+        correctAnswer: 204000,
+        unit: "personnes",
+        explanation: "0,3% de 68 millions représente environ 204 000 personnes supplémentaires par an."
+      },
+      {
+        question: "Combien y a-t-il de personnes en moyenne par ménage en France ?",
+        correctAnswer: 2.2,
+        unit: "personnes",
+        explanation: "Il y a en moyenne 2,2 personnes par ménage en France."
+      },
+      {
+        question: "Combien de nouveaux logements sont donc nécessaires par an pour suivre la croissance démographique en France ?",
+        correctAnswer: 92700,
+        unit: "logements",
+        explanation: "En divisant le nombre de personnes supplémentaires (204 000) par le nombre moyen de personnes par ménage (2,2), on obtient 92 700 nouveaux logements nécessaires."
+      }
+    ],
+    finalExplanation: "Pour suivre la croissance démographique en France, environ 92 700 nouveaux logements sont nécessaires chaque année, calculés à partir d'une croissance annuelle de 0,3% de la population (204 000 personnes) et d'une taille moyenne des ménages de 2,2 personnes."
+  },
+  {
+    id: "eco-ms-016",
+    type: "multistep",
+    question: "Quelle est la valeur totale des importations françaises de produits électroniques ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la valeur totale des importations françaises ?",
+        correctAnswer: 600000000000,
+        unit: "€",
+        explanation: "La valeur totale des importations françaises est d'environ 600 milliards d'euros par an."
+      },
+      {
+        question: "Quel pourcentage des importations françaises concerne des produits électroniques ?",
+        correctAnswer: 9,
+        unit: "%",
+        explanation: "Les produits électroniques représentent environ 9% des importations françaises."
+      },
+      {
+        question: "Quelle est donc la valeur totale des importations françaises de produits électroniques ?",
+        correctAnswer: 54000000000,
+        unit: "€",
+        explanation: "En multipliant la valeur totale des importations (600 milliards €) par le pourcentage des produits électroniques (9%), on obtient 54 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La valeur totale des importations françaises de produits électroniques s'élève à environ 54 milliards d'euros par an, représentant 9% des importations françaises totales estimées à 600 milliards d'euros."
+  },
+  {
+    id: "eco-ms-017",
+    type: "multistep",
+    question: "Combien de mètres carrés de bureaux sont utilisés dans la région Île-de-France ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Combien d'entreprises sont implantées en Île-de-France ?",
+        correctAnswer: 1300000,
+        unit: "entreprises",
+        explanation: "Environ 1,3 million d'entreprises sont implantées en Île-de-France."
+      },
+      {
+        question: "Quelle est la surface moyenne de bureaux par entreprise en Île-de-France ?",
+        correctAnswer: 120,
+        unit: "m²",
+        explanation: "La surface moyenne de bureaux par entreprise en Île-de-France est d'environ 120 m²."
+      },
+      {
+        question: "Combien de mètres carrés de bureaux sont donc utilisés dans la région Île-de-France ?",
+        correctAnswer: 156000000,
+        unit: "m²",
+        explanation: "En multipliant le nombre d'entreprises (1,3 million) par la surface moyenne (120 m²), on obtient 156 millions de m²."
+      }
+    ],
+    finalExplanation: "La région Île-de-France compte environ 156 millions de mètres carrés de bureaux utilisés, ce qui correspond aux 1,3 million d'entreprises implantées dans la région avec une surface moyenne de 120 m² par entreprise."
+  },
+  {
+    id: "eco-ms-018",
+    type: "multistep",
+    question: "Quelle est la valeur du marché mondial de la finance décentralisée (DeFi) ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la capitalisation totale du marché des cryptomonnaies ?",
+        correctAnswer: 2000000000000,
+        unit: "€",
+        explanation: "La capitalisation totale du marché des cryptomonnaies est d'environ 2 000 milliards d'euros."
+      },
+      {
+        question: "Quel pourcentage de cette capitalisation est lié à la finance décentralisée (DeFi) ?",
+        correctAnswer: 5,
+        unit: "%",
+        explanation: "Environ 5% de la capitalisation des cryptomonnaies est liée à la finance décentralisée."
+      },
+      {
+        question: "Quelle est donc la valeur du marché mondial de la finance décentralisée (DeFi) ?",
+        correctAnswer: 100000000000,
+        unit: "€",
+        explanation: "En multipliant la capitalisation totale des cryptomonnaies (2 000 milliards €) par le pourcentage lié à la DeFi (5%), on obtient 100 milliards d'euros."
+      }
+    ],
+    finalExplanation: "La valeur du marché mondial de la finance décentralisée (DeFi) est estimée à environ 100 milliards d'euros, ce qui représente 5% de la capitalisation totale du marché des cryptomonnaies évaluée à 2 000 milliards d'euros."
+  },
+  {
+    id: "eco-ms-019",
+    type: "multistep",
+    question: "Quel est le montant total des dépenses de santé en France chaque année ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quel est le PIB de la France ?",
+        correctAnswer: 2500000000000,
+        unit: "€",
+        explanation: "Le PIB de la France est d'environ 2 500 milliards d'euros."
+      },
+      {
+        question: "Quel pourcentage du PIB représentent les dépenses de santé en France ?",
+        correctAnswer: 11.2,
+        unit: "%",
+        explanation: "Les dépenses de santé représentent environ 11,2% du PIB français."
+      },
+      {
+        question: "Quel est donc le montant total des dépenses de santé en France chaque année ?",
+        correctAnswer: 280000000000,
+        unit: "€",
+        explanation: "En multipliant le PIB (2 500 milliards €) par le pourcentage des dépenses de santé (11,2%), on obtient 280 milliards d'euros."
+      }
+    ],
+    finalExplanation: "Le montant total des dépenses de santé en France s'élève à environ 280 milliards d'euros chaque année, ce qui représente 11,2% du PIB français estimé à 2 500 milliards d'euros."
+  },
+  {
+    id: "eco-ms-020",
+    type: "multistep",
+    question: "Combien de transactions bancaires sont réalisées chaque jour en zone euro ?",
+    theme: "economie",
+    steps: [
+      {
+        question: "Quelle est la population de la zone euro ?",
+        correctAnswer: 340000000,
+        unit: "personnes",
+        explanation: "La zone euro compte environ 340 millions d'habitants."
+      },
+      {
+        question: "Combien de transactions bancaires une personne réalise-t-elle en moyenne par jour dans la zone euro ?",
+        correctAnswer: 1.8,
+        unit: "transactions",
+        explanation: "Une personne dans la zone euro réalise en moyenne 1,8 transaction bancaire par jour."
+      },
+      {
+        question: "Combien de transactions bancaires sont donc réalisées chaque jour en zone euro ?",
+        correctAnswer: 612000000,
+        unit: "transactions",
+        explanation: "En multipliant la population (340 millions) par le nombre moyen de transactions par personne (1,8), on obtient 612 millions de transactions par jour."
+      }
+    ],
+    finalExplanation: "Environ 612 millions de transactions bancaires sont réalisées chaque jour dans la zone euro, ce qui correspond à une moyenne de 1,8 transaction quotidienne pour chacun des 340 millions d'habitants de la zone."
   }
 ];
