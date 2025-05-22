@@ -1,26 +1,20 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, LightbulbIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 
 interface QuizModeSwitcherProps {
   directFinalMode: boolean;
-  hintsMode?: boolean;
   onToggle: () => void;
-  onToggleHints?: () => void;
   anyStepSubmitted: boolean;
   onNextQuestion: () => void;
-  allHintsRevealed?: boolean;
 }
 
 const QuizModeSwitcher: React.FC<QuizModeSwitcherProps> = ({
   directFinalMode,
-  hintsMode = false,
   onToggle,
-  onToggleHints = () => {},
   anyStepSubmitted,
-  onNextQuestion,
-  allHintsRevealed = false
+  onNextQuestion
 }) => {
   return (
     <div className="flex justify-between">
@@ -36,36 +30,18 @@ const QuizModeSwitcher: React.FC<QuizModeSwitcherProps> = ({
           </Button>
         )}
       </div>
-      <div className="flex gap-2">
+      <div>
         <Button 
-          onClick={onToggleHints} 
-          variant={hintsMode ? "secondary" : "outline"} 
+          onClick={onToggle} 
+          variant={directFinalMode ? "secondary" : "outline"} 
           size="sm"
-          className={hintsMode ? 
-            "bg-amber-500 hover:bg-amber-600 text-white border-amber-300" : 
-            "text-amber-700"
+          className={!directFinalMode ? 
+            "bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:bg-gradient-to-r hover:from-purple-700 hover:to-pink-600 border-purple-300 font-semibold shadow-md" : 
+            ""
           }
         >
-          <LightbulbIcon size={16} className="mr-1" />
-          Indices
-          {allHintsRevealed && hintsMode && (
-            <span className="rounded-full bg-yellow-200 text-yellow-800 text-xs ml-1 px-1">!</span>
-          )}
+          {directFinalMode ? "Résoudre par étapes" : "Réponse directe"}
         </Button>
-        
-        {!hintsMode && (
-          <Button 
-            onClick={onToggle} 
-            variant={directFinalMode ? "secondary" : "outline"} 
-            size="sm"
-            className={!directFinalMode ? 
-              "bg-gradient-to-r from-purple-500 to-pink-400 text-white hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-500 border-purple-300 font-medium shadow-sm" : 
-              ""
-            }
-          >
-            {directFinalMode ? "Résoudre par étapes" : "Réponse directe"}
-          </Button>
-        )}
       </div>
     </div>
   );

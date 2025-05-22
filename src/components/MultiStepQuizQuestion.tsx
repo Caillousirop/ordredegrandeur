@@ -38,9 +38,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         answers,
         anyStepSubmitted,
         themeColor,
-        hintsMode,
-        hintsRevealed,
-        allHintsRevealed,
         handleDirectFinalToggle,
         handleStepSubmit,
         handleInputChange,
@@ -48,9 +45,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         handleDirectFinalSubmit,
         setShowAnswer,
         setCalculatorOpen,
-        handleNextQuestion,
-        toggleHintsMode,
-        revealHint
+        handleNextQuestion
       }) => (
         <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
           <CardHeader className="border-b border-border/50">
@@ -60,7 +55,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                   {question.question}
                 </CardTitle>
                 <CardDescription className="mt-2">
-                  Question à étapes multiples - Résolvez chaque étape, utilisez des indices, ou tentez de répondre directement
+                  Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
                 </CardDescription>
               </div>
             </div>
@@ -68,24 +63,13 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
           <CardContent className="pt-6 space-y-6 bg-transparent">
             <QuizModeSwitcher 
               directFinalMode={directFinalMode} 
-              hintsMode={hintsMode}
               onToggle={handleDirectFinalToggle}
-              onToggleHints={toggleHintsMode}
               anyStepSubmitted={anyStepSubmitted}
               onNextQuestion={handleNextQuestion}
-              allHintsRevealed={allHintsRevealed}
             />
-            
-            {/* Warning message when all hints are revealed */}
-            {hintsMode && allHintsRevealed && !directFinalMode && (
-              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-sm">
-                <p className="font-medium">Attention :</p>
-                <p>Tous les indices ont été révélés. Vous ne gagnerez pas de points pour cette question.</p>
-              </div>
-            )}
 
-            {/* Direct Answer Section - only show when not in hints mode */}
-            {!hintsMode && directFinalMode && (
+            {/* Direct Answer Section */}
+            {directFinalMode && (
               <DirectAnswerSection
                 correctAnswer={question.steps[question.steps.length - 1].correctAnswer}
                 finalSubmitted={finalSubmitted}
@@ -98,18 +82,14 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
               />
             )}
 
-            {/* Step-by-Step or Hints Section */}
-            {((!directFinalMode && !hintsMode) || hintsMode) && (
+            {/* Step-by-Step Section */}
+            {!directFinalMode && (
               <QuizStepsList 
                 steps={question.steps}
                 submitted={submitted}
                 answers={answers}
                 handleInputChange={handleInputChange}
                 handleStepSubmit={handleStepSubmit}
-                hintsMode={hintsMode}
-                hintsRevealed={hintsRevealed}
-                revealHint={revealHint}
-                allHintsRevealed={allHintsRevealed}
               />
             )}
 
@@ -117,6 +97,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             {(finalSubmitted && showAnswer) && (
               <FinalExplanation
                 finalExplanation={question.finalExplanation}
+                steps={question.steps}
                 onNextQuestion={handleNextQuestion}
               />
             )}
