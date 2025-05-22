@@ -1,51 +1,52 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 const Sources = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 py-10 transition-colors duration-300">
       <div className="container px-4 py-8 max-w-4xl mx-auto">
-        <div className="mb-8">
+        <div className="flex justify-between items-center mb-8">
           <Link to="/">
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="flex items-center gap-2 dark:border-slate-700 dark:hover:bg-slate-800">
               <ArrowLeft className="h-4 w-4" /> Retour au quiz
             </Button>
           </Link>
+          <DarkModeToggle />
         </div>
         
-        <Card className="border-secondary/30">
+        <Card className="border-secondary/30 dark:bg-card/80 dark:border-slate-800 shadow-md dark:shadow-lg">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            <CardTitle className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 dark-transition">
               Sources des données
             </CardTitle>
-            <CardDescription className="text-center">
+            <CardDescription className="text-center dark:text-slate-300">
               Toutes les statistiques utilisées dans ce quiz proviennent de sources officielles et d'études reconnues.
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Sources principales</h3>
+              <h3 className="text-xl font-bold text-foreground dark-transition">Sources principales</h3>
               
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="p-4 border rounded-md bg-card">
+                <div className="p-4 border rounded-md bg-card dark:border-slate-800 dark:bg-card/70 transition-all duration-300 hover:shadow-md">
                   <h4 className="font-semibold">INSEE</h4>
                   <p className="text-sm text-muted-foreground">Institut National de la Statistique et des Études Économiques</p>
                   <p className="mt-2 text-sm">Les données démographiques, économiques et sociales proviennent majoritairement des études et rapports de l'INSEE.</p>
-                  <a href="https://www.insee.fr" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline block mt-2">
+                  <a href="https://www.insee.fr" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline block mt-2 transition-colors">
                     insee.fr
                   </a>
                 </div>
                 
-                <div className="p-4 border rounded-md bg-card">
+                <div className="p-4 border rounded-md bg-card dark:border-slate-800 dark:bg-card/70 transition-all duration-300 hover:shadow-md">
                   <h4 className="font-semibold">Ministère de la Transition Écologique</h4>
                   <p className="text-sm text-muted-foreground">Données environnementales et énergétiques</p>
                   <p className="mt-2 text-sm">Les statistiques concernant le climat, l'environnement et la transition énergétique sont issues des publications du ministère.</p>
-                  <a href="https://www.ecologie.gouv.fr" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline block mt-2">
+                  <a href="https://www.ecologie.gouv.fr" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline block mt-2 transition-colors">
                     ecologie.gouv.fr
                   </a>
                 </div>
@@ -53,7 +54,7 @@ const Sources = () => {
             </div>
             
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Sources par thématique</h3>
+              <h3 className="text-xl font-bold text-foreground dark-transition">Sources par thématique</h3>
               
               <div className="space-y-6">
                 <div>
@@ -126,7 +127,7 @@ const Sources = () => {
               </div>
             </div>
             
-            <div className="p-4 bg-muted rounded-md text-sm">
+            <div className="p-4 bg-muted dark:bg-slate-800/60 rounded-md text-sm transition-colors">
               <p className="font-medium mb-2">Note méthodologique</p>
               <p>Les questions de type "market sizing" et d'approximation sont basées sur des données officielles croisées avec des modèles d'estimation. Les ordres de grandeur peuvent varier selon les méthodologies d'enquête et les années de référence.</p>
               <p className="mt-2">Pour des données plus précises ou plus récentes, nous vous invitons à consulter directement les sources mentionnées.</p>
