@@ -22,7 +22,7 @@ const DarkModeToggle = () => {
   }
 
   return (
-    <div className="fixed top-4 left-4 z-50 flex items-center gap-2 bg-background/90 backdrop-blur-lg p-2 rounded-full shadow-lg border border-border">
+    <div className="sticky top-4 left-4 z-50 flex items-center gap-2 bg-background/90 backdrop-blur-lg p-2 rounded-full shadow-lg border border-border">
       <Sun size={16} className={`${theme === 'light' ? 'text-amber-500' : 'text-amber-500/40'}`} />
       <Switch 
         className="data-[state=checked]:bg-primary" 
