@@ -11,12 +11,12 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 flex flex-col items-center py-10">
-      {/* Sticky controls that stay visible while scrolling */}
-      <div className="sticky top-0 left-0 right-0 z-50 flex justify-between items-center w-full p-4 bg-background/50 backdrop-blur-md">
-        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+      {/* Subtle sticky controls that blend with the page when scrolling */}
+      <div className="sticky top-0 left-0 right-0 z-50 flex justify-between items-center w-full p-4">
+        <div>
           <DarkModeToggle />
         </div>
-        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+        <div>
           <UserSpace questionsCompleted={quizState.questionsCompleted} />
         </div>
       </div>
