@@ -11,13 +11,15 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 flex flex-col items-center py-10">
-      {/* User Space component in the top right - fixed position */}
-      <div className="fixed top-4 right-4 z-10">
+      {/* User Space component in the top right - sticky position */}
+      <div className="sticky top-4 right-4 z-10 flex justify-end w-full max-w-7xl px-4">
         <UserSpace questionsCompleted={quizState.questionsCompleted} />
       </div>
       
       {/* Dark Mode toggle */}
-      <DarkModeToggle />
+      <div className="w-full max-w-7xl px-4">
+        <DarkModeToggle />
+      </div>
       
       {/* Debug toggle button */}
       <button 
