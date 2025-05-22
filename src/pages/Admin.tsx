@@ -1,15 +1,16 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileDown, FileUp, Copy, Trash, Plus } from "lucide-react";
+import { ArrowLeft, FileDown, FileUp, Copy, Trash, Plus, Calendar, ClipboardCheck } from "lucide-react";
 import { parseQuestionsFromJSON, sampleImportFormat } from "@/utils/questionImporter";
 import { toast } from "sonner";
 import { Question, MultiStepQuestion } from "@/components/types";
 import AdminQuestionsList from "@/components/quiz/AdminQuestionsList";
 import QuestionForm from "@/components/quiz/QuestionForm";
+import QuestionScheduler from "@/components/quiz/QuestionScheduler";
+import QuestionProposalReview from "@/components/quiz/QuestionProposalReview";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -18,9 +19,12 @@ const Admin = () => {
   const [multiStepQuestions, setMultiStepQuestions] = useState<MultiStepQuestion[]>([]);
   const [isQuestionFormOpen, setIsQuestionFormOpen] = useState(false);
   const [currentEditQuestion, setCurrentEditQuestion] = useState<Question | MultiStepQuestion | undefined>(undefined);
+  const [proposedQuestions, setProposedQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
+  const [showProposalReview, setShowProposalReview] = useState(false);
   
   // Load questions from localStorage on component mount
   useEffect(() => {
+    // Load regular questions
     const storedQuestions = localStorage.getItem("admin-questions");
     if (storedQuestions) {
       try {
@@ -30,6 +34,27 @@ const Admin = () => {
         console.log("Loaded questions from localStorage:", parsed);
       } catch (error) {
         console.error("Error parsing stored questions:", error);
+      }
+    }
+    
+    // Load proposed questions
+    const storedProposedQuestions = localStorage.getItem("proposed-questions");
+    if (storedProposedQuestions) {
+      try {
+        const parsed = JSON.parse(storedProposedQuestions);
+        setProposedQuestions(parsed);
+        
+        // If there are proposed questions, show a toast
+        if (parsed.length > 0) {
+          toast.info(`Vous avez ${parsed.length} questions proposées à examiner`, {
+            action: {
+              label: "Examiner",
+              onClick: () => setShowProposalReview(true)
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing stored proposed questions:", error);
       }
     }
   }, []);
@@ -42,6 +67,11 @@ const Admin = () => {
     }));
     console.log("Saved questions to localStorage:", { simpleQuestions, multiStepQuestions });
   }, [simpleQuestions, multiStepQuestions]);
+  
+  // Save proposed questions to localStorage
+  useEffect(() => {
+    localStorage.setItem("proposed-questions", JSON.stringify(proposedQuestions));
+  }, [proposedQuestions]);
 
   const handleImport = () => {
     try {
@@ -149,6 +179,48 @@ const Admin = () => {
     toast.success(currentEditQuestion ? "Question mise à jour avec succès!" : "Question ajoutée avec succès!");
   };
 
+  // Handler for new automatically generated questions
+  const handleNewQuestionsGenerated = (questions: (Question | MultiStepQuestion)[]) => {
+    setProposedQuestions(questions);
+    setShowProposalReview(true);
+  };
+  
+  // Handle approving a proposed question
+  const handleApproveQuestion = (question: Question | MultiStepQuestion) => {
+    if (question.type === "simple") {
+      setSimpleQuestions(prev => [...prev, question as Question]);
+    } else {
+      setMultiStepQuestions(prev => [...prev, question as MultiStepQuestion]);
+    }
+    
+    // Remove from proposed questions
+    setProposedQuestions(prev => prev.filter(q => q.id !== question.id));
+    
+    toast.success("Question approuvée et ajoutée avec succès!");
+  };
+  
+  // Handle rejecting a proposed question
+  const handleRejectQuestion = (questionId: string) => {
+    setProposedQuestions(prev => prev.filter(q => q.id !== questionId));
+    toast.success("Question rejetée avec succès!");
+  };
+  
+  // Handle finishing the review process
+  const handleFinishReview = () => {
+    setShowProposalReview(false);
+    
+    if (proposedQuestions.length > 0) {
+      toast.info(`${proposedQuestions.length} questions proposées restantes`, {
+        action: {
+          label: "Examiner",
+          onClick: () => setShowProposalReview(true)
+        }
+      });
+    } else {
+      toast.success("Toutes les questions proposées ont été traitées!");
+    }
+  };
+
   return (
     <div className="container px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
@@ -173,6 +245,17 @@ const Admin = () => {
             Créer une question
           </Button>
           
+          {proposedQuestions.length > 0 && (
+            <Button 
+              variant="default"
+              onClick={() => setShowProposalReview(true)}
+              className="flex items-center gap-1"
+            >
+              <ClipboardCheck size={16} />
+              Examiner les propositions ({proposedQuestions.length})
+            </Button>
+          )}
+          
           {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
             <Button 
               variant="destructive" 
@@ -187,67 +270,80 @@ const Admin = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Importer des questions</CardTitle>
-            <CardDescription>
-              Importez des questions en format JSON
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Textarea 
-              className="min-h-[300px] font-mono text-sm"
-              placeholder="Collez votre JSON ici..."
-              value={jsonInput}
-              onChange={(e) => setJsonInput(e.target.value)}
+      {!showProposalReview ? (
+        <>
+          <QuestionScheduler onNewQuestionsGenerated={handleNewQuestionsGenerated} />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Importer des questions</CardTitle>
+                <CardDescription>
+                  Importez des questions en format JSON
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Textarea 
+                  className="min-h-[300px] font-mono text-sm"
+                  placeholder="Collez votre JSON ici..."
+                  value={jsonInput}
+                  onChange={(e) => setJsonInput(e.target.value)}
+                />
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button variant="outline" onClick={copyExampleFormat}>
+                  <Copy className="mr-2 h-4 w-4" /> Format d'exemple
+                </Button>
+                <Button onClick={handleImport}>
+                  <FileUp className="mr-2 h-4 w-4" /> Importer
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Résultat</CardTitle>
+                <CardDescription>
+                  Questions importées: {simpleQuestions.length + multiStepQuestions.length}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
+                  <div className="space-y-4">
+                    <p className="font-medium">Questions simples: {simpleQuestions.length}</p>
+                    <p className="font-medium">Questions à étapes: {multiStepQuestions.length}</p>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">Importez des questions pour voir le résultat</p>
+                )}
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  variant="outline" 
+                  disabled={simpleQuestions.length === 0 && multiStepQuestions.length === 0}
+                  onClick={handleExport}
+                >
+                  <FileDown className="mr-2 h-4 w-4" /> Exporter
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+
+          {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
+            <AdminQuestionsList 
+              simpleQuestions={simpleQuestions}
+              multiStepQuestions={multiStepQuestions}
+              onDelete={handleDeleteQuestion}
+              onEdit={handleEditQuestion}
             />
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={copyExampleFormat}>
-              <Copy className="mr-2 h-4 w-4" /> Format d'exemple
-            </Button>
-            <Button onClick={handleImport}>
-              <FileUp className="mr-2 h-4 w-4" /> Importer
-            </Button>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Résultat</CardTitle>
-            <CardDescription>
-              Questions importées: {simpleQuestions.length + multiStepQuestions.length}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
-              <div className="space-y-4">
-                <p className="font-medium">Questions simples: {simpleQuestions.length}</p>
-                <p className="font-medium">Questions à étapes: {multiStepQuestions.length}</p>
-              </div>
-            ) : (
-              <p className="text-muted-foreground">Importez des questions pour voir le résultat</p>
-            )}
-          </CardContent>
-          <CardFooter>
-            <Button 
-              variant="outline" 
-              disabled={simpleQuestions.length === 0 && multiStepQuestions.length === 0}
-              onClick={handleExport}
-            >
-              <FileDown className="mr-2 h-4 w-4" /> Exporter
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-
-      {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
-        <AdminQuestionsList 
-          simpleQuestions={simpleQuestions}
-          multiStepQuestions={multiStepQuestions}
-          onDelete={handleDeleteQuestion}
-          onEdit={handleEditQuestion}
+          )}
+        </>
+      ) : (
+        <QuestionProposalReview 
+          proposedQuestions={proposedQuestions}
+          onApprove={handleApproveQuestion}
+          onReject={handleRejectQuestion}
+          onFinishReview={handleFinishReview}
         />
       )}
       
