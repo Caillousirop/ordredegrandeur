@@ -27,6 +27,7 @@ const Admin = () => {
         const parsed = JSON.parse(storedQuestions);
         setSimpleQuestions(parsed.simpleQuestions || []);
         setMultiStepQuestions(parsed.multiStepQuestions || []);
+        console.log("Loaded questions from localStorage:", parsed);
       } catch (error) {
         console.error("Error parsing stored questions:", error);
       }
@@ -39,6 +40,7 @@ const Admin = () => {
       simpleQuestions, 
       multiStepQuestions 
     }));
+    console.log("Saved questions to localStorage:", { simpleQuestions, multiStepQuestions });
   }, [simpleQuestions, multiStepQuestions]);
 
   const handleImport = () => {

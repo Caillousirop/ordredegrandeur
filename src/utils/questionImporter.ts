@@ -1,12 +1,12 @@
 
 import { Question, MultiStepQuestion } from "@/components/types";
 
-// Fonction pour générer un ID unique
+// Function to generate a unique ID
 export const generateId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 };
 
-// Interface pour le format d'import simplifié
+// Interface for the simplified import format
 interface SimpleQuestionImport {
   question: string;
   correctAnswer: number;
@@ -27,7 +27,7 @@ interface SimpleMultiStepQuestionImport {
   theme: string;
 }
 
-// Fonction pour convertir les questions importées au format de l'application
+// Function to convert imported questions to the app's format
 export const convertSimpleQuestions = (questions: SimpleQuestionImport[]): Question[] => {
   return questions.map(q => ({
     id: generateId(),
@@ -40,7 +40,7 @@ export const convertSimpleQuestions = (questions: SimpleQuestionImport[]): Quest
   }));
 };
 
-// Fonction pour convertir les questions à étapes importées
+// Function to convert multi-step questions
 export const convertMultiStepQuestions = (questions: SimpleMultiStepQuestionImport[]): MultiStepQuestion[] => {
   return questions.map(q => ({
     id: generateId(),
@@ -52,7 +52,7 @@ export const convertMultiStepQuestions = (questions: SimpleMultiStepQuestionImpo
   }));
 };
 
-// Fonction pour parser un JSON contenant des questions
+// Function to parse a JSON containing questions
 export const parseQuestionsFromJSON = (jsonText: string): { 
   simpleQuestions: Question[],
   multiStepQuestions: MultiStepQuestion[] 
@@ -63,32 +63,32 @@ export const parseQuestionsFromJSON = (jsonText: string): {
     let simpleQuestions: Question[] = [];
     let multiStepQuestions: MultiStepQuestion[] = [];
     
-    // Si le JSON contient un tableau "simpleQuestions"
+    // If the JSON contains a "simpleQuestions" array
     if (Array.isArray(parsed.simpleQuestions)) {
       simpleQuestions = convertSimpleQuestions(parsed.simpleQuestions);
     } 
-    // Si le JSON est directement un tableau de questions simples
+    // If the JSON is directly an array of simple questions
     else if (Array.isArray(parsed) && parsed.length > 0 && !parsed[0].steps) {
       simpleQuestions = convertSimpleQuestions(parsed);
     }
     
-    // Si le JSON contient un tableau "multiStepQuestions"
+    // If the JSON contains a "multiStepQuestions" array
     if (Array.isArray(parsed.multiStepQuestions)) {
       multiStepQuestions = convertMultiStepQuestions(parsed.multiStepQuestions);
     }
-    // Si le JSON est directement un tableau de questions à étapes
+    // If the JSON is directly an array of multi-step questions
     else if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].steps) {
       multiStepQuestions = convertMultiStepQuestions(parsed);
     }
     
     return { simpleQuestions, multiStepQuestions };
   } catch (error) {
-    console.error("Erreur lors du parsing du JSON:", error);
+    console.error("Error parsing JSON:", error);
     throw new Error("Format JSON invalide");
   }
 };
 
-// Format d'exemple pour l'import
+// Sample format for import
 export const sampleImportFormat = {
   simpleQuestions: [
     {

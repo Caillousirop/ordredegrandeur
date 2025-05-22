@@ -60,7 +60,7 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
                       onClick={() => onEdit(question)}
                     >
                       <Edit className="h-4 w-4" />
@@ -68,7 +68,7 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
                       onClick={() => onDelete(question.id, "simple")}
                     >
                       <Trash className="h-4 w-4" />
@@ -95,7 +95,7 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                       <Button 
                         variant="ghost" 
                         size="icon"
-                        className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
                         onClick={() => onEdit(question)}
                       >
                         <Edit className="h-4 w-4" />
@@ -103,7 +103,7 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
                         onClick={() => onDelete(question.id, "multistep")}
                       >
                         <Trash className="h-4 w-4" />
