@@ -77,13 +77,4 @@
   }
 }
 
-@keyframes pulse-scale {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@layer utilities {
-  .animate-pulse-scale {
-    animation: pulse-scale 2s infinite;
-  }
-}
+/* Suppression de l'animation pulse-scale */
