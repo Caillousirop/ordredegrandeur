@@ -1,29 +1,70 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileDown, FileUp, Copy } from "lucide-react";
+import { ArrowLeft, FileDown, FileUp, Copy, Trash, Plus } from "lucide-react";
 import { parseQuestionsFromJSON, sampleImportFormat } from "@/utils/questionImporter";
 import { toast } from "sonner";
+import { Question, MultiStepQuestion } from "@/components/types";
+import AdminQuestionsList from "@/components/quiz/AdminQuestionsList";
 
 const Admin = () => {
   const navigate = useNavigate();
   const [jsonInput, setJsonInput] = useState("");
-  const [parseResult, setParseResult] = useState<any>(null);
+  const [simpleQuestions, setSimpleQuestions] = useState<Question[]>([]);
+  const [multiStepQuestions, setMultiStepQuestions] = useState<MultiStepQuestion[]>([]);
+  
+  // Load questions from localStorage on component mount
+  useEffect(() => {
+    const storedQuestions = localStorage.getItem("admin-questions");
+    if (storedQuestions) {
+      try {
+        const parsed = JSON.parse(storedQuestions);
+        setSimpleQuestions(parsed.simpleQuestions || []);
+        setMultiStepQuestions(parsed.multiStepQuestions || []);
+      } catch (error) {
+        console.error("Error parsing stored questions:", error);
+      }
+    }
+  }, []);
+
+  // Save questions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("admin-questions", JSON.stringify({ 
+      simpleQuestions, 
+      multiStepQuestions 
+    }));
+  }, [simpleQuestions, multiStepQuestions]);
 
   const handleImport = () => {
     try {
       const result = parseQuestionsFromJSON(jsonInput);
-      setParseResult(result);
       
-      const totalQuestions = result.simpleQuestions.length + result.multiStepQuestions.length;
-      toast.success(`${totalQuestions} questions importées avec succès!`);
+      // Merge with existing questions, avoiding duplicates by ID
+      const mergedSimpleQuestions = [
+        ...simpleQuestions,
+        ...result.simpleQuestions.filter(
+          newQ => !simpleQuestions.some(existingQ => existingQ.id === newQ.id)
+        )
+      ];
       
-      // Ici, vous pourriez sauvegarder les questions dans votre état global,
-      // les envoyer à une API, etc.
-      console.log("Questions importées:", result);
+      const mergedMultiStepQuestions = [
+        ...multiStepQuestions,
+        ...result.multiStepQuestions.filter(
+          newQ => !multiStepQuestions.some(existingQ => existingQ.id === newQ.id)
+        )
+      ];
+      
+      setSimpleQuestions(mergedSimpleQuestions);
+      setMultiStepQuestions(mergedMultiStepQuestions);
+      
+      const totalImported = result.simpleQuestions.length + result.multiStepQuestions.length;
+      toast.success(`${totalImported} questions importées avec succès!`);
+      
+      // Clear the input field after successful import
+      setJsonInput("");
     } catch (error) {
       toast.error("Erreur lors de l'import: " + (error as Error).message);
     }
@@ -34,17 +75,66 @@ const Admin = () => {
     toast.success("Format d'exemple copié dans le presse-papier");
   };
 
+  const handleExport = () => {
+    const exportData = {
+      simpleQuestions,
+      multiStepQuestions
+    };
+    
+    // Create a download link
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "ordredegrandeur_questions.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+    
+    toast.success("Questions exportées avec succès!");
+  };
+
+  const handleDeleteQuestion = (id: string, type: "simple" | "multistep") => {
+    if (type === "simple") {
+      setSimpleQuestions(simpleQuestions.filter(q => q.id !== id));
+    } else {
+      setMultiStepQuestions(multiStepQuestions.filter(q => q.id !== id));
+    }
+    toast.success("Question supprimée avec succès!");
+  };
+
+  const handleDeleteAllQuestions = () => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer toutes les questions?")) {
+      setSimpleQuestions([]);
+      setMultiStepQuestions([]);
+      toast.success("Toutes les questions ont été supprimées!");
+    }
+  };
+
   return (
     <div className="container px-4 py-8">
-      <div className="mb-6 flex items-center">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/")} 
-          className="mr-2"
-        >
-          <ArrowLeft size={18} />
-        </Button>
-        <h1 className="text-2xl md:text-3xl font-bold">Administration</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/")} 
+            className="mr-2"
+          >
+            <ArrowLeft size={18} />
+          </Button>
+          <h1 className="text-2xl md:text-3xl font-bold">Administration</h1>
+        </div>
+        
+        {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
+          <Button 
+            variant="destructive" 
+            onClick={handleDeleteAllQuestions} 
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Trash size={16} />
+            Supprimer tout
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -77,33 +167,38 @@ const Admin = () => {
           <CardHeader>
             <CardTitle>Résultat</CardTitle>
             <CardDescription>
-              Questions importées
+              Questions importées: {simpleQuestions.length + multiStepQuestions.length}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {parseResult ? (
+            {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
               <div className="space-y-4">
-                <p className="font-medium">Questions simples: {parseResult.simpleQuestions.length}</p>
-                <p className="font-medium">Questions à étapes: {parseResult.multiStepQuestions.length}</p>
-                
-                <details className="mt-4">
-                  <summary className="cursor-pointer font-medium text-primary">Afficher le détail</summary>
-                  <pre className="mt-2 p-2 bg-muted/50 rounded text-xs overflow-auto max-h-[200px]">
-                    {JSON.stringify(parseResult, null, 2)}
-                  </pre>
-                </details>
+                <p className="font-medium">Questions simples: {simpleQuestions.length}</p>
+                <p className="font-medium">Questions à étapes: {multiStepQuestions.length}</p>
               </div>
             ) : (
               <p className="text-muted-foreground">Importez des questions pour voir le résultat</p>
             )}
           </CardContent>
           <CardFooter>
-            <Button variant="outline" disabled={!parseResult}>
+            <Button 
+              variant="outline" 
+              disabled={simpleQuestions.length === 0 && multiStepQuestions.length === 0}
+              onClick={handleExport}
+            >
               <FileDown className="mr-2 h-4 w-4" /> Exporter
             </Button>
           </CardFooter>
         </Card>
       </div>
+
+      {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
+        <AdminQuestionsList 
+          simpleQuestions={simpleQuestions}
+          multiStepQuestions={multiStepQuestions}
+          onDelete={handleDeleteQuestion}
+        />
+      )}
     </div>
   );
 };
