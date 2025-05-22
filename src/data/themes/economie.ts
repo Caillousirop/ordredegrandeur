@@ -1,6 +1,4 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
-import { emploiQuestions } from "./emploi";
 
 // Questions simples sur l'économie
 export const economieQuestionsOriginal: (Question | MultiStepQuestion)[] = [
@@ -471,11 +469,90 @@ export const economieQuestionsOriginal: (Question | MultiStepQuestion)[] = [
   }
 ];
 
+// Questions d'emploi intégrées directement (anciennement dans le fichier emploi.ts)
+export const emploiQuestionsImported: (Question | MultiStepQuestion)[] = [
+  {
+    id: "emp1",
+    question: "Combien y a-t-il de travailleurs en France ?",
+    correctAnswer: 30,
+    unit: "millions",
+    explanation: "La France compte environ 30 millions de personnes en emploi.",
+    type: "simple",
+    theme: "economie"  // Thème changé en économie
+  },
+  {
+    id: "emp2",
+    question: "Quel est le salaire minimum (SMIC) horaire brut en France ?",
+    correctAnswer: 11.52,
+    unit: "€",
+    explanation: "Le SMIC horaire brut en France est de 11,52 € en 2024.",
+    type: "simple",
+    theme: "economie"  // Thème changé en économie
+  },
+  {
+    id: "emp3",
+    type: "multistep",
+    question: "Combien d'heures sont travaillées en France chaque jour ?",
+    finalExplanation: "Les Français travaillent environ 237 millions d'heures par jour ouvrable, un chiffre qui montre l'ampleur de l'activité économique du pays.",
+    theme: "economie", // Thème changé en économie
+    steps: [
+      {
+        question: "Combien y a-t-il de personnes qui travaillent en France ?",
+        correctAnswer: 30,
+        unit: "millions",
+        explanation: "La France compte environ 30 millions de personnes en emploi."
+      },
+      {
+        question: "Combien d'heures un travailleur français travaille-t-il en moyenne par jour ?",
+        correctAnswer: 7.9,
+        unit: "heures",
+        explanation: "Un travailleur français travaille en moyenne 7,9 heures par jour."
+      },
+      {
+        question: "Combien d'heures sont travaillées en France chaque jour ?",
+        correctAnswer: 237,
+        unit: "millions",
+        explanation: "En multipliant le nombre de travailleurs (30 millions) par le nombre moyen d'heures travaillées par jour (7,9), on obtient environ 237 millions d'heures travaillées quotidiennement en France."
+      }
+    ]
+  },
+  {
+    id: "emp4",
+    type: "multistep",
+    question: "Combien de jours de congés payés sont pris par les Français chaque année ?",
+    finalExplanation: "Les Français prennent environ 770 millions de jours de congés payés par an, ce qui reflète l'importance des vacances et du temps de repos dans la culture française.",
+    theme: "economie", // Thème changé en économie
+    steps: [
+      {
+        question: "Combien de jours de congés payés les salariés français ont-ils droit par an ?",
+        correctAnswer: 25,
+        unit: "jours",
+        explanation: "Les salariés français ont droit à 5 semaines de congés payés par an, soit 25 jours ouvrés."
+      },
+      {
+        question: "Combien y a-t-il de salariés en France ?",
+        correctAnswer: 28,
+        unit: "millions",
+        explanation: "La France compte environ 28 millions de salariés."
+      },
+      {
+        question: "Quel pourcentage des congés payés disponibles sont effectivement pris par les salariés ?",
+        correctAnswer: 92,
+        unit: "%",
+        explanation: "Environ 92% des congés payés disponibles sont effectivement pris par les salariés français."
+      },
+      {
+        question: "Combien de jours de congés payés sont pris par les Français chaque année ?",
+        correctAnswer: 770,
+        unit: "millions",
+        explanation: "En multipliant le nombre de salariés (28 millions) par le nombre de jours de congés payés (25) puis par le pourcentage de congés effectivement pris (92%), on obtient environ 770 millions de jours de congés payés pris annuellement."
+      }
+    ]
+  }
+];
+
 // Combinaison des questions économie originales et emploi
 export const economieQuestions = [
   ...economieQuestionsOriginal,
-  ...emploiQuestions.map(question => ({
-    ...question,
-    theme: "economie" // S'assurer que toutes les questions emploi sont bien identifiées comme économie
-  }))
+  ...emploiQuestionsImported
 ];

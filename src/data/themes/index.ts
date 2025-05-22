@@ -2,7 +2,6 @@
 import { demographieQuestions } from "./demographie";
 import { economieQuestions } from "./economie";
 import { educationQuestions } from "./education";
-import { emploiQuestions } from "./emploi";
 import { environnementQuestions } from "./environnement";
 import { mondeQuestions } from "./monde";
 import { santeQuestions } from "./sante";
@@ -14,7 +13,7 @@ import { QuizTheme } from "@/components/types";
 // Combiner toutes les questions - les questions emploi sont désormais incluses dans economie
 export const questions = [
   ...demographieQuestions,
-  ...economieQuestions, // Contient maintenant les questions emploi
+  ...economieQuestions, // Contient déjà les questions emploi
   ...educationQuestions,
   ...environnementQuestions, 
   ...mondeQuestions,
@@ -24,7 +23,7 @@ export const questions = [
   ...insoliteQuestions
 ];
 
-// Définir les thèmes disponibles
+// Définir les thèmes disponibles - emploi est retiré
 export const themes: QuizTheme[] = [
   {
     id: "demographie",
@@ -46,13 +45,6 @@ export const themes: QuizTheme[] = [
     description: "Questions sur le système éducatif français",
     color: "from-amber-500 to-amber-400",
     icon: "GraduationCap"
-  },
-  {
-    id: "emploi",
-    name: "Emploi",
-    description: "Questions sur le marché du travail et les conditions d'emploi",
-    color: "from-cyan-500 to-cyan-400",
-    icon: "Briefcase"
   },
   {
     id: "environnement",
