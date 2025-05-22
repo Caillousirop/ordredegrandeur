@@ -22,14 +22,14 @@ const DarkModeToggle = () => {
   }
 
   return (
-    <div className="sticky top-4 left-4 z-10 flex items-center gap-2 bg-background/90 backdrop-blur-lg p-2 rounded-full shadow-lg border border-border">
-      <Sun size={16} className={`text-amber-500 ${theme === 'light' ? 'opacity-100' : 'opacity-40'}`} />
+    <div className="fixed top-4 left-4 z-50 flex items-center gap-2 bg-background/90 backdrop-blur-lg p-2 rounded-full shadow-lg border border-border">
+      <Sun size={16} className={`${theme === 'light' ? 'text-amber-500' : 'text-amber-500/40'}`} />
       <Switch 
-        className="scale-80 data-[state=checked]:bg-primary" 
+        className="data-[state=checked]:bg-primary" 
         checked={theme === "dark"}
         onCheckedChange={toggleTheme}
       />
-      <Moon size={16} className={`text-indigo-300 ${theme === 'dark' ? 'opacity-100' : 'opacity-40'}`} />
+      <Moon size={16} className={`${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-400/40'}`} />
     </div>
   );
 };

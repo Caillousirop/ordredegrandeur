@@ -17,9 +17,7 @@ const Index = () => {
       </div>
       
       {/* Dark Mode toggle */}
-      <div className="w-full max-w-7xl px-4">
-        <DarkModeToggle />
-      </div>
+      <DarkModeToggle />
       
       {/* Debug toggle button */}
       <button 
