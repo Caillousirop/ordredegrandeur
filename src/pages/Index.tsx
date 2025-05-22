@@ -11,14 +11,14 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 flex flex-col items-center py-10">
-      {/* User Space component in the top right - sticky position */}
-      <div className="sticky top-4 right-4 z-50 flex justify-end w-full max-w-7xl px-4">
-        <UserSpace questionsCompleted={quizState.questionsCompleted} />
-      </div>
-      
-      {/* Dark Mode toggle */}
-      <div className="sticky top-4 left-4 z-50 w-full max-w-7xl px-4">
-        <DarkModeToggle />
+      {/* Fixed position controls at the top of the screen */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full p-4">
+        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+          <DarkModeToggle />
+        </div>
+        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+          <UserSpace questionsCompleted={quizState.questionsCompleted} />
+        </div>
       </div>
       
       {/* Debug toggle button */}
@@ -38,7 +38,7 @@ const Index = () => {
         </div>
       )}
       
-      <div className="container px-4 py-8">
+      <div className="container px-4 py-8 mt-14">
         <QuizContainer />
       </div>
     </div>

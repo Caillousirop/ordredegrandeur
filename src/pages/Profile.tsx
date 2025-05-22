@@ -16,17 +16,17 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 dark:from-primary/10 dark:to-primary/5 py-10 px-4">
-      {/* User Space component in the top right - sticky position */}
-      <div className="sticky top-4 right-4 z-50 flex justify-end w-full max-w-7xl mx-auto">
-        <UserSpace questionsCompleted={questionsCompleted} />
+      {/* Fixed position controls at the top of the screen */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full p-4">
+        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+          <DarkModeToggle />
+        </div>
+        <div className="bg-background/90 backdrop-blur-lg rounded-full shadow-lg">
+          <UserSpace questionsCompleted={questionsCompleted} />
+        </div>
       </div>
       
-      {/* Dark Mode toggle */}
-      <div className="sticky top-4 left-4 z-50 w-full max-w-7xl mx-auto">
-        <DarkModeToggle />
-      </div>
-      
-      <div className="container mx-auto max-w-4xl">
+      <div className="container mx-auto max-w-4xl mt-14">
         <ProfileHeader />
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
