@@ -77,7 +77,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           {question.question}
         </CardTitle>
         <CardDescription>
-          {question.unit ? `Répondez avec un nombre (${question.unit})` : "Répondez avec un nombre"}
+          {question.unit ? `Entrez le nombre complet (ex: 1000000 et non pas 1 million) - ${question.unit}` : "Entrez le nombre complet (ex: 1000000 et non pas 1 million)"}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 pt-6">
@@ -88,7 +88,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 type="text"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Votre réponse"
+                placeholder="Votre réponse (nombre complet)"
                 className="flex-grow"
               />
               {question.unit && (

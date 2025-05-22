@@ -17,15 +17,7 @@ interface QuizStepProps {
 
 // Helper function to format large numbers
 const formatNumber = (num: number): string => {
-  if (num >= 1000000000) {
-    return `${(num / 1000000000).toLocaleString()} milliards`;
-  } else if (num >= 1000000) {
-    return `${(num / 1000000).toLocaleString()} millions`;
-  } else if (num >= 1000) {
-    return `${(num / 1000).toLocaleString()} milliers`;
-  } else {
-    return num.toLocaleString();
-  }
+  return num.toLocaleString();
 };
 
 const QuizStep: React.FC<QuizStepProps> = ({
@@ -55,7 +47,7 @@ const QuizStep: React.FC<QuizStepProps> = ({
                 type="text" 
                 value={answer?.toString() || ""} 
                 onChange={e => onInputChange(e.target.value)} 
-                placeholder="Votre réponse" 
+                placeholder="Nombre complet (ex: 1000000)" 
                 className="flex-grow" 
               />
               {step.unit && (

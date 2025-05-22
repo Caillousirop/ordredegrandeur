@@ -37,7 +37,7 @@ const DirectAnswerSection: React.FC<DirectAnswerSectionProps> = ({
               type="text" 
               value={directFinalAnswer} 
               onChange={e => setDirectFinalAnswer(e.target.value)} 
-              placeholder="Votre réponse finale" 
+              placeholder="Entrez le nombre complet (ex: 1000000)" 
               className="flex-grow" 
             />
           </div>

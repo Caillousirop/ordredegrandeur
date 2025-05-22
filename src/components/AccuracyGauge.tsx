@@ -19,15 +19,7 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   
   // Format large numbers to be more readable
   const formatNumber = (num: number): string => {
-    if (num >= 1000000000) {
-      return `${(num / 1000000000).toLocaleString()} milliards`;
-    } else if (num >= 1000000) {
-      return `${(num / 1000000).toLocaleString()} millions`;
-    } else if (num >= 1000) {
-      return `${(num / 1000).toLocaleString()} milliers`;
-    } else {
-      return num.toLocaleString();
-    }
+    return num.toLocaleString();
   };
   
   // Calculate the accuracy with higher rewards for correct order of magnitude
