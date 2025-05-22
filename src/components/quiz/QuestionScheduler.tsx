@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { themes } from "@/data/themes";
 import { Question, MultiStepQuestion } from "@/components/types";
 import { generateId } from "@/utils/questionImporter";
+import { Badge } from "@/components/ui/badge";
 
 interface QuestionSchedulerProps {
   onNewQuestionsGenerated: (questions: (Question | MultiStepQuestion)[]) => void;
@@ -51,9 +52,9 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
     setIsGenerating(true);
     
     try {
-      // Here we would normally call an API to generate new questions
-      // For this demo, we'll create mock questions
-      const generatedQuestions = generateMockQuestions();
+      // NOTE: Ce code génère actuellement des questions d'exemple
+      // Pour une version future, intégrer un service d'IA pour générer des questions pertinentes
+      const generatedQuestions = generatePlaceholderQuestions();
       
       // Update the last generation date
       const today = new Date();
@@ -68,7 +69,7 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
       // Pass the generated questions up to the parent component
       onNewQuestionsGenerated(generatedQuestions);
       
-      toast.success("Questions générées avec succès!");
+      toast.success("Propositions de questions générées avec succès!");
     } catch (error) {
       console.error("Error generating questions:", error);
       toast.error("Erreur lors de la génération des questions");
@@ -77,22 +78,22 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
     }
   };
   
-  // Mock function to generate questions - in a real app, this would call an API
-  const generateMockQuestions = (): (Question | MultiStepQuestion)[] => {
+  // Placeholder function to generate example questions - will be replaced by AI integration in the future
+  const generatePlaceholderQuestions = (): (Question | MultiStepQuestion)[] => {
     const questions: (Question | MultiStepQuestion)[] = [];
     
-    // Generate 10 questions for each theme
+    // Generate 3 questions for each theme (just placeholder for now)
     themes.forEach(theme => {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 3; i++) {
         // Generate a simple question for even numbers and multi-step for odd
         if (i % 2 === 0) {
           questions.push({
             id: generateId(),
             type: "simple",
-            question: `Question proposée ${i+1} pour le thème ${theme.name}?`,
+            question: `[À REMPLACER] Proposition de question ${i+1} pour le thème ${theme.name}?`,
             correctAnswer: Math.floor(Math.random() * 1000),
             unit: i % 3 === 0 ? "%" : i % 3 === 1 ? "€" : "",
-            explanation: `Explication pour la question ${i+1}`,
+            explanation: `[À REMPLACER] Explication pour la question ${i+1}`,
             theme: theme.id
           });
         } else {
@@ -100,22 +101,22 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
           questions.push({
             id: generateId(),
             type: "multistep",
-            question: `Question à étapes ${i+1} pour le thème ${theme.name}?`,
+            question: `[À REMPLACER] Proposition de question à étapes ${i+1} pour le thème ${theme.name}?`,
             steps: [
               {
-                question: `Étape 1: Sous-question pour ${theme.name}?`,
+                question: `[À REMPLACER] Étape 1: Sous-question pour ${theme.name}?`,
                 correctAnswer: Math.floor(Math.random() * 100),
                 unit: i % 2 === 0 ? "kg" : "",
-                explanation: `Explication pour l'étape 1`
+                explanation: `[À REMPLACER] Explication pour l'étape 1`
               },
               {
-                question: `Étape 2: Deuxième sous-question pour ${theme.name}?`,
+                question: `[À REMPLACER] Étape 2: Deuxième sous-question pour ${theme.name}?`,
                 correctAnswer: Math.floor(Math.random() * 100),
                 unit: i % 2 === 0 ? "kg" : "",
-                explanation: `Explication pour l'étape 2`
+                explanation: `[À REMPLACER] Explication pour l'étape 2`
               }
             ],
-            finalExplanation: `Explication finale pour la question à étapes ${i+1}`,
+            finalExplanation: `[À REMPLACER] Explication finale pour la question à étapes ${i+1}`,
             theme: theme.id
           });
         }
@@ -127,7 +128,15 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
   
   return (
     <div className="p-4 border rounded-md mb-6 bg-muted/20">
-      <h3 className="text-lg font-medium mb-3">Génération automatique de questions</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-lg font-medium">Génération automatique de questions</h3>
+        <Badge variant="outline" className="bg-yellow-100 text-yellow-800">Version préliminaire</Badge>
+      </div>
+      
+      <p className="text-sm mb-4 text-muted-foreground">
+        Cette fonctionnalité génère actuellement des propositions de questions à compléter manuellement. 
+        Une future mise à jour pourra intégrer l'IA pour générer des questions pertinentes par thème.
+      </p>
       
       <div className="space-y-2 mb-4">
         {lastGenerationDate && (
@@ -147,7 +156,7 @@ const QuestionScheduler: React.FC<QuestionSchedulerProps> = ({ onNewQuestionsGen
         disabled={isGenerating}
         className="w-full"
       >
-        {isGenerating ? "Génération en cours..." : "Générer de nouvelles questions"}
+        {isGenerating ? "Génération en cours..." : "Générer des propositions de questions"}
       </Button>
     </div>
   );
