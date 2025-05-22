@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
-  Settings, 
   UserRound
 } from "lucide-react";
 import { 
@@ -33,8 +32,8 @@ const UserSpace: React.FC<UserSpaceProps> = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 rounded-full py-1 px-3">
-            <UserRound size={18} className="text-primary" />
-            <span className="font-medium text-sm">{questionsCompleted}</span>
+            <UserLevelBadge level={userLevel} />
+            <span className="font-medium text-sm hidden md:inline">{questionsCompleted} pts</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
@@ -45,15 +44,8 @@ const UserSpace: React.FC<UserSpaceProps> = ({
               <span>Profil & Résultats</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <span>Questions sauvegardées</span>
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      
-      <Link to="/profile">
-        <UserLevelBadge level={userLevel} />
-      </Link>
     </div>
   );
 };
