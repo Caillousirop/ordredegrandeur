@@ -552,8 +552,12 @@ export const emploiQuestions: (Question | MultiStepQuestion)[] = [
   }
 ];
 
+// Import les questions emploi historiques pour assurer la compatibilité
+import { emploiQuestions as originalEmploiQuestions } from "./emploi";
+
 // Combinaison des questions économie et emploi
 export const economieQuestions = [
   ...economieQuestionsOriginal,
-  ...emploiQuestions
+  ...emploiQuestions,
+  ...originalEmploiQuestions // Ajoute également les questions d'emploi historiques
 ];

@@ -10,10 +10,10 @@ import { transportQuestions } from "./transport";
 import { insoliteQuestions } from "./insolite";
 import { QuizTheme } from "@/components/types";
 
-// Combiner toutes les questions - les questions emploi sont désormais incluses dans economie
+// Combiner toutes les questions
 export const questions = [
   ...demographieQuestions,
-  ...economieQuestions, // Contient déjà les questions emploi
+  ...economieQuestions, // Contient maintenant toutes les questions économie et emploi
   ...educationQuestions,
   ...environnementQuestions, 
   ...mondeQuestions,
