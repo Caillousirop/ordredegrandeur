@@ -47,7 +47,7 @@ const QuizStep: React.FC<QuizStepProps> = ({
                 type="text" 
                 value={answer?.toString() || ""} 
                 onChange={e => onInputChange(e.target.value)} 
-                placeholder="Nombre" 
+                placeholder="Réponse" 
                 className="flex-grow" 
               />
               {step.unit && (

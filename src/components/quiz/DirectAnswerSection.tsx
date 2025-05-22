@@ -37,7 +37,7 @@ const DirectAnswerSection: React.FC<DirectAnswerSectionProps> = ({
               type="text" 
               value={directFinalAnswer} 
               onChange={e => setDirectFinalAnswer(e.target.value)} 
-              placeholder="Nombre" 
+              placeholder="Réponse" 
               className="flex-grow" 
             />
           </div>
