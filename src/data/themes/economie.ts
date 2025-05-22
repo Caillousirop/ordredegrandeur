@@ -1,7 +1,7 @@
 import { Question, MultiStepQuestion } from "@/components/types";
 import { emploiQuestions } from "./emploi";
 
-// Exportez toutes les questions d'économie avec les questions d'emploi
+// Exporting all economy questions combined with employment questions
 export const economieQuestions: (Question | MultiStepQuestion)[] = [
   {
     id: "3",
@@ -1414,6 +1414,6 @@ export const economieQuestions: (Question | MultiStepQuestion)[] = [
     ],
     finalExplanation: "Environ 612 millions de transactions bancaires sont réalisées chaque jour dans la zone euro, ce qui correspond à une moyenne de 1,8 transaction quotidienne pour chacun des 340 millions d'habitants de la zone."
   },
-  // Ajouter les questions d'emploi
+  // Adding the employment questions 
   ...emploiQuestions
 ];
