@@ -11,7 +11,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/5 flex flex-col items-center py-10">
-      {/* User Space component in the top right */}
+      {/* User Space component in the top right - fixed position */}
       <div className="fixed top-4 right-4 z-10">
         <UserSpace questionsCompleted={quizState.questionsCompleted} />
       </div>
