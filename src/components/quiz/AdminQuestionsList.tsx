@@ -26,6 +26,7 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
   onEdit
 }) => {
   const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<{id: string, type: "simple" | "multistep"} | null>(null);
 
   const toggleExpand = (id: string) => {
     if (expandedQuestionId === id) {
@@ -35,9 +36,38 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
     }
   };
 
+  const handleDeleteClick = (id: string, type: "simple" | "multistep") => {
+    setShowDeleteConfirm({id, type});
+  };
+
+  const confirmDelete = () => {
+    if (showDeleteConfirm) {
+      onDelete(showDeleteConfirm.id, showDeleteConfirm.type);
+      setShowDeleteConfirm(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(null);
+  };
+
   return (
     <div className="mt-6 border rounded-md">
       <h3 className="px-4 py-3 font-medium border-b">Questions importées ({simpleQuestions.length + multiStepQuestions.length})</h3>
+      
+      {showDeleteConfirm && (
+        <div className="p-4 bg-muted/30 border-b">
+          <p className="mb-3 font-medium">Êtes-vous sûr de vouloir supprimer cette question ?</p>
+          <div className="flex gap-2">
+            <Button onClick={confirmDelete} variant="destructive" size="sm">
+              Supprimer
+            </Button>
+            <Button onClick={cancelDelete} variant="outline" size="sm">
+              Annuler
+            </Button>
+          </div>
+        </div>
+      )}
       
       <div className="overflow-x-auto">
         <Table>
@@ -68,8 +98,8 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                     <Button 
                       variant="ghost" 
                       size="icon"
-                      className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
-                      onClick={() => onDelete(question.id, "simple")}
+                      className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity text-destructive"
+                      onClick={() => handleDeleteClick(question.id, "simple")}
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
@@ -103,8 +133,8 @@ const AdminQuestionsList: React.FC<AdminQuestionsListProps> = ({
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity"
-                        onClick={() => onDelete(question.id, "multistep")}
+                        className="h-8 w-8 opacity-70 group-hover:opacity-100 transition-opacity text-destructive"
+                        onClick={() => handleDeleteClick(question.id, "multistep")}
                       >
                         <Trash className="h-4 w-4" />
                       </Button>
