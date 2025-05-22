@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
@@ -60,7 +59,6 @@ export const useQuiz = () => {
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
     // Ne pas basculer automatiquement vers l'onglet des questions
-    // Suppression de: setActiveTab("questions");
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
@@ -98,14 +96,26 @@ export const useQuiz = () => {
       }
     });
     
+    // Adjust accuracy based on hints usage
+    let displayAccuracy = score.accuracy;
+    
+    // If all hints were revealed, no points
+    if (score.usedHints && score.hintsRevealedCount === 3) {
+      displayAccuracy = 0;
+    }
+    // Otherwise reduce points based on how many hints were used
+    else if (score.usedHints && score.hintsRevealedCount) {
+      displayAccuracy = Math.max(0, score.accuracy - (score.hintsRevealedCount * 20));
+    }
+    
     // Show toast with score feedback
-    if (score.accuracy >= 90) {
+    if (displayAccuracy >= 90) {
       toast.success("Excellente réponse ! 🎯");
-    } else if (score.accuracy >= 70) {
+    } else if (displayAccuracy >= 70) {
       toast.success("Très bonne réponse ! 👍");
-    } else if (score.accuracy >= 50) {
+    } else if (displayAccuracy >= 50) {
       toast.info("Pas mal ! 😊");
-    } else if (score.accuracy >= 30) {
+    } else if (displayAccuracy >= 30) {
       toast.info("Vous pouvez faire mieux ! 🤔");
     } else {
       toast.error("Essayez encore ! 📚");

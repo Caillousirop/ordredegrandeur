@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { MultiStepQuestion, QuizScore } from "../types";
 import { calculateAccuracy } from "./CalculateAccuracy";
@@ -24,6 +25,9 @@ export interface MultiStepQuizManagerChildrenProps {
   calculatorOpen: boolean;
   anyStepSubmitted: boolean;
   themeColor: string;
+  hintsMode: boolean;
+  hintsRevealed: boolean[];
+  allHintsRevealed: boolean;
   handleDirectFinalToggle: () => void;
   handleStepSubmit: (e: React.FormEvent, stepIndex: number) => void;
   handleInputChange: (stepIndex: number, value: string) => void;
@@ -32,6 +36,8 @@ export interface MultiStepQuizManagerChildrenProps {
   setShowAnswer: (value: boolean) => void;
   setCalculatorOpen: (value: boolean) => void;
   handleNextQuestion: () => void;
+  toggleHintsMode: () => void;
+  revealHint: (index: number) => void;
 }
 
 const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({ 
@@ -51,10 +57,15 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
   const [showAnswer, setShowAnswer] = useState(false);
   const [calculatorOpen, setCalculatorOpen] = useState(false);
   const [anyStepSubmitted, setAnyStepSubmitted] = useState(false); // Track if any step has been submitted
+  const [hintsMode, setHintsMode] = useState(false); // New state for hints mode
+  const [hintsRevealed, setHintsRevealed] = useState<boolean[]>(Array(question.steps.length).fill(false)); // Track revealed hints
 
   // Find theme
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
+
+  // Calculate if all hints are revealed
+  const allHintsRevealed = hintsRevealed.every(hint => hint === true);
 
   useEffect(() => {
     // By default, make all steps active
@@ -65,6 +76,33 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     setDirectFinalMode(!directFinalMode);
     if (!directFinalMode) {
       setSkippedSteps(true);
+    }
+  };
+
+  const toggleHintsMode = () => {
+    setHintsMode(!hintsMode);
+    if (directFinalMode) {
+      setDirectFinalMode(false);
+    }
+  };
+
+  const revealHint = (index: number) => {
+    const newHintsRevealed = [...hintsRevealed];
+    newHintsRevealed[index] = true;
+    setHintsRevealed(newHintsRevealed);
+    
+    // Count revealed hints
+    const revealedCount = newHintsRevealed.filter(hint => hint).length;
+    
+    // Show warning toast if many hints are revealed
+    if (revealedCount === question.steps.length) {
+      toast.warning("Tous les indices sont révélés. Vous ne gagnerez pas de points pour cette question.", {
+        duration: 5000
+      });
+    } else if (revealedCount === question.steps.length - 1) {
+      toast.warning("Attention, il ne vous reste qu'un indice à révéler avant de perdre tous les points.", {
+        duration: 5000
+      });
     }
   };
 
@@ -89,7 +127,9 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
         questionId: question.id,
         accuracy,
         isMultiStep: true,
-        directFinalAnswer: false
+        directFinalAnswer: false,
+        usedHints: hintsMode,
+        hintsRevealedCount: hintsRevealed.filter(hint => hint).length
       });
     }
     
@@ -126,15 +166,17 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
       });
     }
 
-    // Award bonus points for direct final answer
+    // Award bonus points for direct final answer (except if all hints were revealed)
     if (onScore) {
       onScore({
         questionId: question.id,
-        // Give 50% bonus for direct final answer if accurate
-        accuracy: accuracy * 1.5 > 100 ? 100 : accuracy * 1.5,
+        // Give 50% bonus for direct final answer if accurate, but no points if all hints revealed
+        accuracy: allHintsRevealed ? 0 : (accuracy * 1.5 > 100 ? 100 : accuracy * 1.5),
         isMultiStep: true,
         directFinalAnswer: true,
-        skippedSteps: true
+        skippedSteps: true,
+        usedHints: hintsMode,
+        hintsRevealedCount: hintsRevealed.filter(hint => hint).length
       });
     }
   };
@@ -162,6 +204,9 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     calculatorOpen,
     anyStepSubmitted,
     themeColor,
+    hintsMode,
+    hintsRevealed,
+    allHintsRevealed,
     handleDirectFinalToggle,
     handleStepSubmit,
     handleInputChange,
@@ -169,7 +214,9 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     handleDirectFinalSubmit,
     setShowAnswer,
     setCalculatorOpen,
-    handleNextQuestion
+    handleNextQuestion,
+    toggleHintsMode,
+    revealHint
   });
 };
 

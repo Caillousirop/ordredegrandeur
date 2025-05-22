@@ -31,6 +31,8 @@ export type QuizScore = {
   isMultiStep: boolean;
   directFinalAnswer: boolean;
   skippedSteps?: boolean;
+  usedHints?: boolean;
+  hintsRevealedCount?: number;
 };
 
 export type QuizTheme = {
