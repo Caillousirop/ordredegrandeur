@@ -16,12 +16,10 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 dark:from-primary/10 dark:to-primary/5">
-      {/* Fixed header with controls */}
-      <div className="sticky top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border/30">
-        <div className="flex justify-between items-center w-full px-4 py-3">
-          <DarkModeToggle />
-          <UserSpace questionsCompleted={questionsCompleted} />
-        </div>
+      {/* Header with controls that scrolls with content */}
+      <div className="flex justify-between items-center w-full px-4 py-3 border-b border-border/30">
+        <DarkModeToggle />
+        <UserSpace questionsCompleted={questionsCompleted} />
       </div>
       
       <div className="container mx-auto max-w-4xl px-4 py-10">
