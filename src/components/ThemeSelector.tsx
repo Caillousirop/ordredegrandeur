@@ -25,7 +25,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
   // Add a random theme option
   const randomTheme: QuizTheme = {
     id: "random",
-    name: "Aléatoire",
+    name: "Questions aléatoires",
     description: "Questions issues de tous les thèmes, mélangées aléatoirement",
     color: "from-purple-500 to-indigo-500",
     icon: "Shuffle"
@@ -53,7 +53,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
             <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4")}>
               <div className="flex items-center gap-2">
                 {theme.icon && getIconComponent(theme.icon)}
-                <CardTitle className="text-white text-sm">{theme.name}</CardTitle>
+                <CardTitle className="text-white">{theme.name}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-4">
