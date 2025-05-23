@@ -28,35 +28,29 @@ const QuizContainer: React.FC = () => {
   console.log("QuizContainer rendered with filtered questions:", filteredQuestions.length);
 
   return (
-    <div className="h-full flex flex-col max-w-4xl mx-auto">
-      <div className="flex-shrink-0">
-        <QuizHeader />
-      </div>
+    <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
+      <QuizHeader />
       
-      <div className="flex-1 min-h-0 my-6">
-        <QuizTabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          filteredQuestions={filteredQuestions}
-          currentQuestion={currentQuestion}
-          isMultiStep={isMultiStep}
-          selectedTheme={selectedTheme}
-          selectedType={selectedType}
-          questionsCompleted={questionsCompleted}
-          searchQuery={searchQuery}
-          searchResults={searchResults}
-          handleSearch={handleSearch}
-          handleThemeSelect={handleThemeSelect}
-          handleTypeSelect={handleTypeSelect}
-          handleNext={handleNext}
-          handleScore={handleScore}
-          startQuiz={startQuiz}
-        />
-      </div>
+      <QuizTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        filteredQuestions={filteredQuestions}
+        currentQuestion={currentQuestion}
+        isMultiStep={isMultiStep}
+        selectedTheme={selectedTheme}
+        selectedType={selectedType}
+        questionsCompleted={questionsCompleted}
+        searchQuery={searchQuery}
+        searchResults={searchResults}
+        handleSearch={handleSearch}
+        handleThemeSelect={handleThemeSelect}
+        handleTypeSelect={handleTypeSelect}
+        handleNext={handleNext}
+        handleScore={handleScore}
+        startQuiz={startQuiz}
+      />
       
-      <div className="flex-shrink-0">
-        <QuizFooter />
-      </div>
+      <QuizFooter />
     </div>
   );
 };
