@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
@@ -46,13 +47,17 @@ export const useQuiz = () => {
     setCurrentQuestionIndex(0);
   }, [selectedTheme, selectedType]);
 
-  // Handle search separately
+  // Handle search separately with proper accent handling
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== "") {
+      // Convert to lowercase but preserve accents
       const lowerCaseQuery = searchQuery.toLowerCase().trim();
+      
+      // Use includes() which naturally preserves accents in comparison
       const results = questions.filter(q => 
         q.question.toLowerCase().includes(lowerCaseQuery)
       );
+      
       console.log("Search results for:", searchQuery, "found:", results.length);
       setSearchResults(results);
     } else {

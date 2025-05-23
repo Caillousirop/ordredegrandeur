@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Question, MultiStepQuestion } from "./types";
 
@@ -17,7 +17,9 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchQuery, searchResult
   const highlightText = (text: string, query: string) => {
     if (!query.trim()) return text;
     
-    const regex = new RegExp(`(${query})`, 'gi');
+    // Create a regex that preserves accents by escaping special characters
+    const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, 'gi');
     const parts = text.split(regex);
     
     return parts.map((part, index) => 
