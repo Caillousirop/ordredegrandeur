@@ -25,20 +25,20 @@ const DarkModeToggle = () => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="flex items-center gap-2 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border/30 shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-background/80 backdrop-blur-sm border border-border/30 shadow-sm hover:shadow-md transition-all duration-300">
           <Sun 
-            size={16} 
+            size={14} 
             className={`${theme === 'light' 
               ? 'text-amber-500 animate-fade-in' 
               : 'text-amber-500/40'} transition-all duration-300`} 
           />
           <Switch 
-            className="data-[state=checked]:bg-primary transition-all duration-300" 
+            className="data-[state=checked]:bg-primary transition-all duration-300 h-5 w-9" 
             checked={theme === "dark"}
             onCheckedChange={toggleTheme}
           />
           <Moon 
-            size={16} 
+            size={14} 
             className={`${theme === 'dark' 
               ? 'text-indigo-400 animate-fade-in' 
               : 'text-indigo-400/40'} transition-all duration-300`} 
