@@ -52,7 +52,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
           >
             <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4")}>
               <div className="flex items-center gap-2 min-w-0">
-                {theme.icon && getIconComponent(theme.icon)}
+                {theme.id !== "random" && theme.icon && getIconComponent(theme.icon)}
                 <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis">{theme.name}</CardTitle>
               </div>
             </CardHeader>
