@@ -38,7 +38,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
     <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un thème</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {allThemes.map((theme) => (
           <Card 
             key={theme.id}
@@ -50,14 +50,14 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
             )}
             onClick={() => onSelectTheme(theme)}
           >
-            <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4")}>
+            <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4 pb-5")}>
               <div className="flex items-center gap-2 min-w-0">
                 {theme.id !== "random" && theme.icon && getIconComponent(theme.icon)}
-                <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis">{theme.name}</CardTitle>
+                <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">{theme.name}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
-              <p className="text-sm text-muted-foreground">{theme.description}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{theme.description}</p>
             </CardContent>
           </Card>
         ))}
