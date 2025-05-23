@@ -38,12 +38,12 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
     <div className="w-full max-w-4xl mx-auto">
       <h2 className="text-xl font-medium mb-4">Choisissez un thème</h2>
       
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {allThemes.map((theme) => (
           <Card 
             key={theme.id}
             className={cn(
-              "cursor-pointer transition-all hover:shadow-md overflow-hidden",
+              "cursor-pointer transition-all hover:shadow-md overflow-hidden min-w-0",
               selectedTheme?.id === theme.id 
                 ? "ring-2 ring-primary/70 shadow-md" 
                 : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/80 dark:hover:to-slate-600/60"
@@ -51,9 +51,9 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
             onClick={() => onSelectTheme(theme)}
           >
             <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4")}>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 {theme.icon && getIconComponent(theme.icon)}
-                <CardTitle className="text-white">{theme.name}</CardTitle>
+                <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis">{theme.name}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
