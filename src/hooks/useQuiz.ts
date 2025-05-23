@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
@@ -7,6 +6,7 @@ import { toast } from "sonner";
 export const useQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
+  const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
   const [activeTab, setActiveTab] = useState("setup");
   const [scores, setScores] = useState<QuizScore[]>([]);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
@@ -14,20 +14,11 @@ export const useQuiz = () => {
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter questions based on theme, type, and search query
+  // Filter questions based on theme and type (for quiz mode)
   useEffect(() => {
-    console.log("Filtering with search query:", searchQuery);
-    console.log("Current theme:", selectedTheme?.id);
+    console.log("Filtering with theme:", selectedTheme?.id);
     console.log("Current type:", selectedType);
     console.log("Total questions available:", questions.length);
-    
-    // Log theme counts for debugging
-    const themeCounts: Record<string, number> = {};
-    questions.forEach(q => {
-      if (!themeCounts[q.theme]) themeCounts[q.theme] = 0;
-      themeCounts[q.theme]++;
-    });
-    console.log("Questions per theme:", themeCounts);
     
     // Start with all questions
     let filtered = [...questions];
@@ -45,15 +36,6 @@ export const useQuiz = () => {
       console.log(`After type filter, questions count: ${filtered.length}`);
     }
     
-    // Apply search filter ONLY if there's a non-empty query
-    if (searchQuery && searchQuery.trim() !== "") {
-      const lowerCaseQuery = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(q => 
-        q.question.toLowerCase().includes(lowerCaseQuery)
-      );
-      console.log("After search filter, questions count:", filtered.length);
-    }
-    
     // For random theme, just shuffle the questions
     if (selectedTheme && selectedTheme.id === "random") {
       filtered = filtered.sort(() => Math.random() - 0.5);
@@ -62,7 +44,21 @@ export const useQuiz = () => {
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, searchQuery]);
+  }, [selectedTheme, selectedType]);
+
+  // Separate effect for search results
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim() !== "") {
+      const lowerCaseQuery = searchQuery.toLowerCase().trim();
+      const results = questions.filter(q => 
+        q.question.toLowerCase().includes(lowerCaseQuery)
+      );
+      console.log("Search results:", results.length);
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   const handleSearch = (query: string) => {
     console.log("Search query received:", query);
@@ -71,7 +67,6 @@ export const useQuiz = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
-    // Ne pas basculer automatiquement vers l'onglet des questions
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
@@ -79,7 +74,6 @@ export const useQuiz = () => {
   };
 
   const handleNext = () => {
-    // Get a random question index different from the current one
     if (filteredQuestions.length > 1) {
       let newIndex;
       do {
@@ -93,35 +87,27 @@ export const useQuiz = () => {
   };
   
   const handleScore = (score: QuizScore) => {
-    // Update scores
     setScores(prevScores => {
-      // Check if we already have a score for this question
       const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
       
       if (existingScoreIndex >= 0) {
-        // Replace existing score
         const newScores = [...prevScores];
         newScores[existingScoreIndex] = score;
         return newScores;
       } else {
-        // Add new score
         return [...prevScores, score];
       }
     });
     
-    // Adjust accuracy based on hints usage
     let displayAccuracy = score.accuracy;
     
-    // If all hints were revealed, no points
     if (score.usedHints && score.hintsRevealedCount === 3) {
       displayAccuracy = 0;
     }
-    // Otherwise reduce points based on how many hints were used
     else if (score.usedHints && score.hintsRevealedCount) {
       displayAccuracy = Math.max(0, score.accuracy - (score.hintsRevealedCount * 20));
     }
     
-    // Show toast with score feedback
     if (displayAccuracy >= 90) {
       toast.success("Excellente réponse ! 🎯");
     } else if (displayAccuracy >= 70) {
@@ -148,6 +134,7 @@ export const useQuiz = () => {
 
   return {
     filteredQuestions,
+    searchResults,
     currentQuestionIndex,
     currentQuestion,
     isMultiStep,
