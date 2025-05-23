@@ -50,13 +50,13 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
             )}
             onClick={() => onSelectTheme(theme)}
           >
-            <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-4 pb-5")}>
+            <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-3 pb-4")}>
               <div className="flex items-center gap-2 min-w-0">
                 {theme.id !== "random" && theme.icon && getIconComponent(theme.icon)}
                 <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">{theme.name}</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
+            <CardContent className="p-3 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
               <p className="text-sm text-muted-foreground leading-relaxed">{theme.description}</p>
             </CardContent>
           </Card>
