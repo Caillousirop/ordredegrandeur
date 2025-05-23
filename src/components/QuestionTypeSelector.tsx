@@ -22,14 +22,14 @@ const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({ onSelectTyp
             "cursor-pointer transition-all hover:shadow-md overflow-hidden",
             selectedType === "simple" 
               ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/70 dark:hover:to-slate-600/50"
+              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/80 dark:hover:to-slate-600/60"
           )}
           onClick={() => onSelectType("simple")}
         >
           <CardHeader className="bg-gradient-to-r from-violet-500 to-violet-300 p-4">
             <CardTitle className="text-white">Questions simples</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/60 dark:to-slate-700/40 dark:border-slate-600/30">
+          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
             <p className="text-sm text-muted-foreground">
               Une seule estimation à réaliser par question
             </p>
@@ -41,14 +41,14 @@ const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({ onSelectTyp
             "cursor-pointer transition-all hover:shadow-md overflow-hidden",
             selectedType === "multistep" 
               ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/70 dark:hover:to-slate-600/50"
+              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/80 dark:hover:to-slate-600/60"
           )}
           onClick={() => onSelectType("multistep")}
         >
           <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-300 p-4">
             <CardTitle className="text-white">Questions à étapes</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/60 dark:to-slate-700/40 dark:border-slate-600/30">
+          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
             <p className="text-sm text-muted-foreground">
               Plusieurs estimations à réaliser par question
             </p>
@@ -61,14 +61,14 @@ const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({ onSelectTyp
             "cursor-pointer transition-all hover:shadow-md overflow-hidden",
             selectedType === "all" 
               ? "ring-2 ring-primary/70 shadow-md" 
-              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/70 dark:hover:to-slate-600/50"
+              : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/80 dark:hover:to-slate-600/60"
           )}
           onClick={() => onSelectType("all")}
         >
           <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-300 p-4">
             <CardTitle className="text-white">Tous les types</CardTitle>
           </CardHeader>
-          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/60 dark:to-slate-700/40 dark:border-slate-600/30">
+          <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/50 dark:to-slate-700/30">
             <p className="text-sm text-muted-foreground">
               Mélange de questions simples et à étapes
             </p>

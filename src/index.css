@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,42 +37,44 @@
   }
 
   .dark {
-    --background: 225 25% 8%;
+    /* Darker background */
+    --background: 225 30% 4%;
     --foreground: 220 45% 92%;
 
-    --card: 225 30% 12%;
+    /* Less dark components to create contrast with background */
+    --card: 225 30% 10%;
     --card-foreground: 220 45% 92%;
 
-    --popover: 225 30% 12%;
+    --popover: 225 30% 10%;
     --popover-foreground: 220 45% 92%;
 
     --primary: 270 85% 72%;
-    --primary-foreground: 225 25% 8%;
+    --primary-foreground: 225 25% 4%;
 
-    --secondary: 220 30% 18%;
+    --secondary: 220 30% 14%;
     --secondary-foreground: 220 40% 85%;
 
-    --muted: 220 30% 18%;
+    --muted: 220 30% 14%;
     --muted-foreground: 220 25% 65%;
 
-    --accent: 260 40% 25%;
+    --accent: 260 40% 20%;
     --accent-foreground: 220 40% 85%;
 
     --destructive: 10 80% 65%;
     --destructive-foreground: 220 45% 92%;
 
-    --border: 220 25% 25%;
-    --input: 220 30% 20%;
+    --border: 220 25% 18%;
+    --input: 220 30% 16%;
     --ring: 270 85% 72%;
     
     /* Added for sidebar if present */
-    --sidebar-background: 225 30% 12%;
+    --sidebar-background: 225 30% 10%;
     --sidebar-foreground: 220 45% 92%;
     --sidebar-primary: 270 85% 72%;
-    --sidebar-primary-foreground: 225 25% 8%;
-    --sidebar-accent: 260 40% 25%;
+    --sidebar-primary-foreground: 225 25% 4%;
+    --sidebar-accent: 260 40% 20%;
     --sidebar-accent-foreground: 220 40% 85%;
-    --sidebar-border: 220 25% 25%;
+    --sidebar-border: 220 25% 18%;
     --sidebar-ring: 270 85% 72%;
   }
 }
@@ -96,13 +99,13 @@
     @apply transition-all duration-300;
   }
   
-  /* Enhanced card styling for dark mode */
+  /* Enhanced card styling for dark mode - lighter than background, darker than content */
   .dark .card-content-dark {
-    @apply bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30;
+    @apply bg-gradient-to-br from-slate-800/70 to-slate-700/50 border-slate-600/30;
   }
   
   .dark .card-hover-dark {
-    @apply hover:bg-gradient-to-br hover:from-slate-700/70 hover:to-slate-600/50;
+    @apply hover:bg-gradient-to-br hover:from-slate-700/80 hover:to-slate-600/60;
   }
 }
 
