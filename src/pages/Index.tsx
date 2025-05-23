@@ -9,7 +9,7 @@ const Index = () => {
   const { questionsCompleted } = useQuiz();
   
   return (
-    <div className="min-h-screen py-8 bg-gradient-to-br from-primary/5 via-background to-accent/10 dark:from-slate-900/80 dark:via-slate-800/60 dark:to-indigo-900/40">
+    <div className="min-h-screen py-8 bg-gradient-to-br from-primary/8 via-background to-purple-500/8 dark:from-indigo-950/90 dark:via-purple-950/70 dark:to-violet-900/80">
       {/* Sticky controls at the top like in the Profile page */}
       <div className="sticky top-0 left-0 right-0 z-50 flex justify-between items-center w-full p-4">
         <div>
