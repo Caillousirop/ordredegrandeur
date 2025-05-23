@@ -43,10 +43,10 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
           <Card 
             key={theme.id}
             className={cn(
-              "cursor-pointer transition-all hover:shadow-md",
+              "cursor-pointer transition-all hover:shadow-md overflow-hidden",
               selectedTheme?.id === theme.id 
                 ? "ring-2 ring-primary/70 shadow-md" 
-                : "hover:bg-accent/10"
+                : "hover:bg-accent/10 dark:hover:bg-gradient-to-br dark:hover:from-slate-700/70 dark:hover:to-slate-600/50"
             )}
             onClick={() => onSelectTheme(theme)}
           >
@@ -56,7 +56,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ onSelectTheme, selectedTh
                 <CardTitle className="text-white">{theme.name}</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="p-4">
+            <CardContent className="p-4 dark:bg-gradient-to-br dark:from-slate-800/60 dark:to-slate-700/40 dark:border-slate-600/30">
               <p className="text-sm text-muted-foreground">{theme.description}</p>
             </CardContent>
           </Card>

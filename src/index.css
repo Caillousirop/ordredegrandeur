@@ -95,6 +95,15 @@
   .dark-transition {
     @apply transition-all duration-300;
   }
+  
+  /* Enhanced card styling for dark mode */
+  .dark .card-content-dark {
+    @apply bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-slate-600/30;
+  }
+  
+  .dark .card-hover-dark {
+    @apply hover:bg-gradient-to-br hover:from-slate-700/70 hover:to-slate-600/50;
+  }
 }
 
 /* Add dark mode animations */
