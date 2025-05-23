@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
@@ -44,7 +45,7 @@ export const useQuiz = () => {
       console.log(`After type filter, questions count: ${filtered.length}`);
     }
     
-    // Apply search filter if there's a query
+    // Apply search filter ONLY if there's a non-empty query
     if (searchQuery && searchQuery.trim() !== "") {
       const lowerCaseQuery = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(q => 
