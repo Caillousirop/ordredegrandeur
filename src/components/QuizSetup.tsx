@@ -5,7 +5,8 @@ import { ArrowRight } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import QuestionTypeSelector from "./QuestionTypeSelector";
 import SearchBar from "./SearchBar";
-import { QuizTheme } from "./types";
+import SearchResults from "./SearchResults";
+import { QuizTheme, Question, MultiStepQuestion } from "./types";
 
 interface QuizSetupProps {
   onSearch: (query: string) => void;
@@ -15,6 +16,8 @@ interface QuizSetupProps {
   selectedTheme: QuizTheme | null;
   selectedType: "simple" | "multistep" | "all";
   filteredQuestionsCount: number;
+  searchQuery: string;
+  searchResults: (Question | MultiStepQuestion)[];
 }
 
 const QuizSetup: React.FC<QuizSetupProps> = ({
@@ -24,7 +27,9 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
   onStartQuiz,
   selectedTheme,
   selectedType,
-  filteredQuestionsCount
+  filteredQuestionsCount,
+  searchQuery,
+  searchResults
 }) => {
   return (
     <div className="space-y-6">
@@ -50,10 +55,16 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
         </Button>
       </div>
       
-      {/* Moved search bar below the button */}
+      {/* Search bar below the button */}
       <div className="mt-4 flex justify-center">
         <SearchBar onSearch={onSearch} />
       </div>
+      
+      {/* Search results below the search bar */}
+      <SearchResults 
+        searchQuery={searchQuery}
+        searchResults={searchResults}
+      />
     </div>
   );
 };

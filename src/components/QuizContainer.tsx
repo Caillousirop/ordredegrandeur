@@ -15,6 +15,8 @@ const QuizContainer: React.FC = () => {
     selectedTheme,
     selectedType,
     questionsCompleted,
+    searchQuery,
+    searchResults,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,
@@ -38,6 +40,8 @@ const QuizContainer: React.FC = () => {
         selectedTheme={selectedTheme}
         selectedType={selectedType}
         questionsCompleted={questionsCompleted}
+        searchQuery={searchQuery}
+        searchResults={searchResults}
         handleSearch={handleSearch}
         handleThemeSelect={handleThemeSelect}
         handleTypeSelect={handleTypeSelect}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
@@ -13,21 +12,13 @@ export const useQuiz = () => {
   const [selectedTheme, setSelectedTheme] = useState<QuizTheme | null>(null);
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
 
-  // Filter questions based on theme, type, and search query
+  // Filter questions based on theme and type (not search)
   useEffect(() => {
-    console.log("Filtering with search query:", searchQuery);
-    console.log("Current theme:", selectedTheme?.id);
-    console.log("Current type:", selectedType);
+    console.log("Filtering with theme:", selectedTheme?.id);
+    console.log("Filtering with type:", selectedType);
     console.log("Total questions available:", questions.length);
-    
-    // Log theme counts for debugging
-    const themeCounts: Record<string, number> = {};
-    questions.forEach(q => {
-      if (!themeCounts[q.theme]) themeCounts[q.theme] = 0;
-      themeCounts[q.theme]++;
-    });
-    console.log("Questions per theme:", themeCounts);
     
     // Start with all questions
     let filtered = [...questions];
@@ -45,15 +36,6 @@ export const useQuiz = () => {
       console.log(`After type filter, questions count: ${filtered.length}`);
     }
     
-    // Apply search filter ONLY if there's a non-empty query
-    if (searchQuery && searchQuery.trim() !== "") {
-      const lowerCaseQuery = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(q => 
-        q.question.toLowerCase().includes(lowerCaseQuery)
-      );
-      console.log("After search filter, questions count:", filtered.length);
-    }
-    
     // For random theme, just shuffle the questions
     if (selectedTheme && selectedTheme.id === "random") {
       filtered = filtered.sort(() => Math.random() - 0.5);
@@ -62,7 +44,21 @@ export const useQuiz = () => {
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, searchQuery]);
+  }, [selectedTheme, selectedType]);
+
+  // Handle search separately
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim() !== "") {
+      const lowerCaseQuery = searchQuery.toLowerCase().trim();
+      const results = questions.filter(q => 
+        q.question.toLowerCase().includes(lowerCaseQuery)
+      );
+      console.log("Search results for:", searchQuery, "found:", results.length);
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   const handleSearch = (query: string) => {
     console.log("Search query received:", query);
@@ -158,6 +154,7 @@ export const useQuiz = () => {
     questionsCompleted,
     scores,
     searchQuery,
+    searchResults,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,
