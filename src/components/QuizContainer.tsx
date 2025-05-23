@@ -8,8 +8,6 @@ import QuizTabs from "./QuizTabs";
 const QuizContainer: React.FC = () => {
   const {
     filteredQuestions,
-    searchResults,
-    searchQuery,
     currentQuestion,
     isMultiStep,
     activeTab,
@@ -35,8 +33,6 @@ const QuizContainer: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         filteredQuestions={filteredQuestions}
-        searchResults={searchResults}
-        searchQuery={searchQuery}
         currentQuestion={currentQuestion}
         isMultiStep={isMultiStep}
         selectedTheme={selectedTheme}

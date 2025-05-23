@@ -5,14 +5,12 @@ import { Badge } from "./ui/badge";
 import { HelpCircle, Search } from "lucide-react";
 import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
-import { QuizTheme, Question, MultiStepQuestion } from "./types";
+import { QuizTheme } from "./types";
 
 interface QuizTabsProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   filteredQuestions: any[];
-  searchResults: (Question | MultiStepQuestion)[];
-  searchQuery: string;
   currentQuestion: any;
   isMultiStep: boolean;
   selectedTheme: QuizTheme | null;
@@ -30,8 +28,6 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   activeTab,
   setActiveTab,
   filteredQuestions,
-  searchResults,
-  searchQuery,
   currentQuestion,
   isMultiStep,
   selectedTheme,
@@ -72,8 +68,6 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
           selectedTheme={selectedTheme}
           selectedType={selectedType}
           filteredQuestionsCount={filteredQuestions.length}
-          searchResults={searchResults}
-          searchQuery={searchQuery}
         />
       </TabsContent>
       
