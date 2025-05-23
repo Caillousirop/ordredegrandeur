@@ -54,7 +54,7 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
         </TabsTrigger>
         <TabsTrigger value="questions" disabled={filteredQuestions.length === 0} className="flex items-center gap-2">
           <HelpCircle size={16} />
-          Question aléatoire
+          <span className="whitespace-nowrap">Questions aléatoires</span>
           <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
         </TabsTrigger>
       </TabsList>
