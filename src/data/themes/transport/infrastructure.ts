@@ -101,7 +101,6 @@ export const infrastructureTransportQuestions: (Question | MultiStepQuestion)[] 
       }
     ]
   },
-  // Remove duplicate about autoroute network since it exists in general.ts (ID: 4)
   {
     id: "trans-105",
     type: "simple",
@@ -111,5 +110,4 @@ export const infrastructureTransportQuestions: (Question | MultiStepQuestion)[] 
     explanation: "Le réseau ferroviaire français comptait environ 29 000 kilomètres de voies ferrées en 2023.",
     theme: "transport"
   }
-  // Removing duplicate question about autoroutes (ID: trans-109) as it's redundant with ID: 4
 ];

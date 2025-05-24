@@ -132,8 +132,8 @@ export const economicTransportQuestions: (Question | MultiStepQuestion)[] = [
     id: "trans-106",
     type: "simple",
     question: "Quel est le nombre annuel de passagers transportés par les aéroports français ?",
-    correctAnswer: 174,
-    unit: "millions",
+    correctAnswer: 174000000,
+    unit: "passagers",
     explanation: "Les aéroports français accueillent environ 174 millions de passagers par an (avant la crise du COVID-19).",
     theme: "transport"
   },

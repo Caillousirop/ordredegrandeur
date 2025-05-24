@@ -88,11 +88,13 @@ export const insoliteTerreEspaceQuestions: MultiStepQuestion[] = [
       {
         question: "Combien y a-t-il de molécules dans une respiration humaine (0,5 L) ?",
         correctAnswer: 12000000000000000000000,
+        unit: "molécules",
         explanation: "Une respiration contient environ 1,2 × 10²² molécules d'air."
       },
       {
         question: "Combien y a-t-il d'étoiles dans la Voie lactée ?",
         correctAnswer: 100000000000,
+        unit: "étoiles",
         explanation: "La Voie lactée contient environ 100 milliards d'étoiles, soit 1 × 10¹¹."
       },
       {
@@ -112,6 +114,7 @@ export const insoliteTerreEspaceQuestions: MultiStepQuestion[] = [
       {
         question: "Quelle est la population mondiale actuelle ?",
         correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes."
       },
       {
