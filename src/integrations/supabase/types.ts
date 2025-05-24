@@ -9,7 +9,110 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      Content: {
+        Row: {
+          Comment: string | null
+          created_at: string
+          id: number
+        }
+        Insert: {
+          Comment?: string | null
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          Comment?: string | null
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      daily_questions: {
+        Row: {
+          correct_answer: number
+          created_at: string
+          date: string
+          explanation: string | null
+          id: string
+          question: string
+          theme: string
+          unit: string | null
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string
+          date: string
+          explanation?: string | null
+          id?: string
+          question: string
+          theme: string
+          unit?: string | null
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string
+          date?: string
+          explanation?: string | null
+          id?: string
+          question?: string
+          theme?: string
+          unit?: string | null
+        }
+        Relationships: []
+      }
+      daily_responses: {
+        Row: {
+          accuracy: number
+          answered_at: string
+          daily_question_id: string
+          id: string
+          user_answer: number
+          user_id: string
+        }
+        Insert: {
+          accuracy: number
+          answered_at?: string
+          daily_question_id: string
+          id?: string
+          user_answer: number
+          user_id: string
+        }
+        Update: {
+          accuracy?: number
+          answered_at?: string
+          daily_question_id?: string
+          id?: string
+          user_answer?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_responses_daily_question_id_fkey"
+            columns: ["daily_question_id"]
+            isOneToOne: false
+            referencedRelation: "daily_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
