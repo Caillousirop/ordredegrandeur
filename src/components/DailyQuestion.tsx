@@ -173,13 +173,13 @@ const DailyQuestion = () => {
 
   if (!dailyQuestion) {
     return (
-      <Card className="w-full">
+      <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
             <Calendar className="h-5 w-5" />
             Question du Jour
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-blue-600 dark:text-blue-300">
             Aucune question disponible pour aujourd'hui
           </CardDescription>
         </CardHeader>
@@ -189,24 +189,15 @@ const DailyQuestion = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="w-full">
+      <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200 text-xl">
+            <Calendar className="h-6 w-6" />
             Question du Jour
-            <Badge variant="outline">{dailyQuestion.theme}</Badge>
           </CardTitle>
-          <CardDescription>
-            {new Date(dailyQuestion.date).toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-lg font-medium">{dailyQuestion.question}</p>
+          <p className="text-lg font-medium text-blue-900 dark:text-blue-100">{dailyQuestion.question}</p>
 
           {!userResponse && user && (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -218,16 +209,17 @@ const DailyQuestion = () => {
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   required
+                  className="bg-white dark:bg-gray-800"
                 />
                 {dailyQuestion.unit && (
-                  <div className="flex items-center px-3 bg-muted rounded-md">
-                    <span className="text-sm text-muted-foreground">
+                  <div className="flex items-center px-3 bg-blue-100 dark:bg-blue-800 rounded-md">
+                    <span className="text-sm text-blue-700 dark:text-blue-300">
                       {dailyQuestion.unit}
                     </span>
                   </div>
                 )}
               </div>
-              <Button type="submit" disabled={loading} className="w-full">
+              <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700">
                 {loading ? "Envoi..." : "Valider ma réponse"}
               </Button>
             </form>
@@ -235,9 +227,9 @@ const DailyQuestion = () => {
 
           {userResponse && (
             <div className="space-y-3">
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="font-medium">Votre réponse: {userResponse.user_answer} {dailyQuestion.unit}</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="p-4 bg-blue-100 dark:bg-blue-800 rounded-lg">
+                <p className="font-medium text-blue-900 dark:text-blue-100">Votre réponse: {userResponse.user_answer} {dailyQuestion.unit}</p>
+                <p className="text-sm text-blue-700 dark:text-blue-300">
                   Précision: {userResponse.accuracy}%
                 </p>
               </div>
@@ -258,17 +250,20 @@ const DailyQuestion = () => {
           )}
 
           {!user && (
-            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <p className="text-blue-800 dark:text-blue-200">
-                Connectez-vous pour participer à la question du jour et voir le classement !
+            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+              <p className="text-orange-800 dark:text-orange-200 font-medium">
+                Vous pouvez répondre sans vous connecter !
+              </p>
+              <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
+                Connectez-vous pour voir le classement et suivre vos progrès.
               </p>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Leaderboard */}
-      {leaderboard.length > 0 && (
+      {/* Leaderboard - only shown to authenticated users */}
+      {user && leaderboard.length > 0 && (
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

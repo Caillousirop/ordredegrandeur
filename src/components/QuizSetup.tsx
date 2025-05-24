@@ -1,15 +1,13 @@
 
 import React from "react";
 import { Button } from "./ui/button";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import QuestionTypeSelector from "./QuestionTypeSelector";
 import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
 import DailyQuestion from "./DailyQuestion";
 import { QuizTheme, Question, MultiStepQuestion } from "./types";
-import { useAuth } from "@/hooks/useAuth";
-import { Link } from "react-router-dom";
 
 interface QuizSetupProps {
   onSearch: (query: string) => void;
@@ -34,33 +32,12 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
   searchQuery,
   searchResults
 }) => {
-  const { user } = useAuth();
-
   return (
     <div className="space-y-6">
       {/* Daily Question Section */}
       <div className="mb-8">
         <DailyQuestion />
       </div>
-
-      {/* Auth prompt for non-logged users */}
-      {!user && (
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-blue-800 dark:text-blue-200">
-                Participez à la question du jour !
-              </h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
-                Connectez-vous pour répondre et voir votre classement
-              </p>
-            </div>
-            <Button asChild size="sm">
-              <Link to="/auth">Se connecter</Link>
-            </Button>
-          </div>
-        </div>
-      )}
 
       <ThemeSelector 
         onSelectTheme={onSelectTheme} 

@@ -36,39 +36,50 @@ const UserSpace: React.FC<UserSpaceProps> = ({
     navigate("/");
   };
 
-  if (!user) {
-    return (
-      <Button variant="outline" asChild className="flex items-center gap-2 rounded-full py-1 px-3">
-        <Link to="/auth">
-          <LogIn className="h-4 w-4" />
-          <span className="font-medium text-sm">Se connecter</span>
-        </Link>
-      </Button>
-    );
-  }
-
   return (
     <div className="flex items-center space-x-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 rounded-full py-1 px-3">
-            <UserLevelBadge level={userLevel} />
-            <span className="font-medium text-sm hidden md:inline">{questionsCompleted} pts</span>
+            <UserRound className="h-4 w-4" />
+            {user ? (
+              <>
+                <UserLevelBadge level={userLevel} />
+                <span className="font-medium text-sm hidden md:inline">{questionsCompleted} pts</span>
+              </>
+            ) : (
+              <span className="font-medium text-sm">Profil</span>
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Niveau {userLevel}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
-            <Link to="/profile" className="flex items-center w-full">
-              <span>Profil & Résultats</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Se déconnecter</span>
-          </DropdownMenuItem>
+          {user ? (
+            <>
+              <DropdownMenuLabel>Niveau {userLevel}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link to="/profile" className="flex items-center w-full">
+                  <span>Profil & Résultats</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Se déconnecter</span>
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuLabel>Non connecté</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link to="/auth" className="flex items-center w-full">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>Se connecter</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
