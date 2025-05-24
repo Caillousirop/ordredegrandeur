@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { calculateAccuracy } from "@/components/quiz/CalculateAccuracy";
+import AccuracyGauge from "@/components/AccuracyGauge";
 
 interface DailyQuestion {
   id: string;
@@ -232,13 +233,12 @@ const DailyQuestion = () => {
           )}
 
           {userResponse && (
-            <div className="space-y-3">
-              <div className="p-4 bg-blue-100 dark:bg-blue-800 rounded-lg">
-                <p className="font-medium text-blue-900 dark:text-blue-100">Votre réponse: {userResponse.user_answer} {dailyQuestion.unit}</p>
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  Précision: {userResponse.accuracy}%
-                </p>
-              </div>
+            <div className="space-y-4">
+              <AccuracyGauge 
+                userAnswer={userResponse.user_answer} 
+                correctAnswer={dailyQuestion.correct_answer} 
+                answerSubmitted={true}
+              />
             </div>
           )}
 
@@ -252,17 +252,6 @@ const DailyQuestion = () => {
                   {dailyQuestion.explanation}
                 </p>
               </div>
-            </div>
-          )}
-
-          {!user && (
-            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
-              <p className="text-orange-800 dark:text-orange-200 font-medium">
-                🎯 Répondez librement à la question !
-              </p>
-              <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
-                Connectez-vous pour voir le classement et suivre vos progrès sur le long terme.
-              </p>
             </div>
           )}
         </CardContent>
