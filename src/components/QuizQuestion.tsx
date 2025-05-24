@@ -76,9 +76,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
           {question.question}
         </CardTitle>
-        <CardDescription>
-          {question.unit ? `${question.unit}` : ""}
-        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 pt-6">
         {!submitted ? (
@@ -91,9 +88,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 placeholder="Votre réponse"
                 className="flex-grow"
               />
-              {question.unit && (
-                <span className="text-sm text-muted-foreground">{question.unit}</span>
-              )}
             </div>
             <Button type="submit" className="w-full">Valider</Button>
           </form>
@@ -129,6 +123,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                   <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
                     <p className="font-medium">Explication:</p>
                     <p>{question.explanation}</p>
+                    {question.unit && (
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Réponse: {question.correctAnswer.toLocaleString()} {question.unit}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

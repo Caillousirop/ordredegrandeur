@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -218,13 +217,6 @@ const DailyQuestion = () => {
                   required
                   className="bg-white dark:bg-gray-800"
                 />
-                {dailyQuestion.unit && (
-                  <div className="flex items-center px-3 bg-blue-100 dark:bg-blue-800 rounded-md">
-                    <span className="text-sm text-blue-700 dark:text-blue-300">
-                      {dailyQuestion.unit}
-                    </span>
-                  </div>
-                )}
               </div>
               <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700">
                 {loading ? "Envoi..." : "Valider ma réponse"}

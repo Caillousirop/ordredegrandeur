@@ -50,9 +50,6 @@ const QuizStep: React.FC<QuizStepProps> = ({
                 placeholder="Réponse" 
                 className="flex-grow" 
               />
-              {step.unit && (
-                <span className="text-sm text-muted-foreground">{step.unit}</span>
-              )}
             </div>
             <Button type="submit" className="w-full">Valider</Button>
           </form>
@@ -64,6 +61,11 @@ const QuizStep: React.FC<QuizStepProps> = ({
               <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
                 <p className="font-medium">Explication:</p>
                 <p>{step.explanation}</p>
+                {step.unit && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Réponse: {step.correctAnswer.toLocaleString()} {step.unit}
+                  </p>
+                )}
               </div>
             )}
           </div>
