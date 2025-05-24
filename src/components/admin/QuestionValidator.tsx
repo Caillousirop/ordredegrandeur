@@ -4,14 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertTriangle, CheckCircle, Download, Wand2, Target } from "lucide-react";
+import { AlertTriangle, CheckCircle, Download, Wand2, Target, RefreshCw } from "lucide-react";
 import { questions } from "@/data/themes";
-import { themes } from "@/data/themes";
 import { 
   analyzeQuestions, 
   generateCorrectionReport, 
   applyCorrectionsByTheme,
-  getCorrectionStatsByTheme 
+  getCorrectionStatsByTheme,
+  normalizeThemeName,
+  applyCorrectionsAndSave
 } from "@/utils/questionValidator";
 import { toast } from "sonner";
 
@@ -21,14 +22,15 @@ const QuestionValidator = () => {
   const [isApplyingCorrections, setIsApplyingCorrections] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<string>("");
   const [themeStats, setThemeStats] = useState<any>(null);
+  const [correctedQuestions, setCorrectedQuestions] = useState<any[]>(questions);
 
   const handleAnalyze = () => {
     setIsAnalyzing(true);
     toast.info("Analyse en cours...");
     
     setTimeout(() => {
-      const result = analyzeQuestions(questions);
-      const stats = getCorrectionStatsByTheme(questions);
+      const result = analyzeQuestions(correctedQuestions);
+      const stats = getCorrectionStatsByTheme(correctedQuestions);
       setAnalysis(result);
       setThemeStats(stats);
       setIsAnalyzing(false);
@@ -42,7 +44,7 @@ const QuestionValidator = () => {
   };
 
   const handleGenerateReport = () => {
-    const report = generateCorrectionReport(questions);
+    const report = generateCorrectionReport(correctedQuestions);
     const blob = new Blob([report], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -62,30 +64,41 @@ const QuestionValidator = () => {
     }
 
     setIsApplyingCorrections(true);
-    const themeProblems = themeStats[selectedTheme]?.problematic || 0;
-    toast.info(`Application des corrections pour le thème "${selectedTheme}" (${themeProblems} problèmes)...`);
+    const normalizedTheme = normalizeThemeName(selectedTheme);
+    const themeProblems = themeStats[normalizedTheme]?.problematic || 0;
+    toast.info(`Application des corrections pour le thème "${normalizedTheme}" (${themeProblems} problèmes)...`);
 
     setTimeout(() => {
-      const correctedQuestions = applyCorrectionsByTheme(questions, selectedTheme);
+      // Appliquer les corrections et sauvegarder
+      const newCorrectedQuestions = applyCorrectionsAndSave(correctedQuestions, selectedTheme);
+      setCorrectedQuestions(newCorrectedQuestions);
       
-      console.log(`=== CORRECTIONS APPLIQUÉES POUR LE THÈME: ${selectedTheme} ===`);
-      console.log("Questions corrigées:", correctedQuestions.filter(q => q.theme === selectedTheme));
+      console.log(`=== CORRECTIONS APPLIQUÉES ET SAUVEGARDÉES POUR LE THÈME: ${normalizedTheme} ===`);
+      console.log("Questions corrigées:", newCorrectedQuestions.filter(q => normalizeThemeName(q.theme) === normalizedTheme));
       
       // Relancer l'analyse pour vérifier
-      const newAnalysis = analyzeQuestions(correctedQuestions);
-      const newStats = getCorrectionStatsByTheme(correctedQuestions);
+      const newAnalysis = analyzeQuestions(newCorrectedQuestions);
+      const newStats = getCorrectionStatsByTheme(newCorrectedQuestions);
       setAnalysis(newAnalysis);
       setThemeStats(newStats);
       setIsApplyingCorrections(false);
       
-      const remainingProblemsForTheme = newStats[selectedTheme]?.problematic || 0;
+      const remainingProblemsForTheme = newStats[normalizedTheme]?.problematic || 0;
       
       if (remainingProblemsForTheme === 0) {
-        toast.success(`Thème "${selectedTheme}" corrigé avec succès !`);
+        toast.success(`Thème "${normalizedTheme}" corrigé avec succès et sauvegardé !`);
       } else {
-        toast.warning(`${remainingProblemsForTheme} problèmes restants pour le thème "${selectedTheme}"`);
+        toast.warning(`${remainingProblemsForTheme} problèmes restants pour le thème "${normalizedTheme}"`);
       }
     }, 2000);
+  };
+
+  const handleResetToOriginal = () => {
+    setCorrectedQuestions([...questions]);
+    setAnalysis(null);
+    setThemeStats(null);
+    setSelectedTheme("");
+    toast.info("Questions remises à l'état original");
   };
 
   return (
@@ -104,6 +117,15 @@ const QuestionValidator = () => {
             className="flex items-center gap-2"
           >
             {isAnalyzing ? "Analyse..." : "Analyser les questions"}
+          </Button>
+          
+          <Button 
+            onClick={handleResetToOriginal}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Remettre à zéro
           </Button>
           
           {analysis && (
@@ -206,7 +228,7 @@ const QuestionValidator = () => {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{questions.length}</div>
+                    <div className="text-2xl font-bold">{correctedQuestions.length}</div>
                     <div className="text-sm text-muted-foreground">Questions totales</div>
                   </div>
                 </CardContent>
@@ -227,7 +249,7 @@ const QuestionValidator = () => {
                 <CardContent className="pt-6">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
-                      {((questions.length - analysis.totalProblems) / questions.length * 100).toFixed(1)}%
+                      {((correctedQuestions.length - analysis.totalProblems) / correctedQuestions.length * 100).toFixed(1)}%
                     </div>
                     <div className="text-sm text-muted-foreground">Questions correctes</div>
                   </div>
@@ -245,7 +267,7 @@ const QuestionValidator = () => {
                         <div className="flex justify-between items-start gap-4">
                           <div className="flex-1">
                             <Badge variant="outline" className="mb-2">
-                              {prob.type} - {prob.id} - {prob.unit}
+                              {prob.type} - {prob.id} - {prob.theme}
                             </Badge>
                             <p className="text-sm font-medium mb-2">{prob.question}</p>
                             <div className="text-xs text-muted-foreground space-y-1">
