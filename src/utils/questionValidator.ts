@@ -43,12 +43,44 @@ export const detectAbbreviatedValue = (correctAnswer: number, unit?: string): {
   }
 
   // Cas spéciaux pour les unités monétaires
-  if (unitLower.includes('milliards €') || unitLower.includes('milliards d\'euros')) {
+  if (unitLower.includes('milliards €') || unitLower.includes('milliards d\'euros') || unitLower.includes('milliards euros')) {
     if (correctAnswer < 10000) {
       return {
         isAbbreviated: true,
         suggestedValue: correctAnswer * 1000000000,
         multiplier: 1000000000
+      };
+    }
+  }
+
+  if (unitLower.includes('millions €') || unitLower.includes('millions d\'euros') || unitLower.includes('millions euros')) {
+    if (correctAnswer < 10000) {
+      return {
+        isAbbreviated: true,
+        suggestedValue: correctAnswer * 1000000,
+        multiplier: 1000000
+      };
+    }
+  }
+
+  // Cas pour les valeurs avec "millions de" dans l'unité
+  if (unitLower.includes('millions de') || unitLower.includes('millions d\'')) {
+    if (correctAnswer < 1000) {
+      return {
+        isAbbreviated: true,
+        suggestedValue: correctAnswer * 1000000,
+        multiplier: 1000000
+      };
+    }
+  }
+
+  // Cas pour les valeurs avec "milliers de" dans l'unité  
+  if (unitLower.includes('milliers de') || unitLower.includes('milliers d\'')) {
+    if (correctAnswer < 1000) {
+      return {
+        isAbbreviated: true,
+        suggestedValue: correctAnswer * 1000,
+        multiplier: 1000
       };
     }
   }
@@ -162,7 +194,7 @@ export const fixAllQuestions = (questions: (Question | MultiStepQuestion)[]): (Q
   });
 };
 
-// Fonction pour générer un rapport de correction
+// Fonction pour générer un rapport de correction détaillé
 export const generateCorrectionReport = (questions: (Question | MultiStepQuestion)[]): string => {
   const analysis = analyzeQuestions(questions);
   
@@ -192,4 +224,58 @@ export const generateCorrectionReport = (questions: (Question | MultiStepQuestio
   }
   
   return report;
+};
+
+// Fonction pour appliquer les corrections à un ensemble de questions spécifique
+export const applyCorrectionsByTheme = (questions: (Question | MultiStepQuestion)[], theme: string): (Question | MultiStepQuestion)[] => {
+  return questions.map(q => {
+    if (q.theme === theme) {
+      if (q.type === 'simple') {
+        return fixSimpleQuestion(q);
+      } else {
+        return fixMultiStepQuestion(q);
+      }
+    }
+    return q;
+  });
+};
+
+// Fonction pour obtenir les statistiques de correction par thème
+export const getCorrectionStatsByTheme = (questions: (Question | MultiStepQuestion)[]): Record<string, {
+  total: number;
+  problematic: number;
+  percentage: number;
+}> => {
+  const stats: Record<string, { total: number; problematic: number; percentage: number }> = {};
+  
+  questions.forEach(q => {
+    if (!stats[q.theme]) {
+      stats[q.theme] = { total: 0, problematic: 0, percentage: 0 };
+    }
+    stats[q.theme].total++;
+    
+    if (q.type === 'simple') {
+      const detection = detectAbbreviatedValue(q.correctAnswer, q.unit);
+      if (detection.isAbbreviated) {
+        stats[q.theme].problematic++;
+      }
+    } else if (q.type === 'multistep') {
+      let hasProblems = false;
+      q.steps.forEach(step => {
+        const detection = detectAbbreviatedValue(step.correctAnswer, step.unit);
+        if (detection.isAbbreviated) {
+          hasProblems = true;
+        }
+      });
+      if (hasProblems) {
+        stats[q.theme].problematic++;
+      }
+    }
+  });
+  
+  Object.keys(stats).forEach(theme => {
+    stats[theme].percentage = (stats[theme].problematic / stats[theme].total) * 100;
+  });
+  
+  return stats;
 };
