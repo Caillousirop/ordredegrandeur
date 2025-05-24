@@ -29,7 +29,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({
   const navigate = useNavigate();
 
   // Mock user level - in a real app, this would come from the user's state
-  const userLevel = Math.max(1, Math.floor(questionsCompleted / 5));
+  const userLevel = user ? Math.max(1, Math.floor(questionsCompleted / 5)) : 1;
 
   const handleSignOut = async () => {
     await signOut();
@@ -40,40 +40,52 @@ const UserSpace: React.FC<UserSpaceProps> = ({
     <div className="flex items-center space-x-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="flex items-center gap-2 rounded-full py-1 px-3">
-            <UserRound className="h-4 w-4" />
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-2 rounded-full py-1 px-3 bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 border-orange-300 dark:border-orange-700 hover:from-orange-200 hover:to-orange-300 dark:hover:from-orange-800/40 dark:hover:to-orange-700/40"
+          >
+            <UserRound className="h-4 w-4 text-orange-700 dark:text-orange-300" />
             {user ? (
               <>
                 <UserLevelBadge level={userLevel} />
-                <span className="font-medium text-sm hidden md:inline">{questionsCompleted} pts</span>
+                <span className="font-medium text-sm hidden md:inline text-orange-800 dark:text-orange-200">{questionsCompleted} pts</span>
               </>
             ) : (
-              <span className="font-medium text-sm">Profil</span>
+              <>
+                <UserLevelBadge level={1} />
+                <span className="font-medium text-sm text-orange-800 dark:text-orange-200">Profil</span>
+              </>
             )}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-700">
           {user ? (
             <>
-              <DropdownMenuLabel>Niveau {userLevel}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Link to="/profile" className="flex items-center w-full">
+              <DropdownMenuLabel className="text-orange-800 dark:text-orange-200">Niveau {userLevel}</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-orange-200 dark:bg-orange-700" />
+              <DropdownMenuItem className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-800/30">
+                <Link to="/profile" className="flex items-center w-full text-orange-700 dark:text-orange-300">
                   <span>Profil & Résultats</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Se déconnecter</span>
+              <DropdownMenuSeparator className="bg-orange-200 dark:bg-orange-700" />
+              <DropdownMenuItem className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-800/30" onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4 text-orange-700 dark:text-orange-300" />
+                <span className="text-orange-700 dark:text-orange-300">Se déconnecter</span>
               </DropdownMenuItem>
             </>
           ) : (
             <>
-              <DropdownMenuLabel>Non connecté</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Link to="/auth" className="flex items-center w-full">
+              <DropdownMenuLabel className="text-orange-800 dark:text-orange-200">Niveau 1 (Visiteur)</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-orange-200 dark:bg-orange-700" />
+              <DropdownMenuItem className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-800/30">
+                <Link to="/profile" className="flex items-center w-full text-orange-700 dark:text-orange-300">
+                  <span>Voir les récompenses</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-orange-200 dark:bg-orange-700" />
+              <DropdownMenuItem className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-800/30">
+                <Link to="/auth" className="flex items-center w-full text-orange-700 dark:text-orange-300">
                   <LogIn className="mr-2 h-4 w-4" />
                   <span>Se connecter</span>
                 </Link>

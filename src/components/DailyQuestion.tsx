@@ -120,7 +120,7 @@ const DailyQuestion = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dailyQuestion || !user || !answer) return;
+    if (!dailyQuestion || !answer) return;
 
     setLoading(true);
 
@@ -133,18 +133,23 @@ const DailyQuestion = () => {
 
       const accuracy = calculateAccuracy(numAnswer, dailyQuestion.correct_answer);
 
-      const { error } = await supabase
-        .from("daily_responses")
-        .insert({
-          user_id: user.id,
-          daily_question_id: dailyQuestion.id,
-          user_answer: numAnswer,
-          accuracy: accuracy
-        });
+      // Only save to database if user is logged in
+      if (user) {
+        const { error } = await supabase
+          .from("daily_responses")
+          .insert({
+            user_id: user.id,
+            daily_question_id: dailyQuestion.id,
+            user_answer: numAnswer,
+            accuracy: accuracy
+          });
 
-      if (error) {
-        toast.error("Erreur lors de l'enregistrement de votre réponse");
-        return;
+        if (error) {
+          toast.error("Erreur lors de l'enregistrement de votre réponse");
+          return;
+        }
+
+        fetchLeaderboard();
       }
 
       setUserResponse({
@@ -155,7 +160,6 @@ const DailyQuestion = () => {
       });
 
       setShowAnswer(true);
-      fetchLeaderboard();
 
       if (accuracy >= 80) {
         toast.success("🎉 Excellente réponse !");
@@ -190,16 +194,18 @@ const DailyQuestion = () => {
   return (
     <div className="space-y-6">
       <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200 text-xl">
-            <Calendar className="h-6 w-6" />
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200 text-2xl font-bold">
+            <Calendar className="h-7 w-7" />
             Question du Jour
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-lg font-medium text-blue-900 dark:text-blue-100">{dailyQuestion.question}</p>
+          <div className="bg-white/80 dark:bg-gray-800/80 p-4 rounded-lg border">
+            <p className="text-lg text-gray-800 dark:text-gray-200 leading-relaxed">{dailyQuestion.question}</p>
+          </div>
 
-          {!userResponse && user && (
+          {!userResponse && (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex gap-2">
                 <Input
@@ -252,10 +258,10 @@ const DailyQuestion = () => {
           {!user && (
             <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
               <p className="text-orange-800 dark:text-orange-200 font-medium">
-                Vous pouvez répondre sans vous connecter !
+                🎯 Répondez librement à la question !
               </p>
               <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
-                Connectez-vous pour voir le classement et suivre vos progrès.
+                Connectez-vous pour voir le classement et suivre vos progrès sur le long terme.
               </p>
             </div>
           )}
