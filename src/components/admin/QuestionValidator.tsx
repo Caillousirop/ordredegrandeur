@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, Download, Wand2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertTriangle, CheckCircle, Download, Wand2, Target } from "lucide-react";
 import { questions } from "@/data/themes";
+import { themes } from "@/data/themes";
 import { 
   analyzeQuestions, 
   generateCorrectionReport, 
-  fixAllQuestions 
+  applyCorrectionsByTheme,
+  getCorrectionStatsByTheme 
 } from "@/utils/questionValidator";
 import { toast } from "sonner";
 
@@ -16,15 +19,18 @@ const QuestionValidator = () => {
   const [analysis, setAnalysis] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isApplyingCorrections, setIsApplyingCorrections] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<string>("");
+  const [themeStats, setThemeStats] = useState<any>(null);
 
   const handleAnalyze = () => {
     setIsAnalyzing(true);
     toast.info("Analyse en cours...");
     
-    // Simulation d'un délai pour l'analyse
     setTimeout(() => {
       const result = analyzeQuestions(questions);
+      const stats = getCorrectionStatsByTheme(questions);
       setAnalysis(result);
+      setThemeStats(stats);
       setIsAnalyzing(false);
       
       if (result.totalProblems > 0) {
@@ -49,63 +55,37 @@ const QuestionValidator = () => {
     toast.success("Rapport téléchargé !");
   };
 
-  const handlePreviewCorrections = () => {
-    if (!analysis) return;
-    
-    console.log("=== APERÇU DES CORRECTIONS ===");
-    console.log("Questions problématiques:", analysis.problematicQuestions);
-    
-    const correctedQuestions = fixAllQuestions(questions);
-    console.log("Questions corrigées (échantillon):", correctedQuestions.slice(0, 5));
-    
-    toast.info("Aperçu des corrections affiché dans la console");
-  };
-
-  const handleApplyAllCorrections = () => {
-    if (!analysis || analysis.totalProblems === 0) {
-      toast.error("Aucune correction à appliquer");
+  const handleApplyCorrectionsByTheme = () => {
+    if (!selectedTheme) {
+      toast.error("Veuillez sélectionner un thème");
       return;
     }
 
     setIsApplyingCorrections(true);
-    toast.info(`Application de ${analysis.totalProblems} corrections...`);
+    const themeProblems = themeStats[selectedTheme]?.problematic || 0;
+    toast.info(`Application des corrections pour le thème "${selectedTheme}" (${themeProblems} problèmes)...`);
 
-    // Simulation de l'application des corrections
     setTimeout(() => {
-      const correctedQuestions = fixAllQuestions(questions);
+      const correctedQuestions = applyCorrectionsByTheme(questions, selectedTheme);
       
-      // Générer le code corrigé pour chaque fichier de thème
-      const correctedCode = generateCorrectedThemeFiles(correctedQuestions);
-      
-      console.log("=== CORRECTIONS APPLIQUÉES ===");
-      console.log("Code corrigé généré:", correctedCode);
+      console.log(`=== CORRECTIONS APPLIQUÉES POUR LE THÈME: ${selectedTheme} ===`);
+      console.log("Questions corrigées:", correctedQuestions.filter(q => q.theme === selectedTheme));
       
       // Relancer l'analyse pour vérifier
       const newAnalysis = analyzeQuestions(correctedQuestions);
+      const newStats = getCorrectionStatsByTheme(correctedQuestions);
       setAnalysis(newAnalysis);
+      setThemeStats(newStats);
       setIsApplyingCorrections(false);
       
-      if (newAnalysis.totalProblems === 0) {
-        toast.success("Toutes les corrections ont été appliquées avec succès !");
+      const remainingProblemsForTheme = newStats[selectedTheme]?.problematic || 0;
+      
+      if (remainingProblemsForTheme === 0) {
+        toast.success(`Thème "${selectedTheme}" corrigé avec succès !`);
       } else {
-        toast.warning(`${newAnalysis.totalProblems} problèmes restants après correction`);
+        toast.warning(`${remainingProblemsForTheme} problèmes restants pour le thème "${selectedTheme}"`);
       }
     }, 2000);
-  };
-
-  const generateCorrectedThemeFiles = (correctedQuestions: any[]) => {
-    // Cette fonction génère le code corrigé pour chaque fichier de thème
-    // En production, cela devrait effectivement écrire dans les fichiers
-    const themeFiles: Record<string, any[]> = {};
-    
-    correctedQuestions.forEach(q => {
-      if (!themeFiles[q.theme]) {
-        themeFiles[q.theme] = [];
-      }
-      themeFiles[q.theme].push(q);
-    });
-
-    return themeFiles;
   };
 
   return (
@@ -126,17 +106,6 @@ const QuestionValidator = () => {
             {isAnalyzing ? "Analyse..." : "Analyser les questions"}
           </Button>
           
-          {analysis && analysis.totalProblems > 0 && (
-            <Button 
-              onClick={handleApplyAllCorrections}
-              disabled={isApplyingCorrections}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
-            >
-              <Wand2 className="h-4 w-4" />
-              {isApplyingCorrections ? "Application..." : `Corriger automatiquement (${analysis.totalProblems})`}
-            </Button>
-          )}
-          
           {analysis && (
             <>
               <Button 
@@ -147,16 +116,89 @@ const QuestionValidator = () => {
                 <Download className="h-4 w-4" />
                 Télécharger le rapport
               </Button>
-              
-              <Button 
-                onClick={handlePreviewCorrections}
-                variant="outline"
-              >
-                Aperçu des corrections
-              </Button>
             </>
           )}
         </div>
+
+        {/* Correction par thème */}
+        {analysis && analysis.totalProblems > 0 && themeStats && (
+          <Card className="border-blue-200">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Target className="h-5 w-5" />
+                Correction par thème
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex gap-4 items-end">
+                <div className="flex-1">
+                  <label className="text-sm font-medium mb-2 block">Sélectionner un thème :</label>
+                  <Select value={selectedTheme} onValueChange={setSelectedTheme}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choisir un thème..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(themeStats)
+                        .filter(([_, stats]: [string, any]) => stats.problematic > 0)
+                        .map(([theme, stats]: [string, any]) => (
+                          <SelectItem key={theme} value={theme}>
+                            {theme} ({stats.problematic} problèmes sur {stats.total})
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button 
+                  onClick={handleApplyCorrectionsByTheme}
+                  disabled={isApplyingCorrections || !selectedTheme}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                >
+                  <Wand2 className="h-4 w-4" />
+                  {isApplyingCorrections ? "Correction..." : "Corriger ce thème"}
+                </Button>
+              </div>
+              
+              {selectedTheme && themeStats[selectedTheme] && (
+                <div className="text-sm text-muted-foreground">
+                  Thème sélectionné : <strong>{selectedTheme}</strong> - 
+                  {themeStats[selectedTheme].problematic} problèmes sur {themeStats[selectedTheme].total} questions
+                  ({themeStats[selectedTheme].percentage.toFixed(1)}%)
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Statistiques par thème */}
+        {themeStats && (
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Statistiques par thème :</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {Object.entries(themeStats).map(([theme, stats]: [string, any]) => (
+                <Card key={theme} className={stats.problematic > 0 ? "border-orange-200" : "border-green-200"}>
+                  <CardContent className="pt-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="font-medium">{theme}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {stats.total} questions
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge variant={stats.problematic > 0 ? "destructive" : "default"}>
+                          {stats.problematic} problèmes
+                        </Badge>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {stats.percentage.toFixed(1)}%
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {analysis && (
           <div className="space-y-4">
@@ -195,7 +237,7 @@ const QuestionValidator = () => {
 
             {analysis.problematicQuestions.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-3">Questions problématiques détectées :</h3>
+                <h3 className="text-lg font-semibold mb-3">Questions problématiques (10 premiers) :</h3>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {analysis.problematicQuestions.slice(0, 10).map((prob: any, index: number) => (
                     <Card key={index} className="border-orange-200">
@@ -203,13 +245,12 @@ const QuestionValidator = () => {
                         <div className="flex justify-between items-start gap-4">
                           <div className="flex-1">
                             <Badge variant="outline" className="mb-2">
-                              {prob.type} - ID: {prob.id}
+                              {prob.type} - {prob.id} - {prob.unit}
                             </Badge>
                             <p className="text-sm font-medium mb-2">{prob.question}</p>
                             <div className="text-xs text-muted-foreground space-y-1">
                               <div>Valeur actuelle: <span className="font-mono">{prob.currentValue}</span></div>
                               <div>Valeur suggérée: <span className="font-mono text-green-600">{prob.suggestedValue.toLocaleString()}</span></div>
-                              <div>Unité: {prob.unit}</div>
                             </div>
                           </div>
                           <AlertTriangle className="h-5 w-5 text-orange-500 flex-shrink-0" />
