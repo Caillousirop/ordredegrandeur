@@ -1,17 +1,15 @@
-
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "./ui/badge";
-import { HelpCircle, Search } from "lucide-react";
 import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
-import { QuizTheme, Question, MultiStepQuestion } from "./types";
+import { Question, MultiStepQuestion, QuizTheme } from "./types";
+import QuestionValidator from "./admin/QuestionValidator";
 
 interface QuizTabsProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  filteredQuestions: any[];
-  currentQuestion: any;
+  filteredQuestions: (Question | MultiStepQuestion)[];
+  currentQuestion: Question | MultiStepQuestion | undefined;
   isMultiStep: boolean;
   selectedTheme: QuizTheme | null;
   selectedType: "simple" | "multistep" | "all";
@@ -45,52 +43,43 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   startQuiz
 }) => {
   return (
-    <Tabs 
-      defaultValue="setup" 
-      value={activeTab} 
-      onValueChange={setActiveTab}
-      className="w-full"
-    >
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="setup" className="flex items-center gap-2">
-          <Search size={16} />
-          Configuration
-        </TabsTrigger>
-        <TabsTrigger value="questions" disabled={filteredQuestions.length === 0} className="flex items-center gap-2">
-          <HelpCircle size={16} />
-          <span className="whitespace-nowrap">Questions aléatoires</span>
-          <Badge variant="outline" className="ml-2">{filteredQuestions.length}</Badge>
-        </TabsTrigger>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <TabsList className="grid w-full grid-cols-4">
+        <TabsTrigger value="setup">Configuration</TabsTrigger>
+        <TabsTrigger value="questions">Questions</TabsTrigger>
+        <TabsTrigger value="scores">Scores</TabsTrigger>
+        <TabsTrigger value="validator">Validateur</TabsTrigger>
       </TabsList>
 
       <TabsContent value="setup" className="mt-6">
         <QuizSetup
-          onSearch={handleSearch}
-          onSelectTheme={handleThemeSelect}
-          onSelectType={handleTypeSelect}
-          onStartQuiz={startQuiz}
           selectedTheme={selectedTheme}
           selectedType={selectedType}
-          filteredQuestionsCount={filteredQuestions.length}
+          handleThemeSelect={handleThemeSelect}
+          handleTypeSelect={handleTypeSelect}
           searchQuery={searchQuery}
           searchResults={searchResults}
+          handleSearch={handleSearch}
+          startQuiz={startQuiz}
         />
       </TabsContent>
-      
-      <TabsContent value="questions" className="mt-8">
-        {filteredQuestions.length > 0 ? (
-          <QuizContent
-            question={currentQuestion}
-            isMultiStep={isMultiStep}
-            onNext={handleNext}
-            onScore={handleScore}
-            questionsCompleted={questionsCompleted}
-          />
-        ) : (
-          <div className="text-center p-8">
-            <p>Aucune question disponible.</p>
-          </div>
-        )}
+
+      <TabsContent value="questions" className="mt-6">
+        <QuizContent
+          currentQuestion={currentQuestion}
+          isMultiStep={isMultiStep}
+          questionsCompleted={questionsCompleted}
+          handleNext={handleNext}
+          handleScore={handleScore}
+        />
+      </TabsContent>
+
+      <TabsContent value="scores" className="mt-6">
+        <div>Scores</div>
+      </TabsContent>
+
+      <TabsContent value="validator" className="mt-6">
+        <QuestionValidator />
       </TabsContent>
     </Tabs>
   );
