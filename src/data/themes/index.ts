@@ -10,29 +10,56 @@ import { transportQuestions } from "./transport";
 import { insoliteQuestions } from "./insolite";
 import { QuizTheme } from "@/components/types";
 
-// Normaliser tous les thèmes pour éviter les doublons
-const normalizeQuestions = (questions: any[]) => {
-  return questions.map(q => ({
-    ...q,
-    theme: q.theme === "demographie" ? "démographie" : 
-           q.theme === "economie" ? "économie" : 
-           q.theme === "education" ? "éducation" : 
-           q.theme === "sante" ? "santé" : 
-           q.theme
-  }));
+// Normaliser tous les thèmes pour éviter les doublons et corriger les valeurs abrégées
+const normalizeAndFixQuestions = (questions: any[], targetTheme: string) => {
+  return questions.map(q => {
+    const fixedQuestion = { ...q, theme: targetTheme };
+    
+    if (q.type === "simple") {
+      // Corriger les valeurs abrégées pour les questions simples
+      if (q.unit && typeof q.correctAnswer === "number") {
+        const unit = q.unit.toLowerCase();
+        if ((unit.includes('millions') || unit.includes('million')) && q.correctAnswer < 1000) {
+          fixedQuestion.correctAnswer = q.correctAnswer * 1000000;
+        } else if ((unit.includes('milliards') || unit.includes('billion')) && q.correctAnswer < 1000) {
+          fixedQuestion.correctAnswer = q.correctAnswer * 1000000000;
+        } else if ((unit.includes('milliers') || unit.includes('thousand')) && q.correctAnswer < 100) {
+          fixedQuestion.correctAnswer = q.correctAnswer * 1000;
+        }
+      }
+    } else if (q.type === "multistep" && q.steps) {
+      // Corriger les valeurs abrégées pour les questions multi-étapes
+      fixedQuestion.steps = q.steps.map((step: any) => {
+        const fixedStep = { ...step };
+        if (step.unit && typeof step.correctAnswer === "number") {
+          const unit = step.unit.toLowerCase();
+          if ((unit.includes('millions') || unit.includes('million')) && step.correctAnswer < 1000) {
+            fixedStep.correctAnswer = step.correctAnswer * 1000000;
+          } else if ((unit.includes('milliards') || unit.includes('billion')) && step.correctAnswer < 1000) {
+            fixedStep.correctAnswer = step.correctAnswer * 1000000000;
+          } else if ((unit.includes('milliers') || unit.includes('thousand')) && step.correctAnswer < 100) {
+            fixedStep.correctAnswer = step.correctAnswer * 1000;
+          }
+        }
+        return fixedStep;
+      });
+    }
+    
+    return fixedQuestion;
+  });
 };
 
-// Combiner toutes les questions avec normalisation des thèmes
+// Combiner toutes les questions avec normalisation des thèmes et correction des valeurs
 export const questions = [
-  ...normalizeQuestions(demographieQuestions),
-  ...normalizeQuestions(economieQuestions),
-  ...normalizeQuestions(educationQuestions),
-  ...normalizeQuestions(environnementQuestions), 
-  ...normalizeQuestions(mondeQuestions),
-  ...normalizeQuestions(santeQuestions),
-  ...normalizeQuestions(technologieQuestions),
-  ...normalizeQuestions(transportQuestions),
-  ...normalizeQuestions(insoliteQuestions)
+  ...normalizeAndFixQuestions(demographieQuestions, "démographie"),
+  ...normalizeAndFixQuestions(economieQuestions, "économie"),
+  ...normalizeAndFixQuestions(educationQuestions, "éducation"),
+  ...normalizeAndFixQuestions(environnementQuestions, "environnement"), 
+  ...normalizeAndFixQuestions(mondeQuestions, "monde"),
+  ...normalizeAndFixQuestions(santeQuestions, "santé"),
+  ...normalizeAndFixQuestions(technologieQuestions, "technologie"),
+  ...normalizeAndFixQuestions(transportQuestions, "transport"),
+  ...normalizeAndFixQuestions(insoliteQuestions, "insolite")
 ];
 
 // Définir les thèmes disponibles avec noms normalisés
