@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 // Questions related to world population and demographics

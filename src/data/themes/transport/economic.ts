@@ -74,8 +74,8 @@ export const economicTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de taxis et VTC sont donc en activité dans les grandes villes françaises ?",
-        correctAnswer: 105,
-        unit: "milliers",
+        correctAnswer: 105000,
+        unit: "taxis et VTC",
         explanation: "En multipliant le nombre de grandes villes (42) par le nombre moyen de taxis (1 850) et en ajoutant 35% pour les VTC, on obtient environ 105 000 véhicules."
       }
     ]
@@ -98,8 +98,8 @@ export const economicTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Combien de véhicules particuliers circulent en France ?",
-        correctAnswer: 40,
-        unit: "millions",
+        correctAnswer: 40000000,
+        unit: "véhicules",
         explanation: "La France compte environ 40 millions de véhicules particuliers en circulation."
       },
       {
@@ -122,8 +122,8 @@ export const economicTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de litres de carburant sont donc consommés chaque jour ?",
-        correctAnswer: 64,
-        unit: "millions de litres",
+        correctAnswer: 64000000,
+        unit: "litres",
         explanation: "En multipliant le nombre de véhicules (40 millions) par le taux d'utilisation (80%) par la distance quotidienne (27 km) par la consommation (7,4 L/100km), on obtient environ 64 millions de litres par jour."
       }
     ]

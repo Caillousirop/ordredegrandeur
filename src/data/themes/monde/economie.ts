@@ -1,4 +1,3 @@
-
 import { Question, MultiStepQuestion } from "@/components/types";
 
 // Questions related to world economy and infrastructure
@@ -378,8 +377,8 @@ export const mondeEconomieQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population mondiale actuelle ?",
-        correctAnswer: 8000,
-        unit: "millions",
+        correctAnswer: 8000000000,
+        unit: "personnes",
         explanation: "La population mondiale est d'environ 8 milliards de personnes."
       },
       {
@@ -402,8 +401,8 @@ export const mondeEconomieQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien d'heures sont donc travaillées dans le monde chaque jour ?",
-        correctAnswer: 30.4,
-        unit: "milliards",
+        correctAnswer: 30400000000,
+        unit: "heures",
         explanation: "En multipliant la population mondiale (8 milliards) par le pourcentage en âge de travailler (65%) par le taux d'emploi (58%) par le nombre d'heures travaillées par jour (6,4), on obtient environ 30,4 milliards d'heures."
       }
     ]
