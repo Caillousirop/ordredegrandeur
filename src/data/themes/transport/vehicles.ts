@@ -56,8 +56,8 @@ export const vehiclesTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de kilomètres sont donc parcourus par les trains de marchandises chaque année ?",
-        correctAnswer: 36,
-        unit: "millions",
+        correctAnswer: 36000000,
+        unit: "kilomètres",
         explanation: "En multipliant le nombre de trains (700) par la distance moyenne quotidienne (140 km) par le nombre de jours d'exploitation (365), on obtient environ 36 millions de kilomètres par an."
       }
     ]
@@ -71,8 +71,8 @@ export const vehiclesTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Combien de voyages en avion les Français effectuent-ils en moyenne chaque année ?",
-        correctAnswer: 145,
-        unit: "millions",
+        correctAnswer: 145000000,
+        unit: "voyages",
         explanation: "Les Français effectuent environ 145 millions de voyages en avion par an (vols nationaux et internationaux)."
       },
       {
@@ -83,8 +83,8 @@ export const vehiclesTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de kilomètres sont donc parcourus par les Français en avion chaque année ?",
-        correctAnswer: 174,
-        unit: "milliards",
+        correctAnswer: 174000000000,
+        unit: "kilomètres",
         explanation: "En multipliant le nombre de voyages (145 millions) par la distance moyenne (1 200 km), on obtient environ 174 milliards de kilomètres par an."
       }
     ]
@@ -98,8 +98,8 @@ export const vehiclesTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population de la France ?",
-        correctAnswer: 68,
-        unit: "millions",
+        correctAnswer: 68000000,
+        unit: "habitants",
         explanation: "La France compte environ 68 millions d'habitants."
       },
       {
@@ -110,8 +110,8 @@ export const vehiclesTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de vélos sont donc vendus chaque année en France ?",
-        correctAnswer: 2.7,
-        unit: "millions",
+        correctAnswer: 2700000,
+        unit: "vélos",
         explanation: "En multipliant la population (68 millions) par le taux d'achat annuel (3,97%), on obtient environ 2,7 millions de vélos vendus par an."
       }
     ]

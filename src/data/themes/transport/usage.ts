@@ -11,8 +11,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Combien de véhicules particuliers sont en circulation en France ?",
-        correctAnswer: 40.7,
-        unit: "millions",
+        correctAnswer: 40700000,
+        unit: "véhicules",
         explanation: "Environ 40,7 millions de véhicules particuliers sont actuellement en circulation en France selon les données du Ministère des Transports."
       },
       {
@@ -29,8 +29,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de trajets sont donc effectués quotidiennement en voiture individuelle ?",
-        correctAnswer: 38.5,
-        unit: "millions",
+        correctAnswer: 38500000,
+        unit: "trajets",
         explanation: "En multipliant le nombre de véhicules (40,7 millions) par le taux d'utilisation (68%) et par le nombre moyen de trajets (1,4), on obtient environ 38,5 millions de trajets quotidiens."
       }
     ]
@@ -44,8 +44,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population d'Île-de-France ?",
-        correctAnswer: 12.3,
-        unit: "millions",
+        correctAnswer: 12300000,
+        unit: "habitants",
         explanation: "La population d'Île-de-France est d'environ 12,3 millions d'habitants selon les dernières données de l'INSEE."
       },
       {
@@ -62,8 +62,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de personnes prennent donc le métro quotidiennement en Île-de-France ?",
-        correctAnswer: 4.3,
-        unit: "millions",
+        correctAnswer: 4300000,
+        unit: "personnes",
         explanation: "En multipliant la population francilienne (12,3 millions) par le taux d'utilisation des transports en commun (43%) et par le taux d'utilisation du métro (82%), on obtient environ 4,3 millions de personnes."
       }
     ]
@@ -173,8 +173,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "Combien de trajets sont donc effectués sur le métro parisien chaque année ?",
-        correctAnswer: 1.8,
-        unit: "milliard",
+        correctAnswer: 1800000000,
+        unit: "trajets",
         explanation: "En multipliant le nombre de stations (308) par la fréquentation moyenne (16 000 personnes) par le nombre de jours d'exploitation (365), on obtient environ 1,8 milliard de trajets annuels."
       }
     ]
@@ -188,8 +188,8 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
     steps: [
       {
         question: "Quelle est la population active de la France ?",
-        correctAnswer: 29,
-        unit: "millions",
+        correctAnswer: 29000000,
+        unit: "personnes",
         explanation: "La France compte environ 29 millions d'actifs (personnes en emploi ou cherchant un emploi)."
       },
       {
@@ -200,14 +200,14 @@ export const usageTransportQuestions: (Question | MultiStepQuestion)[] = [
       },
       {
         question: "En plus des trajets domicile-travail, combien de personnes utilisent les transports en commun pour d'autres motifs ?",
-        correctAnswer: 6.25,
-        unit: "millions",
+        correctAnswer: 6250000,
+        unit: "personnes",
         explanation: "Environ 6,25 millions de personnes utilisent les transports en commun pour d'autres motifs que le trajet domicile-travail."
       },
       {
         question: "Combien de personnes utilisent donc les transports en commun chaque jour en France ?",
-        correctAnswer: 16,
-        unit: "millions",
+        correctAnswer: 16000000,
+        unit: "personnes",
         explanation: "En additionnant les utilisateurs pour les trajets domicile-travail (environ 4,78 millions) et les utilisateurs pour d'autres motifs (6,25 millions), et en tenant compte des personnes qui font plusieurs trajets, on arrive à environ 16 millions d'utilisateurs quotidiens."
       }
     ]

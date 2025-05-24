@@ -10,37 +10,49 @@ import { transportQuestions } from "./transport";
 import { insoliteQuestions } from "./insolite";
 import { QuizTheme } from "@/components/types";
 
-// Combiner toutes les questions
+// Normaliser tous les thèmes pour éviter les doublons
+const normalizeQuestions = (questions: any[]) => {
+  return questions.map(q => ({
+    ...q,
+    theme: q.theme === "demographie" ? "démographie" : 
+           q.theme === "economie" ? "économie" : 
+           q.theme === "education" ? "éducation" : 
+           q.theme === "sante" ? "santé" : 
+           q.theme
+  }));
+};
+
+// Combiner toutes les questions avec normalisation des thèmes
 export const questions = [
-  ...demographieQuestions,
-  ...economieQuestions, // Contient maintenant toutes les questions économie et emploi
-  ...educationQuestions,
-  ...environnementQuestions, 
-  ...mondeQuestions,
-  ...santeQuestions,
-  ...technologieQuestions,
-  ...transportQuestions,
-  ...insoliteQuestions
+  ...normalizeQuestions(demographieQuestions),
+  ...normalizeQuestions(economieQuestions),
+  ...normalizeQuestions(educationQuestions),
+  ...normalizeQuestions(environnementQuestions), 
+  ...normalizeQuestions(mondeQuestions),
+  ...normalizeQuestions(santeQuestions),
+  ...normalizeQuestions(technologieQuestions),
+  ...normalizeQuestions(transportQuestions),
+  ...normalizeQuestions(insoliteQuestions)
 ];
 
-// Définir les thèmes disponibles - emploi est retiré
+// Définir les thèmes disponibles avec noms normalisés
 export const themes: QuizTheme[] = [
   {
-    id: "demographie",
+    id: "démographie",
     name: "Démographie",
     description: "Questions sur la population française et les tendances démographiques",
     color: "from-blue-500 to-blue-400",
     icon: "Users"
   },
   {
-    id: "economie",
+    id: "économie",
     name: "Économie",
     description: "Questions sur l'économie française, l'emploi et les finances",
     color: "from-green-500 to-green-400",
     icon: "LineChart"
   },
   {
-    id: "education",
+    id: "éducation",
     name: "Éducation",
     description: "Questions sur le système éducatif français",
     color: "from-amber-500 to-amber-400",
@@ -61,7 +73,7 @@ export const themes: QuizTheme[] = [
     icon: "Globe"
   },
   {
-    id: "sante",
+    id: "santé",
     name: "Santé",
     description: "Questions sur le système de santé et les indicateurs sanitaires",
     color: "from-red-500 to-red-400",
