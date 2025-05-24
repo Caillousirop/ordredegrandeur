@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuizSetup from "./QuizSetup";
@@ -55,23 +56,26 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
         <QuizSetup
           selectedTheme={selectedTheme}
           selectedType={selectedType}
-          handleThemeSelect={handleThemeSelect}
-          handleTypeSelect={handleTypeSelect}
+          onSelectTheme={handleThemeSelect}
+          onSelectType={handleTypeSelect}
           searchQuery={searchQuery}
           searchResults={searchResults}
-          handleSearch={handleSearch}
-          startQuiz={startQuiz}
+          onSearch={handleSearch}
+          onStartQuiz={startQuiz}
+          filteredQuestionsCount={filteredQuestions.length}
         />
       </TabsContent>
 
       <TabsContent value="questions" className="mt-6">
-        <QuizContent
-          currentQuestion={currentQuestion}
-          isMultiStep={isMultiStep}
-          questionsCompleted={questionsCompleted}
-          handleNext={handleNext}
-          handleScore={handleScore}
-        />
+        {currentQuestion && (
+          <QuizContent
+            question={currentQuestion}
+            isMultiStep={isMultiStep}
+            questionsCompleted={questionsCompleted}
+            onNext={handleNext}
+            onScore={handleScore}
+          />
+        )}
       </TabsContent>
 
       <TabsContent value="scores" className="mt-6">
