@@ -64,7 +64,7 @@ export const useThemeQuestions = () => {
         correct_answer: question.type === "simple" ? question.correctAnswer : 0,
         unit: question.type === "simple" ? question.unit : null,
         explanation: question.type === "simple" ? question.explanation : null,
-        steps: question.type === "multistep" ? question.steps : null,
+        steps: question.type === "multistep" ? JSON.parse(JSON.stringify(question.steps)) : null,
         final_explanation: question.type === "multistep" ? question.finalExplanation : null,
       };
 
@@ -97,7 +97,7 @@ export const useThemeQuestions = () => {
         correct_answer: question.type === "simple" ? question.correctAnswer : 0,
         unit: question.type === "simple" ? question.unit : null,
         explanation: question.type === "simple" ? question.explanation : null,
-        steps: question.type === "multistep" ? question.steps : null,
+        steps: question.type === "multistep" ? JSON.parse(JSON.stringify(question.steps)) : null,
         final_explanation: question.type === "multistep" ? question.finalExplanation : null,
         updated_at: new Date().toISOString()
       };
