@@ -3,7 +3,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
-  UserRound,
   LogOut,
   LogIn
 } from "lucide-react";
@@ -44,7 +43,6 @@ const UserSpace: React.FC<UserSpaceProps> = ({
             variant="outline" 
             className="flex items-center gap-2 rounded-full py-1 px-3 bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 border-orange-300 dark:border-orange-700 hover:from-orange-200 hover:to-orange-300 dark:hover:from-orange-800/40 dark:hover:to-orange-700/40"
           >
-            <UserRound className="h-4 w-4 text-orange-700 dark:text-orange-300" />
             {user ? (
               <>
                 <UserLevelBadge level={userLevel} />
