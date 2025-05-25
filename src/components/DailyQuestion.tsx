@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -177,37 +178,46 @@ const DailyQuestion = () => {
 
   if (!dailyQuestion) {
     return (
-      <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
-            <Calendar className="h-5 w-5" />
-            Question du Jour
-          </CardTitle>
-          <CardDescription className="text-blue-600 dark:text-blue-300">
+      <div className="relative mb-8 rounded-xl overflow-hidden">
+        {/* Fond dégradé coloré */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600"></div>
+        
+        {/* Contenu sans fond par-dessus */}
+        <div className="relative z-10 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Calendar className="h-8 w-8 text-white drop-shadow-md" />
+            <h2 className="text-3xl font-bold text-white drop-shadow-md">Question du Jour</h2>
+          </div>
+          <p className="text-white/90 text-lg drop-shadow-sm">
             Aucune question disponible pour aujourd'hui
-          </CardDescription>
-        </CardHeader>
-      </Card>
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200 text-2xl font-bold">
-            <Calendar className="h-7 w-7" />
-            Question du Jour
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-white/80 dark:bg-gray-800/80 p-4 rounded-lg border">
-            <p className="text-lg text-gray-800 dark:text-gray-200 leading-relaxed">{dailyQuestion.question}</p>
+    <div className="space-y-6 mb-8">
+      <div className="relative rounded-xl overflow-hidden shadow-2xl">
+        {/* Fond dégradé coloré */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600"></div>
+        
+        {/* Contenu sans fond par-dessus */}
+        <div className="relative z-10 p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Calendar className="h-8 w-8 text-white drop-shadow-md" />
+            <h2 className="text-3xl font-bold text-white drop-shadow-md">Question du Jour</h2>
+          </div>
+
+          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 mb-6 border border-white/30">
+            <p className="text-xl text-white font-medium leading-relaxed drop-shadow-sm">
+              {dailyQuestion.question}
+            </p>
           </div>
 
           {!userResponse && (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <Input
                   type="number"
                   step="any"
@@ -215,39 +225,45 @@ const DailyQuestion = () => {
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   required
-                  className="bg-white dark:bg-gray-800"
+                  className="bg-white/90 dark:bg-gray-800/90 border-white/50 text-gray-900 dark:text-white placeholder:text-gray-600 dark:placeholder:text-gray-400 text-lg py-3"
                 />
+                <Button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm px-8 py-3 text-lg font-medium"
+                >
+                  {loading ? "Envoi..." : "Valider"}
+                </Button>
               </div>
-              <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700">
-                {loading ? "Envoi..." : "Valider ma réponse"}
-              </Button>
             </form>
           )}
 
           {userResponse && (
             <div className="space-y-4">
-              <AccuracyGauge 
-                userAnswer={userResponse.user_answer} 
-                correctAnswer={dailyQuestion.correct_answer} 
-                answerSubmitted={true}
-              />
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+                <AccuracyGauge 
+                  userAnswer={userResponse.user_answer} 
+                  correctAnswer={dailyQuestion.correct_answer} 
+                  answerSubmitted={true}
+                />
+              </div>
             </div>
           )}
 
           {showAnswer && (
-            <div className="space-y-3">
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                <p className="font-medium text-green-800 dark:text-green-200">
+            <div className="space-y-3 mt-6">
+              <div className="bg-green-500/20 backdrop-blur-sm rounded-lg p-4 border border-green-400/30">
+                <p className="font-medium text-white text-lg mb-2">
                   Réponse correcte: {dailyQuestion.correct_answer} {dailyQuestion.unit}
                 </p>
-                <p className="text-sm text-green-700 dark:text-green-300 mt-2">
+                <p className="text-white/90">
                   {dailyQuestion.explanation}
                 </p>
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Leaderboard - only shown to authenticated users */}
       {user && leaderboard.length > 0 && (

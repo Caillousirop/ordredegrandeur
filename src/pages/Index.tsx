@@ -3,7 +3,6 @@ import React from "react";
 import QuizContainer from "@/components/QuizContainer";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
-import DailyQuestion from "@/components/DailyQuestion";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -28,15 +27,6 @@ const Index = () => {
       <div className="flex justify-between items-center w-full px-4 py-3 border-b border-border/30">
         <DarkModeToggle />
         <UserSpace questionsCompleted={questionsCompleted} />
-      </div>
-      
-      {/* Question du jour mise en avant */}
-      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 p-1">
-        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
-          <div className="container mx-auto py-6 px-4">
-            <DailyQuestion />
-          </div>
-        </div>
       </div>
       
       <div className="container mx-auto py-8">
