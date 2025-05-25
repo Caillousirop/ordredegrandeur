@@ -13,12 +13,8 @@ import { insoliteQuestions } from "@/data/themes/insolite";
 import { mondeQuestions } from "@/data/themes/monde";
 import { santeQuestions } from "@/data/themes/sante";
 import { transportQuestions } from "@/data/themes/transport";
-import { demographieQuestions } from "@/data/themes/demographie";
-import { economieQuestions } from "@/data/themes/economie";
-import { educationQuestions } from "@/data/themes/education";
-import { emploiQuestions } from "@/data/themes/emploi";
-import { environnementQuestions } from "@/data/themes/environnement";
-import { technologieQuestions } from "@/data/themes/technologie";
+// Import from themes/index.ts which has all questions normalized
+import { questions } from "@/data/themes";
 
 const QuestionImporter: React.FC = () => {
   const { addQuestion, questions: existingQuestions } = useThemeQuestions();
@@ -29,25 +25,8 @@ const QuestionImporter: React.FC = () => {
     skipped: number;
   } | null>(null);
 
-  // Collect all questions from local files
-  const getAllLocalQuestions = (): (Question | MultiStepQuestion)[] => {
-    const allLocalQuestions: (Question | MultiStepQuestion)[] = [
-      ...insoliteQuestions,
-      ...mondeQuestions,
-      ...santeQuestions,
-      ...transportQuestions,
-      ...demographieQuestions,
-      ...economieQuestions,
-      ...educationQuestions,
-      ...emploiQuestions,
-      ...environnementQuestions,
-      ...technologieQuestions
-    ];
-
-    return allLocalQuestions;
-  };
-
-  const localQuestions = getAllLocalQuestions();
+  // Use the questions from the centralized themes index
+  const localQuestions = questions;
 
   const handleImport = async () => {
     setImporting(true);
