@@ -185,10 +185,10 @@ const DailyQuestion = () => {
         {/* Contenu sans fond par-dessus */}
         <div className="relative z-10 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Calendar className="h-8 w-8 text-white drop-shadow-md" />
-            <h2 className="text-3xl font-bold text-white drop-shadow-md">Question du Jour</h2>
+            <Calendar className="h-6 w-6 text-white drop-shadow-md" />
+            <h2 className="text-xl font-bold text-white drop-shadow-md">Question du Jour</h2>
           </div>
-          <p className="text-white/90 text-lg drop-shadow-sm">
+          <p className="text-white/90 drop-shadow-sm">
             Aucune question disponible pour aujourd'hui
           </p>
         </div>
@@ -203,20 +203,20 @@ const DailyQuestion = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600"></div>
         
         {/* Contenu sans fond par-dessus */}
-        <div className="relative z-10 p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <Calendar className="h-8 w-8 text-white drop-shadow-md" />
-            <h2 className="text-3xl font-bold text-white drop-shadow-md">Question du Jour</h2>
+        <div className="relative z-10 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Calendar className="h-6 w-6 text-white drop-shadow-md" />
+            <h2 className="text-xl font-bold text-white drop-shadow-md">Question du Jour</h2>
           </div>
 
-          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 mb-6 border border-white/30">
-            <p className="text-xl text-white font-medium leading-relaxed drop-shadow-sm">
+          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-4 border border-white/30">
+            <p className="text-white font-medium leading-relaxed drop-shadow-sm">
               {dailyQuestion.question}
             </p>
           </div>
 
           {!userResponse && (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="flex gap-3">
                 <Input
                   type="number"
@@ -225,12 +225,12 @@ const DailyQuestion = () => {
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   required
-                  className="bg-white/90 dark:bg-gray-800/90 border-white/50 text-gray-900 dark:text-white placeholder:text-gray-600 dark:placeholder:text-gray-400 text-lg py-3"
+                  className="bg-white/90 dark:bg-gray-800/90 border-white/50 text-gray-900 dark:text-white placeholder:text-gray-600 dark:placeholder:text-gray-400"
                 />
                 <Button 
                   type="submit" 
                   disabled={loading} 
-                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm px-8 py-3 text-lg font-medium"
+                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm font-medium"
                 >
                   {loading ? "Envoi..." : "Valider"}
                 </Button>
@@ -239,8 +239,8 @@ const DailyQuestion = () => {
           )}
 
           {userResponse && (
-            <div className="space-y-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+            <div className="space-y-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 border border-white/30">
                 <AccuracyGauge 
                   userAnswer={userResponse.user_answer} 
                   correctAnswer={dailyQuestion.correct_answer} 
@@ -251,12 +251,12 @@ const DailyQuestion = () => {
           )}
 
           {showAnswer && (
-            <div className="space-y-3 mt-6">
-              <div className="bg-green-500/20 backdrop-blur-sm rounded-lg p-4 border border-green-400/30">
-                <p className="font-medium text-white text-lg mb-2">
+            <div className="space-y-3 mt-4">
+              <div className="bg-green-500/20 backdrop-blur-sm rounded-lg p-3 border border-green-400/30">
+                <p className="font-medium text-white mb-1">
                   Réponse correcte: {dailyQuestion.correct_answer} {dailyQuestion.unit}
                 </p>
-                <p className="text-white/90">
+                <p className="text-white/90 text-sm">
                   {dailyQuestion.explanation}
                 </p>
               </div>

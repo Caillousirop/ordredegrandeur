@@ -8,11 +8,16 @@ INSERT INTO daily_questions (
   date,
   theme
 ) VALUES (
-  'Combien de baguettes de pain sont vendues chaque jour en France ?',
-  30000000,
-  'baguettes',
-  'La France consomme environ 30 millions de baguettes par jour. Cette consommation représente environ 10 milliards de baguettes par an, soit une moyenne de 120 baguettes par personne et par an.',
+  'Combien de femmes de plus de 60 ans jouent du piano en France ?',
+  450000,
+  'femmes',
+  'Environ 450 000 femmes de plus de 60 ans pratiquent le piano en France. Cette estimation se base sur les données de pratique musicale amateur et les inscriptions dans les conservatoires et écoles de musique, où le piano reste l''instrument le plus populaire, particulièrement chez les femmes seniors.',
   CURRENT_DATE,
-  'économie'
+  'culture'
 ) 
-ON CONFLICT (date) DO NOTHING;
+ON CONFLICT (date) DO UPDATE SET
+  question = EXCLUDED.question,
+  correct_answer = EXCLUDED.correct_answer,
+  unit = EXCLUDED.unit,
+  explanation = EXCLUDED.explanation,
+  theme = EXCLUDED.theme;
