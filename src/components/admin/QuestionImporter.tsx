@@ -8,17 +8,17 @@ import { useThemeQuestions } from "@/hooks/useThemeQuestions";
 import { Question, MultiStepQuestion } from "@/components/types";
 import { toast } from "sonner";
 
-// Import all local questions from theme files
-import { allQuestions as insoliteQuestions } from "@/data/themes/insolite";
-import { allQuestions as mondeQuestions } from "@/data/themes/monde";
-import { allQuestions as santeQuestions } from "@/data/themes/sante";
-import { allQuestions as transportQuestions } from "@/data/themes/transport";
-import { questions as demographieQuestions } from "@/data/themes/demographie";
-import { questions as economieQuestions } from "@/data/themes/economie";
-import { questions as educationQuestions } from "@/data/themes/education";
-import { questions as emploiQuestions } from "@/data/themes/emploi";
-import { questions as environnementQuestions } from "@/data/themes/environnement";
-import { questions as technologieQuestions } from "@/data/themes/technologie";
+// Import all local questions from theme files with correct export names
+import { insoliteQuestions } from "@/data/themes/insolite";
+import { mondeQuestions } from "@/data/themes/monde";
+import { santeQuestions } from "@/data/themes/sante";
+import { transportQuestions } from "@/data/themes/transport";
+import { demographieQuestions } from "@/data/themes/demographie";
+import { economieQuestions } from "@/data/themes/economie";
+import { educationQuestions } from "@/data/themes/education";
+import { emploiQuestions } from "@/data/themes/emploi";
+import { environnementQuestions } from "@/data/themes/environnement";
+import { technologieQuestions } from "@/data/themes/technologie";
 
 const QuestionImporter: React.FC = () => {
   const { addQuestion, questions: existingQuestions } = useThemeQuestions();
