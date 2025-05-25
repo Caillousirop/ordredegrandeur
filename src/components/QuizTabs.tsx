@@ -5,6 +5,7 @@ import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
 import { Question, MultiStepQuestion, QuizTheme } from "./types";
 import QuestionValidator from "./admin/QuestionValidator";
+import ThemeQuestionsManager from "./admin/ThemeQuestionsManager";
 
 interface QuizTabsProps {
   activeTab: string;
@@ -45,11 +46,12 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
 }) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid w-full grid-cols-4">
+      <TabsList className="grid w-full grid-cols-5">
         <TabsTrigger value="setup">Configuration</TabsTrigger>
         <TabsTrigger value="questions">Questions</TabsTrigger>
         <TabsTrigger value="scores">Scores</TabsTrigger>
         <TabsTrigger value="validator">Validateur</TabsTrigger>
+        <TabsTrigger value="manager">Gestion</TabsTrigger>
       </TabsList>
 
       <TabsContent value="setup" className="mt-6">
@@ -84,6 +86,10 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
 
       <TabsContent value="validator" className="mt-6">
         <QuestionValidator />
+      </TabsContent>
+
+      <TabsContent value="manager" className="mt-6">
+        <ThemeQuestionsManager />
       </TabsContent>
     </Tabs>
   );

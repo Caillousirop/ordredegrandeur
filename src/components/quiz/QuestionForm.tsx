@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +21,7 @@ import { Question, MultiStepQuestion, Step } from "@/components/types";
 import { PlusCircle, X } from "lucide-react";
 import { themes } from "@/data/themes";
 import { generateId } from "@/utils/questionImporter";
+import { useThemeQuestions } from "@/hooks/useThemeQuestions";
 
 interface QuestionFormProps {
   isOpen: boolean;
@@ -36,6 +36,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   onSave,
   initialQuestion
 }) => {
+  const { addQuestion, updateQuestion } = useThemeQuestions();
   const [activeTab, setActiveTab] = useState<"simple" | "multistep">(
     initialQuestion ? initialQuestion.type : "simple"
   );
@@ -94,9 +95,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     }
   }, [isOpen, initialQuestion]);
   
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
+    let questionToSave: Question | MultiStepQuestion;
+    
     if (activeTab === "simple") {
-      const finalQuestion: Question = {
+      questionToSave = {
         id: simpleQuestion.id || generateId(),
         question: simpleQuestion.question || "",
         correctAnswer: Number(simpleQuestion.correctAnswer) || 0,
@@ -105,9 +108,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         theme: simpleQuestion.theme || "insolite",
         type: "simple"
       };
-      onSave(finalQuestion);
     } else {
-      const finalQuestion: MultiStepQuestion = {
+      questionToSave = {
         id: multiQuestion.id || generateId(),
         question: multiQuestion.question || "",
         steps: multiQuestion.steps?.map(step => ({
@@ -120,9 +122,20 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         theme: multiQuestion.theme || "insolite",
         type: "multistep"
       };
-      onSave(finalQuestion);
     }
-    onClose();
+
+    // Save to Supabase
+    let success = false;
+    if (initialQuestion) {
+      success = await updateQuestion(questionToSave);
+    } else {
+      success = await addQuestion(questionToSave);
+    }
+
+    if (success) {
+      onSave(questionToSave);
+      onClose();
+    }
   };
   
   const addStep = () => {
