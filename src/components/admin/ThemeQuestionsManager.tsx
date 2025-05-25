@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Question, MultiStepQuestion } from "@/components/types";
 import { themes } from "@/data/themes";
 import QuestionForm from "@/components/quiz/QuestionForm";
+import QuestionImporter from "./QuestionImporter";
 
 const ThemeQuestionsManager: React.FC = () => {
   const { questions, loading, deleteQuestion } = useThemeQuestions();
@@ -81,6 +82,11 @@ const ThemeQuestionsManager: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Import Section - Show only if there are no questions in database */}
+      {questions.length === 0 && (
+        <QuestionImporter />
+      )}
+
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
@@ -97,6 +103,13 @@ const ThemeQuestionsManager: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent>
+          {/* Show importer button even when there are questions */}
+          {questions.length > 0 && (
+            <div className="mb-4">
+              <QuestionImporter />
+            </div>
+          )}
+
           {/* Filters */}
           <div className="flex flex-wrap gap-2 mb-6">
             <div className="flex flex-wrap gap-2">
