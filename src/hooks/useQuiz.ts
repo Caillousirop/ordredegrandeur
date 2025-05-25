@@ -1,8 +1,8 @@
+
 import { useState, useEffect } from "react";
+import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
-import { themes } from "@/data/themes";
 import { toast } from "sonner";
-import { useThemeQuestions } from "./useThemeQuestions";
 
 export const useQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -15,16 +15,13 @@ export const useQuiz = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
 
-  // Use Supabase questions instead of local data
-  const { questions } = useThemeQuestions();
-
   // Filter questions based on theme and type (not search)
   useEffect(() => {
     console.log("Filtering with theme:", selectedTheme?.id);
     console.log("Filtering with type:", selectedType);
     console.log("Total questions available:", questions.length);
     
-    // Start with all questions from Supabase
+    // Start with all questions
     let filtered = [...questions];
     
     // Filter by theme if selected (except for random theme)
@@ -48,7 +45,7 @@ export const useQuiz = () => {
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, questions]);
+  }, [selectedTheme, selectedType]);
 
   // Handle search separately with proper accent handling
   useEffect(() => {
@@ -66,7 +63,7 @@ export const useQuiz = () => {
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery, questions]);
+  }, [searchQuery]);
 
   const handleSearch = (query: string) => {
     console.log("Search query received:", query);
@@ -75,6 +72,7 @@ export const useQuiz = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
+    // Ne pas basculer automatiquement vers l'onglet des questions
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
