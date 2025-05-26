@@ -113,6 +113,48 @@ export type Database = {
         }
         Relationships: []
       }
+      theme_questions: {
+        Row: {
+          correct_answer: number
+          created_at: string
+          explanation: string | null
+          final_explanation: string | null
+          id: string
+          question: string
+          steps: Json | null
+          theme: string
+          type: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string
+          explanation?: string | null
+          final_explanation?: string | null
+          id?: string
+          question: string
+          steps?: Json | null
+          theme: string
+          type?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string
+          explanation?: string | null
+          final_explanation?: string | null
+          id?: string
+          question?: string
+          steps?: Json | null
+          theme?: string
+          type?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
