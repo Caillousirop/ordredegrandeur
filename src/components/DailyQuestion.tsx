@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,8 +46,13 @@ const DailyQuestion = () => {
 
   useEffect(() => {
     fetchDailyQuestion();
-    fetchLeaderboard();
   }, [user]);
+
+  useEffect(() => {
+    if (dailyQuestion) {
+      fetchLeaderboard();
+    }
+  }, [dailyQuestion]);
 
   const fetchDailyQuestion = async () => {
     try {
@@ -64,28 +70,28 @@ const DailyQuestion = () => {
 
       setDailyQuestion(question);
 
-      // Check if user has already answered - using raw query to avoid type issues
+      // Check if user has already answered
       if (question && user) {
-        try {
-          const { data: response } = await supabase
-            .rpc('get_user_daily_response', { 
-              p_daily_question_id: question.id, 
-              p_user_id: user.id 
-            });
+        const { data: response, error: responseError } = await supabase
+          .from("daily_responses")
+          .select("*")
+          .eq("daily_question_id", question.id)
+          .eq("user_id", user.id)
+          .maybeSingle();
 
-          if (response && response.length > 0) {
-            const userAnswer = response[0];
-            setUserResponse({
-              id: userAnswer.id,
-              user_answer: userAnswer.user_answer,
-              accuracy: userAnswer.accuracy,
-              answered_at: userAnswer.answered_at
-            });
-            setShowAnswer(true);
-          }
-        } catch (error) {
-          // Fallback: try direct query if RPC doesn't exist
-          console.log("RPC not available, using direct query");
+        if (responseError) {
+          console.error("Error fetching user response:", responseError);
+          return;
+        }
+
+        if (response) {
+          setUserResponse({
+            id: response.id,
+            user_answer: response.user_answer,
+            accuracy: response.accuracy,
+            answered_at: response.answered_at
+          });
+          setShowAnswer(true);
         }
       }
     } catch (error) {
@@ -97,9 +103,18 @@ const DailyQuestion = () => {
     if (!dailyQuestion) return;
 
     try {
-      // Use raw query to avoid type issues
       const { data, error } = await supabase
-        .rpc('get_daily_leaderboard', { p_daily_question_id: dailyQuestion.id });
+        .from("daily_responses")
+        .select(`
+          user_id,
+          accuracy,
+          answered_at,
+          profiles!inner(username)
+        `)
+        .eq("daily_question_id", dailyQuestion.id)
+        .order("accuracy", { ascending: false })
+        .order("answered_at", { ascending: true })
+        .limit(10);
 
       if (error) {
         console.error("Error fetching leaderboard:", error);
@@ -108,7 +123,7 @@ const DailyQuestion = () => {
 
       const formattedLeaderboard = data?.map((entry: any) => ({
         user_id: entry.user_id,
-        username: entry.username || "Utilisateur",
+        username: entry.profiles?.username || "Utilisateur",
         accuracy: entry.accuracy,
         answered_at: entry.answered_at,
       })) || [];
@@ -134,26 +149,24 @@ const DailyQuestion = () => {
 
       const accuracy = calculateAccuracy(numAnswer, dailyQuestion.correct_answer);
 
-      // Only save to database if user is logged in - using raw query
+      // Save to database if user is logged in
       if (user) {
-        try {
-          const { error } = await supabase
-            .rpc('insert_daily_response', {
-              p_user_id: user.id,
-              p_daily_question_id: dailyQuestion.id,
-              p_user_answer: numAnswer,
-              p_accuracy: accuracy
-            });
+        const { error } = await supabase
+          .from("daily_responses")
+          .upsert({
+            user_id: user.id,
+            daily_question_id: dailyQuestion.id,
+            user_answer: numAnswer,
+            accuracy: accuracy
+          });
 
-          if (error) {
-            toast.error("Erreur lors de l'enregistrement de votre réponse");
-            return;
-          }
-
-          fetchLeaderboard();
-        } catch (error) {
-          console.log("RPC not available, response not saved");
+        if (error) {
+          console.error("Error saving response:", error);
+          toast.error("Erreur lors de l'enregistrement de votre réponse");
+          return;
         }
+
+        fetchLeaderboard();
       }
 
       setUserResponse({
@@ -173,6 +186,7 @@ const DailyQuestion = () => {
         toast.success("Merci pour votre participation !");
       }
     } catch (error) {
+      console.error("Error submitting answer:", error);
       toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
