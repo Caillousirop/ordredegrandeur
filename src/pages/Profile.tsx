@@ -1,11 +1,11 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import AchievementsCard from "@/components/profile/AchievementsCard";
-import { calculateProfileStats } from "@/components/profile/ProfileStatCalculator";
+import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,9 +16,27 @@ import { LogIn, Trophy, Target, Zap, Crown } from "lucide-react";
 const Profile = () => {
   const { scores, questionsCompleted } = useQuiz();
   const { user } = useAuth();
+  const [supabaseStats, setSupabaseStats] = useState<{
+    correctPercentage: number;
+    totalPoints: number;
+    userLevel: number;
+  } | null>(null);
   
-  // Calculate all statistics
-  const { correctPercentage, totalPoints, userLevel } = calculateProfileStats(scores, questionsCompleted);
+  // Charger les statistiques depuis Supabase
+  useEffect(() => {
+    const loadStats = async () => {
+      if (user) {
+        const stats = await loadSupabaseStats(user.id);
+        setSupabaseStats(stats);
+      }
+    };
+
+    loadStats();
+  }, [user]);
+
+  // Utiliser les stats Supabase si disponibles, sinon calculer localement
+  const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
+  const { correctPercentage, totalPoints, userLevel } = finalStats;
 
   // If user is not logged in, show rewards preview
   if (!user) {

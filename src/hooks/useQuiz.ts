@@ -3,8 +3,13 @@ import { useState, useEffect } from "react";
 import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 
 export const useQuiz = () => {
+  const { user } = useAuth();
+  const { saveScore, loadProgress, syncing } = useSupabaseProgress();
+  
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
   const [activeTab, setActiveTab] = useState("setup");
@@ -14,6 +19,33 @@ export const useQuiz = () => {
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Charger les données depuis Supabase au démarrage
+  useEffect(() => {
+    const initializeData = async () => {
+      if (user && !isLoaded) {
+        console.log("Chargement des données depuis Supabase...");
+        const data = await loadProgress();
+        
+        if (data?.progress) {
+          setQuestionsCompleted(data.progress.questions_completed);
+          console.log("Progression chargée:", data.progress);
+        }
+        
+        if (data?.scores && data.scores.length > 0) {
+          setScores(data.scores);
+          console.log("Scores chargés:", data.scores.length);
+        }
+        
+        setIsLoaded(true);
+      } else if (!user) {
+        setIsLoaded(true);
+      }
+    };
+
+    initializeData();
+  }, [user, loadProgress, isLoaded]);
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {
@@ -93,8 +125,8 @@ export const useQuiz = () => {
     setQuestionsCompleted(prev => prev + 1);
   };
   
-  const handleScore = (score: QuizScore) => {
-    // Update scores
+  const handleScore = async (score: QuizScore) => {
+    // Update scores locally
     setScores(prevScores => {
       // Check if we already have a score for this question
       const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
@@ -109,6 +141,12 @@ export const useQuiz = () => {
         return [...prevScores, score];
       }
     });
+    
+    // Sauvegarder dans Supabase si l'utilisateur est connecté
+    if (user) {
+      await saveScore(score);
+      console.log("Score sauvegardé dans Supabase:", score);
+    }
     
     // Adjust accuracy based on hints usage
     let displayAccuracy = score.accuracy;
@@ -160,6 +198,7 @@ export const useQuiz = () => {
     scores,
     searchQuery,
     searchResults,
+    syncing,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,

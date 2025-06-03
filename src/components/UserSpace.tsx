@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import UserLevelBadge from "./UserLevelBadge";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface UserSpaceProps {
@@ -28,9 +29,45 @@ const UserSpace: React.FC<UserSpaceProps> = ({
 }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [userProgress, setUserProgress] = useState<{
+    total_points: number;
+    user_level: number;
+    questions_completed: number;
+  } | null>(null);
 
-  // Mock user level - in a real app, this would come from the user's state
-  const userLevel = user ? Math.max(1, Math.floor(questionsCompleted / 5)) : 1;
+  // Charger la progression de l'utilisateur depuis Supabase
+  useEffect(() => {
+    const loadUserProgress = async () => {
+      if (!user) {
+        setUserProgress(null);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('user_progress')
+          .select('total_points, user_level, questions_completed')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Erreur lors du chargement de la progression:', error);
+          return;
+        }
+
+        setUserProgress(data);
+      } catch (error) {
+        console.error('Erreur lors du chargement:', error);
+      }
+    };
+
+    loadUserProgress();
+  }, [user]);
+
+  // Utiliser les données Supabase si disponibles, sinon utiliser les données locales
+  const effectiveQuestionsCompleted = userProgress?.questions_completed || questionsCompleted;
+  const userLevel = userProgress?.user_level || Math.max(1, Math.floor(questionsCompleted / 5));
+  const totalPoints = userProgress?.total_points || 0;
 
   const handleSignOut = async () => {
     await signOut();
@@ -55,7 +92,9 @@ const UserSpace: React.FC<UserSpaceProps> = ({
             {user ? (
               <>
                 <UserLevelBadge level={userLevel} />
-                <span className="font-medium text-sm hidden md:inline text-orange-800 dark:text-orange-200">{questionsCompleted} pts</span>
+                <span className="font-medium text-sm hidden md:inline text-orange-800 dark:text-orange-200">
+                  {userProgress ? `${totalPoints} pts` : `${effectiveQuestionsCompleted} pts`}
+                </span>
               </>
             ) : (
               <>

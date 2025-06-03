@@ -9,21 +9,24 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      Content: {
+      admin_users: {
         Row: {
-          Comment: string | null
           created_at: string
-          id: number
+          id: string
+          role: string
+          user_id: string
         }
         Insert: {
-          Comment?: string | null
           created_at?: string
-          id?: number
+          id?: string
+          role?: string
+          user_id: string
         }
         Update: {
-          Comment?: string | null
           created_at?: string
-          id?: number
+          id?: string
+          role?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -60,41 +63,6 @@ export type Database = {
         }
         Relationships: []
       }
-      daily_responses: {
-        Row: {
-          accuracy: number
-          answered_at: string
-          daily_question_id: string
-          id: string
-          user_answer: number
-          user_id: string
-        }
-        Insert: {
-          accuracy: number
-          answered_at?: string
-          daily_question_id: string
-          id?: string
-          user_answer: number
-          user_id: string
-        }
-        Update: {
-          accuracy?: number
-          answered_at?: string
-          daily_question_id?: string
-          id?: string
-          user_answer?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "daily_responses_daily_question_id_fkey"
-            columns: ["daily_question_id"]
-            isOneToOne: false
-            referencedRelation: "daily_questions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
           created_at: string
@@ -113,14 +81,17 @@ export type Database = {
         }
         Relationships: []
       }
-      theme_questions: {
+      quiz_questions: {
         Row: {
           correct_answer: number
           created_at: string
           explanation: string | null
           final_explanation: string | null
           id: string
+          is_active: boolean | null
+          priority: number | null
           question: string
+          scheduled_date: string | null
           steps: Json | null
           theme: string
           type: string
@@ -133,7 +104,10 @@ export type Database = {
           explanation?: string | null
           final_explanation?: string | null
           id?: string
+          is_active?: boolean | null
+          priority?: number | null
           question: string
+          scheduled_date?: string | null
           steps?: Json | null
           theme: string
           type?: string
@@ -146,7 +120,10 @@ export type Database = {
           explanation?: string | null
           final_explanation?: string | null
           id?: string
+          is_active?: boolean | null
+          priority?: number | null
           question?: string
+          scheduled_date?: string | null
           steps?: Json | null
           theme?: string
           type?: string
@@ -155,12 +132,84 @@ export type Database = {
         }
         Relationships: []
       }
+      user_progress: {
+        Row: {
+          correct_percentage: number
+          id: string
+          last_updated: string
+          questions_completed: number
+          total_points: number
+          user_id: string
+          user_level: number
+        }
+        Insert: {
+          correct_percentage?: number
+          id?: string
+          last_updated?: string
+          questions_completed?: number
+          total_points?: number
+          user_id: string
+          user_level?: number
+        }
+        Update: {
+          correct_percentage?: number
+          id?: string
+          last_updated?: string
+          questions_completed?: number
+          total_points?: number
+          user_id?: string
+          user_level?: number
+        }
+        Relationships: []
+      }
+      user_quiz_scores: {
+        Row: {
+          accuracy: number
+          created_at: string
+          direct_final_answer: boolean
+          hints_revealed_count: number
+          id: string
+          is_multi_step: boolean
+          question_id: string
+          skipped_steps: boolean
+          used_hints: boolean
+          user_id: string
+        }
+        Insert: {
+          accuracy: number
+          created_at?: string
+          direct_final_answer?: boolean
+          hints_revealed_count?: number
+          id?: string
+          is_multi_step?: boolean
+          question_id: string
+          skipped_steps?: boolean
+          used_hints?: boolean
+          user_id: string
+        }
+        Update: {
+          accuracy?: number
+          created_at?: string
+          direct_final_answer?: boolean
+          hints_revealed_count?: number
+          id?: string
+          is_multi_step?: boolean
+          question_id?: string
+          skipped_steps?: boolean
+          used_hints?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id?: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

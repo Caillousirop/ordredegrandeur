@@ -1,5 +1,6 @@
 
 import { QuizScore } from "@/components/types";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface ProfileStats {
   correctPercentage: number;
@@ -31,4 +32,34 @@ export const calculateProfileStats = (scores: QuizScore[], questionsCompleted: n
     totalPoints,
     userLevel
   };
+};
+
+// Nouvelle fonction pour charger les statistiques depuis Supabase
+export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | null> => {
+  try {
+    // Charger la progression globale
+    const { data: progress, error: progressError } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+
+    if (progressError && progressError.code !== 'PGRST116') {
+      console.error('Erreur lors du chargement de la progression:', progressError);
+      return null;
+    }
+
+    if (progress) {
+      return {
+        correctPercentage: progress.correct_percentage,
+        totalPoints: progress.total_points,
+        userLevel: progress.user_level
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Erreur lors du chargement des statistiques:', error);
+    return null;
+  }
 };
