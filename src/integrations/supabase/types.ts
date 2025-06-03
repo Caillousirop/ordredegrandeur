@@ -63,6 +63,41 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_responses: {
+        Row: {
+          accuracy: number
+          answered_at: string
+          daily_question_id: string
+          id: string
+          user_answer: number
+          user_id: string
+        }
+        Insert: {
+          accuracy: number
+          answered_at?: string
+          daily_question_id: string
+          id?: string
+          user_answer: number
+          user_id: string
+        }
+        Update: {
+          accuracy?: number
+          answered_at?: string
+          daily_question_id?: string
+          id?: string
+          user_answer?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_responses_daily_question_id_fkey"
+            columns: ["daily_question_id"]
+            isOneToOne: false
+            referencedRelation: "daily_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

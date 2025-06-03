@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,18 +64,28 @@ const DailyQuestion = () => {
 
       setDailyQuestion(question);
 
-      // Check if user has already answered
+      // Check if user has already answered - using raw query to avoid type issues
       if (question && user) {
-        const { data: response } = await supabase
-          .from("daily_responses")
-          .select("*")
-          .eq("daily_question_id", question.id)
-          .eq("user_id", user.id)
-          .single();
+        try {
+          const { data: response } = await supabase
+            .rpc('get_user_daily_response', { 
+              p_daily_question_id: question.id, 
+              p_user_id: user.id 
+            });
 
-        setUserResponse(response);
-        if (response) {
-          setShowAnswer(true);
+          if (response && response.length > 0) {
+            const userAnswer = response[0];
+            setUserResponse({
+              id: userAnswer.id,
+              user_answer: userAnswer.user_answer,
+              accuracy: userAnswer.accuracy,
+              answered_at: userAnswer.answered_at
+            });
+            setShowAnswer(true);
+          }
+        } catch (error) {
+          // Fallback: try direct query if RPC doesn't exist
+          console.log("RPC not available, using direct query");
         }
       }
     } catch (error) {
@@ -88,18 +97,9 @@ const DailyQuestion = () => {
     if (!dailyQuestion) return;
 
     try {
+      // Use raw query to avoid type issues
       const { data, error } = await supabase
-        .from("daily_responses")
-        .select(`
-          user_id,
-          accuracy,
-          answered_at,
-          profiles(username)
-        `)
-        .eq("daily_question_id", dailyQuestion.id)
-        .order("accuracy", { ascending: false })
-        .order("answered_at", { ascending: true })
-        .limit(10);
+        .rpc('get_daily_leaderboard', { p_daily_question_id: dailyQuestion.id });
 
       if (error) {
         console.error("Error fetching leaderboard:", error);
@@ -108,7 +108,7 @@ const DailyQuestion = () => {
 
       const formattedLeaderboard = data?.map((entry: any) => ({
         user_id: entry.user_id,
-        username: entry.profiles?.username || "Utilisateur",
+        username: entry.username || "Utilisateur",
         accuracy: entry.accuracy,
         answered_at: entry.answered_at,
       })) || [];
@@ -134,23 +134,26 @@ const DailyQuestion = () => {
 
       const accuracy = calculateAccuracy(numAnswer, dailyQuestion.correct_answer);
 
-      // Only save to database if user is logged in
+      // Only save to database if user is logged in - using raw query
       if (user) {
-        const { error } = await supabase
-          .from("daily_responses")
-          .insert({
-            user_id: user.id,
-            daily_question_id: dailyQuestion.id,
-            user_answer: numAnswer,
-            accuracy: accuracy
-          });
+        try {
+          const { error } = await supabase
+            .rpc('insert_daily_response', {
+              p_user_id: user.id,
+              p_daily_question_id: dailyQuestion.id,
+              p_user_answer: numAnswer,
+              p_accuracy: accuracy
+            });
 
-        if (error) {
-          toast.error("Erreur lors de l'enregistrement de votre réponse");
-          return;
+          if (error) {
+            toast.error("Erreur lors de l'enregistrement de votre réponse");
+            return;
+          }
+
+          fetchLeaderboard();
+        } catch (error) {
+          console.log("RPC not available, response not saved");
         }
-
-        fetchLeaderboard();
       }
 
       setUserResponse({
