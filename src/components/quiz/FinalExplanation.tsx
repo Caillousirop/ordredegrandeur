@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Step } from "../types";
 
 interface FinalExplanationProps {
@@ -39,9 +38,6 @@ const FinalExplanation: React.FC<FinalExplanationProps> = ({
         {/* Explication finale */}
         {finalExplanation && <p className="text-primary font-medium">{finalExplanation}</p>}
       </div>
-      <Button onClick={onNextQuestion} className="w-full mt-2 bg-gradient-to-r from-primary to-primary/80">
-        Question suivante
-      </Button>
     </div>
   );
 };
