@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Question, QuizScore } from "./types";
 import { themes } from "@/data/themes";
 import { EyeIcon } from "lucide-react";
+import { calculateAccuracy } from "./quiz/CalculateAccuracy";
 
 interface QuizQuestionProps {
   question: Question;
@@ -43,15 +44,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     setSubmitted(true);
 
     if (onScore) {
-      // Calculate accuracy
-      const maxDifference = question.correctAnswer;
-      const actualDifference = Math.abs(numAnswer - question.correctAnswer);
-      const calculatedAccuracy = Math.max(0, 100 - (actualDifference / maxDifference) * 100);
-      const clampedAccuracy = Math.min(100, Math.max(0, calculatedAccuracy));
+      // Use the centralized accuracy calculation
+      const calculatedAccuracy = calculateAccuracy(numAnswer, question.correctAnswer);
       
       onScore({
         questionId: question.id,
-        accuracy: clampedAccuracy,
+        accuracy: calculatedAccuracy,
         isMultiStep: false,
         directFinalAnswer: false
       });

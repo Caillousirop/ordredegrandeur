@@ -1,8 +1,11 @@
 
 // Utility function extracted from MultiStepQuizQuestion with improved order of magnitude logic
 export const calculateAccuracy = (userAnswer: number, correctAnswer: number): number => {
+  console.log(`CalculateAccuracy: User answer: ${userAnswer}, Correct answer: ${correctAnswer}`);
+  
   // Handle exact match case
   if (userAnswer === correctAnswer) {
+    console.log("Exact match - returning 100%");
     return 100;
   }
   
@@ -18,12 +21,19 @@ export const calculateAccuracy = (userAnswer: number, correctAnswer: number): nu
   
   let calculatedAccuracy = 0;
   
-  // Special handling for percentages (values typically between 0 and 100)
-  const isPercentage = correctAnswer <= 100 && correctAnswer >= 0;
+  // Enhanced percentage detection - values typically between 0 and 100 AND the correct answer suggests it's a percentage
+  const isPercentage = correctAnswer <= 100 && correctAnswer >= 0 && (
+    correctAnswer % 1 !== 0 || // Has decimals (like 73.5%)
+    (correctAnswer >= 1 && correctAnswer <= 100) // Whole numbers between 1-100 are likely percentages
+  );
+  
+  console.log(`Is percentage: ${isPercentage}, Correct answer: ${correctAnswer}`);
   
   if (isPercentage) {
-    // For percentages, be much more strict
+    // For percentages, be much more strict with absolute differences
     const absoluteDifference = Math.abs(userAnswer - correctAnswer);
+    
+    console.log(`Percentage mode - Absolute difference: ${absoluteDifference}`);
     
     if (absoluteDifference <= 1) {
       calculatedAccuracy = 95; // Within 1% - excellent
@@ -39,8 +49,10 @@ export const calculateAccuracy = (userAnswer: number, correctAnswer: number): nu
       calculatedAccuracy = 35; // Within 25% - poor
     } else if (absoluteDifference <= 40) {
       calculatedAccuracy = 20; // Within 40% - very poor
+    } else if (absoluteDifference <= 50) {
+      calculatedAccuracy = 10; // Within 50% - terrible
     } else {
-      calculatedAccuracy = 10; // More than 40% off - terrible
+      calculatedAccuracy = 5; // More than 50% off - very terrible
     }
   } else {
     // Same order of magnitude - excellent!
@@ -94,5 +106,8 @@ export const calculateAccuracy = (userAnswer: number, correctAnswer: number): nu
     }
   }
   
-  return Math.min(100, Math.max(0, calculatedAccuracy));
+  const finalAccuracy = Math.min(100, Math.max(0, calculatedAccuracy));
+  console.log(`Final calculated accuracy: ${finalAccuracy}`);
+  
+  return finalAccuracy;
 };
