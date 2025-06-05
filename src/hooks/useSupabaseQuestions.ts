@@ -99,6 +99,11 @@ export const useSupabaseQuestions = () => {
         color: "from-purple-500 to-pink-400",
         icon: "Sparkles",
         description: "Questions surprenantes sur des faits étonnants et inhabituels"
+      },
+      "autre": {
+        color: "from-gray-500 to-gray-400",
+        icon: "HelpCircle",
+        description: "Questions diverses et variées"
       }
     };
 
@@ -118,19 +123,31 @@ export const useSupabaseQuestions = () => {
             icon: predefined.icon
           });
         } else {
-          // Créer un nouveau thème pour les thèmes non reconnus
-          themeMap.set(themeId, {
-            id: themeId,
-            name: question.theme.charAt(0).toUpperCase() + question.theme.slice(1),
-            description: `Questions sur ${question.theme}`,
-            color: "from-gray-500 to-gray-400",
-            icon: "HelpCircle"
+          // Créer un thème "Autre" pour les thèmes non reconnus
+          const otherTheme = predefinedThemes["autre"];
+          themeMap.set("autre", {
+            id: "autre",
+            name: "Autre",
+            description: otherTheme.description,
+            color: otherTheme.color,
+            icon: otherTheme.icon
           });
         }
       }
     });
 
-    return Array.from(themeMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+    // Convertir en array et trier avec "insolite" en dernier
+    const themesArray = Array.from(themeMap.values());
+    return themesArray.sort((a, b) => {
+      // Mettre "insolite" en dernier
+      if (a.id === "insolite") return 1;
+      if (b.id === "insolite") return -1;
+      // Mettre "autre" en avant-dernier
+      if (a.id === "autre") return 1;
+      if (b.id === "autre") return -1;
+      // Tri alphabétique pour le reste
+      return a.name.localeCompare(b.name);
+    });
   };
 
   const fetchQuestions = async () => {

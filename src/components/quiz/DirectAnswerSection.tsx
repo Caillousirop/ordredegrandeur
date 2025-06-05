@@ -59,7 +59,7 @@ const DirectAnswerSection: React.FC<DirectAnswerSectionProps> = ({
             <div className="space-y-4">
               <AccuracyGauge userAnswer={parseFloat(directFinalAnswer)} correctAnswer={correctAnswer} answerSubmitted={finalSubmitted} />
               
-              {finalAccuracy >= 80 && (
+              {finalAccuracy >= 75 && (
                 <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
                   <p className="font-medium flex items-center gap-2">
                     <CircleCheck className="h-5 w-5 text-green-500" />

@@ -1,5 +1,5 @@
 
-// Utility function extracted from MultiStepQuizQuestion
+// Utility function extracted from MultiStepQuizQuestion with improved order of magnitude logic
 export const calculateAccuracy = (userAnswer: number, correctAnswer: number): number => {
   // Handle exact match case
   if (userAnswer === correctAnswer) {
@@ -16,53 +16,56 @@ export const calculateAccuracy = (userAnswer: number, correctAnswer: number): nu
   // Calculate relative difference (as a fraction of the correct answer)
   const relativeDifference = Math.abs(userAnswer - correctAnswer) / Math.abs(correctAnswer);
   
-  // For very large numbers (billions or more), be more lenient
-  const isVeryLargeNumber = correctMagnitude >= 9; // 1 billion or more
-  const isLargeNumber = correctMagnitude >= 6; // 1 million or more
-  
   let calculatedAccuracy = 0;
   
-  // Same order of magnitude
+  // Same order of magnitude - excellent!
   if (orderOfMagnitudeDifference === 0) {
     if (relativeDifference < 0.05) {
-      calculatedAccuracy = 99; // Very close but not exact
+      calculatedAccuracy = 98; // Within 5% - excellent
     } else if (relativeDifference < 0.1) {
-      calculatedAccuracy = 95; // Very close
-    } else if (relativeDifference < 0.25) {
-      calculatedAccuracy = 90;
+      calculatedAccuracy = 95; // Within 10% - very good
+    } else if (relativeDifference < 0.2) {
+      calculatedAccuracy = 90; // Within 20% - good
     } else if (relativeDifference < 0.5) {
-      calculatedAccuracy = 85;
+      calculatedAccuracy = 85; // Within 50% - still good
     } else if (relativeDifference < 1) {
-      calculatedAccuracy = 75;
+      calculatedAccuracy = 80; // Within 100% but same magnitude - decent
     } else {
-      calculatedAccuracy = 70; // Higher base score even if quite off
+      calculatedAccuracy = 75; // Same order of magnitude but quite off
     }
   } 
-  // One order of magnitude difference
+  // One order of magnitude off - still decent for large numbers
   else if (orderOfMagnitudeDifference === 1) {
-    // Be more lenient for very large numbers
-    if (isVeryLargeNumber) {
-      calculatedAccuracy = 80; // Good score for being only one order off with billions
-    } else if (isLargeNumber) {
-      calculatedAccuracy = 70; // Good score for being only one order off with millions
+    // Be more generous for very large numbers (billions, trillions)
+    if (correctMagnitude >= 9) { // Billions or more
+      calculatedAccuracy = 70; // Good effort for billions
+    } else if (correctMagnitude >= 6) { // Millions
+      calculatedAccuracy = 60; // Decent for millions
     } else {
-      calculatedAccuracy = 50; // Increased from 40
+      calculatedAccuracy = 45; // Less forgiving for smaller numbers
     }
   } 
-  // Two orders of magnitude difference
+  // Two orders of magnitude off
   else if (orderOfMagnitudeDifference === 2) {
-    if (isVeryLargeNumber) {
-      calculatedAccuracy = 60; // Still decent for billions
-    } else if (isLargeNumber) {
-      calculatedAccuracy = 50; // Still decent for millions
+    if (correctMagnitude >= 9) { // Billions or more
+      calculatedAccuracy = 50; // Still some credit for billions
+    } else if (correctMagnitude >= 6) { // Millions
+      calculatedAccuracy = 35; // Some credit for millions
     } else {
-      calculatedAccuracy = 30;
+      calculatedAccuracy = 25;
     }
   }
-  // More than two orders of magnitude difference
+  // Three orders of magnitude off
+  else if (orderOfMagnitudeDifference === 3) {
+    if (correctMagnitude >= 9) { // Billions or more
+      calculatedAccuracy = 30; // Minimal credit for billions
+    } else {
+      calculatedAccuracy = 15;
+    }
+  }
+  // More than three orders of magnitude off - very poor
   else {
-    // Even for very large numbers, more than 2 orders of magnitude off is quite inaccurate
-    calculatedAccuracy = Math.max(10, 40 - (orderOfMagnitudeDifference - 2) * 10);
+    calculatedAccuracy = Math.max(5, 20 - (orderOfMagnitudeDifference - 3) * 5);
   }
   
   return Math.min(100, Math.max(0, calculatedAccuracy));
