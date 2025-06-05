@@ -17,6 +17,9 @@ const QuizContainer: React.FC = () => {
     questionsCompleted,
     searchQuery,
     searchResults,
+    questionsLoading,
+    questionsError,
+    themes,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,
@@ -26,6 +29,9 @@ const QuizContainer: React.FC = () => {
   } = useQuiz();
 
   console.log("QuizContainer rendered with filtered questions:", filteredQuestions.length);
+  console.log("Questions loading:", questionsLoading);
+  console.log("Questions error:", questionsError);
+  console.log("Available themes:", themes.length);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
@@ -42,6 +48,9 @@ const QuizContainer: React.FC = () => {
         questionsCompleted={questionsCompleted}
         searchQuery={searchQuery}
         searchResults={searchResults}
+        questionsLoading={questionsLoading}
+        questionsError={questionsError}
+        themes={themes}
         handleSearch={handleSearch}
         handleThemeSelect={handleThemeSelect}
         handleTypeSelect={handleTypeSelect}

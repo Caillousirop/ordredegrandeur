@@ -1,14 +1,15 @@
 
 import { useState, useEffect } from "react";
-import { questions, themes } from "@/data/themes";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 
 export const useQuiz = () => {
   const { user } = useAuth();
   const { saveScore, loadProgress, syncing } = useSupabaseProgress();
+  const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
@@ -20,6 +21,13 @@ export const useQuiz = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Afficher les erreurs de chargement des questions
+  useEffect(() => {
+    if (questionsError) {
+      toast.error(`Erreur lors du chargement des questions: ${questionsError}`);
+    }
+  }, [questionsError]);
 
   // Charger les données depuis Supabase au démarrage
   useEffect(() => {
@@ -49,17 +57,23 @@ export const useQuiz = () => {
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {
+    if (!supabaseQuestions || supabaseQuestions.length === 0) {
+      console.log("Aucune question disponible depuis Supabase");
+      setFilteredQuestions([]);
+      return;
+    }
+
     console.log("Filtering with theme:", selectedTheme?.id);
     console.log("Filtering with type:", selectedType);
-    console.log("Total questions available:", questions.length);
+    console.log("Total questions available:", supabaseQuestions.length);
     
-    // Start with all questions
-    let filtered = [...questions];
+    // Start with all questions from Supabase
+    let filtered = [...supabaseQuestions];
     
     // Filter by theme if selected (except for random theme)
     if (selectedTheme && selectedTheme.id !== "random") {
       console.log(`Filtering for theme: ${selectedTheme.id}`);
-      filtered = filtered.filter(q => q.theme === selectedTheme.id);
+      filtered = filtered.filter(q => q.theme.toLowerCase() === selectedTheme.id.toLowerCase());
       console.log(`After theme filter, questions count: ${filtered.length}`);
     }
     
@@ -77,16 +91,21 @@ export const useQuiz = () => {
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType]);
+  }, [selectedTheme, selectedType, supabaseQuestions]);
 
   // Handle search separately with proper accent handling
   useEffect(() => {
+    if (!supabaseQuestions || supabaseQuestions.length === 0) {
+      setSearchResults([]);
+      return;
+    }
+
     if (searchQuery && searchQuery.trim() !== "") {
       // Convert to lowercase but preserve accents
       const lowerCaseQuery = searchQuery.toLowerCase().trim();
       
       // Use includes() which naturally preserves accents in comparison
-      const results = questions.filter(q => 
+      const results = supabaseQuestions.filter(q => 
         q.question.toLowerCase().includes(lowerCaseQuery)
       );
       
@@ -95,7 +114,7 @@ export const useQuiz = () => {
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, supabaseQuestions]);
 
   const handleSearch = (query: string) => {
     console.log("Search query received:", query);
@@ -199,6 +218,9 @@ export const useQuiz = () => {
     searchQuery,
     searchResults,
     syncing,
+    questionsLoading,
+    questionsError,
+    themes: supabaseThemes,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,

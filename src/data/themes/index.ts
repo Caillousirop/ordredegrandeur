@@ -10,6 +10,9 @@ import { transportQuestions } from "./transport";
 import { insoliteQuestions } from "./insolite";
 import { QuizTheme } from "@/components/types";
 
+// IMPORTANT: Ce fichier est maintenant obsolète car les questions proviennent de Supabase
+// Il est conservé temporairement pour référence mais ne doit plus être utilisé
+
 // Normaliser tous les thèmes pour éviter les doublons et corriger les valeurs abrégées
 const normalizeAndFixQuestions = (questions: any[], targetTheme: string) => {
   return questions.map(q => {
@@ -49,7 +52,7 @@ const normalizeAndFixQuestions = (questions: any[], targetTheme: string) => {
   });
 };
 
-// Combiner toutes les questions avec normalisation des thèmes et correction des valeurs
+// OBSOLÈTE: Combiner toutes les questions avec normalisation des thèmes et correction des valeurs
 export const questions = [
   ...normalizeAndFixQuestions(demographieQuestions, "démographie"),
   ...normalizeAndFixQuestions(economieQuestions, "économie"),
@@ -62,7 +65,7 @@ export const questions = [
   ...normalizeAndFixQuestions(insoliteQuestions, "insolite")
 ];
 
-// Définir les thèmes disponibles avec noms normalisés
+// OBSOLÈTE: Définir les thèmes disponibles avec noms normalisés
 export const themes: QuizTheme[] = [
   {
     id: "démographie",

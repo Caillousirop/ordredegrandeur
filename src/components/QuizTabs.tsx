@@ -17,6 +17,9 @@ interface QuizTabsProps {
   questionsCompleted: number;
   searchQuery: string;
   searchResults: (Question | MultiStepQuestion)[];
+  questionsLoading?: boolean;
+  questionsError?: string | null;
+  themes: QuizTheme[];
   handleSearch: (query: string) => void;
   handleThemeSelect: (theme: QuizTheme) => void;
   handleTypeSelect: (type: "simple" | "multistep" | "all") => void;
@@ -36,6 +39,9 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   questionsCompleted,
   searchQuery,
   searchResults,
+  questionsLoading = false,
+  questionsError = null,
+  themes,
   handleSearch,
   handleThemeSelect,
   handleTypeSelect,
@@ -63,11 +69,24 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
           onSearch={handleSearch}
           onStartQuiz={startQuiz}
           filteredQuestionsCount={filteredQuestions.length}
+          questionsLoading={questionsLoading}
+          questionsError={questionsError}
+          themes={themes}
         />
       </TabsContent>
 
       <TabsContent value="questions" className="mt-6">
-        {currentQuestion && (
+        {questionsLoading ? (
+          <div className="text-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-2 text-muted-foreground">Chargement des questions...</p>
+          </div>
+        ) : questionsError ? (
+          <div className="text-center p-8 text-red-600">
+            <p>Erreur lors du chargement des questions:</p>
+            <p className="text-sm mt-1">{questionsError}</p>
+          </div>
+        ) : currentQuestion ? (
           <QuizContent
             question={currentQuestion}
             isMultiStep={isMultiStep}
@@ -75,6 +94,10 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
             onNext={handleNext}
             onScore={handleScore}
           />
+        ) : (
+          <div className="text-center p-8 text-muted-foreground">
+            <p>Aucune question disponible pour cette sélection.</p>
+          </div>
         )}
       </TabsContent>
 
