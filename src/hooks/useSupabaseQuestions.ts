@@ -100,10 +100,45 @@ export const useSupabaseQuestions = () => {
         icon: "Sparkles",
         description: "Questions surprenantes sur des faits étonnants et inhabituels"
       },
-      "autre": {
-        color: "from-gray-500 to-gray-400",
-        icon: "HelpCircle",
-        description: "Questions diverses et variées"
+      "alimentation": {
+        color: "from-lime-500 to-green-400",
+        icon: "Apple",
+        description: "Questions sur l'alimentation et les habitudes alimentaires"
+      },
+      "culture": {
+        color: "from-rose-500 to-pink-400",
+        icon: "Music",
+        description: "Questions sur la culture, les arts et les loisirs"
+      },
+      "sport": {
+        color: "from-cyan-500 to-blue-400",
+        icon: "Trophy",
+        description: "Questions sur le sport et les activités physiques"
+      },
+      "géographie": {
+        color: "from-teal-500 to-cyan-400",
+        icon: "MapPin",
+        description: "Questions sur la géographie française et mondiale"
+      },
+      "histoire": {
+        color: "from-amber-600 to-yellow-500",
+        icon: "BookOpen",
+        description: "Questions sur l'histoire de France et du monde"
+      },
+      "politique": {
+        color: "from-slate-600 to-gray-500",
+        icon: "Vote",
+        description: "Questions sur la politique et les institutions"
+      },
+      "justice": {
+        color: "from-stone-600 to-slate-500",
+        icon: "Scale",
+        description: "Questions sur le système judiciaire et la justice"
+      },
+      "emploi": {
+        color: "from-blue-600 to-indigo-500",
+        icon: "Briefcase",
+        description: "Questions sur l'emploi et le marché du travail"
       }
     };
 
@@ -123,14 +158,25 @@ export const useSupabaseQuestions = () => {
             icon: predefined.icon
           });
         } else {
-          // Créer un thème "Autre" pour les thèmes non reconnus
-          const otherTheme = predefinedThemes["autre"];
-          themeMap.set("autre", {
-            id: "autre",
-            name: "Autre",
-            description: otherTheme.description,
-            color: otherTheme.color,
-            icon: otherTheme.icon
+          // Créer un thème avec une couleur par défaut pour les thèmes non prédéfinis
+          const colors = [
+            "from-indigo-600 to-purple-500",
+            "from-pink-600 to-rose-500",
+            "from-yellow-600 to-orange-500",
+            "from-green-600 to-teal-500",
+            "from-blue-600 to-cyan-500",
+            "from-purple-600 to-indigo-500"
+          ];
+          const icons = ["Star", "Zap", "Gem", "Crown", "Rocket", "Shield"];
+          
+          const colorIndex = Math.abs(themeId.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % colors.length;
+          
+          themeMap.set(themeId, {
+            id: themeId,
+            name: question.theme.charAt(0).toUpperCase() + question.theme.slice(1),
+            description: `Questions sur ${question.theme}`,
+            color: colors[colorIndex],
+            icon: icons[colorIndex]
           });
         }
       }
@@ -142,9 +188,6 @@ export const useSupabaseQuestions = () => {
       // Mettre "insolite" en dernier
       if (a.id === "insolite") return 1;
       if (b.id === "insolite") return -1;
-      // Mettre "autre" en avant-dernier
-      if (a.id === "autre") return 1;
-      if (b.id === "autre") return -1;
       // Tri alphabétique pour le reste
       return a.name.localeCompare(b.name);
     });
