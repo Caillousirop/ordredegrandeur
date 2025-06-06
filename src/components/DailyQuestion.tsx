@@ -101,7 +101,7 @@ const DailyQuestion: React.FC = () => {
       setNumericAnswer(answer);
       setSubmitted(true);
 
-      const accuracy = calculateAccuracy(answer, dailyQuestion.correct_answer, dailyQuestion.unit);
+      const accuracy = calculateAccuracy(answer, dailyQuestion.correct_answer);
 
       // Save to database only if user is logged in
       if (user) {

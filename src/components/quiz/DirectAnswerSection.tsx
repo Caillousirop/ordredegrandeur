@@ -45,20 +45,17 @@ const DirectAnswerSection: React.FC<DirectAnswerSectionProps> = ({
         </form>
       ) : (
         <div className="space-y-4">
+          <AccuracyGauge userAnswer={parseFloat(directFinalAnswer)} correctAnswer={correctAnswer} answerSubmitted={finalSubmitted} />
+          
           {!showAnswer ? (
-            <div className="space-y-4">
-              <AccuracyGauge userAnswer={parseFloat(directFinalAnswer)} correctAnswer={correctAnswer} answerSubmitted={finalSubmitted} />
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={() => setShowAnswer(true)} className="flex items-center gap-2">
-                  <EyeIcon size={16} />
-                  Voir la réponse
-                </Button>
-              </div>
+            <div className="flex justify-center">
+              <Button variant="outline" onClick={() => setShowAnswer(true)} className="flex items-center gap-2">
+                <EyeIcon size={16} />
+                Voir la réponse
+              </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              <AccuracyGauge userAnswer={parseFloat(directFinalAnswer)} correctAnswer={correctAnswer} answerSubmitted={finalSubmitted} />
-              
               {finalAccuracy >= 75 && (
                 <div className="mt-4 p-3 rounded-md border border-green-200 bg-green-50 dark:bg-green-900/20 text-sm">
                   <p className="font-medium flex items-center gap-2">

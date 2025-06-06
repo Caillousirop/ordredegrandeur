@@ -1,5 +1,5 @@
 
-// Utility function extracted from MultiStepQuizQuestion with improved order of magnitude logic
+// Utility function extracted from MultiStepQuizQuestion with improved and stricter accuracy logic
 export const calculateAccuracy = (userAnswer: number, correctAnswer: number): number => {
   console.log(`CalculateAccuracy: User answer: ${userAnswer}, Correct answer: ${correctAnswer}`);
   
@@ -38,71 +38,71 @@ export const calculateAccuracy = (userAnswer: number, correctAnswer: number): nu
     if (absoluteDifference <= 1) {
       calculatedAccuracy = 95; // Within 1% - excellent
     } else if (absoluteDifference <= 2) {
-      calculatedAccuracy = 90; // Within 2% - very good
+      calculatedAccuracy = 85; // Within 2% - very good (reduced from 90)
     } else if (absoluteDifference <= 5) {
-      calculatedAccuracy = 80; // Within 5% - good
+      calculatedAccuracy = 70; // Within 5% - good (reduced from 80)
     } else if (absoluteDifference <= 10) {
-      calculatedAccuracy = 65; // Within 10% - decent
+      calculatedAccuracy = 55; // Within 10% - decent (reduced from 65)
     } else if (absoluteDifference <= 15) {
-      calculatedAccuracy = 50; // Within 15% - not great
+      calculatedAccuracy = 40; // Within 15% - not great (reduced from 50)
     } else if (absoluteDifference <= 25) {
-      calculatedAccuracy = 35; // Within 25% - poor
+      calculatedAccuracy = 25; // Within 25% - poor (reduced from 35)
     } else if (absoluteDifference <= 40) {
-      calculatedAccuracy = 20; // Within 40% - very poor
+      calculatedAccuracy = 15; // Within 40% - very poor (reduced from 20)
     } else if (absoluteDifference <= 50) {
-      calculatedAccuracy = 10; // Within 50% - terrible
+      calculatedAccuracy = 8; // Within 50% - terrible (reduced from 10)
     } else {
-      calculatedAccuracy = 5; // More than 50% off - very terrible
+      calculatedAccuracy = 3; // More than 50% off - very terrible (reduced from 5)
     }
   } else {
-    // Same order of magnitude - excellent!
+    // Same order of magnitude - be more strict
     if (orderOfMagnitudeDifference === 0) {
       if (relativeDifference < 0.05) {
-        calculatedAccuracy = 98; // Within 5% - excellent
+        calculatedAccuracy = 95; // Within 5% - excellent
       } else if (relativeDifference < 0.1) {
-        calculatedAccuracy = 95; // Within 10% - very good
+        calculatedAccuracy = 85; // Within 10% - very good (reduced from 95)
       } else if (relativeDifference < 0.2) {
-        calculatedAccuracy = 90; // Within 20% - good
+        calculatedAccuracy = 75; // Within 20% - good (reduced from 90)
       } else if (relativeDifference < 0.5) {
-        calculatedAccuracy = 85; // Within 50% - still good
+        calculatedAccuracy = 65; // Within 50% - still good (reduced from 85)
       } else if (relativeDifference < 1) {
-        calculatedAccuracy = 80; // Within 100% but same magnitude - decent
+        calculatedAccuracy = 55; // Within 100% but same magnitude - decent (reduced from 80)
       } else {
-        calculatedAccuracy = 75; // Same order of magnitude but quite off
+        calculatedAccuracy = 45; // Same order of magnitude but quite off (reduced from 75)
       }
     } 
-    // One order of magnitude off - still decent for large numbers
+    // One order of magnitude off - be more strict
     else if (orderOfMagnitudeDifference === 1) {
-      // Be more generous for very large numbers (billions, trillions)
+      // Be more strict for large numbers too
       if (correctMagnitude >= 9) { // Billions or more
-        calculatedAccuracy = 70; // Good effort for billions
+        calculatedAccuracy = 50; // Good effort for billions (reduced from 70)
       } else if (correctMagnitude >= 6) { // Millions
-        calculatedAccuracy = 60; // Decent for millions
+        calculatedAccuracy = 40; // Decent for millions (reduced from 60)
       } else {
-        calculatedAccuracy = 45; // Less forgiving for smaller numbers
+        calculatedAccuracy = 30; // Less forgiving for smaller numbers (reduced from 45)
       }
     } 
-    // Two orders of magnitude off
+    // Two orders of magnitude off - much stricter
     else if (orderOfMagnitudeDifference === 2) {
       if (correctMagnitude >= 9) { // Billions or more
-        calculatedAccuracy = 50; // Still some credit for billions
+        calculatedAccuracy = 30; // Still some credit for billions (reduced from 50)
       } else if (correctMagnitude >= 6) { // Millions
-        calculatedAccuracy = 35; // Some credit for millions
+        calculatedAccuracy = 20; // Some credit for millions (reduced from 35)
       } else {
-        calculatedAccuracy = 25;
+        calculatedAccuracy = 15; // Reduced from 25
       }
     }
-    // Three orders of magnitude off
+    // Three orders of magnitude off - very strict
     else if (orderOfMagnitudeDifference === 3) {
       if (correctMagnitude >= 9) { // Billions or more
-        calculatedAccuracy = 30; // Minimal credit for billions
+        calculatedAccuracy = 15; // Minimal credit for billions (reduced from 30)
       } else {
-        calculatedAccuracy = 15;
+        calculatedAccuracy = 8; // Reduced from 15
       }
     }
-    // More than three orders of magnitude off - very poor
+    // More than three orders of magnitude off - extremely strict
     else {
-      calculatedAccuracy = Math.max(5, 20 - (orderOfMagnitudeDifference - 3) * 5);
+      calculatedAccuracy = Math.max(2, 10 - (orderOfMagnitudeDifference - 3) * 2); // Much more penalizing
     }
   }
   
