@@ -93,26 +93,13 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
               />
             )}
 
-            {/* Final explanation or next question button */}
+            {/* Final explanation */}
             {(finalSubmitted && showAnswer) && (
               <FinalExplanation
                 finalExplanation={question.finalExplanation}
                 steps={question.steps}
                 onNextQuestion={handleNextQuestion}
               />
-            )}
-            
-            {/* Extra Next Question button at the bottom if any step is submitted */}
-            {anyStepSubmitted && (
-              <div className="mt-6 flex justify-center">
-                <Button 
-                  onClick={handleNextQuestion} 
-                  variant="outline" 
-                  className="px-6"
-                >
-                  Question suivante
-                </Button>
-              </div>
             )}
           </CardContent>
           

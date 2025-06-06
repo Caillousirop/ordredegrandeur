@@ -1,42 +1,36 @@
 
 import React from "react";
-import { Step } from "../types";
+import { QuizStep } from "../types";
 
 interface FinalExplanationProps {
   finalExplanation?: string;
-  steps?: Step[];
+  steps: QuizStep[];
   onNextQuestion: () => void;
 }
 
 const FinalExplanation: React.FC<FinalExplanationProps> = ({
   finalExplanation,
-  steps = [],
-  onNextQuestion
+  steps
 }) => {
   return (
-    <div className="p-4 mt-4 border-2 border-primary/20 rounded-md">
-      <div className="mt-2 text-sm mb-4">
-        <p className="font-medium text-base">Explication finale:</p>
-        
-        {/* Étapes de calcul résumées */}
-        {steps && steps.length > 0 && (
-          <div className="space-y-2 mt-3 mb-4">
-            <p className="font-medium">Calculs:</p>
-            {steps.map((step, index) => (
-              <div key={index} className="pl-4 border-l-2 border-gray-200">
-                <p>
-                  <span className="font-medium">Étape {index + 1}:</span> {step.question}
-                </p>
-                <p className="text-gray-600">
-                  Résultat: {step.correctAnswer.toLocaleString()} {step.unit || ""}
-                </p>
-              </div>
-            ))}
+    <div className="space-y-6">
+      {finalExplanation && (
+        <div className="bg-primary/5 rounded-lg p-4">
+          <h4 className="font-medium mb-2">Explication complète</h4>
+          <p className="text-sm">{finalExplanation}</p>
+        </div>
+      )}
+      
+      <div className="space-y-3">
+        <h4 className="font-medium">Récapitulatif des étapes</h4>
+        {steps.map((step, index) => (
+          <div key={index} className="bg-muted/30 rounded-lg p-3">
+            <p className="text-sm font-medium">{step.question}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Réponse : {step.correctAnswer} {step.unit}
+            </p>
           </div>
-        )}
-        
-        {/* Explication finale */}
-        {finalExplanation && <p className="text-primary font-medium">{finalExplanation}</p>}
+        ))}
       </div>
     </div>
   );

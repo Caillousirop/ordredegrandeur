@@ -43,7 +43,7 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
 }) => {
   const [answers, setAnswers] = useState<(number | null)[]>(Array(question.steps.length).fill(null));
   const [submitted, setSubmitted] = useState<boolean[]>(Array(question.steps.length).fill(false));
-  const [directFinalMode, setDirectFinalMode] = useState(true); // Default to direct answer mode
+  const [directFinalMode, setDirectFinalMode] = useState(true);
   const [directFinalAnswer, setDirectFinalAnswer] = useState<string>("");
   const [finalSubmitted, setFinalSubmitted] = useState(false);
   const [finalAccuracy, setFinalAccuracy] = useState(0);
@@ -51,16 +51,27 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
   const [skippedSteps, setSkippedSteps] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [calculatorOpen, setCalculatorOpen] = useState(false);
-  const [anyStepSubmitted, setAnyStepSubmitted] = useState(false); // Track if any step has been submitted
+  const [anyStepSubmitted, setAnyStepSubmitted] = useState(false);
 
   // Find theme
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
 
+  // Reset all states when question changes
   useEffect(() => {
-    // By default, make all steps active
+    console.log("Question changed, resetting states");
+    setAnswers(Array(question.steps.length).fill(null));
+    setSubmitted(Array(question.steps.length).fill(false));
+    setDirectFinalMode(true);
+    setDirectFinalAnswer("");
+    setFinalSubmitted(false);
+    setFinalAccuracy(0);
+    setSkippedSteps(false);
+    setShowAnswer(false);
+    setCalculatorOpen(false);
+    setAnyStepSubmitted(false);
     setActiveSteps(Array.from({ length: question.steps.length }, (_, i) => i));
-  }, [question.steps.length]);
+  }, [question.id, question.steps.length]);
 
   const handleDirectFinalToggle = () => {
     setDirectFinalMode(!directFinalMode);
@@ -79,7 +90,7 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     const newSubmitted = [...submitted];
     newSubmitted[stepIndex] = true;
     setSubmitted(newSubmitted);
-    setAnyStepSubmitted(true); // Mark that at least one step has been submitted
+    setAnyStepSubmitted(true);
 
     // Calculate accuracy for this step
     const step = question.steps[stepIndex];
@@ -94,7 +105,6 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
       });
     }
     
-    // Show next question button immediately after answering any step
     toast.success("Réponse enregistrée ! Vous pouvez passer à la question suivante.", {
       duration: 3000
     });
@@ -108,20 +118,18 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
       return;
     }
     setFinalSubmitted(true);
-    setAnyStepSubmitted(true); // Mark that an answer has been submitted
+    setAnyStepSubmitted(true);
 
     // Calculate accuracy compared to the last step's correct answer
     const finalStep = question.steps[question.steps.length - 1];
     const accuracy = calculateAccuracy(numAnswer, finalStep.correctAnswer);
     setFinalAccuracy(accuracy);
 
-    // Show congratulations message for direct final answers that are accurate
     if (accuracy >= 80) {
       toast.success("🎉 Bravo ! Excellente réponse directe !", {
         duration: 5000
       });
     } else {
-      // Show next question notification for other cases
       toast.success("Réponse enregistrée ! Vous pouvez passer à la question suivante.", {
         duration: 3000
       });
@@ -131,7 +139,6 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     if (onScore) {
       onScore({
         questionId: question.id,
-        // Give 50% bonus for direct final answer if accurate
         accuracy: accuracy * 1.5 > 100 ? 100 : accuracy * 1.5,
         isMultiStep: true,
         directFinalAnswer: true,
@@ -147,6 +154,7 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
   };
 
   const handleNextQuestion = () => {
+    console.log("Next question clicked");
     if (onNext) onNext();
   };
 
