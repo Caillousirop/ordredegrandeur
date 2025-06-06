@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
 import { Question, MultiStepQuestion, QuizTheme } from "./types";
@@ -29,7 +28,6 @@ interface QuizTabsProps {
 
 const QuizTabs: React.FC<QuizTabsProps> = ({
   activeTab,
-  setActiveTab,
   filteredQuestions,
   currentQuestion,
   isMultiStep,
@@ -48,30 +46,9 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   handleScore,
   startQuiz
 }) => {
-  return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid w-full grid-cols-1">
-        <TabsTrigger value="setup">Configuration</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="setup" className="mt-6">
-        <QuizSetup
-          selectedTheme={selectedTheme}
-          selectedType={selectedType}
-          onSelectTheme={handleThemeSelect}
-          onSelectType={handleTypeSelect}
-          searchQuery={searchQuery}
-          searchResults={searchResults}
-          onSearch={handleSearch}
-          onStartQuiz={startQuiz}
-          filteredQuestionsCount={filteredQuestions.length}
-          questionsLoading={questionsLoading}
-          questionsError={questionsError}
-          themes={themes}
-        />
-      </TabsContent>
-
-      <TabsContent value="questions" className="mt-6">
+  if (activeTab === "questions") {
+    return (
+      <div className="w-full">
         {questionsLoading ? (
           <div className="text-center p-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
@@ -95,8 +72,27 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
             <p>Aucune question disponible pour cette sélection.</p>
           </div>
         )}
-      </TabsContent>
-    </Tabs>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <QuizSetup
+        selectedTheme={selectedTheme}
+        selectedType={selectedType}
+        onSelectTheme={handleThemeSelect}
+        onSelectType={handleTypeSelect}
+        searchQuery={searchQuery}
+        searchResults={searchResults}
+        onSearch={handleSearch}
+        onStartQuiz={startQuiz}
+        filteredQuestionsCount={filteredQuestions.length}
+        questionsLoading={questionsLoading}
+        questionsError={questionsError}
+        themes={themes}
+      />
+    </div>
   );
 };
 
