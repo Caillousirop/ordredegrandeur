@@ -8,12 +8,16 @@ interface AccuracyGaugeProps {
   userAnswer: number;
   correctAnswer: number;
   answerSubmitted: boolean;
+  accuracy?: number;
+  size?: "sm" | "md" | "lg";
 }
 
 const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
   userAnswer,
   correctAnswer,
   answerSubmitted,
+  accuracy: providedAccuracy,
+  size = "md",
 }) => {
   const [progress, setProgress] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
@@ -23,10 +27,12 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
     return num.toLocaleString();
   };
   
-  // Calculate the accuracy using the centralized function
+  // Calculate the accuracy using the centralized function or use provided accuracy
   useEffect(() => {
     if (answerSubmitted) {
-      const calculatedAccuracy = calculateAccuracy(userAnswer, correctAnswer);
+      const calculatedAccuracy = providedAccuracy !== undefined 
+        ? providedAccuracy 
+        : calculateAccuracy(userAnswer, correctAnswer);
       
       console.log(`AccuracyGauge: User answer: ${userAnswer}, Correct answer: ${correctAnswer}, Calculated accuracy: ${calculatedAccuracy}`);
       
@@ -40,7 +46,7 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       
       return () => clearTimeout(timer);
     }
-  }, [userAnswer, correctAnswer, answerSubmitted]);
+  }, [userAnswer, correctAnswer, answerSubmitted, providedAccuracy]);
 
   // Determine color based on accuracy
   const getColor = () => {
@@ -60,6 +66,14 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
     return "😢";
   };
 
+  const getSizeClass = () => {
+    switch (size) {
+      case "sm": return "h-2";
+      case "lg": return "h-6";
+      default: return "h-4";
+    }
+  };
+
   return (
     <div className="w-full space-y-3">
       <div className="flex justify-between items-center">
@@ -72,7 +86,7 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       <div className="relative">
         <Progress 
           value={progress} 
-          className={cn("h-4 rounded-full transition-all", answerSubmitted ? getColor() : "")} 
+          className={cn(`${getSizeClass()} rounded-full transition-all`, answerSubmitted ? getColor() : "")} 
         />
       </div>
       {answerSubmitted && (

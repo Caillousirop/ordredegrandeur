@@ -35,6 +35,8 @@ const DailyQuestion: React.FC = () => {
   const [userResponse, setUserResponse] = useState<DailyResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [numericAnswer, setNumericAnswer] = useState<number>(0);
 
   useEffect(() => {
     loadDailyQuestion();
@@ -59,7 +61,7 @@ const DailyQuestion: React.FC = () => {
 
       setDailyQuestion(question);
 
-      // Check if user has already answered today
+      // Check if user has already answered today (only if logged in)
       if (user && question) {
         const { data: response, error: responseError } = await supabase
           .from('daily_responses')
@@ -73,6 +75,8 @@ const DailyQuestion: React.FC = () => {
         } else if (response) {
           setHasAnswered(true);
           setUserResponse(response);
+          setSubmitted(true);
+          setNumericAnswer(response.user_answer);
         }
       }
     } catch (error) {
@@ -83,7 +87,7 @@ const DailyQuestion: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!dailyQuestion || !user || !userAnswer.trim()) return;
+    if (!dailyQuestion || !userAnswer.trim()) return;
 
     try {
       setSubmitting(true);
@@ -94,28 +98,36 @@ const DailyQuestion: React.FC = () => {
         return;
       }
 
+      setNumericAnswer(answer);
+      setSubmitted(true);
+
       const accuracy = calculateAccuracy(answer, dailyQuestion.correct_answer, dailyQuestion.unit);
 
-      const { data, error } = await supabase
-        .from('daily_responses')
-        .insert({
-          user_id: user.id,
-          daily_question_id: dailyQuestion.id,
-          user_answer: answer,
-          accuracy: accuracy
-        })
-        .select()
-        .single();
+      // Save to database only if user is logged in
+      if (user) {
+        const { data, error } = await supabase
+          .from('daily_responses')
+          .insert({
+            user_id: user.id,
+            daily_question_id: dailyQuestion.id,
+            user_answer: answer,
+            accuracy: accuracy
+          })
+          .select()
+          .single();
 
-      if (error) {
-        console.error('Error saving response:', error);
-        toast.error("Erreur lors de l'enregistrement de votre réponse");
-        return;
+        if (error) {
+          console.error('Error saving response:', error);
+          toast.error("Erreur lors de l'enregistrement de votre réponse");
+          return;
+        }
+
+        setHasAnswered(true);
+        setUserResponse(data);
+        toast.success("Réponse enregistrée !");
+      } else {
+        toast.success("Réponse soumise ! Connectez-vous pour sauvegarder vos résultats.");
       }
-
-      setHasAnswered(true);
-      setUserResponse(data);
-      toast.success("Réponse enregistrée !");
     } catch (error) {
       console.error('Error submitting answer:', error);
       toast.error("Erreur lors de l'enregistrement");
@@ -148,7 +160,7 @@ const DailyQuestion: React.FC = () => {
   }
 
   return (
-    <Card className="mb-6 border-primary/20">
+    <Card className="mb-6">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
@@ -164,35 +176,7 @@ const DailyQuestion: React.FC = () => {
       <CardContent className="space-y-4">
         <p className="text-base font-medium">{dailyQuestion.question}</p>
         
-        {!user ? (
-          <div className="text-center p-4 bg-muted/30 rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              Connectez-vous pour participer à la question du jour
-            </p>
-          </div>
-        ) : hasAnswered && userResponse ? (
-          <div className="space-y-3">
-            <div className="bg-muted/30 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Votre réponse:</span>
-                <span className="font-mono">{userResponse.user_answer.toLocaleString()}{dailyQuestion.unit && ` ${dailyQuestion.unit}`}</span>
-              </div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium">Réponse correcte:</span>
-                <span className="font-mono text-primary">{dailyQuestion.correct_answer.toLocaleString()}{dailyQuestion.unit && ` ${dailyQuestion.unit}`}</span>
-              </div>
-              <AccuracyGauge accuracy={userResponse.accuracy} size="sm" />
-            </div>
-            
-            {dailyQuestion.explanation && (
-              <div className="bg-primary/5 rounded-lg p-4">
-                <p className="text-sm">
-                  <span className="font-medium">Explication:</span> {dailyQuestion.explanation}
-                </p>
-              </div>
-            )}
-          </div>
-        ) : (
+        {!submitted ? (
           <div className="space-y-3">
             <div className="flex gap-2">
               <Input
@@ -211,6 +195,36 @@ const DailyQuestion: React.FC = () => {
                 {submitting ? "..." : "Valider"}
               </Button>
             </div>
+            
+            {!user && (
+              <p className="text-xs text-muted-foreground">
+                💡 Connectez-vous pour sauvegarder vos résultats et voir votre classement
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <AccuracyGauge 
+              userAnswer={numericAnswer} 
+              correctAnswer={dailyQuestion.correct_answer} 
+              answerSubmitted={true}
+            />
+            
+            {dailyQuestion.explanation && (
+              <div className="bg-primary/5 rounded-lg p-4">
+                <p className="text-sm">
+                  <span className="font-medium">Explication:</span> {dailyQuestion.explanation}
+                </p>
+              </div>
+            )}
+            
+            {user && userResponse && (
+              <div className="bg-muted/30 rounded-lg p-3">
+                <p className="text-sm text-center">
+                  🏆 Votre score a été sauvegardé !
+                </p>
+              </div>
+            )}
           </div>
         )}
       </CardContent>
