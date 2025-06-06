@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileDown, FileUp, Copy, Trash, Plus, Calendar, ClipboardCheck } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, FileDown, FileUp, Copy, Trash, Plus, Calendar, ClipboardCheck, AlertTriangle } from "lucide-react";
 import { parseQuestionsFromJSON, sampleImportFormat } from "@/utils/questionImporter";
 import { toast } from "sonner";
 import { Question, MultiStepQuestion } from "@/components/types";
@@ -11,9 +13,11 @@ import AdminQuestionsList from "@/components/quiz/AdminQuestionsList";
 import QuestionForm from "@/components/quiz/QuestionForm";
 import QuestionScheduler from "@/components/quiz/QuestionScheduler";
 import QuestionProposalReview from "@/components/quiz/QuestionProposalReview";
+import QuestionValidator from "@/components/admin/QuestionValidator";
 
 const Admin = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("import");
   const [jsonInput, setJsonInput] = useState("");
   const [simpleQuestions, setSimpleQuestions] = useState<Question[]>([]);
   const [multiStepQuestions, setMultiStepQuestions] = useState<MultiStepQuestion[]>([]);
@@ -271,73 +275,94 @@ const Admin = () => {
       </div>
 
       {!showProposalReview ? (
-        <>
-          <QuestionScheduler onNewQuestionsGenerated={handleNewQuestionsGenerated} />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Importer des questions</CardTitle>
-                <CardDescription>
-                  Importez des questions en format JSON
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Textarea 
-                  className="min-h-[300px] font-mono text-sm"
-                  placeholder="Collez votre JSON ici..."
-                  value={jsonInput}
-                  onChange={(e) => setJsonInput(e.target.value)}
-                />
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button variant="outline" onClick={copyExampleFormat}>
-                  <Copy className="mr-2 h-4 w-4" /> Format d'exemple
-                </Button>
-                <Button onClick={handleImport}>
-                  <FileUp className="mr-2 h-4 w-4" /> Importer
-                </Button>
-              </CardFooter>
-            </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="import">Import/Export</TabsTrigger>
+            <TabsTrigger value="scheduler">Planificateur</TabsTrigger>
+            <TabsTrigger value="list">Liste des questions</TabsTrigger>
+            <TabsTrigger value="validator">Validateur</TabsTrigger>
+          </TabsList>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Résultat</CardTitle>
-                <CardDescription>
-                  Questions importées: {simpleQuestions.length + multiStepQuestions.length}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
-                  <div className="space-y-4">
-                    <p className="font-medium">Questions simples: {simpleQuestions.length}</p>
-                    <p className="font-medium">Questions à étapes: {multiStepQuestions.length}</p>
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground">Importez des questions pour voir le résultat</p>
-                )}
-              </CardContent>
-              <CardFooter>
-                <Button 
-                  variant="outline" 
-                  disabled={simpleQuestions.length === 0 && multiStepQuestions.length === 0}
-                  onClick={handleExport}
-                >
-                  <FileDown className="mr-2 h-4 w-4" /> Exporter
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
+          <TabsContent value="import" className="mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Importer des questions</CardTitle>
+                  <CardDescription>
+                    Importez des questions en format JSON
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Textarea 
+                    className="min-h-[300px] font-mono text-sm"
+                    placeholder="Collez votre JSON ici..."
+                    value={jsonInput}
+                    onChange={(e) => setJsonInput(e.target.value)}
+                  />
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <Button variant="outline" onClick={copyExampleFormat}>
+                    <Copy className="mr-2 h-4 w-4" /> Format d'exemple
+                  </Button>
+                  <Button onClick={handleImport}>
+                    <FileUp className="mr-2 h-4 w-4" /> Importer
+                  </Button>
+                </CardFooter>
+              </Card>
 
-          {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) && (
-            <AdminQuestionsList 
-              simpleQuestions={simpleQuestions}
-              multiStepQuestions={multiStepQuestions}
-              onDelete={handleDeleteQuestion}
-              onEdit={handleEditQuestion}
-            />
-          )}
-        </>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Résultat</CardTitle>
+                  <CardDescription>
+                    Questions importées: {simpleQuestions.length + multiStepQuestions.length}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
+                    <div className="space-y-4">
+                      <p className="font-medium">Questions simples: {simpleQuestions.length}</p>
+                      <p className="font-medium">Questions à étapes: {multiStepQuestions.length}</p>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground">Importez des questions pour voir le résultat</p>
+                  )}
+                </CardContent>
+                <CardFooter>
+                  <Button 
+                    variant="outline" 
+                    disabled={simpleQuestions.length === 0 && multiStepQuestions.length === 0}
+                    onClick={handleExport}
+                  >
+                    <FileDown className="mr-2 h-4 w-4" /> Exporter
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="scheduler" className="mt-6">
+            <QuestionScheduler onNewQuestionsGenerated={handleNewQuestionsGenerated} />
+          </TabsContent>
+
+          <TabsContent value="list" className="mt-6">
+            {(simpleQuestions.length > 0 || multiStepQuestions.length > 0) ? (
+              <AdminQuestionsList 
+                simpleQuestions={simpleQuestions}
+                multiStepQuestions={multiStepQuestions}
+                onDelete={handleDeleteQuestion}
+                onEdit={handleEditQuestion}
+              />
+            ) : (
+              <div className="text-center p-8 text-muted-foreground">
+                <p>Aucune question importée. Utilisez l'onglet "Import/Export" pour ajouter des questions.</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="validator" className="mt-6">
+            <QuestionValidator />
+          </TabsContent>
+        </Tabs>
       ) : (
         <QuestionProposalReview 
           proposedQuestions={proposedQuestions}
