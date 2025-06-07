@@ -28,6 +28,7 @@ interface QuizTabsProps {
 
 const QuizTabs: React.FC<QuizTabsProps> = ({
   activeTab,
+  setActiveTab,
   filteredQuestions,
   currentQuestion,
   isMultiStep,
@@ -46,6 +47,10 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   handleScore,
   startQuiz
 }) => {
+  const handleGoHome = () => {
+    setActiveTab("setup");
+  };
+
   if (activeTab === "questions") {
     return (
       <div className="w-full">
@@ -66,6 +71,7 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
             questionsCompleted={questionsCompleted}
             onNext={handleNext}
             onScore={handleScore}
+            onGoHome={handleGoHome}
           />
         ) : (
           <div className="text-center p-8 text-muted-foreground">

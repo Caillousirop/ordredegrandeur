@@ -10,23 +10,24 @@ import FloatingCalculator from "./quiz/FloatingCalculator";
 import FinalExplanation from "./quiz/FinalExplanation";
 import QuizModeSwitcher from "./quiz/QuizModeSwitcher";
 import { Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
   onNext?: () => void;
   onScore?: (score: QuizScore) => void;
+  onGoHome?: () => void;
 }
 
 const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   question,
   onNext,
-  onScore
+  onScore,
+  onGoHome
 }) => {
-  const navigate = useNavigate();
-
   const handleGoHome = () => {
-    navigate("/");
+    if (onGoHome) {
+      onGoHome();
+    }
   };
 
   return (

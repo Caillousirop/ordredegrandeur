@@ -9,20 +9,20 @@ import { Question, QuizScore } from "./types";
 import { themes } from "@/data/themes";
 import { EyeIcon, Home } from "lucide-react";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
-import { useNavigate } from "react-router-dom";
 
 interface QuizQuestionProps {
   question: Question;
   onNext?: () => void;
   onScore?: (score: QuizScore) => void;
+  onGoHome?: () => void;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({ 
   question, 
   onNext,
-  onScore
+  onScore,
+  onGoHome
 }) => {
-  const navigate = useNavigate();
   const [answer, setAnswer] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
@@ -71,7 +71,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   const handleGoHome = () => {
-    navigate("/");
+    if (onGoHome) {
+      onGoHome();
+    }
   };
 
   return (

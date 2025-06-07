@@ -2,15 +2,15 @@
 import React from "react";
 import QuizQuestion from "./QuizQuestion";
 import MultiStepQuizQuestion from "./MultiStepQuizQuestion";
-import { Badge } from "./ui/badge";
 import { Question, MultiStepQuestion, QuizScore } from "./types";
 
 interface QuizContentProps {
   question: Question | MultiStepQuestion;
   isMultiStep: boolean;
+  questionsCompleted: number;
   onNext: () => void;
   onScore: (score: QuizScore) => void;
-  questionsCompleted: number;
+  onGoHome: () => void;
 }
 
 const QuizContent: React.FC<QuizContentProps> = ({
@@ -18,33 +18,25 @@ const QuizContent: React.FC<QuizContentProps> = ({
   isMultiStep,
   onNext,
   onScore,
-  questionsCompleted
+  onGoHome
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="w-full flex justify-center">
       {isMultiStep ? (
-        <MultiStepQuizQuestion 
-          question={question as MultiStepQuestion} 
-          onNext={onNext} 
+        <MultiStepQuizQuestion
+          question={question as MultiStepQuestion}
+          onNext={onNext}
           onScore={onScore}
+          onGoHome={onGoHome}
         />
       ) : (
-        <QuizQuestion 
-          question={question as Question} 
-          onNext={onNext} 
+        <QuizQuestion
+          question={question as Question}
+          onNext={onNext}
           onScore={onScore}
+          onGoHome={onGoHome}
         />
       )}
-      
-      <div className="flex items-center justify-between text-sm text-muted-foreground px-2">
-        <p>Question {questionsCompleted + 1}</p>
-        
-        {isMultiStep && (
-          <Badge variant="outline" className="bg-primary/10">
-            Question à étapes
-          </Badge>
-        )}
-      </div>
     </div>
   );
 };
