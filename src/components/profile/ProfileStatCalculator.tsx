@@ -8,6 +8,26 @@ export interface ProfileStats {
   userLevel: number;
 }
 
+export interface LevelInfo {
+  currentLevel: number;
+  totalPoints: number;
+  nextLevelPoints: number;
+  currentLevelPoints: number;
+}
+
+export const calculateLevelInfo = (totalPoints: number): LevelInfo => {
+  const currentLevel = Math.floor(totalPoints / 25) + 1;
+  const currentLevelPoints = (currentLevel - 1) * 25;
+  const nextLevelPoints = currentLevel * 25;
+  
+  return {
+    currentLevel,
+    totalPoints,
+    nextLevelPoints,
+    currentLevelPoints
+  };
+};
+
 export const calculateProfileStats = (scores: QuizScore[], questionsCompleted: number): ProfileStats => {
   // Calculate statistics
   const totalAnswers = scores.length;

@@ -4,7 +4,7 @@ import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
-import AchievementsCard from "@/components/profile/AchievementsCard";
+import RewardsSystem from "@/components/profile/RewardsSystem";
 import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
@@ -168,24 +168,30 @@ const Profile = () => {
         <UserSpace questionsCompleted={questionsCompleted} />
       </div>
       
-      <div className="container mx-auto max-w-4xl px-4 py-10">
+      <div className="container mx-auto max-w-5xl px-4 py-10">
         <ProfileHeader />
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* User stats card */}
-          <StatisticsCard
-            scores={scores}
-            questionsCompleted={questionsCompleted}
-            correctPercentage={correctPercentage}
-            totalPoints={totalPoints}
-            userLevel={userLevel}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* User stats card - takes 2 columns on large screens */}
+          <div className="lg:col-span-2">
+            <StatisticsCard
+              scores={scores}
+              questionsCompleted={questionsCompleted}
+              correctPercentage={correctPercentage}
+              totalPoints={totalPoints}
+              userLevel={userLevel}
+            />
+          </div>
           
-          {/* Achievements card */}
-          <AchievementsCard 
-            scores={scores} 
-            questionsCompleted={questionsCompleted} 
-          />
+          {/* Rewards system - takes 1 column */}
+          <div className="lg:col-span-1">
+            <RewardsSystem 
+              scores={scores} 
+              questionsCompleted={questionsCompleted}
+              totalPoints={totalPoints}
+              correctPercentage={correctPercentage}
+            />
+          </div>
         </div>
       </div>
     </div>
