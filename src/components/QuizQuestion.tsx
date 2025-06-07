@@ -75,88 +75,89 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto border-[1px] border-secondary/50 shadow-sm">
-      <CardHeader className="border-b border-border/50">
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
-              {question.question}
-            </CardTitle>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleGoHome}
-            className="ml-2 flex items-center gap-1"
-          >
-            <Home size={16} />
-            <span className="hidden sm:inline">Accueil</span>
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4 pt-6">
-        {!submitted ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Input
-                type="text"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Votre réponse"
-                className="flex-grow"
-              />
-            </div>
-            <Button type="submit" className="w-full">Valider</Button>
-          </form>
-        ) : (
-          <div className="space-y-4">
-            {!showAnswer ? (
-              <div className="space-y-4">
-                <AccuracyGauge 
-                  userAnswer={userAnswer} 
-                  correctAnswer={question.correctAnswer} 
-                  answerSubmitted={submitted}
+    <div className="w-full max-w-md mx-auto space-y-4">
+      {/* Bouton retour en haut */}
+      <div className="flex justify-center">
+        <Button
+          variant="outline"
+          onClick={handleGoHome}
+          className="flex items-center gap-2"
+        >
+          <Home size={16} />
+          Retourner à l'accueil
+        </Button>
+      </div>
+
+      <Card className="border-[1px] border-secondary/50 shadow-sm">
+        <CardHeader className="border-b border-border/50">
+          <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
+            {question.question}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-6">
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  placeholder="Votre réponse"
+                  className="flex-grow"
                 />
-                <div className="flex justify-center">
-                  <Button 
-                    variant="outline" 
-                    onClick={handleShowAnswer} 
-                    className="flex items-center gap-2"
-                  >
-                    <EyeIcon size={16} />
-                    Voir la réponse
-                  </Button>
-                </div>
               </div>
-            ) : (
-              <div className="space-y-4">
-                <AccuracyGauge 
-                  userAnswer={userAnswer} 
-                  correctAnswer={question.correctAnswer} 
-                  answerSubmitted={submitted} 
-                />
-                
-                {question.explanation && (
-                  <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
-                    <p className="font-medium">Explication:</p>
-                    <p>{question.explanation}</p>
-                    {question.unit && (
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Réponse: {question.correctAnswer.toLocaleString()} {question.unit}
-                      </p>
-                    )}
+              <Button type="submit" className="w-full">Valider</Button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {!showAnswer ? (
+                <div className="space-y-4">
+                  <AccuracyGauge 
+                    userAnswer={userAnswer} 
+                    correctAnswer={question.correctAnswer} 
+                    answerSubmitted={submitted}
+                  />
+                  <div className="flex justify-center">
+                    <Button 
+                      variant="outline" 
+                      onClick={handleShowAnswer} 
+                      className="flex items-center gap-2"
+                    >
+                      <EyeIcon size={16} />
+                      Voir la réponse
+                    </Button>
                   </div>
-                )}
-              </div>
-            )}
-            
-            <Button onClick={handleNextQuestion} className="w-full">
-              {onNext ? "Question suivante" : "Réessayer"}
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <AccuracyGauge 
+                    userAnswer={userAnswer} 
+                    correctAnswer={question.correctAnswer} 
+                    answerSubmitted={submitted} 
+                  />
+                  
+                  {question.explanation && (
+                    <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
+                      <p className="font-medium">Explication:</p>
+                      <p>{question.explanation}</p>
+                      {question.unit && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Réponse: {question.correctAnswer.toLocaleString()} {question.unit}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              <Button onClick={handleNextQuestion} className="w-full">
+                {onNext ? "Question suivante" : "Réessayer"}
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

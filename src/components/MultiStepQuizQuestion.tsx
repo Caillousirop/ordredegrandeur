@@ -55,77 +55,78 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         setCalculatorOpen,
         handleNextQuestion
       }) => (
-        <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
-          <CardHeader className="border-b border-border/50">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <CardTitle className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
-                  {question.question}
-                </CardTitle>
-                <CardDescription className="mt-2">
-                  Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
-                </CardDescription>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleGoHome}
-                className="ml-2 flex items-center gap-1"
-              >
-                <Home size={16} />
-                <span className="hidden sm:inline">Accueil</span>
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6 space-y-6 bg-transparent">
-            <QuizModeSwitcher 
-              directFinalMode={directFinalMode} 
-              onToggle={handleDirectFinalToggle}
-              anyStepSubmitted={anyStepSubmitted}
-              onNextQuestion={handleNextQuestion}
-            />
+        <div className="w-full max-w-4xl mx-auto space-y-4">
+          {/* Bouton retour en haut */}
+          <div className="flex justify-center">
+            <Button
+              variant="outline"
+              onClick={handleGoHome}
+              className="flex items-center gap-2"
+            >
+              <Home size={16} />
+              Retourner à l'accueil
+            </Button>
+          </div>
 
-            {/* Direct Answer Section */}
-            {directFinalMode && (
-              <DirectAnswerSection
-                correctAnswer={question.steps[question.steps.length - 1].correctAnswer}
-                finalSubmitted={finalSubmitted}
-                directFinalAnswer={directFinalAnswer}
-                setDirectFinalAnswer={setDirectFinalAnswer}
-                handleDirectFinalSubmit={handleDirectFinalSubmit}
-                showAnswer={showAnswer}
-                setShowAnswer={setShowAnswer}
-                finalAccuracy={finalAccuracy}
-              />
-            )}
-
-            {/* Step-by-Step Section */}
-            {!directFinalMode && (
-              <QuizStepsList 
-                steps={question.steps}
-                submitted={submitted}
-                answers={answers}
-                handleInputChange={handleInputChange}
-                handleStepSubmit={handleStepSubmit}
-              />
-            )}
-
-            {/* Final explanation */}
-            {(finalSubmitted && showAnswer) && (
-              <FinalExplanation
-                finalExplanation={question.finalExplanation}
-                steps={question.steps}
+          <Card className="border-[1px] border-secondary/50 shadow-sm">
+            <CardHeader className="border-b border-border/50">
+              <CardTitle className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
+                {question.question}
+              </CardTitle>
+              <CardDescription className="mt-2">
+                Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6 bg-transparent">
+              <QuizModeSwitcher 
+                directFinalMode={directFinalMode} 
+                onToggle={handleDirectFinalToggle}
+                anyStepSubmitted={anyStepSubmitted}
                 onNextQuestion={handleNextQuestion}
               />
-            )}
-          </CardContent>
-          
-          {/* Calculatrice flottante */}
-          <FloatingCalculator
-            calculatorOpen={calculatorOpen}
-            setCalculatorOpen={setCalculatorOpen}
-          />
-        </Card>
+
+              {/* Direct Answer Section */}
+              {directFinalMode && (
+                <DirectAnswerSection
+                  correctAnswer={question.steps[question.steps.length - 1].correctAnswer}
+                  finalSubmitted={finalSubmitted}
+                  directFinalAnswer={directFinalAnswer}
+                  setDirectFinalAnswer={setDirectFinalAnswer}
+                  handleDirectFinalSubmit={handleDirectFinalSubmit}
+                  showAnswer={showAnswer}
+                  setShowAnswer={setShowAnswer}
+                  finalAccuracy={finalAccuracy}
+                />
+              )}
+
+              {/* Step-by-Step Section */}
+              {!directFinalMode && (
+                <QuizStepsList 
+                  steps={question.steps}
+                  submitted={submitted}
+                  answers={answers}
+                  handleInputChange={handleInputChange}
+                  handleStepSubmit={handleStepSubmit}
+                />
+              )}
+
+              {/* Final explanation */}
+              {(finalSubmitted && showAnswer) && (
+                <FinalExplanation
+                  finalExplanation={question.finalExplanation}
+                  steps={question.steps}
+                  onNextQuestion={handleNextQuestion}
+                />
+              )}
+            </CardContent>
+            
+            {/* Calculatrice flottante */}
+            <FloatingCalculator
+              calculatorOpen={calculatorOpen}
+              setCalculatorOpen={setCalculatorOpen}
+            />
+          </Card>
+        </div>
       )}
     </MultiStepQuizManager>
   );
