@@ -13,22 +13,65 @@ export const useSupabaseProgress = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
+      console.log("Sauvegarde du score dans Supabase:", score);
+      
+      // D'abord, vérifier si ce score existe déjà
+      const { data: existingScore, error: checkError } = await supabase
         .from('user_quiz_scores')
-        .insert({
-          user_id: user.id,
-          question_id: score.questionId,
-          accuracy: score.accuracy,
-          is_multi_step: score.isMultiStep || false,
-          direct_final_answer: score.directFinalAnswer || false,
-          skipped_steps: score.skippedSteps || false,
-          used_hints: score.usedHints || false,
-          hints_revealed_count: score.hintsRevealedCount || 0
-        });
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('question_id', score.questionId)
+        .maybeSingle();
 
-      if (error) {
-        console.error('Erreur lors de la sauvegarde du score:', error);
+      if (checkError) {
+        console.error('Erreur lors de la vérification du score existant:', checkError);
       }
+
+      if (existingScore) {
+        // Mettre à jour le score existant
+        const { error: updateError } = await supabase
+          .from('user_quiz_scores')
+          .update({
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
+          })
+          .eq('user_id', user.id)
+          .eq('question_id', score.questionId);
+
+        if (updateError) {
+          console.error('Erreur lors de la mise à jour du score:', updateError);
+        } else {
+          console.log('Score mis à jour avec succès');
+        }
+      } else {
+        // Insérer un nouveau score
+        const { error: insertError } = await supabase
+          .from('user_quiz_scores')
+          .insert({
+            user_id: user.id,
+            question_id: score.questionId,
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
+          });
+
+        if (insertError) {
+          console.error('Erreur lors de l\'insertion du score:', insertError);
+        } else {
+          console.log('Nouveau score inséré avec succès');
+        }
+      }
+
+      // La progression sera automatiquement mise à jour par le trigger update_user_progress()
+      console.log('Score traité, la progression devrait être mise à jour automatiquement');
+      
     } catch (error) {
       console.error('Erreur lors de la sauvegarde:', error);
     }
@@ -40,17 +83,19 @@ export const useSupabaseProgress = () => {
 
     try {
       setSyncing(true);
+      console.log("Chargement de la progression depuis Supabase pour l'utilisateur:", user.id);
       
       // Charger la progression globale
       const { data: progress, error: progressError } = await supabase
         .from('user_progress')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (progressError && progressError.code !== 'PGRST116') {
+      if (progressError) {
         console.error('Erreur lors du chargement de la progression:', progressError);
-        return null;
+      } else {
+        console.log('Progression chargée:', progress);
       }
 
       // Charger tous les scores
@@ -62,10 +107,11 @@ export const useSupabaseProgress = () => {
 
       if (scoresError) {
         console.error('Erreur lors du chargement des scores:', scoresError);
-        return null;
+      } else {
+        console.log('Scores chargés:', scores?.length || 0);
       }
 
-      return {
+      const result = {
         progress,
         scores: scores?.map(score => ({
           questionId: score.question_id,
@@ -77,6 +123,9 @@ export const useSupabaseProgress = () => {
           hintsRevealedCount: score.hints_revealed_count
         })) || []
       };
+      
+      console.log('Données complètes chargées:', result);
+      return result;
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
       return null;

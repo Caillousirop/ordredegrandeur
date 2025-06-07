@@ -21,22 +21,52 @@ const Profile = () => {
     totalPoints: number;
     userLevel: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Charger les statistiques depuis Supabase
   useEffect(() => {
     const loadStats = async () => {
       if (user) {
+        setIsLoading(true);
+        console.log("Chargement des statistiques du profil depuis Supabase...");
         const stats = await loadSupabaseStats(user.id);
+        console.log("Statistiques chargées:", stats);
         setSupabaseStats(stats);
+        setIsLoading(false);
       }
     };
 
     loadStats();
   }, [user]);
 
+  // Recharger les statistiques quand les scores changent
+  useEffect(() => {
+    const reloadStats = async () => {
+      if (user && scores.length > 0) {
+        console.log("Rechargement des statistiques suite à un changement de scores...");
+        setIsLoading(true);
+        // Attendre un peu pour laisser le temps au trigger de mettre à jour la progression
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const stats = await loadSupabaseStats(user.id);
+        console.log("Statistiques rechargées:", stats);
+        setSupabaseStats(stats);
+        setIsLoading(false);
+      }
+    };
+
+    reloadStats();
+  }, [user, scores.length]);
+
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
   const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
   const { correctPercentage, totalPoints, userLevel } = finalStats;
+
+  console.log("Stats finales utilisées dans Profile:", {
+    finalStats,
+    scoresCount: scores.length,
+    questionsCompleted,
+    isFromSupabase: !!supabaseStats
+  });
 
   // If user is not logged in, show rewards preview
   if (!user) {
@@ -170,6 +200,12 @@ const Profile = () => {
       
       <div className="container mx-auto max-w-5xl px-4 py-10">
         <ProfileHeader />
+        
+        {isLoading && (
+          <div className="text-center py-4">
+            <p className="text-muted-foreground">Mise à jour de vos statistiques...</p>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* User stats card - takes 2 columns on large screens */}

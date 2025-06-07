@@ -96,6 +96,14 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     const step = question.steps[stepIndex];
     const accuracy = calculateAccuracy(answers[stepIndex]!, step.correctAnswer);
 
+    console.log("Soumission d'une étape:", {
+      stepIndex,
+      userAnswer: answers[stepIndex],
+      correctAnswer: step.correctAnswer,
+      accuracy,
+      questionId: question.id
+    });
+
     if (onScore) {
       onScore({
         questionId: question.id,
@@ -124,6 +132,13 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
     const finalStep = question.steps[question.steps.length - 1];
     const accuracy = calculateAccuracy(numAnswer, finalStep.correctAnswer);
     setFinalAccuracy(accuracy);
+
+    console.log("Soumission réponse directe:", {
+      userAnswer: numAnswer,
+      correctAnswer: finalStep.correctAnswer,
+      accuracy,
+      questionId: question.id
+    });
 
     if (accuracy >= 80) {
       toast.success("🎉 Bravo ! Excellente réponse directe !", {

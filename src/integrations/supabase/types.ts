@@ -124,7 +124,7 @@ export type Database = {
           final_explanation: string | null
           id: string
           is_active: boolean | null
-          priority: string | null
+          priority: number | null
           question: string | null
           scheduled_date: string | null
           steps: Json | null
@@ -140,7 +140,7 @@ export type Database = {
           final_explanation?: string | null
           id?: string
           is_active?: boolean | null
-          priority?: string | null
+          priority?: number | null
           question?: string | null
           scheduled_date?: string | null
           steps?: Json | null
@@ -156,7 +156,7 @@ export type Database = {
           final_explanation?: string | null
           id?: string
           is_active?: boolean | null
-          priority?: string | null
+          priority?: number | null
           question?: string | null
           scheduled_date?: string | null
           steps?: Json | null
