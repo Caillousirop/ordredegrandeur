@@ -9,6 +9,8 @@ import QuizStepsList from "./quiz/QuizStepsList";
 import FloatingCalculator from "./quiz/FloatingCalculator";
 import FinalExplanation from "./quiz/FinalExplanation";
 import QuizModeSwitcher from "./quiz/QuizModeSwitcher";
+import { Home } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -21,6 +23,12 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   onNext,
   onScore
 }) => {
+  const navigate = useNavigate();
+
+  const handleGoHome = () => {
+    navigate("/");
+  };
+
   return (
     <MultiStepQuizManager
       question={question}
@@ -50,7 +58,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
         <Card className="w-full max-w-4xl mx-auto border-[1px] border-secondary/50 shadow-sm">
           <CardHeader className="border-b border-border/50">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="flex-1">
                 <CardTitle className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
                   {question.question}
                 </CardTitle>
@@ -58,6 +66,15 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                   Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
                 </CardDescription>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleGoHome}
+                className="ml-2 flex items-center gap-1"
+              >
+                <Home size={16} />
+                <span className="hidden sm:inline">Accueil</span>
+              </Button>
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-6 bg-transparent">

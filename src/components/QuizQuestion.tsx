@@ -7,8 +7,9 @@ import AccuracyGauge from "./AccuracyGauge";
 import { toast } from "sonner";
 import { Question, QuizScore } from "./types";
 import { themes } from "@/data/themes";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, Home } from "lucide-react";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
+import { useNavigate } from "react-router-dom";
 
 interface QuizQuestionProps {
   question: Question;
@@ -21,6 +22,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onNext,
   onScore
 }) => {
+  const navigate = useNavigate();
   const [answer, setAnswer] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
@@ -68,12 +70,29 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     setShowAnswer(true);
   };
 
+  const handleGoHome = () => {
+    navigate("/");
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto border-[1px] border-secondary/50 shadow-sm">
       <CardHeader className="border-b border-border/50">
-        <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
-          {question.question}
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
+              {question.question}
+            </CardTitle>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleGoHome}
+            className="ml-2 flex items-center gap-1"
+          >
+            <Home size={16} />
+            <span className="hidden sm:inline">Accueil</span>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4 pt-6">
         {!submitted ? (

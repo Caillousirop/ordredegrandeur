@@ -1,6 +1,11 @@
 
 import React from "react";
-import { QuizStep } from "../types";
+
+interface QuizStep {
+  question: string;
+  correctAnswer: number;
+  unit?: string;
+}
 
 interface FinalExplanationProps {
   finalExplanation?: string;
