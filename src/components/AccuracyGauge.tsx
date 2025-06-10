@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
+import { getFeedbackMessage } from "@/utils/feedbackMessages";
 
 interface AccuracyGaugeProps {
   userAnswer: number;
@@ -57,14 +58,8 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
     return "bg-gradient-to-r from-red-500 to-rose-400";
   };
 
-  const getEmoji = () => {
-    if (accuracy >= 90) return "🎯";
-    if (accuracy >= 75) return "👍";
-    if (accuracy >= 60) return "😊";
-    if (accuracy >= 40) return "😐";
-    if (accuracy >= 25) return "😕";
-    return "😢";
-  };
+  // Use consistent feedback messages
+  const feedback = getFeedbackMessage(accuracy);
 
   const getSizeClass = () => {
     switch (size) {
@@ -79,7 +74,7 @@ const AccuracyGauge: React.FC<AccuracyGaugeProps> = ({
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium">Précision de votre réponse</span>
         <div className="flex items-center gap-1.5">
-          {answerSubmitted && <span className="text-xl">{getEmoji()}</span>}
+          {answerSubmitted && <span className="text-xl">{feedback.emoji}</span>}
           <span className="text-sm font-semibold">{answerSubmitted ? `${Math.round(accuracy)}%` : ""}</span>
         </div>
       </div>

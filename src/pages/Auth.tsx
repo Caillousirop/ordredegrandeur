@@ -41,11 +41,7 @@ const Auth = () => {
         options: {
           data: {
             username: username || "Utilisateur"
-          },
-          // Configuration explicite pour activer l'auto-confirmation
-          emailRedirectTo: undefined,
-          // Ne pas envoyer d'email de confirmation
-          shouldCreateUser: true
+          }
         }
       });
 

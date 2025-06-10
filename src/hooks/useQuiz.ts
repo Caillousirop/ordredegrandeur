@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
+import { getFeedbackMessage } from "@/utils/feedbackMessages";
 
 export const useQuiz = () => {
   const { user } = useAuth();
@@ -202,17 +202,15 @@ export const useQuiz = () => {
       displayAccuracy = Math.max(0, score.accuracy - (score.hintsRevealedCount * 20));
     }
     
-    // Show toast with score feedback
-    if (displayAccuracy >= 90) {
-      toast.success("Excellente réponse ! 🎯");
-    } else if (displayAccuracy >= 70) {
-      toast.success("Très bonne réponse ! 👍");
-    } else if (displayAccuracy >= 50) {
-      toast.info("Pas mal ! 😊");
-    } else if (displayAccuracy >= 30) {
-      toast.info("Vous pouvez faire mieux ! 🤔");
+    // Show toast with consistent feedback message
+    const feedback = getFeedbackMessage(displayAccuracy);
+    
+    if (feedback.type === 'success') {
+      toast.success(feedback.message);
+    } else if (feedback.type === 'info') {
+      toast.info(feedback.message);
     } else {
-      toast.error("Essayez encore ! 📚");
+      toast.error(feedback.message);
     }
   };
 
