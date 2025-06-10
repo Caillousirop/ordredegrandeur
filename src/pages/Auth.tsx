@@ -33,29 +33,46 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      console.log("Tentative de création de compte pour:", email);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             username: username || "Utilisateur"
-          },
-          emailRedirectTo: undefined // Disable email confirmation
+          }
+          // Suppression de emailRedirectTo pour éviter les problèmes de confirmation
         }
       });
 
+      console.log("Réponse signup:", { data, error });
+
       if (error) {
+        console.error("Erreur signup:", error);
         if (error.message.includes("already registered")) {
           toast.error("Cet email est déjà utilisé. Essayez de vous connecter.");
+        } else if (error.message.includes("Invalid email")) {
+          toast.error("Adresse email invalide.");
+        } else if (error.message.includes("Password")) {
+          toast.error("Le mot de passe doit contenir au moins 6 caractères.");
         } else {
-          toast.error(error.message);
+          toast.error(`Erreur lors de la création du compte: ${error.message}`);
         }
-      } else if (data.user && data.session) {
-        // User is automatically logged in after signup
-        toast.success("Compte créé et connexion réussie !");
-        navigate("/");
+      } else if (data.user) {
+        if (data.session) {
+          // Utilisateur connecté immédiatement
+          console.log("Utilisateur connecté immédiatement");
+          toast.success("Compte créé et connexion réussie !");
+          navigate("/");
+        } else {
+          // Utilisateur créé mais pas encore connecté (confirmation email requise)
+          console.log("Utilisateur créé, vérification email requise");
+          toast.success("Compte créé ! Vérifiez votre email pour activer votre compte.");
+        }
       }
     } catch (error) {
+      console.error("Erreur inattendue:", error);
       toast.error("Une erreur inattendue s'est produite");
     } finally {
       setLoading(false);
@@ -67,22 +84,31 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      console.log("Tentative de connexion pour:", email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log("Réponse signin:", { data, error });
+
       if (error) {
+        console.error("Erreur signin:", error);
         if (error.message.includes("Invalid login credentials")) {
           toast.error("Email ou mot de passe incorrect");
+        } else if (error.message.includes("Email not confirmed")) {
+          toast.error("Veuillez confirmer votre email avant de vous connecter");
         } else {
-          toast.error(error.message);
+          toast.error(`Erreur de connexion: ${error.message}`);
         }
       } else if (data.user) {
+        console.log("Connexion réussie");
         toast.success("Connexion réussie !");
         navigate("/");
       }
     } catch (error) {
+      console.error("Erreur inattendue:", error);
       toast.error("Une erreur inattendue s'est produite");
     } finally {
       setLoading(false);
@@ -162,10 +188,11 @@ const Auth = () => {
                 <div className="space-y-2 relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Mot de passe"
+                    placeholder="Mot de passe (min. 6 caractères)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    minLength={6}
                   />
                   <Button
                     type="button"
@@ -177,8 +204,8 @@ const Auth = () => {
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="text-xs text-muted-foreground bg-green-50 dark:bg-green-950 p-3 rounded-lg">
-                  ✅ Inscription instantanée ! Vous serez connecté immédiatement après la création de votre compte.
+                <div className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
+                  ℹ️ Selon la configuration, vous pourriez recevoir un email de confirmation ou être connecté immédiatement.
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Création..." : "Créer un compte"}
