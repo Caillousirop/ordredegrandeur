@@ -41,8 +41,11 @@ const Auth = () => {
         options: {
           data: {
             username: username || "Utilisateur"
-          }
-          // Suppression de emailRedirectTo pour éviter les problèmes de confirmation
+          },
+          // Configuration explicite pour activer l'auto-confirmation
+          emailRedirectTo: undefined,
+          // Ne pas envoyer d'email de confirmation
+          shouldCreateUser: true
         }
       });
 
@@ -66,9 +69,20 @@ const Auth = () => {
           toast.success("Compte créé et connexion réussie !");
           navigate("/");
         } else {
-          // Utilisateur créé mais pas encore connecté (confirmation email requise)
-          console.log("Utilisateur créé, vérification email requise");
-          toast.success("Compte créé ! Vérifiez votre email pour activer votre compte.");
+          // Essayer de connecter l'utilisateur immédiatement
+          console.log("Tentative de connexion immédiate après création");
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+          
+          if (signInError) {
+            console.error("Erreur lors de la connexion après création:", signInError);
+            toast.error("Compte créé mais problème lors de la connexion. Veuillez vous connecter manuellement.");
+          } else {
+            toast.success("Compte créé et connexion réussie !");
+            navigate("/");
+          }
         }
       }
     } catch (error) {
@@ -204,8 +218,8 @@ const Auth = () => {
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
-                  ℹ️ Selon la configuration, vous pourriez recevoir un email de confirmation ou être connecté immédiatement.
+                <div className="text-xs text-muted-foreground bg-green-50 dark:bg-green-950 p-3 rounded-lg">
+                  ✅ Inscription instantanée ! Vous serez connecté immédiatement après la création de votre compte.
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Création..." : "Créer un compte"}
