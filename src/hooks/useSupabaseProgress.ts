@@ -19,7 +19,7 @@ export const useSupabaseProgress = () => {
       console.log("💾 Début de la sauvegarde du score:", score);
       setSyncing(true);
       
-      // Insérer ou mettre à jour le score directement
+      // Utiliser upsert avec la contrainte unique ajoutée
       const { data, error } = await supabase
         .from('user_quiz_scores')
         .upsert({
@@ -31,8 +31,6 @@ export const useSupabaseProgress = () => {
           skipped_steps: score.skippedSteps || false,
           used_hints: score.usedHints || false,
           hints_revealed_count: score.hintsRevealedCount || 0
-        }, {
-          onConflict: 'user_id,question_id'
         })
         .select();
 
@@ -42,10 +40,6 @@ export const useSupabaseProgress = () => {
       }
 
       console.log('✅ Score sauvegardé avec succès:', data);
-      
-      // Attendre un peu pour que le trigger se déclenche
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       return true;
     } catch (error) {
       console.error('❌ Erreur lors de la sauvegarde:', error);
