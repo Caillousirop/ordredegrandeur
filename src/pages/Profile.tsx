@@ -11,7 +11,7 @@ import UserSpace from "@/components/UserSpace";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { LogIn, Trophy, Target, Zap, Crown } from "lucide-react";
+import { LogIn, Trophy, Target, Zap, Crown, RefreshCw } from "lucide-react";
 
 const Profile = () => {
   const { scores, questionsCompleted } = useQuiz();
@@ -22,7 +22,25 @@ const Profile = () => {
     userLevel: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   
+  // Fonction pour recharger les statistiques
+  const reloadStats = async () => {
+    if (user) {
+      setIsLoading(true);
+      console.log("Rechargement forcé des statistiques du profil...");
+      try {
+        const stats = await loadSupabaseStats(user.id);
+        console.log("Statistiques rechargées:", stats);
+        setSupabaseStats(stats);
+      } catch (error) {
+        console.error("Erreur lors du rechargement des stats:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   // Charger les statistiques depuis Supabase
   useEffect(() => {
     const loadStats = async () => {
@@ -37,24 +55,21 @@ const Profile = () => {
     };
 
     loadStats();
-  }, [user]);
+  }, [user, refreshKey]);
 
   // Recharger les statistiques quand les scores changent
   useEffect(() => {
-    const reloadStats = async () => {
+    const reloadStatsDelayed = async () => {
       if (user && scores.length > 0) {
         console.log("Rechargement des statistiques suite à un changement de scores...");
-        setIsLoading(true);
         // Attendre un peu pour laisser le temps au trigger de mettre à jour la progression
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const stats = await loadSupabaseStats(user.id);
-        console.log("Statistiques rechargées:", stats);
-        setSupabaseStats(stats);
-        setIsLoading(false);
+        setTimeout(async () => {
+          await reloadStats();
+        }, 2000);
       }
     };
 
-    reloadStats();
+    reloadStatsDelayed();
   }, [user, scores.length]);
 
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
@@ -199,7 +214,18 @@ const Profile = () => {
       </div>
       
       <div className="container mx-auto max-w-5xl px-4 py-10">
-        <ProfileHeader />
+        <div className="flex items-center justify-between mb-6">
+          <ProfileHeader />
+          <Button
+            variant="outline"
+            onClick={reloadStats}
+            disabled={isLoading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            Actualiser
+          </Button>
+        </div>
         
         {isLoading && (
           <div className="text-center py-4">

@@ -141,18 +141,12 @@ export const useQuiz = () => {
     } else if (filteredQuestions.length === 1) {
       setCurrentQuestionIndex(0);
     }
-    
-    // Incrémenter le nombre de questions complétées localement ET dans Supabase
-    const newQuestionsCompleted = questionsCompleted + 1;
-    setQuestionsCompleted(newQuestionsCompleted);
-    
-    console.log("Question suivante - Questions complétées:", newQuestionsCompleted);
   };
   
   const handleScore = async (score: QuizScore) => {
     console.log("Nouveau score reçu:", score);
     
-    // Update scores locally
+    // Update scores locally first
     setScores(prevScores => {
       // Check if we already have a score for this question
       const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
@@ -170,23 +164,35 @@ export const useQuiz = () => {
         return newScores;
       }
     });
+
+    // Incrémenter le nombre de questions complétées localement
+    setQuestionsCompleted(prev => {
+      const newCount = prev + 1;
+      console.log("Questions complétées mises à jour:", newCount);
+      return newCount;
+    });
     
     // Sauvegarder dans Supabase si l'utilisateur est connecté
     if (user) {
       console.log("Sauvegarde du score dans Supabase...");
-      await saveScore(score);
-      console.log("Score sauvegardé dans Supabase:", score);
-      
-      // Recharger la progression depuis Supabase pour avoir les stats à jour
-      console.log("Rechargement de la progression depuis Supabase...");
-      const updatedData = await loadProgress();
-      if (updatedData?.progress) {
-        setQuestionsCompleted(updatedData.progress.questions_completed);
-        console.log("Progression mise à jour:", updatedData.progress);
-      }
-      if (updatedData?.scores) {
-        setScores(updatedData.scores);
-        console.log("Scores mis à jour:", updatedData.scores.length);
+      try {
+        await saveScore(score);
+        console.log("Score sauvegardé dans Supabase:", score);
+        
+        // Recharger la progression depuis Supabase pour avoir les stats à jour
+        console.log("Rechargement de la progression depuis Supabase...");
+        const updatedData = await loadProgress();
+        if (updatedData?.progress) {
+          setQuestionsCompleted(updatedData.progress.questions_completed);
+          console.log("Progression mise à jour depuis Supabase:", updatedData.progress);
+        }
+        if (updatedData?.scores) {
+          setScores(updatedData.scores);
+          console.log("Scores mis à jour depuis Supabase:", updatedData.scores.length);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la sauvegarde:", error);
+        toast.error("Erreur lors de la sauvegarde de votre progression");
       }
     }
     

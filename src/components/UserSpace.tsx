@@ -32,6 +32,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({
     user_level: number;
     questions_completed: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Charger la progression de l'utilisateur depuis Supabase
   useEffect(() => {
@@ -41,25 +42,53 @@ const UserSpace: React.FC<UserSpaceProps> = ({
         return;
       }
 
+      setIsLoading(true);
       try {
+        console.log("UserSpace: Chargement de la progression pour l'utilisateur:", user.id);
         const { data, error } = await supabase
           .from('user_progress')
           .select('total_points, user_level, questions_completed')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') {
-          console.error('Erreur lors du chargement de la progression:', error);
+        if (error) {
+          console.error('UserSpace: Erreur lors du chargement de la progression:', error);
           return;
         }
 
+        console.log("UserSpace: Progression chargée:", data);
         setUserProgress(data);
       } catch (error) {
-        console.error('Erreur lors du chargement:', error);
+        console.error('UserSpace: Erreur lors du chargement:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadUserProgress();
+  }, [user]);
+
+  // Recharger la progression périodiquement pour rester synchronisé
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const { data } = await supabase
+          .from('user_progress')
+          .select('total_points, user_level, questions_completed')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (data) {
+          setUserProgress(data);
+        }
+      } catch (error) {
+        console.error('UserSpace: Erreur lors de la synchronisation:', error);
+      }
+    }, 30000); // Recharger toutes les 30 secondes
+
+    return () => clearInterval(interval);
   }, [user]);
 
   // Utiliser les données Supabase si disponibles, sinon utiliser les données locales
@@ -70,6 +99,12 @@ const UserSpace: React.FC<UserSpaceProps> = ({
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const getPointsDisplay = () => {
+    if (isLoading) return "...";
+    if (userProgress) return `${totalPoints} pts`;
+    return `${effectiveQuestionsCompleted} pts`;
   };
 
   return (
@@ -84,7 +119,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({
               <>
                 <UserLevelBadge level={userLevel} />
                 <span className="font-medium text-sm hidden md:inline text-orange-800 dark:text-orange-200">
-                  {userProgress ? `${totalPoints} pts` : `${effectiveQuestionsCompleted} pts`}
+                  {getPointsDisplay()}
                 </span>
               </>
             ) : (
@@ -98,7 +133,14 @@ const UserSpace: React.FC<UserSpaceProps> = ({
         <DropdownMenuContent align="end" className="w-80 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-700">
           {user ? (
             <>
-              <DropdownMenuLabel className="text-orange-800 dark:text-orange-200">Niveau {userLevel}</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-orange-800 dark:text-orange-200">
+                Niveau {userLevel}
+                {userProgress && (
+                  <div className="text-xs text-orange-600 dark:text-orange-400 font-normal">
+                    {userProgress.questions_completed} questions • {userProgress.total_points} points
+                  </div>
+                )}
+              </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-orange-200 dark:bg-orange-700" />
               
               <DropdownMenuItem className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-800/30">
