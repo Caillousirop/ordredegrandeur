@@ -12,78 +12,44 @@ export const useSupabaseProgress = () => {
   const saveScore = async (score: QuizScore) => {
     if (!user) {
       console.log("❌ Utilisateur non connecté, impossible de sauvegarder");
-      return;
+      return false;
     }
 
     try {
       console.log("💾 Début de la sauvegarde du score:", score);
       setSyncing(true);
       
-      // D'abord, vérifier si ce score existe déjà
-      const { data: existingScore, error: checkError } = await supabase
+      // Insérer ou mettre à jour le score directement
+      const { data, error } = await supabase
         .from('user_quiz_scores')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('question_id', score.questionId)
-        .maybeSingle();
+        .upsert({
+          user_id: user.id,
+          question_id: score.questionId,
+          accuracy: score.accuracy,
+          is_multi_step: score.isMultiStep || false,
+          direct_final_answer: score.directFinalAnswer || false,
+          skipped_steps: score.skippedSteps || false,
+          used_hints: score.usedHints || false,
+          hints_revealed_count: score.hintsRevealedCount || 0
+        }, {
+          onConflict: 'user_id,question_id'
+        })
+        .select();
 
-      if (checkError) {
-        console.error('❌ Erreur lors de la vérification du score existant:', checkError);
-        throw checkError;
+      if (error) {
+        console.error('❌ Erreur lors de la sauvegarde du score:', error);
+        throw error;
       }
 
-      if (existingScore) {
-        console.log("🔄 Score existant trouvé, mise à jour...");
-        // Mettre à jour le score existant
-        const { error: updateError } = await supabase
-          .from('user_quiz_scores')
-          .update({
-            accuracy: score.accuracy,
-            is_multi_step: score.isMultiStep || false,
-            direct_final_answer: score.directFinalAnswer || false,
-            skipped_steps: score.skippedSteps || false,
-            used_hints: score.usedHints || false,
-            hints_revealed_count: score.hintsRevealedCount || 0
-          })
-          .eq('user_id', user.id)
-          .eq('question_id', score.questionId);
-
-        if (updateError) {
-          console.error('❌ Erreur lors de la mise à jour du score:', updateError);
-          throw updateError;
-        } else {
-          console.log('✅ Score mis à jour avec succès');
-        }
-      } else {
-        console.log("➕ Nouveau score, insertion...");
-        // Insérer un nouveau score
-        const { error: insertError } = await supabase
-          .from('user_quiz_scores')
-          .insert({
-            user_id: user.id,
-            question_id: score.questionId,
-            accuracy: score.accuracy,
-            is_multi_step: score.isMultiStep || false,
-            direct_final_answer: score.directFinalAnswer || false,
-            skipped_steps: score.skippedSteps || false,
-            used_hints: score.usedHints || false,
-            hints_revealed_count: score.hintsRevealedCount || 0
-          });
-
-        if (insertError) {
-          console.error('❌ Erreur lors de l\'insertion du score:', insertError);
-          throw insertError;
-        } else {
-          console.log('✅ Nouveau score inséré avec succès');
-        }
-      }
-
-      // La progression sera automatiquement mise à jour par le trigger update_user_progress()
-      console.log('✅ Score traité, la progression devrait être mise à jour automatiquement par le trigger');
+      console.log('✅ Score sauvegardé avec succès:', data);
       
+      // Attendre un peu pour que le trigger se déclenche
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      return true;
     } catch (error) {
       console.error('❌ Erreur lors de la sauvegarde:', error);
-      throw error;
+      return false;
     } finally {
       setSyncing(false);
     }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -181,33 +180,28 @@ export const useQuiz = () => {
     if (user) {
       console.log("💾 Début de la sauvegarde dans Supabase...");
       try {
-        // Attendre que la sauvegarde soit terminée
-        const saveResult = await saveScore(score);
-        console.log("✅ Score sauvegardé dans Supabase:", score);
+        const success = await saveScore(score);
         
-        // Petit délai pour laisser le trigger faire son travail
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Recharger la progression depuis Supabase pour avoir les stats à jour
-        console.log("🔄 Rechargement de la progression depuis Supabase...");
-        const updatedData = await loadProgress();
-        if (updatedData?.progress) {
-          console.log("📈 Nouvelle progression:", updatedData.progress);
-          setQuestionsCompleted(updatedData.progress.questions_completed);
-          console.log("✅ Progression mise à jour depuis Supabase:", updatedData.progress);
+        if (success) {
+          console.log("✅ Score sauvegardé avec succès");
+          
+          // Délai plus long pour permettre au trigger de s'exécuter
+          setTimeout(async () => {
+            console.log("🔄 Rechargement de la progression depuis Supabase...");
+            const updatedData = await loadProgress();
+            if (updatedData?.progress) {
+              console.log("📈 Nouvelle progression:", updatedData.progress);
+              setQuestionsCompleted(updatedData.progress.questions_completed);
+            }
+            if (updatedData?.scores) {
+              setScores(updatedData.scores);
+            }
+          }, 1000);
         } else {
-          console.log("⚠️ Aucune progression trouvée après sauvegarde");
+          console.error("❌ Échec de la sauvegarde");
         }
-        if (updatedData?.scores) {
-          setScores(updatedData.scores);
-          console.log("✅ Scores mis à jour depuis Supabase:", updatedData.scores.length);
-        }
-        
-        // Afficher un message de succès pour confirmer la sauvegarde
-        toast.success("Score sauvegardé !");
       } catch (error) {
         console.error("❌ Erreur lors de la sauvegarde:", error);
-        toast.error("Erreur lors de la sauvegarde de votre progression");
       }
     } else {
       console.log("⚠️ Utilisateur non connecté, sauvegarde locale uniquement");
