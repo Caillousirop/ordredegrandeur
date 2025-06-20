@@ -185,7 +185,7 @@ export const useQuiz = () => {
         if (success) {
           console.log("✅ Score sauvegardé avec succès");
           
-          // Délai plus long pour permettre au trigger de s'exécuter
+          // Recharger les données après sauvegarde
           setTimeout(async () => {
             console.log("🔄 Rechargement de la progression depuis Supabase...");
             const updatedData = await loadProgress();
@@ -196,7 +196,7 @@ export const useQuiz = () => {
             if (updatedData?.scores) {
               setScores(updatedData.scores);
             }
-          }, 1000);
+          }, 1500); // Délai plus long pour la synchronisation
         } else {
           console.error("❌ Échec de la sauvegarde");
         }
