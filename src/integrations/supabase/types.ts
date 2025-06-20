@@ -116,57 +116,6 @@ export type Database = {
         }
         Relationships: []
       }
-      question_temporaire: {
-        Row: {
-          correct_answer: number | null
-          created_at: string | null
-          explanation: string | null
-          final_explanation: string | null
-          id: string
-          is_active: boolean | null
-          priority: number | null
-          question: string | null
-          scheduled_date: string | null
-          steps: Json | null
-          theme: string | null
-          type: string | null
-          unit: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          correct_answer?: number | null
-          created_at?: string | null
-          explanation?: string | null
-          final_explanation?: string | null
-          id?: string
-          is_active?: boolean | null
-          priority?: number | null
-          question?: string | null
-          scheduled_date?: string | null
-          steps?: Json | null
-          theme?: string | null
-          type?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          correct_answer?: number | null
-          created_at?: string | null
-          explanation?: string | null
-          final_explanation?: string | null
-          id?: string
-          is_active?: boolean | null
-          priority?: number | null
-          question?: string | null
-          scheduled_date?: string | null
-          steps?: Json | null
-          theme?: string | null
-          type?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       quiz_questions: {
         Row: {
           correct_answer: number
@@ -262,6 +211,57 @@ export type Database = {
           question?: string | null
           scheduled_date?: string | null
           steps?: Json | null
+          theme?: string | null
+          type?: string | null
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      quiz_questions_temp: {
+        Row: {
+          correct_answer: number | null
+          created_at: string | null
+          explanation: string | null
+          final_explanation: string | null
+          id: string
+          is_active: boolean | null
+          priority: number | null
+          question: string | null
+          scheduled_date: string | null
+          steps: string | null
+          theme: string | null
+          type: string | null
+          unit: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          correct_answer?: number | null
+          created_at?: string | null
+          explanation?: string | null
+          final_explanation?: string | null
+          id: string
+          is_active?: boolean | null
+          priority?: number | null
+          question?: string | null
+          scheduled_date?: string | null
+          steps?: string | null
+          theme?: string | null
+          type?: string | null
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          correct_answer?: number | null
+          created_at?: string | null
+          explanation?: string | null
+          final_explanation?: string | null
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          question?: string | null
+          scheduled_date?: string | null
+          steps?: string | null
           theme?: string | null
           type?: string | null
           unit?: string | null
@@ -369,6 +369,10 @@ export type Database = {
     Functions: {
       is_admin: {
         Args: { user_id?: string }
+        Returns: boolean
+      }
+      is_user_admin: {
+        Args: { check_user_id?: string }
         Returns: boolean
       }
     }

@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import RewardsSystem from "@/components/profile/RewardsSystem";
+import DebugInfo from "@/components/profile/DebugInfo";
 import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
@@ -28,13 +28,13 @@ const Profile = () => {
   const reloadStats = async () => {
     if (user) {
       setIsLoading(true);
-      console.log("Rechargement forcé des statistiques du profil...");
+      console.log("🔄 [PROFILE] Rechargement forcé des statistiques du profil...");
       try {
         const stats = await loadSupabaseStats(user.id);
-        console.log("Statistiques rechargées:", stats);
+        console.log("📊 [PROFILE] Statistiques rechargées:", stats);
         setSupabaseStats(stats);
       } catch (error) {
-        console.error("Erreur lors du rechargement des stats:", error);
+        console.error("❌ [PROFILE] Erreur lors du rechargement des stats:", error);
       } finally {
         setIsLoading(false);
       }
@@ -46,9 +46,9 @@ const Profile = () => {
     const loadStats = async () => {
       if (user) {
         setIsLoading(true);
-        console.log("Chargement des statistiques du profil depuis Supabase...");
+        console.log("📥 [PROFILE] Chargement des statistiques du profil depuis Supabase...");
         const stats = await loadSupabaseStats(user.id);
-        console.log("Statistiques chargées:", stats);
+        console.log("📊 [PROFILE] Statistiques chargées:", stats);
         setSupabaseStats(stats);
         setIsLoading(false);
       }
@@ -61,7 +61,7 @@ const Profile = () => {
   useEffect(() => {
     const reloadStatsDelayed = async () => {
       if (user && scores.length > 0) {
-        console.log("Rechargement des statistiques suite à un changement de scores...");
+        console.log("🔄 [PROFILE] Rechargement des statistiques suite à un changement de scores...");
         // Attendre un peu pour laisser le temps au trigger de mettre à jour la progression
         setTimeout(async () => {
           await reloadStats();
@@ -76,7 +76,7 @@ const Profile = () => {
   const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
   const { correctPercentage, totalPoints, userLevel } = finalStats;
 
-  console.log("Stats finales utilisées dans Profile:", {
+  console.log("📈 [PROFILE] Stats finales utilisées:", {
     finalStats,
     scoresCount: scores.length,
     questionsCompleted,
@@ -233,26 +233,31 @@ const Profile = () => {
           </div>
         )}
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* User stats card - takes 2 columns on large screens */}
-          <div className="lg:col-span-2">
-            <StatisticsCard
-              scores={scores}
-              questionsCompleted={questionsCompleted}
-              correctPercentage={correctPercentage}
-              totalPoints={totalPoints}
-              userLevel={userLevel}
-            />
-          </div>
+        <div className="space-y-6">
+          {/* Debug info - visible pour tous les utilisateurs */}
+          <DebugInfo />
           
-          {/* Rewards system - takes 1 column */}
-          <div className="lg:col-span-1">
-            <RewardsSystem 
-              scores={scores} 
-              questionsCompleted={questionsCompleted}
-              totalPoints={totalPoints}
-              correctPercentage={correctPercentage}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* User stats card - takes 2 columns on large screens */}
+            <div className="lg:col-span-2">
+              <StatisticsCard
+                scores={scores}
+                questionsCompleted={questionsCompleted}
+                correctPercentage={correctPercentage}
+                totalPoints={totalPoints}
+                userLevel={userLevel}
+              />
+            </div>
+            
+            {/* Rewards system - takes 1 column */}
+            <div className="lg:col-span-1">
+              <RewardsSystem 
+                scores={scores} 
+                questionsCompleted={questionsCompleted}
+                totalPoints={totalPoints}
+                correctPercentage={correctPercentage}
+              />
+            </div>
           </div>
         </div>
       </div>
