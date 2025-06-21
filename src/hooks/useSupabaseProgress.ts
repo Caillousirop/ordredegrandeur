@@ -16,23 +16,10 @@ export const useSupabaseProgress = () => {
     }
 
     try {
-      console.log("💾 Début de la sauvegarde du score:", score);
+      console.log("💾 [SAVE] Début de la sauvegarde du score:", score);
       setSyncing(true);
       
-      // D'abord vérifier si un score existe déjà pour cette question
-      const { data: existingScore, error: checkError } = await supabase
-        .from('user_quiz_scores')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('question_id', score.questionId)
-        .maybeSingle();
-
-      if (checkError) {
-        console.error("❌ Erreur lors de la vérification:", checkError);
-        throw checkError;
-      }
-
-      // Préparer les données exactement selon le schéma de la table
+      // Préparer les données pour l'insertion
       const scoreData = {
         user_id: user.id,
         question_id: score.questionId,
@@ -44,47 +31,54 @@ export const useSupabaseProgress = () => {
         hints_revealed_count: score.hintsRevealedCount || 0
       };
 
-      console.log("📝 Données préparées:", scoreData);
+      console.log("📝 [SAVE] Données préparées:", scoreData);
+
+      // D'abord vérifier si un score existe déjà
+      const { data: existingScore, error: checkError } = await supabase
+        .from('user_quiz_scores')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('question_id', score.questionId)
+        .maybeSingle();
+
+      if (checkError) {
+        console.error("❌ [SAVE] Erreur lors de la vérification:", checkError);
+        throw checkError;
+      }
 
       let result;
       
       if (existingScore) {
         // Mettre à jour le score existant
-        console.log("🔄 Mise à jour du score existant");
+        console.log("🔄 [SAVE] Mise à jour du score existant, ID:", existingScore.id);
         result = await supabase
           .from('user_quiz_scores')
-          .update({
-            accuracy: scoreData.accuracy,
-            is_multi_step: scoreData.is_multi_step,
-            direct_final_answer: scoreData.direct_final_answer,
-            skipped_steps: scoreData.skipped_steps,
-            used_hints: scoreData.used_hints,
-            hints_revealed_count: scoreData.hints_revealed_count
-          })
+          .update(scoreData)
           .eq('id', existingScore.id)
           .select();
       } else {
         // Insérer un nouveau score
-        console.log("➕ Insertion d'un nouveau score");
+        console.log("➕ [SAVE] Insertion d'un nouveau score");
         result = await supabase
           .from('user_quiz_scores')
-          .insert([scoreData])
+          .insert(scoreData)
           .select();
       }
 
       if (result.error) {
-        console.error('❌ Erreur lors de la sauvegarde:', result.error);
+        console.error('❌ [SAVE] Erreur lors de la sauvegarde:', result.error);
         throw result.error;
       }
 
-      console.log('✅ Score sauvegardé avec succès:', result.data);
+      console.log('✅ [SAVE] Score sauvegardé avec succès:', result.data);
       
-      // Attendre un peu pour que le trigger de progression s'exécute
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Attendre que le trigger de progression s'exécute
+      console.log('⏱️ [SAVE] Attente de la mise à jour de la progression...');
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       return true;
     } catch (error) {
-      console.error('❌ Erreur lors de la sauvegarde:', error);
+      console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
       return false;
     } finally {
       setSyncing(false);
@@ -94,13 +88,13 @@ export const useSupabaseProgress = () => {
   // Charger la progression depuis Supabase
   const loadProgress = async () => {
     if (!user) {
-      console.log("❌ Utilisateur non connecté");
+      console.log("❌ [LOAD] Utilisateur non connecté");
       return null;
     }
 
     try {
       setSyncing(true);
-      console.log("📥 Chargement de la progression");
+      console.log("📥 [LOAD] Chargement de la progression pour:", user.id);
       
       // Charger la progression globale
       const { data: progress, error: progressError } = await supabase
@@ -109,8 +103,10 @@ export const useSupabaseProgress = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (progressError) {
-        console.error('❌ Erreur progression:', progressError);
+      if (progressError && progressError.code !== 'PGRST116') {
+        console.error('❌ [LOAD] Erreur progression:', progressError);
+      } else {
+        console.log('📊 [LOAD] Progression trouvée:', progress);
       }
 
       // Charger tous les scores
@@ -121,7 +117,9 @@ export const useSupabaseProgress = () => {
         .order('created_at', { ascending: false });
 
       if (scoresError) {
-        console.error('❌ Erreur scores:', scoresError);
+        console.error('❌ [LOAD] Erreur scores:', scoresError);
+      } else {
+        console.log('📋 [LOAD] Scores trouvés:', scores?.length || 0);
       }
 
       const result = {
@@ -137,10 +135,10 @@ export const useSupabaseProgress = () => {
         })) || []
       };
       
-      console.log('📦 Données chargées:', result);
+      console.log('📦 [LOAD] Données finales:', result);
       return result;
     } catch (error) {
-      console.error('❌ Erreur lors du chargement:', error);
+      console.error('❌ [LOAD] Erreur lors du chargement:', error);
       return null;
     } finally {
       setSyncing(false);

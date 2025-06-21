@@ -54,32 +54,37 @@ export const calculateProfileStats = (scores: QuizScore[], questionsCompleted: n
   };
 };
 
-// Nouvelle fonction pour charger les statistiques depuis Supabase
+// Fonction pour charger les statistiques depuis Supabase
 export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | null> => {
   try {
+    console.log("📊 [STATS] Chargement des statistiques pour:", userId);
+    
     // Charger la progression globale
     const { data: progress, error: progressError } = await supabase
       .from('user_progress')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     if (progressError && progressError.code !== 'PGRST116') {
-      console.error('Erreur lors du chargement de la progression:', progressError);
+      console.error('❌ [STATS] Erreur lors du chargement de la progression:', progressError);
       return null;
     }
 
     if (progress) {
+      console.log("✅ [STATS] Progression trouvée:", progress);
       return {
         correctPercentage: progress.correct_percentage,
         totalPoints: progress.total_points,
         userLevel: progress.user_level
       };
+    } else {
+      console.log("ℹ️ [STATS] Aucune progression trouvée");
     }
 
     return null;
   } catch (error) {
-    console.error('Erreur lors du chargement des statistiques:', error);
+    console.error('❌ [STATS] Erreur lors du chargement des statistiques:', error);
     return null;
   }
 };

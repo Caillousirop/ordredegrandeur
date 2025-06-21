@@ -33,21 +33,21 @@ export const useQuiz = () => {
   useEffect(() => {
     const initializeData = async () => {
       if (user && !isLoaded) {
-        console.log("🔄 Initialisation des données utilisateur depuis Supabase...");
+        console.log("🔄 [QUIZ] Initialisation des données utilisateur depuis Supabase...");
         const data = await loadProgress();
         
         if (data?.progress) {
+          console.log("✅ [QUIZ] Progression chargée:", data.progress);
           setQuestionsCompleted(data.progress.questions_completed);
-          console.log("✅ Progression chargée:", data.progress);
         } else {
-          console.log("ℹ️ Aucune progression trouvée dans Supabase");
+          console.log("ℹ️ [QUIZ] Aucune progression trouvée dans Supabase");
         }
         
         if (data?.scores && data.scores.length > 0) {
+          console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
           setScores(data.scores);
-          console.log("✅ Scores chargés:", data.scores.length);
         } else {
-          console.log("ℹ️ Aucun score trouvé dans Supabase");
+          console.log("ℹ️ [QUIZ] Aucun score trouvé dans Supabase");
         }
         
         setIsLoaded(true);
@@ -127,7 +127,6 @@ export const useQuiz = () => {
 
   const handleThemeSelect = (theme: QuizTheme) => {
     setSelectedTheme(theme);
-    // Ne pas basculer automatiquement vers l'onglet des questions
   };
 
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
@@ -148,23 +147,20 @@ export const useQuiz = () => {
   };
   
   const handleScore = async (score: QuizScore) => {
-    console.log("🎯 Nouveau score reçu:", score);
+    console.log("🎯 [QUIZ] Nouveau score reçu:", score);
     
     // Update scores locally first
     setScores(prevScores => {
-      // Check if we already have a score for this question
       const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
       
       if (existingScoreIndex >= 0) {
-        // Replace existing score
         const newScores = [...prevScores];
         newScores[existingScoreIndex] = score;
-        console.log("🔄 Score remplacé pour la question:", score.questionId);
+        console.log("🔄 [QUIZ] Score remplacé pour la question:", score.questionId);
         return newScores;
       } else {
-        // Add new score
         const newScores = [...prevScores, score];
-        console.log("✅ Nouveau score ajouté, total scores:", newScores.length);
+        console.log("✅ [QUIZ] Nouveau score ajouté, total scores:", newScores.length);
         return newScores;
       }
     });
@@ -172,39 +168,38 @@ export const useQuiz = () => {
     // Incrémenter le nombre de questions complétées localement
     setQuestionsCompleted(prev => {
       const newCount = prev + 1;
-      console.log("📊 Questions complétées mises à jour:", newCount);
+      console.log("📊 [QUIZ] Questions complétées mises à jour:", newCount);
       return newCount;
     });
     
     // Sauvegarder dans Supabase si l'utilisateur est connecté
     if (user) {
-      console.log("💾 Début de la sauvegarde dans Supabase...");
+      console.log("💾 [QUIZ] Début de la sauvegarde dans Supabase...");
       try {
         const success = await saveScore(score);
         
         if (success) {
-          console.log("✅ Score sauvegardé avec succès");
+          console.log("✅ [QUIZ] Score sauvegardé avec succès");
           
-          // Recharger les données après sauvegarde
-          setTimeout(async () => {
-            console.log("🔄 Rechargement de la progression depuis Supabase...");
-            const updatedData = await loadProgress();
-            if (updatedData?.progress) {
-              console.log("📈 Nouvelle progression:", updatedData.progress);
-              setQuestionsCompleted(updatedData.progress.questions_completed);
-            }
-            if (updatedData?.scores) {
-              setScores(updatedData.scores);
-            }
-          }, 1500); // Délai plus long pour la synchronisation
+          // Recharger immédiatement les données depuis Supabase
+          console.log("🔄 [QUIZ] Rechargement immédiat de la progression...");
+          const updatedData = await loadProgress();
+          if (updatedData?.progress) {
+            console.log("📈 [QUIZ] Nouvelle progression chargée:", updatedData.progress);
+            setQuestionsCompleted(updatedData.progress.questions_completed);
+          }
+          if (updatedData?.scores) {
+            console.log("📋 [QUIZ] Nouveaux scores chargés:", updatedData.scores.length);
+            setScores(updatedData.scores);
+          }
         } else {
-          console.error("❌ Échec de la sauvegarde");
+          console.error("❌ [QUIZ] Échec de la sauvegarde");
         }
       } catch (error) {
-        console.error("❌ Erreur lors de la sauvegarde:", error);
+        console.error("❌ [QUIZ] Erreur lors de la sauvegarde:", error);
       }
     } else {
-      console.log("⚠️ Utilisateur non connecté, sauvegarde locale uniquement");
+      console.log("⚠️ [QUIZ] Utilisateur non connecté, sauvegarde locale uniquement");
     }
     
     // Adjust accuracy based on hints usage
