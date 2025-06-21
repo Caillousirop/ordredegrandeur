@@ -20,7 +20,7 @@ export const useSupabaseProgress = () => {
       console.log("👤 [SAVE] User ID:", user.id);
       setSyncing(true);
       
-      // Préparer les données pour l'insertion - simplifiées
+      // Préparer les données pour l'insertion - avec TOUTES les colonnes requises
       const scoreData = {
         user_id: user.id,
         question_id: score.questionId,
@@ -149,7 +149,7 @@ export const useSupabaseProgress = () => {
 
       console.log("✅ [TEST] Lecture OK");
 
-      // Test d'insertion simple
+      // Test d'insertion simple avec TOUTES les colonnes requises
       const testScore = {
         user_id: user.id,
         question_id: `test-${Date.now()}`,
@@ -160,6 +160,8 @@ export const useSupabaseProgress = () => {
         used_hints: false,
         hints_revealed_count: 0
       };
+
+      console.log("🧪 [TEST] Tentative d'insertion:", testScore);
 
       const { data: insertData, error: insertError } = await supabase
         .from('user_quiz_scores')
@@ -174,10 +176,13 @@ export const useSupabaseProgress = () => {
       console.log("✅ [TEST] Insertion OK:", insertData);
 
       // Nettoyer le test
-      await supabase
-        .from('user_quiz_scores')
-        .delete()
-        .eq('question_id', testScore.question_id);
+      if (insertData && insertData.length > 0) {
+        await supabase
+          .from('user_quiz_scores')
+          .delete()
+          .eq('question_id', testScore.question_id);
+        console.log("🧹 [TEST] Test nettoyé");
+      }
 
       return { success: true };
     } catch (error) {
