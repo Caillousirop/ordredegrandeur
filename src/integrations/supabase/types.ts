@@ -218,57 +218,6 @@ export type Database = {
         }
         Relationships: []
       }
-      quiz_questions_temp: {
-        Row: {
-          correct_answer: number | null
-          created_at: string | null
-          explanation: string | null
-          final_explanation: string | null
-          id: string
-          is_active: boolean | null
-          priority: number | null
-          question: string | null
-          scheduled_date: string | null
-          steps: string | null
-          theme: string | null
-          type: string | null
-          unit: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          correct_answer?: number | null
-          created_at?: string | null
-          explanation?: string | null
-          final_explanation?: string | null
-          id: string
-          is_active?: boolean | null
-          priority?: number | null
-          question?: string | null
-          scheduled_date?: string | null
-          steps?: string | null
-          theme?: string | null
-          type?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          correct_answer?: number | null
-          created_at?: string | null
-          explanation?: string | null
-          final_explanation?: string | null
-          id?: string
-          is_active?: boolean | null
-          priority?: number | null
-          question?: string | null
-          scheduled_date?: string | null
-          steps?: string | null
-          theme?: string | null
-          type?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       temp_import: {
         Row: {
           correct_answer: string | null

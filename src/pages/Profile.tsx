@@ -21,6 +21,7 @@ const Profile = () => {
     userLevel: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
   
   // Fonction pour recharger les statistiques
   const reloadStats = async () => {
@@ -194,20 +195,36 @@ const Profile = () => {
       <div className="container mx-auto max-w-5xl px-4 py-10">
         <div className="flex items-center justify-between mb-6">
           <ProfileHeader />
-          <Button
-            variant="outline"
-            onClick={reloadStats}
-            disabled={isLoading}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            Actualiser
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowDebug(!showDebug)}
+              className="flex items-center gap-2"
+            >
+              🔍 Debug
+            </Button>
+            <Button
+              variant="outline"
+              onClick={reloadStats}
+              disabled={isLoading}
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              Actualiser
+            </Button>
+          </div>
         </div>
         
         {isLoading && (
           <div className="text-center py-4">
             <p className="text-muted-foreground">Mise à jour de vos statistiques...</p>
+          </div>
+        )}
+
+        {/* Debug Info */}
+        {showDebug && (
+          <div className="mb-6">
+            <DebugInfo />
           </div>
         )}
         

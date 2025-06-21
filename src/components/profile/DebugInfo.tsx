@@ -3,14 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { RefreshCw, Database, User, Bug } from "lucide-react";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { RefreshCw, Database, User, Bug, TestTube } from "lucide-react";
 
 const DebugInfo: React.FC = () => {
   const { user } = useAuth();
+  const { loadProgress, testConnection } = useSupabaseProgress();
   const [debugData, setDebugData] = useState<any>({});
   const [loading, setLoading] = useState(false);
+  const [testResult, setTestResult] = useState<any>(null);
 
   const loadDebugData = async () => {
     if (!user) return;
@@ -19,51 +21,21 @@ const DebugInfo: React.FC = () => {
     console.log("🔍 [DEBUG] Chargement des données de debug pour:", user.id);
     
     try {
-      // Vérifier le statut admin
-      const { data: adminCheck } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', user.id);
-
-      // Charger les scores
-      const { data: scores, error: scoresError } = await supabase
-        .from('user_quiz_scores')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      // Charger la progression
-      const { data: progress, error: progressError } = await supabase
-        .from('user_progress')
-        .select('*')
-        .eq('user_id', user.id);
-
-      // Test de la fonction admin
-      const { data: isAdminResult } = await supabase.rpc('is_user_admin', { 
-        check_user_id: user.id 
-      });
-
+      const data = await loadProgress();
+      
       setDebugData({
         userId: user.id,
         email: user.email,
-        isAdmin: adminCheck && adminCheck.length > 0,
-        adminCheckData: adminCheck,
-        isAdminFunction: isAdminResult,
-        scores: scores || [],
-        scoresError: scoresError?.message,
-        progress: progress || [],
-        progressError: progressError?.message,
-        scoresCount: scores?.length || 0,
+        progress: data?.progress,
+        scores: data?.scores || [],
+        scoresCount: data?.scores?.length || 0,
         lastUpdated: new Date().toISOString()
       });
 
       console.log("🔍 [DEBUG] Données récupérées:", {
         userId: user.id,
-        isAdmin: adminCheck && adminCheck.length > 0,
-        scoresCount: scores?.length || 0,
-        progressCount: progress?.length || 0,
-        scoresError,
-        progressError
+        scoresCount: data?.scores?.length || 0,
+        progressData: data?.progress
       });
 
     } catch (error) {
@@ -72,6 +44,24 @@ const DebugInfo: React.FC = () => {
         error: error.message,
         userId: user.id
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const runConnectionTest = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    console.log("🧪 [DEBUG] Test de connexion...");
+    
+    try {
+      const result = await testConnection();
+      setTestResult(result);
+      console.log("🧪 [DEBUG] Résultat test:", result);
+    } catch (error) {
+      console.error("❌ [DEBUG] Erreur test:", error);
+      setTestResult({ error: error.message });
     } finally {
       setLoading(false);
     }
@@ -93,7 +83,7 @@ const DebugInfo: React.FC = () => {
           Informations de Debug
         </CardTitle>
         <CardDescription>
-          Données techniques pour identifier les problèmes
+          Données techniques pour identifier les problèmes de sauvegarde
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -105,12 +95,31 @@ const DebugInfo: React.FC = () => {
             disabled={loading}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Actualiser
+            Recharger données
           </Button>
-          <Badge variant={debugData.isAdmin ? "default" : "secondary"}>
-            {debugData.isAdmin ? "Admin" : "Utilisateur"}
-          </Badge>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={runConnectionTest}
+            disabled={loading}
+          >
+            <TestTube className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Test connexion
+          </Button>
         </div>
+
+        {testResult && (
+          <div className="space-y-2">
+            <h4 className="font-medium">Résultat du test de connexion</h4>
+            <div className={`p-2 rounded border ${testResult.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+              {testResult.success ? (
+                <p className="text-green-700">✅ Connexion et permissions OK</p>
+              ) : (
+                <p className="text-red-700">❌ Erreur: {testResult.error}</p>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div className="space-y-2">
@@ -121,8 +130,6 @@ const DebugInfo: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 p-2 rounded border">
               <p><strong>ID:</strong> {debugData.userId}</p>
               <p><strong>Email:</strong> {debugData.email}</p>
-              <p><strong>Admin:</strong> {debugData.isAdmin ? 'Oui' : 'Non'}</p>
-              <p><strong>Fonction Admin:</strong> {debugData.isAdminFunction ? 'Oui' : 'Non'}</p>
             </div>
           </div>
 
@@ -133,12 +140,9 @@ const DebugInfo: React.FC = () => {
             </h4>
             <div className="bg-white dark:bg-gray-800 p-2 rounded border">
               <p><strong>Scores:</strong> {debugData.scoresCount}</p>
-              <p><strong>Progression:</strong> {debugData.progress?.length || 0}</p>
-              {debugData.scoresError && (
-                <p className="text-red-500"><strong>Erreur scores:</strong> {debugData.scoresError}</p>
-              )}
-              {debugData.progressError && (
-                <p className="text-red-500"><strong>Erreur progression:</strong> {debugData.progressError}</p>
+              <p><strong>Progression:</strong> {debugData.progress ? 'Trouvée' : 'Aucune'}</p>
+              {debugData.error && (
+                <p className="text-red-500"><strong>Erreur:</strong> {debugData.error}</p>
               )}
             </div>
           </div>
@@ -150,28 +154,25 @@ const DebugInfo: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 p-2 rounded border max-h-40 overflow-y-auto">
               {debugData.scores.slice(0, 5).map((score: any, index: number) => (
                 <div key={index} className="text-xs border-b border-gray-200 dark:border-gray-600 pb-1 mb-1">
-                  <p><strong>Question:</strong> {score.question_id}</p>
+                  <p><strong>Question:</strong> {score.questionId}</p>
                   <p><strong>Précision:</strong> {score.accuracy}%</p>
-                  <p><strong>Date:</strong> {new Date(score.created_at).toLocaleString()}</p>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {debugData.progress && debugData.progress.length > 0 && (
+        {debugData.progress && (
           <div className="space-y-2">
             <h4 className="font-medium">Progression actuelle</h4>
             <div className="bg-white dark:bg-gray-800 p-2 rounded border">
-              {debugData.progress.map((prog: any, index: number) => (
-                <div key={index} className="text-xs">
-                  <p><strong>Points:</strong> {prog.total_points}</p>
-                  <p><strong>Questions:</strong> {prog.questions_completed}</p>
-                  <p><strong>Niveau:</strong> {prog.user_level}</p>
-                  <p><strong>Précision:</strong> {prog.correct_percentage}%</p>
-                  <p><strong>Mis à jour:</strong> {new Date(prog.last_updated).toLocaleString()}</p>
-                </div>
-              ))}
+              <div className="text-xs">
+                <p><strong>Points:</strong> {debugData.progress.total_points}</p>
+                <p><strong>Questions:</strong> {debugData.progress.questions_completed}</p>
+                <p><strong>Niveau:</strong> {debugData.progress.user_level}</p>
+                <p><strong>Précision:</strong> {debugData.progress.correct_percentage}%</p>
+                <p><strong>Mis à jour:</strong> {new Date(debugData.progress.last_updated).toLocaleString()}</p>
+              </div>
             </div>
           </div>
         )}
