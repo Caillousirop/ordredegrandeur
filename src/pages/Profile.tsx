@@ -4,7 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import RewardsSystem from "@/components/profile/RewardsSystem";
-import DebugInfo from "@/components/profile/DebugInfo";
 import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
@@ -22,19 +21,17 @@ const Profile = () => {
     userLevel: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
   
   // Fonction pour recharger les statistiques
   const reloadStats = async () => {
     if (user) {
       setIsLoading(true);
-      console.log("🔄 [PROFILE] Rechargement forcé des statistiques du profil...");
+      console.log("🔄 [PROFILE] Rechargement des statistiques...");
       try {
         const stats = await loadSupabaseStats(user.id);
-        console.log("📊 [PROFILE] Statistiques rechargées:", stats);
         setSupabaseStats(stats);
       } catch (error) {
-        console.error("❌ [PROFILE] Erreur lors du rechargement des stats:", error);
+        console.error("❌ [PROFILE] Erreur:", error);
       } finally {
         setIsLoading(false);
       }
@@ -43,33 +40,14 @@ const Profile = () => {
 
   // Charger les statistiques depuis Supabase
   useEffect(() => {
-    const loadStats = async () => {
-      if (user) {
-        setIsLoading(true);
-        console.log("📥 [PROFILE] Chargement des statistiques du profil depuis Supabase...");
-        const stats = await loadSupabaseStats(user.id);
-        console.log("📊 [PROFILE] Statistiques chargées:", stats);
-        setSupabaseStats(stats);
-        setIsLoading(false);
-      }
-    };
-
-    loadStats();
-  }, [user, refreshKey]);
+    reloadStats();
+  }, [user]);
 
   // Recharger les statistiques quand les scores changent
   useEffect(() => {
-    const reloadStatsDelayed = async () => {
-      if (user && scores.length > 0) {
-        console.log("🔄 [PROFILE] Rechargement des statistiques suite à un changement de scores...");
-        // Attendre un peu pour laisser le temps au trigger de mettre à jour la progression
-        setTimeout(async () => {
-          await reloadStats();
-        }, 2000);
-      }
-    };
-
-    reloadStatsDelayed();
+    if (user && scores.length > 0) {
+      setTimeout(reloadStats, 2000);
+    }
   }, [user, scores.length]);
 
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
@@ -234,9 +212,6 @@ const Profile = () => {
         )}
         
         <div className="space-y-6">
-          {/* Debug info - visible pour tous les utilisateurs */}
-          <DebugInfo />
-          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* User stats card - takes 2 columns on large screens */}
             <div className="lg:col-span-2">
