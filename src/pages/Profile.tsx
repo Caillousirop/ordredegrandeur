@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import RewardsSystem from "@/components/profile/RewardsSystem";
+import DebugInfo from "@/components/profile/DebugInfo";
 import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
