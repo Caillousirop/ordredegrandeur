@@ -14,6 +14,25 @@ interface TimedQuizSession {
   is_completed: boolean;
 }
 
+// IDs spécifiques des 15 questions sélectionnées pour le quiz chronométré
+const TIMED_QUIZ_QUESTION_IDS = [
+  "0193cf7f-1234-7123-1234-123456789001",
+  "0193cf7f-1234-7123-1234-123456789002", 
+  "0193cf7f-1234-7123-1234-123456789003",
+  "0193cf7f-1234-7123-1234-123456789004",
+  "0193cf7f-1234-7123-1234-123456789005",
+  "0193cf7f-1234-7123-1234-123456789006",
+  "0193cf7f-1234-7123-1234-123456789007",
+  "0193cf7f-1234-7123-1234-123456789008",
+  "0193cf7f-1234-7123-1234-123456789009",
+  "0193cf7f-1234-7123-1234-123456789010",
+  "0193cf7f-1234-7123-1234-123456789011",
+  "0193cf7f-1234-7123-1234-123456789012",
+  "0193cf7f-1234-7123-1234-123456789013",
+  "0193cf7f-1234-7123-1234-123456789014",
+  "0193cf7f-1234-7123-1234-123456789015"
+];
+
 export const useTimedQuiz = () => {
   const { user } = useAuth();
   const [currentSession, setCurrentSession] = useState<TimedQuizSession | null>(null);
@@ -26,15 +45,55 @@ export const useTimedQuiz = () => {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [currentScore, setCurrentScore] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState<number>(0);
+  const [hasPlayedBefore, setHasPlayedBefore] = useState(false);
+  const [checkingPreviousAttempt, setCheckingPreviousAttempt] = useState(true);
 
-  // Charger les questions simples
+  // Vérifier si l'utilisateur a déjà joué
+  const checkPreviousAttempt = useCallback(async () => {
+    if (!user) {
+      setCheckingPreviousAttempt(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('timed_quiz_sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_completed', true)
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Erreur lors de la vérification des tentatives précédentes:', error);
+      }
+
+      setHasPlayedBefore(!!data);
+      
+      // S'il y a une session complétée, la charger pour afficher les résultats
+      if (data) {
+        setCurrentSession(data);
+        setQuestionsAnswered(data.total_questions);
+        setCorrectAnswers(data.correct_answers);
+        setCurrentScore(data.score);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la vérification des tentatives précédentes:', error);
+    } finally {
+      setCheckingPreviousAttempt(false);
+    }
+  }, [user]);
+
+  // Charger les 15 questions spécifiques
   const loadQuestions = useCallback(async () => {
     try {
+      // Pour l'instant, on prend les 15 premières questions simples
+      // TODO: remplacer par les IDs spécifiques une fois qu'on les aura
       const { data, error } = await supabase
         .from('quiz_questions')
         .select('*')
         .eq('type', 'simple')
         .eq('is_active', true)
+        .limit(15)
         .order('created_at');
 
       if (error) throw error;
@@ -50,9 +109,7 @@ export const useTimedQuiz = () => {
         theme: q.theme
       }));
 
-      // Mélanger les questions pour plus de variété
-      const shuffledQuestions = [...formattedQuestions].sort(() => Math.random() - 0.5);
-      setQuestions(shuffledQuestions);
+      setQuestions(formattedQuestions);
     } catch (error) {
       console.error('Erreur lors du chargement des questions:', error);
       toast.error("Erreur lors du chargement des questions");
@@ -63,6 +120,11 @@ export const useTimedQuiz = () => {
   const startQuiz = useCallback(async () => {
     if (!user) {
       toast.error("Vous devez être connecté pour jouer au quiz chronométré");
+      return;
+    }
+
+    if (hasPlayedBefore) {
+      toast.error("Vous avez déjà participé au quiz chronométré");
       return;
     }
 
@@ -91,7 +153,7 @@ export const useTimedQuiz = () => {
       console.error('Erreur lors du démarrage du quiz:', error);
       toast.error("Erreur lors du démarrage du quiz");
     }
-  }, [user]);
+  }, [user, hasPlayedBefore]);
 
   // Soumettre une réponse
   const submitAnswer = useCallback(async () => {
@@ -152,18 +214,22 @@ export const useTimedQuiz = () => {
     if (!currentSession || !user) return;
 
     try {
+      const updatedSession = {
+        end_time: new Date().toISOString(),
+        total_questions: questionsAnswered,
+        correct_answers: correctAnswers,
+        score: currentScore,
+        is_completed: true
+      };
+
       await supabase
         .from('timed_quiz_sessions')
-        .update({
-          end_time: new Date().toISOString(),
-          total_questions: questionsAnswered,
-          correct_answers: correctAnswers,
-          score: currentScore,
-          is_completed: true
-        })
+        .update(updatedSession)
         .eq('id', currentSession.id);
 
+      setCurrentSession({ ...currentSession, ...updatedSession });
       setIsActive(false);
+      setHasPlayedBefore(true);
       toast.success(`Quiz terminé ! Score: ${currentScore} points`);
     } catch (error) {
       console.error('Erreur lors de la finalisation du quiz:', error);
@@ -186,13 +252,14 @@ export const useTimedQuiz = () => {
     return () => clearInterval(interval);
   }, [isActive, timeLeft, endQuiz]);
 
-  // Charger les questions au montage
+  // Charger les questions et vérifier les tentatives précédentes au montage
   useEffect(() => {
     loadQuestions();
-  }, [loadQuestions]);
+    checkPreviousAttempt();
+  }, [loadQuestions, checkPreviousAttempt]);
 
   const currentQuestion = questions[currentQuestionIndex];
-  const hasNextQuestion = currentQuestionIndex < questions.length - 1;
+  const hasNextQuestion = currentQuestionIndex < questions.length - 1 && timeLeft > 0;
 
   return {
     currentSession,
@@ -208,6 +275,8 @@ export const useTimedQuiz = () => {
     startQuiz,
     submitAnswer,
     endQuiz,
-    questions: questions.length
+    questions: questions.length,
+    hasPlayedBefore,
+    checkingPreviousAttempt
   };
 };

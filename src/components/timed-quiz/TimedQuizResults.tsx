@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trophy, Target, Clock, RotateCcw } from "lucide-react";
+import { Trophy, Target, Clock } from "lucide-react";
 import { useTimedQuiz } from "@/hooks/useTimedQuiz";
 
 interface TimedQuizResultsProps {
@@ -11,7 +11,6 @@ interface TimedQuizResultsProps {
 }
 
 const TimedQuizResults: React.FC<TimedQuizResultsProps> = ({
-  onRestart,
   onViewLeaderboard
 }) => {
   const { questionsAnswered, correctAnswers, currentScore } = useTimedQuiz();
@@ -87,14 +86,16 @@ const TimedQuizResults: React.FC<TimedQuizResultsProps> = ({
           )}
         </div>
 
-        <div className="flex flex-col gap-3">
-          <Button onClick={onViewLeaderboard} variant="default" className="w-full">
+        <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-center">
+          <p className="text-sm text-blue-600 dark:text-blue-400">
+            Merci d'avoir participé ! Chaque utilisateur ne peut participer qu'une seule fois pour garantir l'équité du classement.
+          </p>
+        </div>
+
+        <div className="flex justify-center">
+          <Button onClick={onViewLeaderboard} className="w-full max-w-md">
             <Trophy className="mr-2 h-4 w-4" />
             Voir le classement
-          </Button>
-          <Button onClick={onRestart} variant="outline" className="w-full">
-            <RotateCcw className="mr-2 h-4 w-4" />
-            Rejouer
           </Button>
         </div>
       </CardContent>

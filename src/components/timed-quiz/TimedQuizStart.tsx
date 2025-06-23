@@ -2,20 +2,39 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Target, Trophy, Zap } from "lucide-react";
+import { Clock, Target, Trophy, Zap, AlertCircle } from "lucide-react";
 import { useTimedQuiz } from "@/hooks/useTimedQuiz";
 import { useAuth } from "@/hooks/useAuth";
 
 const TimedQuizStart: React.FC = () => {
-  const { startQuiz, questions } = useTimedQuiz();
+  const { 
+    startQuiz, 
+    questions, 
+    hasPlayedBefore, 
+    checkingPreviousAttempt 
+  } = useTimedQuiz();
   const { user } = useAuth();
 
   const handleStart = () => {
     if (!user) {
       return;
     }
+    if (hasPlayedBefore) {
+      return;
+    }
     startQuiz();
   };
+
+  if (checkingPreviousAttempt) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardContent className="p-6 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Vérification de vos tentatives précédentes...</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -30,6 +49,18 @@ const TimedQuizStart: React.FC = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
+        {hasPlayedBefore && (
+          <div className="bg-orange-50 dark:bg-orange-950/50 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+            <div className="flex items-center gap-2 text-orange-700 dark:text-orange-300">
+              <AlertCircle className="h-5 w-5" />
+              <h4 className="font-medium">Déjà participé</h4>
+            </div>
+            <p className="text-sm text-orange-600 dark:text-orange-400 mt-1">
+              Vous avez déjà participé au quiz chronométré. Chaque utilisateur ne peut participer qu'une seule fois pour garantir l'équité du classement.
+            </p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center space-y-2">
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto">
@@ -74,14 +105,25 @@ const TimedQuizStart: React.FC = () => {
           </ul>
         </div>
 
+        <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <h4 className="font-medium text-blue-700 dark:text-blue-300">Important</h4>
+          <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+            Chaque utilisateur ne peut participer qu'une seule fois au quiz chronométré pour garantir l'équité du classement. 15 questions sélectionnées sont disponibles.
+          </p>
+        </div>
+
         <div className="text-center space-y-4">
           <p className="text-sm text-muted-foreground">
-            {questions} questions disponibles • Questions simples uniquement
+            {questions} questions sélectionnées • Questions simples uniquement
           </p>
           
           {!user ? (
             <p className="text-sm text-orange-600 dark:text-orange-400">
               Connectez-vous pour participer au quiz chronométré
+            </p>
+          ) : hasPlayedBefore ? (
+            <p className="text-sm text-muted-foreground">
+              Vous avez déjà participé à ce quiz
             </p>
           ) : (
             <Button 

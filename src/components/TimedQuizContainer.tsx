@@ -10,20 +10,30 @@ type ViewState = 'start' | 'game' | 'results' | 'leaderboard';
 
 const TimedQuizContainer: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('start');
-  const { isActive, currentSession } = useTimedQuiz();
+  const { 
+    isActive, 
+    currentSession, 
+    hasPlayedBefore,
+    checkingPreviousAttempt 
+  } = useTimedQuiz();
 
   // Détermine automatiquement la vue à afficher
   React.useEffect(() => {
+    if (checkingPreviousAttempt) {
+      return; // Attendre la fin de la vérification
+    }
+    
     if (isActive) {
       setCurrentView('game');
-    } else if (currentSession?.is_completed) {
+    } else if (currentSession?.is_completed || hasPlayedBefore) {
       setCurrentView('results');
     } else {
       setCurrentView('start');
     }
-  }, [isActive, currentSession]);
+  }, [isActive, currentSession, hasPlayedBefore, checkingPreviousAttempt]);
 
   const handleRestart = () => {
+    // On ne peut pas redémarrer car chaque utilisateur ne peut jouer qu'une fois
     setCurrentView('start');
   };
 
@@ -32,7 +42,7 @@ const TimedQuizContainer: React.FC = () => {
   };
 
   const handleBackFromLeaderboard = () => {
-    if (currentSession?.is_completed) {
+    if (currentSession?.is_completed || hasPlayedBefore) {
       setCurrentView('results');
     } else {
       setCurrentView('start');

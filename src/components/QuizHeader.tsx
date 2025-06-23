@@ -16,15 +16,15 @@ const QuizHeader: React.FC = () => {
         Testez vos connaissances en estimation de grandeurs. Évaluez vos réponses et découvrez des faits fascinants !
       </p>
       
-      {/* Bouton Quiz Chronométré */}
+      {/* Bouton Quiz Chronométré - style original */}
       <div className="flex justify-center mt-6">
         <Button
           onClick={() => navigate('/timed-quiz')}
           variant="outline"
-          className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-none hover:from-orange-600 hover:to-red-600"
+          className="hover:bg-accent hover:text-accent-foreground"
         >
           <Clock className="mr-2 h-4 w-4" />
-          Quiz Chronométré 30s
+          Quiz Chronométré
         </Button>
       </div>
     </div>
