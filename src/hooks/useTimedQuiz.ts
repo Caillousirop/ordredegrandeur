@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
@@ -47,10 +48,12 @@ export const useTimedQuiz = () => {
   const [hasPlayedBefore, setHasPlayedBefore] = useState(false);
   const [checkingPreviousAttempt, setCheckingPreviousAttempt] = useState(true);
 
-  // Vérifier si l'utilisateur a déjà joué
+  // Vérifier si l'utilisateur connecté a déjà joué
   const checkPreviousAttempt = useCallback(async () => {
+    // Si pas d'utilisateur connecté, pas de vérification nécessaire
     if (!user) {
       setCheckingPreviousAttempt(false);
+      setHasPlayedBefore(false);
       return;
     }
 
@@ -135,14 +138,9 @@ export const useTimedQuiz = () => {
   const startQuiz = useCallback(async () => {
     console.log("Tentative de démarrage du quiz...");
     
-    if (!user) {
-      console.error("Utilisateur non connecté");
-      toast.error("Vous devez être connecté pour jouer au quiz chronométré");
-      return;
-    }
-
-    if (hasPlayedBefore) {
-      console.error("Utilisateur a déjà joué");
+    // Pour les utilisateurs connectés, vérifier s'ils ont déjà joué
+    if (user && hasPlayedBefore) {
+      console.error("Utilisateur connecté a déjà joué");
       toast.error("Vous avez déjà participé au quiz chronométré");
       return;
     }
@@ -154,23 +152,40 @@ export const useTimedQuiz = () => {
     }
 
     try {
-      console.log("Création de la session de quiz...");
-      const { data, error } = await supabase
-        .from('timed_quiz_sessions')
-        .insert({
-          user_id: user.id,
-          start_time: new Date().toISOString()
-        })
-        .select()
-        .single();
+      let sessionData = null;
+      
+      // Créer une session seulement si l'utilisateur est connecté
+      if (user) {
+        console.log("Création de la session de quiz pour utilisateur connecté...");
+        const { data, error } = await supabase
+          .from('timed_quiz_sessions')
+          .insert({
+            user_id: user.id,
+            start_time: new Date().toISOString()
+          })
+          .select()
+          .single();
 
-      if (error) {
-        console.error("Erreur lors de la création de la session:", error);
-        throw error;
+        if (error) {
+          console.error("Erreur lors de la création de la session:", error);
+          throw error;
+        }
+
+        console.log("Session créée avec succès:", data.id);
+        sessionData = data;
+      } else {
+        console.log("Quiz en mode anonyme - pas de session créée");
+        // Pour les utilisateurs non connectés, on crée une session temporaire locale
+        sessionData = {
+          id: `temp-${Date.now()}`,
+          total_questions: 0,
+          correct_answers: 0,
+          score: 0,
+          is_completed: false
+        };
       }
 
-      console.log("Session créée avec succès:", data.id);
-      setCurrentSession(data);
+      setCurrentSession(sessionData);
       setTimeLeft(30);
       setIsActive(true);
       setCurrentQuestionIndex(0);
@@ -243,25 +258,38 @@ export const useTimedQuiz = () => {
 
   // Terminer le quiz
   const endQuiz = useCallback(async () => {
-    if (!currentSession || !user) return;
+    if (!currentSession) return;
 
     try {
-      const updatedSession = {
-        end_time: new Date().toISOString(),
-        total_questions: questionsAnswered,
-        correct_answers: correctAnswers,
-        score: currentScore,
-        is_completed: true
-      };
+      // Sauvegarder seulement si l'utilisateur est connecté et la session n'est pas temporaire
+      if (user && !currentSession.id.startsWith('temp-')) {
+        const updatedSession = {
+          end_time: new Date().toISOString(),
+          total_questions: questionsAnswered,
+          correct_answers: correctAnswers,
+          score: currentScore,
+          is_completed: true
+        };
 
-      await supabase
-        .from('timed_quiz_sessions')
-        .update(updatedSession)
-        .eq('id', currentSession.id);
+        await supabase
+          .from('timed_quiz_sessions')
+          .update(updatedSession)
+          .eq('id', currentSession.id);
 
-      setCurrentSession({ ...currentSession, ...updatedSession });
+        setCurrentSession({ ...currentSession, ...updatedSession });
+        setHasPlayedBefore(true);
+      } else {
+        // Pour les sessions temporaires, juste mettre à jour l'état local
+        setCurrentSession({
+          ...currentSession,
+          total_questions: questionsAnswered,
+          correct_answers: correctAnswers,
+          score: currentScore,
+          is_completed: true
+        });
+      }
+
       setIsActive(false);
-      setHasPlayedBefore(true);
       toast.success(`Quiz terminé ! Score: ${currentScore} points`);
     } catch (error) {
       console.error('Erreur lors de la finalisation du quiz:', error);

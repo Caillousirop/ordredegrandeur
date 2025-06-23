@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Target, Trophy, Zap, AlertCircle } from "lucide-react";
+import { Clock, Target, Trophy, Zap, AlertCircle, User } from "lucide-react";
 import { useTimedQuiz } from "@/hooks/useTimedQuiz";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -16,12 +16,6 @@ const TimedQuizStart: React.FC = () => {
   const { user } = useAuth();
 
   const handleStart = () => {
-    if (!user) {
-      return;
-    }
-    if (hasPlayedBefore) {
-      return;
-    }
     startQuiz();
   };
 
@@ -36,6 +30,8 @@ const TimedQuizStart: React.FC = () => {
     );
   }
 
+  const canPlay = !user || !hasPlayedBefore;
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center space-y-4">
@@ -49,14 +45,26 @@ const TimedQuizStart: React.FC = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {hasPlayedBefore && (
+        {user && hasPlayedBefore && (
           <div className="bg-orange-50 dark:bg-orange-950/50 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
             <div className="flex items-center gap-2 text-orange-700 dark:text-orange-300">
               <AlertCircle className="h-5 w-5" />
               <h4 className="font-medium">Déjà participé</h4>
             </div>
             <p className="text-sm text-orange-600 dark:text-orange-400 mt-1">
-              Vous avez déjà participé au quiz chronométré. Chaque utilisateur ne peut participer qu'une seule fois pour garantir l'équité du classement.
+              Vous avez déjà participé au quiz chronométré. Les utilisateurs connectés ne peuvent participer qu'une seule fois pour garantir l'équité du classement.
+            </p>
+          </div>
+        )}
+
+        {!user && (
+          <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+              <User className="h-5 w-5" />
+              <h4 className="font-medium">Mode anonyme</h4>
+            </div>
+            <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+              Vous jouez en mode anonyme. Votre score ne sera pas sauvegardé dans le classement, mais vous pouvez rejouer autant de fois que vous le souhaitez.
             </p>
           </div>
         )}
@@ -88,7 +96,7 @@ const TimedQuizStart: React.FC = () => {
             </div>
             <h3 className="font-medium">Classement</h3>
             <p className="text-sm text-muted-foreground">
-              Comparez vos performances
+              {user ? "Comparez vos performances" : "Connectez-vous pour apparaître"}
             </p>
           </div>
         </div>
@@ -106,9 +114,12 @@ const TimedQuizStart: React.FC = () => {
         </div>
 
         <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <h4 className="font-medium text-blue-700 dark:text-blue-300">Important</h4>
+          <h4 className="font-medium text-blue-700 dark:text-blue-300">Règles</h4>
           <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
-            Chaque utilisateur ne peut participer qu'une seule fois au quiz chronométré pour garantir l'équité du classement. 15 questions sélectionnées sont disponibles.
+            {user ? 
+              "Les utilisateurs connectés ne peuvent participer qu'une fois pour garantir l'équité du classement." :
+              "En mode anonyme, vous pouvez rejouer autant de fois que vous voulez, mais votre score ne sera pas sauvegardé."
+            } 15 questions sélectionnées sont disponibles.
           </p>
         </div>
 
@@ -117,15 +128,7 @@ const TimedQuizStart: React.FC = () => {
             {questions} questions sélectionnées • Questions simples uniquement
           </p>
           
-          {!user ? (
-            <p className="text-sm text-orange-600 dark:text-orange-400">
-              Connectez-vous pour participer au quiz chronométré
-            </p>
-          ) : hasPlayedBefore ? (
-            <p className="text-sm text-muted-foreground">
-              Vous avez déjà participé à ce quiz
-            </p>
-          ) : (
+          {canPlay ? (
             <Button 
               onClick={handleStart}
               size="lg"
@@ -134,6 +137,10 @@ const TimedQuizStart: React.FC = () => {
               <Clock className="mr-2 h-5 w-5" />
               Commencer le défi !
             </Button>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Vous avez déjà participé à ce quiz
+            </p>
           )}
         </div>
       </CardContent>

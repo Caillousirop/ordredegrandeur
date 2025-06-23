@@ -9,8 +9,10 @@ const QuizHeader: React.FC = () => {
 
   return (
     <div className="text-center space-y-4">
-      <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-purple-400">
-        Quantifiz
+      <h1 className="text-6xl font-bold mb-8">
+        <span className="text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-purple-400">Ordre</span>
+        <span className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-purple-400 mx-2">de</span>
+        <span className="text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-purple-400">Grandeur</span>
       </h1>
       <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
         Testez vos connaissances en estimation de grandeurs. Évaluez vos réponses et découvrez des faits fascinants !
