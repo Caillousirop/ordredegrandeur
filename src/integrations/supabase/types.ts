@@ -242,6 +242,93 @@ export type Database = {
         }
         Relationships: []
       }
+      timed_quiz_answers: {
+        Row: {
+          accuracy: number
+          answered_at: string
+          correct_answer: number
+          id: string
+          question_id: string
+          response_time_ms: number
+          session_id: string
+          user_answer: number | null
+        }
+        Insert: {
+          accuracy: number
+          answered_at?: string
+          correct_answer: number
+          id?: string
+          question_id: string
+          response_time_ms: number
+          session_id: string
+          user_answer?: number | null
+        }
+        Update: {
+          accuracy?: number
+          answered_at?: string
+          correct_answer?: number
+          id?: string
+          question_id?: string
+          response_time_ms?: number
+          session_id?: string
+          user_answer?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timed_quiz_answers_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "timed_quiz_leaderboard"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timed_quiz_answers_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "timed_quiz_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      timed_quiz_sessions: {
+        Row: {
+          correct_answers: number
+          created_at: string
+          duration_seconds: number
+          end_time: string | null
+          id: string
+          is_completed: boolean
+          score: number
+          start_time: string
+          total_questions: number
+          user_id: string | null
+        }
+        Insert: {
+          correct_answers?: number
+          created_at?: string
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          is_completed?: boolean
+          score?: number
+          start_time?: string
+          total_questions?: number
+          user_id?: string | null
+        }
+        Update: {
+          correct_answers?: number
+          created_at?: string
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          is_completed?: boolean
+          score?: number
+          start_time?: string
+          total_questions?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_progress: {
         Row: {
           correct_percentage: number
@@ -313,7 +400,18 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      timed_quiz_leaderboard: {
+        Row: {
+          correct_answers: number | null
+          created_at: string | null
+          id: string | null
+          rank: number | null
+          score: number | null
+          total_questions: number | null
+          username: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       is_admin: {
