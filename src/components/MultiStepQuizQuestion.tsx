@@ -10,6 +10,7 @@ import FloatingCalculator from "./quiz/FloatingCalculator";
 import FinalExplanation from "./quiz/FinalExplanation";
 import QuizModeSwitcher from "./quiz/QuizModeSwitcher";
 import { Home } from "lucide-react";
+import { formatUnitDisplay } from "@/utils/unitDisplay";
 
 interface MultiStepQuizQuestionProps {
   question: MultiStepQuestion;
@@ -29,6 +30,10 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
       onGoHome();
     }
   };
+
+  // Obtenir l'unité de la dernière étape (réponse finale)
+  const finalStep = question.steps[question.steps.length - 1];
+  const unitDisplay = formatUnitDisplay(finalStep?.unit);
 
   return (
     <MultiStepQuizManager
@@ -73,6 +78,11 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
             <CardHeader className="border-b border-border/50">
               <CardTitle className={`text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
                 {question.question}
+                {unitDisplay && directFinalMode && (
+                  <div className="text-sm font-normal text-muted-foreground mt-1">
+                    {unitDisplay}
+                  </div>
+                )}
               </CardTitle>
               <CardDescription className="mt-2">
                 Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement

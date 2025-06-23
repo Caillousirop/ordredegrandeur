@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "../AccuracyGauge";
 import { Step } from "../types";
+import { formatUnitDisplay } from "@/utils/unitDisplay";
 
 interface QuizStepProps {
   step: Step;
@@ -28,6 +29,8 @@ const QuizStep: React.FC<QuizStepProps> = ({
   onInputChange,
   onSubmit
 }) => {
+  const unitDisplay = formatUnitDisplay(step.unit);
+
   return (
     <div className={`p-4 border rounded-md ${submitted ? "bg-muted/20" : ""}`}>
       <div className="mb-2">
@@ -35,7 +38,14 @@ const QuizStep: React.FC<QuizStepProps> = ({
           <Badge variant={submitted ? "default" : "outline"} className={`mr-2 ${submitted ? "bg-primary" : ""}`}>
             {index + 1}
           </Badge>
-          {`Étape ${index + 1}: ${step.question}`}
+          <div>
+            {`Étape ${index + 1}: ${step.question}`}
+            {unitDisplay && (
+              <div className="text-sm font-normal text-muted-foreground mt-1">
+                {unitDisplay}
+              </div>
+            )}
+          </div>
         </h3>
       </div>
       

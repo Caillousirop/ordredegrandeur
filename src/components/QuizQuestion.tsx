@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +8,7 @@ import { Question, QuizScore } from "./types";
 import { themes } from "@/data/themes";
 import { EyeIcon, Home } from "lucide-react";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
+import { formatUnitDisplay } from "@/utils/unitDisplay";
 
 interface QuizQuestionProps {
   question: Question;
@@ -31,6 +31,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   // Find theme color
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
+
+  const unitDisplay = formatUnitDisplay(question.unit);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +96,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         <CardHeader className="border-b border-border/50">
           <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
             {question.question}
+            {unitDisplay && (
+              <div className="text-sm font-normal text-muted-foreground mt-1">
+                {unitDisplay}
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">

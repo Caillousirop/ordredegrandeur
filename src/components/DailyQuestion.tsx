@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
@@ -10,6 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import AccuracyGauge from "./AccuracyGauge";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
+import { formatUnitDisplay } from "@/utils/unitDisplay";
 
 interface DailyQuestion {
   id: string;
@@ -159,6 +159,8 @@ const DailyQuestion: React.FC = () => {
     );
   }
 
+  const unitDisplay = formatUnitDisplay(dailyQuestion.unit);
+
   return (
     <Card className="mb-6">
       <CardHeader className="pb-3">
@@ -174,7 +176,12 @@ const DailyQuestion: React.FC = () => {
       </CardHeader>
       
       <CardContent className="space-y-4">
-        <p className="text-base font-medium">{dailyQuestion.question}</p>
+        <div>
+          <p className="text-base font-medium">{dailyQuestion.question}</p>
+          {unitDisplay && (
+            <p className="text-sm text-muted-foreground mt-1">{unitDisplay}</p>
+          )}
+        </div>
         
         {!submitted ? (
           <div className="space-y-3">
