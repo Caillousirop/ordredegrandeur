@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
@@ -56,6 +55,7 @@ export const useTimedQuiz = () => {
     }
 
     try {
+      console.log("Vérification des tentatives précédentes pour:", user.id);
       const { data, error } = await supabase
         .from('timed_quiz_sessions')
         .select('*')
@@ -67,7 +67,9 @@ export const useTimedQuiz = () => {
         console.error('Erreur lors de la vérification des tentatives précédentes:', error);
       }
 
-      setHasPlayedBefore(!!data);
+      const hasPlayed = !!data;
+      console.log("A déjà joué:", hasPlayed);
+      setHasPlayedBefore(hasPlayed);
       
       // S'il y a une session complétée, la charger pour afficher les résultats
       if (data) {
@@ -86,6 +88,7 @@ export const useTimedQuiz = () => {
   // Charger les 15 questions spécifiques
   const loadQuestions = useCallback(async () => {
     try {
+      console.log("Chargement des questions pour le quiz chronométré...");
       // Pour l'instant, on prend les 15 premières questions simples
       // TODO: remplacer par les IDs spécifiques une fois qu'on les aura
       const { data, error } = await supabase
@@ -96,7 +99,18 @@ export const useTimedQuiz = () => {
         .limit(15)
         .order('created_at');
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erreur lors du chargement des questions:", error);
+        throw error;
+      }
+
+      console.log("Questions chargées:", data?.length || 0);
+
+      if (!data || data.length === 0) {
+        console.warn("Aucune question trouvée pour le quiz chronométré");
+        toast.error("Aucune question disponible pour le quiz chronométré");
+        return;
+      }
 
       // Convertir les questions de Supabase au format attendu
       const formattedQuestions: Question[] = data.map(q => ({
@@ -109,6 +123,7 @@ export const useTimedQuiz = () => {
         theme: q.theme
       }));
 
+      console.log("Questions formatées:", formattedQuestions.length);
       setQuestions(formattedQuestions);
     } catch (error) {
       console.error('Erreur lors du chargement des questions:', error);
@@ -118,17 +133,28 @@ export const useTimedQuiz = () => {
 
   // Démarrer une nouvelle session
   const startQuiz = useCallback(async () => {
+    console.log("Tentative de démarrage du quiz...");
+    
     if (!user) {
+      console.error("Utilisateur non connecté");
       toast.error("Vous devez être connecté pour jouer au quiz chronométré");
       return;
     }
 
     if (hasPlayedBefore) {
+      console.error("Utilisateur a déjà joué");
       toast.error("Vous avez déjà participé au quiz chronométré");
       return;
     }
 
+    if (questions.length === 0) {
+      console.error("Aucune question disponible");
+      toast.error("Aucune question disponible pour le quiz");
+      return;
+    }
+
     try {
+      console.log("Création de la session de quiz...");
       const { data, error } = await supabase
         .from('timed_quiz_sessions')
         .insert({
@@ -138,8 +164,12 @@ export const useTimedQuiz = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erreur lors de la création de la session:", error);
+        throw error;
+      }
 
+      console.log("Session créée avec succès:", data.id);
       setCurrentSession(data);
       setTimeLeft(30);
       setIsActive(true);
@@ -149,11 +179,13 @@ export const useTimedQuiz = () => {
       setCurrentScore(0);
       setUserAnswer("");
       setQuestionStartTime(Date.now());
+      
+      toast.success("Quiz chronométré démarré !");
     } catch (error) {
       console.error('Erreur lors du démarrage du quiz:', error);
       toast.error("Erreur lors du démarrage du quiz");
     }
-  }, [user, hasPlayedBefore]);
+  }, [user, hasPlayedBefore, questions.length]);
 
   // Soumettre une réponse
   const submitAnswer = useCallback(async () => {
@@ -254,6 +286,7 @@ export const useTimedQuiz = () => {
 
   // Charger les questions et vérifier les tentatives précédentes au montage
   useEffect(() => {
+    console.log("Initialisation du hook useTimedQuiz");
     loadQuestions();
     checkPreviousAttempt();
   }, [loadQuestions, checkPreviousAttempt]);
