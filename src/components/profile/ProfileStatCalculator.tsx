@@ -59,9 +59,9 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
   try {
     console.log("📊 [STATS] Chargement des statistiques pour:", userId);
     
-    // Charger la progression globale
+    // Charger la progression globale avec un cast pour contourner le problème TypeScript
     const { data: progress, error: progressError } = await supabase
-      .from('user_progress')
+      .from('user_progress' as any)
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();

@@ -80,9 +80,9 @@ export const useSupabaseProgress = () => {
       setSyncing(true);
       console.log("📥 [LOAD] Chargement de la progression pour:", user.id);
       
-      // Charger la progression globale
+      // Charger la progression globale avec un cast pour contourner le problème TypeScript
       const { data: progress, error: progressError } = await supabase
-        .from('user_progress')
+        .from('user_progress' as any)
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();

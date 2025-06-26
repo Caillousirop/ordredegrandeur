@@ -46,7 +46,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({
       try {
         console.log("UserSpace: Chargement de la progression pour l'utilisateur:", user.id);
         const { data, error } = await supabase
-          .from('user_progress')
+          .from('user_progress' as any)
           .select('total_points, user_level, questions_completed')
           .eq('user_id', user.id)
           .maybeSingle();
@@ -75,7 +75,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({
     const interval = setInterval(async () => {
       try {
         const { data } = await supabase
-          .from('user_progress')
+          .from('user_progress' as any)
           .select('total_points, user_level, questions_completed')
           .eq('user_id', user.id)
           .maybeSingle();

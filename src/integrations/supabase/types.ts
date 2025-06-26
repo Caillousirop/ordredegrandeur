@@ -281,6 +281,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_progress: {
+        Row: {
+          correct_percentage: number
+          id: string
+          last_updated: string
+          questions_completed: number
+          total_points: number
+          user_id: string
+          user_level: number
+        }
+        Insert: {
+          correct_percentage?: number
+          id?: string
+          last_updated?: string
+          questions_completed?: number
+          total_points?: number
+          user_id: string
+          user_level?: number
+        }
+        Update: {
+          correct_percentage?: number
+          id?: string
+          last_updated?: string
+          questions_completed?: number
+          total_points?: number
+          user_id?: string
+          user_level?: number
+        }
+        Relationships: []
+      }
       user_quiz_scores: {
         Row: {
           accuracy: number
