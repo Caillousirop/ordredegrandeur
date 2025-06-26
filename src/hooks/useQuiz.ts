@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -74,15 +75,22 @@ export const useQuiz = () => {
     // Start with all questions from Supabase
     let filtered = [...supabaseQuestions];
     
-    // Filter by theme if selected (except for random theme)
-    if (selectedTheme && selectedTheme.id !== "random") {
+    // Filter by theme if selected
+    if (selectedTheme && selectedTheme.id !== "random" && selectedTheme.id !== "challenge-30s") {
       console.log(`Filtering for theme: ${selectedTheme.id}`);
       filtered = filtered.filter(q => q.theme.toLowerCase() === selectedTheme.id.toLowerCase());
       console.log(`After theme filter, questions count: ${filtered.length}`);
     }
     
-    // Filter by question type if selected
-    if (selectedType !== "all") {
+    // Special handling for challenge-30s theme
+    if (selectedTheme && selectedTheme.id === "challenge-30s") {
+      console.log("Filtering for 30s challenge - simple questions only");
+      filtered = filtered.filter(q => q.type === "simple");
+      console.log(`After challenge-30s filter, questions count: ${filtered.length}`);
+    }
+    
+    // Filter by question type if selected (except for challenge-30s which is already filtered to simple)
+    if (selectedType !== "all" && selectedTheme?.id !== "challenge-30s") {
       filtered = filtered.filter(q => q.type === selectedType);
       console.log(`After type filter, questions count: ${filtered.length}`);
     }
@@ -228,7 +236,12 @@ export const useQuiz = () => {
 
   const startQuiz = () => {
     if (filteredQuestions.length > 0) {
-      setActiveTab("questions");
+      // Check if it's the 30s challenge theme
+      if (selectedTheme?.id === "challenge-30s") {
+        setActiveTab("challenge-30s");
+      } else {
+        setActiveTab("questions");
+      }
     } else {
       toast.error("Veuillez sélectionner un thème et un type de question");
     }

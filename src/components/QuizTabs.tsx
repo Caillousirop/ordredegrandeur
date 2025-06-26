@@ -2,6 +2,7 @@
 import React from "react";
 import QuizSetup from "./QuizSetup";
 import QuizContent from "./QuizContent";
+import Challenge30sContainer from "./challenge/Challenge30sContainer";
 import { Question, MultiStepQuestion, QuizTheme } from "./types";
 
 interface QuizTabsProps {
@@ -50,6 +51,17 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   const handleGoHome = () => {
     setActiveTab("setup");
   };
+
+  if (activeTab === "challenge-30s") {
+    return (
+      <div className="w-full">
+        <Challenge30sContainer
+          questions={filteredQuestions.filter(q => q.type === "simple") as Question[]}
+          onGoHome={handleGoHome}
+        />
+      </div>
+    );
+  }
 
   if (activeTab === "questions") {
     return (

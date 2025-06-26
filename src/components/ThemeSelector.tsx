@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 import * as LucideIcons from "lucide-react";
-import { Shuffle } from "lucide-react";
+import { Shuffle, Timer } from "lucide-react";
 
 interface ThemeSelectorProps {
   onSelectTheme: (theme: QuizTheme) => void;
@@ -37,8 +37,17 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
     icon: "Shuffle"
   };
 
-  // All themes including the random theme
-  const allThemes = [randomTheme, ...themes];
+  // Add a 30s challenge theme
+  const challenge30sTheme: QuizTheme = {
+    id: "challenge-30s",
+    name: "Défi 30s",
+    description: "Questions simples avec un chrono de 30 secondes par question",
+    color: "from-orange-500 to-red-500",
+    icon: "Timer"
+  };
+
+  // All themes including the special themes
+  const allThemes = [randomTheme, challenge30sTheme, ...themes];
 
   if (loading) {
     return (
@@ -83,8 +92,9 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           >
             <CardHeader className={cn("bg-gradient-to-r", theme.color, "p-3 pb-4")}>
               <div className="flex items-center gap-2 min-w-0">
-                {theme.id !== "random" && theme.icon && getIconComponent(theme.icon)}
                 {theme.id === "random" && <Shuffle className="h-5 w-5 text-white" />}
+                {theme.id === "challenge-30s" && <Timer className="h-5 w-5 text-white" />}
+                {theme.id !== "random" && theme.id !== "challenge-30s" && theme.icon && getIconComponent(theme.icon)}
                 <CardTitle className="text-white whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">{theme.name}</CardTitle>
               </div>
             </CardHeader>
