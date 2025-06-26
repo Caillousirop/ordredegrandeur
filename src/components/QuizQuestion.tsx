@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
 import { toast } from "sonner";
@@ -9,6 +8,7 @@ import { themes } from "@/data/themes";
 import { EyeIcon, Home } from "lucide-react";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
 import { formatUnitDisplay } from "@/utils/unitDisplay";
+import NumberInput from "./NumberInput";
 
 interface QuizQuestionProps {
   question: Question;
@@ -107,10 +107,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex items-center gap-2">
-                <Input
-                  type="text"
+                <NumberInput
                   value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
+                  onChange={setAnswer}
                   placeholder="Votre réponse"
                   className="flex-grow"
                 />

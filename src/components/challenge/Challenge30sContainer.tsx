@@ -6,6 +6,7 @@ import { Timer, Play, ArrowLeft } from "lucide-react";
 import { Input } from "../ui/input";
 import { calculateAccuracy } from "../quiz/CalculateAccuracy";
 import { toast } from "sonner";
+import NumberInput from "../NumberInput";
 
 interface Challenge30sContainerProps {
   questions: Question[];
@@ -222,10 +223,9 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
                 
                 {/* Answer input */}
                 <div className="flex gap-2">
-                  <Input
-                    type="text"
+                  <NumberInput
                     value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
+                    onChange={setUserAnswer}
                     onKeyPress={handleKeyPress}
                     placeholder="Votre réponse..."
                     disabled={isGameFinished}

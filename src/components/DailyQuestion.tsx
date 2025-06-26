@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Input as NumberInput } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -186,12 +186,11 @@ const DailyQuestion: React.FC = () => {
         {!submitted ? (
           <div className="space-y-3">
             <div className="flex gap-2">
-              <Input
-                type="number"
-                placeholder="Votre estimation..."
+              <NumberInput
                 value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
+                onChange={setUserAnswer}
                 onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
+                placeholder="Votre estimation..."
                 className="flex-1"
               />
               <Button 

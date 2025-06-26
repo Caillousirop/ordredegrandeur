@@ -1,9 +1,9 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "../AccuracyGauge";
+import NumberInput from "../NumberInput";
 import { Step } from "../types";
 import { formatUnitDisplay } from "@/utils/unitDisplay";
 
@@ -15,11 +15,6 @@ interface QuizStepProps {
   onInputChange: (value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
-
-// Helper function to format large numbers
-const formatNumber = (num: number): string => {
-  return num.toLocaleString();
-};
 
 const QuizStep: React.FC<QuizStepProps> = ({
   step,
@@ -53,10 +48,9 @@ const QuizStep: React.FC<QuizStepProps> = ({
         {!submitted ? (
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="flex items-center gap-2">
-              <Input 
-                type="text" 
+              <NumberInput 
                 value={answer?.toString() || ""} 
-                onChange={e => onInputChange(e.target.value)} 
+                onChange={onInputChange} 
                 placeholder="Réponse" 
                 className="flex-grow" 
               />
