@@ -57,8 +57,8 @@ const UserSpace: React.FC<UserSpaceProps> = ({
         }
 
         console.log("UserSpace: Progression chargée:", data);
-        if (data) {
-          setUserProgress(data);
+        if (data && typeof data === 'object' && 'total_points' in data) {
+          setUserProgress(data as any);
         }
       } catch (error) {
         console.error('UserSpace: Erreur lors du chargement:', error);
@@ -82,8 +82,8 @@ const UserSpace: React.FC<UserSpaceProps> = ({
           .eq('user_id', user.id)
           .maybeSingle();
 
-        if (!error && data) {
-          setUserProgress(data);
+        if (!error && data && typeof data === 'object' && 'total_points' in data) {
+          setUserProgress(data as any);
         }
       } catch (error) {
         console.error('UserSpace: Erreur lors de la synchronisation:', error);

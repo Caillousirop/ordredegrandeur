@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { formatNumberInput, cleanNumberInput } from "@/utils/numberFormatter";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -12,28 +13,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [query, setQuery] = useState("");
   const [displayValue, setDisplayValue] = useState("");
   
-  // Function to format numbers with thousand separators
-  const formatNumber = (value: string): string => {
-    // Remove all non-digit characters except spaces (which we use as separators)
-    const cleanValue = value.replace(/[^\d]/g, '');
-    
-    if (!cleanValue) return value;
-    
-    // Check if the input is purely numeric
-    if (/^\d+$/.test(cleanValue)) {
-      // Add spaces every 3 digits from the right
-      return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-    }
-    
-    return value;
-  };
-  
   // Apply debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (onSearch) {
         // Send the clean query (without spaces) for search
-        const cleanQuery = query.replace(/\s/g, '');
+        const cleanQuery = cleanNumberInput(query);
         onSearch(cleanQuery);
       }
     }, 300);
@@ -44,7 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Send the clean query (without spaces) for search
-    const cleanQuery = query.replace(/\s/g, '');
+    const cleanQuery = cleanNumberInput(query);
     onSearch(cleanQuery);
   };
 
@@ -52,13 +37,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const newValue = e.target.value;
     
     // Check if the input looks like a number (digits with potential separators)
-    const maybeNumber = newValue.replace(/\s/g, '');
+    const cleanValue = cleanNumberInput(newValue);
     
-    if (/^\d+$/.test(maybeNumber) && maybeNumber.length > 3) {
+    if (/^\d+$/.test(cleanValue) && cleanValue.length > 3) {
       // Format as number with separators
-      const formatted = formatNumber(newValue);
+      const formatted = formatNumberInput(newValue);
       setDisplayValue(formatted);
-      setQuery(maybeNumber); // Store clean value for search
+      setQuery(cleanValue); // Store clean value for search
     } else {
       // For non-numeric input, use as-is
       setDisplayValue(newValue);

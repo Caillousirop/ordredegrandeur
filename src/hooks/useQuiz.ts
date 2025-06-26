@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -37,11 +36,12 @@ export const useQuiz = () => {
         console.log("🔄 [QUIZ] Initialisation des données utilisateur depuis Supabase...");
         const data = await loadProgress();
         
-        if (data?.progress) {
+        if (data?.progress && typeof data.progress === 'object') {
           console.log("✅ [QUIZ] Progression chargée:", data.progress);
+          const progress = data.progress as any;
           // Vérifier que la propriété existe avant de l'utiliser
-          if (data.progress.questions_completed !== undefined) {
-            setQuestionsCompleted(data.progress.questions_completed);
+          if (progress.questions_completed !== undefined) {
+            setQuestionsCompleted(progress.questions_completed);
           }
         } else {
           console.log("ℹ️ [QUIZ] Aucune progression trouvée dans Supabase");
@@ -195,9 +195,12 @@ export const useQuiz = () => {
           // Recharger immédiatement les données depuis Supabase
           console.log("🔄 [QUIZ] Rechargement immédiat de la progression...");
           const updatedData = await loadProgress();
-          if (updatedData?.progress && updatedData.progress.questions_completed !== undefined) {
-            console.log("📈 [QUIZ] Nouvelle progression chargée:", updatedData.progress);
-            setQuestionsCompleted(updatedData.progress.questions_completed);
+          if (updatedData?.progress && typeof updatedData.progress === 'object') {
+            const progress = updatedData.progress as any;
+            if (progress.questions_completed !== undefined) {
+              console.log("📈 [QUIZ] Nouvelle progression chargée:", updatedData.progress);
+              setQuestionsCompleted(progress.questions_completed);
+            }
           }
           if (updatedData?.scores) {
             console.log("📋 [QUIZ] Nouveaux scores chargés:", updatedData.scores.length);
