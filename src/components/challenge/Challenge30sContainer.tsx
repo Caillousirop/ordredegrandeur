@@ -22,20 +22,16 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [userAnswer, setUserAnswer] = useState("");
-  const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [isGameFinished, setIsGameFinished] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
 
   // Filter only simple questions
   const simpleQuestions = questions.filter(q => q.type === "simple");
 
-  useEffect(() => {
-    setTotalQuestions(simpleQuestions.length);
-  }, [simpleQuestions]);
-
-  // Timer logic
+  // Timer logic - runs continuously during the game
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     
@@ -61,22 +57,25 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
     setHasStarted(true);
     setIsTimerRunning(true);
     setTimeLeft(30);
+    setScore(0);
+    setQuestionsAnswered(0);
+    setCurrentQuestionIndex(0);
+    setUserAnswer("");
+    setIsGameFinished(false);
   };
 
   const handleTimeUp = () => {
-    if (!isAnswered) {
-      toast.error("Temps écoulé !");
-      handleNextQuestion();
-    }
+    setIsGameFinished(true);
+    toast.success(`Temps écoulé ! Score final: ${score}/${questionsAnswered}`);
   };
 
   const handleAnswerSubmit = () => {
-    if (!userAnswer.trim()) return;
+    if (!userAnswer.trim() || isGameFinished) return;
 
     const numericAnswer = parseFloat(userAnswer.replace(/[^\d.,]/g, '').replace(',', '.'));
     
     if (isNaN(numericAnswer)) {
-      toast.error("Veuillez entrer une réponse numérique valide");
+      toast.error("Réponse invalide");
       return;
     }
 
@@ -84,36 +83,31 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
     
     if (accuracy >= 50) {
       setScore(prev => prev + 1);
-      toast.success(`Bonne réponse ! Précision: ${accuracy}%`);
+      toast.success(`Correct ! (+1 point)`);
     } else {
-      toast.error(`Réponse incorrecte. Précision: ${accuracy}%`);
+      toast.error(`Incorrect`);
     }
 
-    setIsAnswered(true);
-    setIsTimerRunning(false);
+    setQuestionsAnswered(prev => prev + 1);
     
-    // Show correct answer
-    setTimeout(() => {
-      handleNextQuestion();
-    }, 2000);
+    // Move to next question immediately
+    handleNextQuestion();
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < simpleQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setTimeLeft(30);
-      setUserAnswer("");
-      setIsAnswered(false);
-      setIsTimerRunning(true);
-    } else {
-      // End of quiz
-      setIsTimerRunning(false);
-      toast.success(`Quiz terminé ! Score: ${score}/${totalQuestions}`);
+    if (simpleQuestions.length > 1) {
+      // Get a random question different from current one
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * simpleQuestions.length);
+      } while (newIndex === currentQuestionIndex && simpleQuestions.length > 1);
+      setCurrentQuestionIndex(newIndex);
     }
+    setUserAnswer("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isAnswered && hasStarted) {
+    if (e.key === 'Enter' && hasStarted && !isGameFinished) {
       handleAnswerSubmit();
     }
   };
@@ -142,36 +136,6 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
     );
   }
 
-  // Quiz finished
-  if (currentQuestionIndex >= simpleQuestions.length) {
-    return (
-      <div className="max-w-2xl mx-auto p-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Timer className="h-6 w-6" />
-              Défi 30s - Terminé !
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-center">
-            <div className="mb-6">
-              <div className="text-4xl font-bold text-primary mb-2">
-                {score}/{totalQuestions}
-              </div>
-              <p className="text-lg text-muted-foreground">
-                Score final: {Math.round((score / totalQuestions) * 100)}%
-              </p>
-            </div>
-            <Button onClick={onGoHome} className="w-full">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour à l'accueil
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-2xl mx-auto p-6">
       <Card>
@@ -183,10 +147,7 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
             </CardTitle>
             <div className="flex items-center gap-4">
               <div className="text-sm text-muted-foreground">
-                Question {currentQuestionIndex + 1}/{simpleQuestions.length}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Score: {score}/{currentQuestionIndex}
+                Score: {score}/{questionsAnswered}
               </div>
             </div>
           </div>
@@ -198,13 +159,37 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
                 <Timer className="h-16 w-16 mx-auto mb-4 text-primary" />
                 <h3 className="text-xl font-semibold mb-2">Prêt pour le défi ?</h3>
                 <p className="text-muted-foreground mb-4">
-                  Vous avez 30 secondes par question. Cliquez pour commencer !
+                  Répondez au maximum de questions en 30 secondes !
                 </p>
               </div>
               <Button onClick={startTimer} size="lg" className="w-full">
                 <Play className="h-4 w-4 mr-2" />
                 Lancer le chrono
               </Button>
+            </div>
+          ) : isGameFinished ? (
+            <div className="text-center">
+              <div className="mb-6">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {score}/{questionsAnswered}
+                </div>
+                <p className="text-lg text-muted-foreground mb-2">
+                  Score final: {questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0}%
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Questions répondues en 30 secondes
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Button onClick={startTimer} className="w-full">
+                  <Play className="h-4 w-4 mr-2" />
+                  Rejouer
+                </Button>
+                <Button onClick={onGoHome} variant="outline" className="w-full">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Retour à l'accueil
+                </Button>
+              </div>
             </div>
           ) : (
             <div>
@@ -235,8 +220,9 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
                     onChange={(e) => setUserAnswer(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Votre réponse..."
-                    disabled={isAnswered || !isTimerRunning}
+                    disabled={isGameFinished}
                     className="flex-1"
+                    autoFocus
                   />
                   {currentQuestion.unit && (
                     <div className="flex items-center px-3 bg-muted rounded-md">
@@ -245,31 +231,14 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
                   )}
                 </div>
                 
-                {!isAnswered && isTimerRunning && (
-                  <Button 
-                    onClick={handleAnswerSubmit} 
-                    className="w-full mt-4"
-                    disabled={!userAnswer.trim()}
-                  >
-                    Valider
-                  </Button>
-                )}
+                <Button 
+                  onClick={handleAnswerSubmit} 
+                  className="w-full mt-4"
+                  disabled={!userAnswer.trim() || isGameFinished}
+                >
+                  Valider
+                </Button>
               </div>
-
-              {/* Show correct answer when answered */}
-              {isAnswered && (
-                <div className="text-center p-4 bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Réponse correcte :</p>
-                  <p className="text-lg font-semibold">
-                    {currentQuestion.correctAnswer.toLocaleString()} {currentQuestion.unit}
-                  </p>
-                  {currentQuestion.explanation && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {currentQuestion.explanation}
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
           )}
         </CardContent>
