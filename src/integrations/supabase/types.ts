@@ -242,54 +242,6 @@ export type Database = {
         }
         Relationships: []
       }
-      timed_quiz_answers: {
-        Row: {
-          accuracy: number
-          answered_at: string
-          correct_answer: number
-          id: string
-          question_id: string
-          response_time_ms: number
-          session_id: string
-          user_answer: number | null
-        }
-        Insert: {
-          accuracy: number
-          answered_at?: string
-          correct_answer: number
-          id?: string
-          question_id: string
-          response_time_ms: number
-          session_id: string
-          user_answer?: number | null
-        }
-        Update: {
-          accuracy?: number
-          answered_at?: string
-          correct_answer?: number
-          id?: string
-          question_id?: string
-          response_time_ms?: number
-          session_id?: string
-          user_answer?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "timed_quiz_answers_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "timed_quiz_leaderboard"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "timed_quiz_answers_session_id_fkey"
-            columns: ["session_id"]
-            isOneToOne: false
-            referencedRelation: "timed_quiz_sessions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       timed_quiz_sessions: {
         Row: {
           correct_answers: number
@@ -326,36 +278,6 @@ export type Database = {
           start_time?: string
           total_questions?: number
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      user_progress: {
-        Row: {
-          correct_percentage: number
-          id: string
-          last_updated: string
-          questions_completed: number
-          total_points: number
-          user_id: string
-          user_level: number
-        }
-        Insert: {
-          correct_percentage?: number
-          id?: string
-          last_updated?: string
-          questions_completed?: number
-          total_points?: number
-          user_id: string
-          user_level?: number
-        }
-        Update: {
-          correct_percentage?: number
-          id?: string
-          last_updated?: string
-          questions_completed?: number
-          total_points?: number
-          user_id?: string
-          user_level?: number
         }
         Relationships: []
       }

@@ -10,12 +10,31 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [query, setQuery] = useState("");
+  const [displayValue, setDisplayValue] = useState("");
+  
+  // Function to format numbers with thousand separators
+  const formatNumber = (value: string): string => {
+    // Remove all non-digit characters except spaces (which we use as separators)
+    const cleanValue = value.replace(/[^\d]/g, '');
+    
+    if (!cleanValue) return value;
+    
+    // Check if the input is purely numeric
+    if (/^\d+$/.test(cleanValue)) {
+      // Add spaces every 3 digits from the right
+      return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
+    
+    return value;
+  };
   
   // Apply debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (onSearch) {
-        onSearch(query);
+        // Send the clean query (without spaces) for search
+        const cleanQuery = query.replace(/\s/g, '');
+        onSearch(cleanQuery);
       }
     }, 300);
     
@@ -24,12 +43,27 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(query);
+    // Send the clean query (without spaces) for search
+    const cleanQuery = query.replace(/\s/g, '');
+    onSearch(cleanQuery);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
+    const newValue = e.target.value;
+    
+    // Check if the input looks like a number (digits with potential separators)
+    const maybeNumber = newValue.replace(/\s/g, '');
+    
+    if (/^\d+$/.test(maybeNumber) && maybeNumber.length > 3) {
+      // Format as number with separators
+      const formatted = formatNumber(newValue);
+      setDisplayValue(formatted);
+      setQuery(maybeNumber); // Store clean value for search
+    } else {
+      // For non-numeric input, use as-is
+      setDisplayValue(newValue);
+      setQuery(newValue);
+    }
   };
 
   return (
@@ -39,7 +73,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <Input
           type="text"
           placeholder="Rechercher une question..."
-          value={query}
+          value={displayValue}
           onChange={handleChange}
           className="pl-10"
         />
