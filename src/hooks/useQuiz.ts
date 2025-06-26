@@ -39,7 +39,10 @@ export const useQuiz = () => {
         
         if (data?.progress) {
           console.log("✅ [QUIZ] Progression chargée:", data.progress);
-          setQuestionsCompleted(data.progress.questions_completed);
+          // Vérifier que la propriété existe avant de l'utiliser
+          if (data.progress.questions_completed !== undefined) {
+            setQuestionsCompleted(data.progress.questions_completed);
+          }
         } else {
           console.log("ℹ️ [QUIZ] Aucune progression trouvée dans Supabase");
         }
@@ -192,7 +195,7 @@ export const useQuiz = () => {
           // Recharger immédiatement les données depuis Supabase
           console.log("🔄 [QUIZ] Rechargement immédiat de la progression...");
           const updatedData = await loadProgress();
-          if (updatedData?.progress) {
+          if (updatedData?.progress && updatedData.progress.questions_completed !== undefined) {
             console.log("📈 [QUIZ] Nouvelle progression chargée:", updatedData.progress);
             setQuestionsCompleted(updatedData.progress.questions_completed);
           }

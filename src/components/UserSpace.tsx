@@ -57,7 +57,9 @@ const UserSpace: React.FC<UserSpaceProps> = ({
         }
 
         console.log("UserSpace: Progression chargée:", data);
-        setUserProgress(data);
+        if (data) {
+          setUserProgress(data);
+        }
       } catch (error) {
         console.error('UserSpace: Erreur lors du chargement:', error);
       } finally {
@@ -74,13 +76,13 @@ const UserSpace: React.FC<UserSpaceProps> = ({
 
     const interval = setInterval(async () => {
       try {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('user_progress' as any)
           .select('total_points, user_level, questions_completed')
           .eq('user_id', user.id)
           .maybeSingle();
 
-        if (data) {
+        if (!error && data) {
           setUserProgress(data);
         }
       } catch (error) {
