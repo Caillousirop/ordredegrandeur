@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import { AuthButton } from "@/components/AuthButton";
 import { ProfileButton } from "@/components/ProfileButton";
-import { UserLevelBadge } from "@/components/UserLevelBadge";
-import { FormattedNumber } from "@/components/FormattedNumber";
+import UserLevelBadge from "@/components/UserLevelBadge";
+import FormattedNumber from "@/components/FormattedNumber";
 import { useAuth } from "@/hooks/useAuth";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 
@@ -12,8 +13,9 @@ interface UserSpaceProps {
 
 const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   const { user, loading: authLoading } = useAuth();
-  const { progress, loadProgress } = useSupabaseProgress();
+  const { loadProgress } = useSupabaseProgress();
   
+  const [progress, setProgress] = useState<any>(null);
   const [localStats, setLocalStats] = useState({
     total_points: 0,
     user_level: 1,
@@ -22,7 +24,13 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
 
   useEffect(() => {
     if (user) {
-      loadProgress();
+      const fetchProgress = async () => {
+        const data = await loadProgress();
+        if (data?.progress) {
+          setProgress(data.progress);
+        }
+      };
+      fetchProgress();
     }
   }, [user, loadProgress]);
 
