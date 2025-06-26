@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Question } from "../types";
 import { Button } from "../ui/button";
@@ -149,6 +148,15 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
               <div className="text-sm text-muted-foreground">
                 Score: {score}/{questionsAnswered}
               </div>
+              <Button 
+                onClick={onGoHome} 
+                variant="outline" 
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Accueil
+              </Button>
             </div>
           </div>
         </CardHeader>
