@@ -73,7 +73,11 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
 
     if (progress && typeof progress === 'object' && progress !== null && 'correct_percentage' in progress) {
       console.log("✅ [STATS] Progression trouvée:", progress);
-      const typedProgress = progress as any;
+      const typedProgress = progress as {
+        correct_percentage: number;
+        total_points: number;
+        user_level: number;
+      };
       return {
         correctPercentage: typedProgress.correct_percentage || 0,
         totalPoints: typedProgress.total_points || 0,

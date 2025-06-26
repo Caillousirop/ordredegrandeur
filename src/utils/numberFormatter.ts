@@ -25,10 +25,8 @@ export const cleanNumberInput = (value: string): string => {
 export const formatNumberInput = (value: string): string => {
   const cleanValue = cleanNumberInput(value);
   
-  if (!cleanValue || !/^\d+$/.test(cleanValue)) return value;
+  if (!cleanValue || !/^\d+$/.test(cleanValue)) return cleanValue;
   
-  const num = parseFloat(cleanValue);
-  if (isNaN(num)) return value;
-  
-  return formatNumber(num);
+  // Formater en ajoutant des espaces tous les 3 chiffres depuis la droite
+  return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 };

@@ -38,20 +38,21 @@ const NumberInput: React.FC<NumberInputProps> = ({
       return;
     }
     
-    // Vérifier si c'est un nombre (chiffres avec potentiels séparateurs)
+    // Nettoyer la valeur (enlever tous les espaces)
     const cleanValue = cleanNumberInput(newValue);
     
-    // Si c'est un nombre valide
+    // Vérifier si c'est un nombre valide (uniquement des chiffres)
     if (/^\d+$/.test(cleanValue)) {
-      // Formater avec des espaces
-      const formatted = formatNumberInput(newValue);
+      // Formater automatiquement avec des espaces si le nombre a plus de 3 chiffres
+      const formatted = cleanValue.length > 3 ? formatNumberInput(cleanValue) : cleanValue;
       setDisplayValue(formatted);
-      onChange(cleanValue); // Envoyer la valeur propre
-    } else {
-      // Pour les entrées non numériques, utiliser tel quel
-      setDisplayValue(newValue);
-      onChange(newValue);
+      onChange(cleanValue); // Envoyer la valeur propre (sans espaces)
+    } else if (/^\d*$/.test(cleanValue)) {
+      // Autoriser les nombres partiels pendant la saisie
+      setDisplayValue(cleanValue);
+      onChange(cleanValue);
     }
+    // Si ce n'est pas numérique, on ignore la saisie
   };
 
   return (
