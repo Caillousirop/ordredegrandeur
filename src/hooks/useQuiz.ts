@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -186,18 +187,21 @@ export const useQuiz = () => {
       
       if (success) {
         console.log("✅ [QUIZ] Score sauvegardé avec succès");
-        // Attendre un peu pour que le trigger s'exécute
+        console.log("🔄 [QUIZ] Le trigger va automatiquement mettre à jour la progression");
+        
+        // Recharger la progression après un court délai pour voir les changements du trigger
         setTimeout(async () => {
+          console.log("🔄 [QUIZ] Rechargement de la progression après trigger...");
           const updatedData = await loadProgress();
           if (updatedData?.progress) {
-            console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+            console.log("📈 [QUIZ] Progression mise à jour par le trigger:", updatedData.progress);
             setQuestionsCompleted(updatedData.progress.questions_completed || 0);
           }
           if (updatedData?.scores) {
-            console.log("📋 [QUIZ] Scores mis à jour:", updatedData.scores.length);
+            console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
             setScores(updatedData.scores);
           }
-        }, 1000);
+        }, 1500); // Délai légèrement plus long pour laisser le trigger s'exécuter
       } else {
         console.error("❌ [QUIZ] Échec de la sauvegarde");
       }

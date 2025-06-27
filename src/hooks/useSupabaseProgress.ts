@@ -32,6 +32,7 @@ export const useSupabaseProgress = () => {
 
       console.log("📝 [SAVE] Données à sauvegarder:", scoreData);
 
+      // Utiliser la contrainte unique pour l'upsert
       const { data, error } = await supabase
         .from('user_quiz_scores')
         .upsert(scoreData, { 
@@ -41,14 +42,18 @@ export const useSupabaseProgress = () => {
         .select();
 
       if (error) {
-        console.error('❌ [SAVE] Erreur:', error);
+        console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
         return false;
       }
 
-      console.log('✅ [SAVE] Score sauvegardé:', data);
+      console.log('✅ [SAVE] Score sauvegardé avec succès:', data);
+      
+      // Le trigger va automatiquement mettre à jour user_progress
+      console.log('🔄 [SAVE] Le trigger va mettre à jour la progression automatiquement');
+      
       return true;
     } catch (error) {
-      console.error('❌ [SAVE] Erreur:', error);
+      console.error('❌ [SAVE] Erreur inattendue:', error);
       return false;
     } finally {
       setSyncing(false);
@@ -76,7 +81,7 @@ export const useSupabaseProgress = () => {
       if (progressError && progressError.code !== 'PGRST116') {
         console.error('❌ [LOAD] Erreur progression:', progressError);
       } else {
-        console.log('📊 [LOAD] Progression:', progress);
+        console.log('📊 [LOAD] Progression chargée:', progress);
       }
 
       // Charger les scores
@@ -89,7 +94,7 @@ export const useSupabaseProgress = () => {
       if (scoresError) {
         console.error('❌ [LOAD] Erreur scores:', scoresError);
       } else {
-        console.log('📋 [LOAD] Scores:', scores?.length || 0);
+        console.log('📋 [LOAD] Scores chargés:', scores?.length || 0);
       }
 
       return {
@@ -105,7 +110,7 @@ export const useSupabaseProgress = () => {
         })) || []
       };
     } catch (error) {
-      console.error('❌ [LOAD] Erreur:', error);
+      console.error('❌ [LOAD] Erreur inattendue:', error);
       return null;
     } finally {
       setSyncing(false);
