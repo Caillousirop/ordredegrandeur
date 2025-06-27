@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import QuestionValidator from "@/components/admin/QuestionValidator";
+import SportQuestionCleaner from "@/components/admin/SportQuestionCleaner";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -25,12 +26,17 @@ const Admin = () => {
       </div>
 
       <Tabs defaultValue="validator" className="w-full">
-        <TabsList className="grid w-full grid-cols-1">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="validator">Validateur</TabsTrigger>
+          <TabsTrigger value="cleaner">Nettoyage Sport</TabsTrigger>
         </TabsList>
 
         <TabsContent value="validator" className="mt-6">
           <QuestionValidator />
+        </TabsContent>
+
+        <TabsContent value="cleaner" className="mt-6">
+          <SportQuestionCleaner />
         </TabsContent>
       </Tabs>
     </div>
