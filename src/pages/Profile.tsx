@@ -5,7 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import RewardsSystem from "@/components/profile/RewardsSystem";
-import DebugInfo from "@/components/profile/DebugInfo";
 import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
@@ -23,7 +22,6 @@ const Profile = () => {
     userLevel: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showDebug, setShowDebug] = useState(false);
   
   // Fonction pour recharger les statistiques
   const reloadStats = async () => {
@@ -33,6 +31,7 @@ const Profile = () => {
       try {
         const stats = await loadSupabaseStats(user.id);
         setSupabaseStats(stats);
+        console.log("✅ [PROFILE] Statistiques rechargées:", stats);
       } catch (error) {
         console.error("❌ [PROFILE] Erreur:", error);
       } finally {
@@ -200,13 +199,6 @@ const Profile = () => {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              onClick={() => setShowDebug(!showDebug)}
-              className="flex items-center gap-2"
-            >
-              🔍 Debug
-            </Button>
-            <Button
-              variant="outline"
               onClick={reloadStats}
               disabled={isLoading}
               className="flex items-center gap-2"
@@ -220,13 +212,6 @@ const Profile = () => {
         {isLoading && (
           <div className="text-center py-4">
             <p className="text-muted-foreground">Mise à jour de vos statistiques...</p>
-          </div>
-        )}
-
-        {/* Debug Info */}
-        {showDebug && (
-          <div className="mb-6">
-            <DebugInfo />
           </div>
         )}
         

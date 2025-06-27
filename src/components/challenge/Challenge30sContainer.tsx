@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Question } from "../types";
 import { Button } from "../ui/button";
@@ -66,7 +67,9 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
 
   const handleTimeUp = () => {
     setIsGameFinished(true);
-    toast.success(`Temps écoulé ! Score final: ${score}/${questionsAnswered}`);
+    // Calculer le score final basé sur les bonnes réponses ET le nombre de questions répondues
+    const finalScore = Math.round((score / Math.max(questionsAnswered, 1)) * questionsAnswered * 10);
+    toast.success(`Temps écoulé ! Score final: ${finalScore} points (${score}/${questionsAnswered} correctes)`);
   };
 
   const handleAnswerSubmit = () => {
@@ -110,6 +113,12 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
     if (e.key === 'Enter' && hasStarted && !isGameFinished) {
       handleAnswerSubmit();
     }
+  };
+
+  // Calculer le score final pour l'affichage
+  const getFinalScore = () => {
+    if (questionsAnswered === 0) return 0;
+    return Math.round((score / questionsAnswered) * questionsAnswered * 10);
   };
 
   if (simpleQuestions.length === 0) {
@@ -170,6 +179,11 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
                 <p className="text-muted-foreground mb-4">
                   Répondez au maximum de questions en 30 secondes !
                 </p>
+                <div className="bg-muted/50 p-4 rounded-lg mb-4">
+                  <p className="text-sm text-muted-foreground">
+                    💡 <strong>Système de score :</strong> Votre score final dépend à la fois du pourcentage de bonnes réponses ET du nombre de questions auxquelles vous répondez. Plus vous répondez à de questions correctement, plus votre score sera élevé !
+                  </p>
+                </div>
               </div>
               <Button onClick={startTimer} size="lg" className="w-full">
                 <Play className="h-4 w-4 mr-2" />
@@ -180,14 +194,19 @@ const Challenge30sContainer: React.FC<Challenge30sContainerProps> = ({
             <div className="text-center">
               <div className="mb-6">
                 <div className="text-4xl font-bold text-primary mb-2">
-                  {score}/{questionsAnswered}
+                  {getFinalScore()} pts
                 </div>
                 <p className="text-lg text-muted-foreground mb-2">
-                  Score final: {questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0}%
+                  {score}/{questionsAnswered} bonnes réponses ({questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0}%)
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Questions répondues en 30 secondes
                 </p>
+                <div className="bg-muted/50 p-3 rounded-lg mt-4">
+                  <p className="text-xs text-muted-foreground">
+                    Score calculé : ({score}/{questionsAnswered}) × {questionsAnswered} × 10 = {getFinalScore()} points
+                  </p>
+                </div>
               </div>
               <div className="space-y-2">
                 <Button onClick={startTimer} className="w-full">

@@ -17,7 +17,6 @@ export const useSupabaseProgress = () => {
 
     try {
       console.log("💾 [SAVE] Début de la sauvegarde du score:", score);
-      console.log("👤 [SAVE] User ID:", user.id);
       setSyncing(true);
       
       // Préparer les données pour l'insertion - avec TOUTES les colonnes requises
@@ -45,20 +44,13 @@ export const useSupabaseProgress = () => {
 
       if (error) {
         console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
-        console.error('❌ [SAVE] Détails erreur:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
         return false;
       }
 
       console.log('✅ [SAVE] Score sauvegardé avec succès:', data);
       
       // Attendre que le trigger de progression s'exécute
-      console.log('⏱️ [SAVE] Attente de la mise à jour de la progression...');
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       return true;
     } catch (error) {
@@ -80,14 +72,14 @@ export const useSupabaseProgress = () => {
       setSyncing(true);
       console.log("📥 [LOAD] Chargement de la progression pour:", user.id);
       
-      // Charger la progression globale avec un cast pour contourner le problème TypeScript
+      // Charger la progression globale
       const { data: progress, error: progressError } = await supabase
-        .from('user_progress' as any)
+        .from('user_progress')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (progressError) {
+      if (progressError && progressError.code !== 'PGRST116') {
         console.error('❌ [LOAD] Erreur progression:', progressError);
       } else {
         console.log('📊 [LOAD] Progression trouvée:', progress);
@@ -103,7 +95,7 @@ export const useSupabaseProgress = () => {
       if (scoresError) {
         console.error('❌ [LOAD] Erreur scores:', scoresError);
       } else {
-        console.log('📋 [LOAD] Scores trouvés:', scores?.length || 0, scores);
+        console.log('📋 [LOAD] Scores trouvés:', scores?.length || 0);
       }
 
       const result = {
@@ -129,72 +121,9 @@ export const useSupabaseProgress = () => {
     }
   };
 
-  // Test de connexion à la base
-  const testConnection = async () => {
-    if (!user) return { error: "Pas d'utilisateur connecté" };
-    
-    try {
-      console.log("🔍 [TEST] Test de la connexion Supabase...");
-      
-      // Test de lecture sur user_quiz_scores
-      const { data: testScores, error: testError } = await supabase
-        .from('user_quiz_scores')
-        .select('count')
-        .eq('user_id', user.id);
-
-      if (testError) {
-        console.error("❌ [TEST] Erreur test lecture:", testError);
-        return { error: testError.message };
-      }
-
-      console.log("✅ [TEST] Lecture OK");
-
-      // Test d'insertion simple avec TOUTES les colonnes requises
-      const testScore = {
-        user_id: user.id,
-        question_id: `test-${Date.now()}`,
-        accuracy: 100,
-        is_multi_step: false,
-        direct_final_answer: false,
-        skipped_steps: false,
-        used_hints: false,
-        hints_revealed_count: 0
-      };
-
-      console.log("🧪 [TEST] Tentative d'insertion:", testScore);
-
-      const { data: insertData, error: insertError } = await supabase
-        .from('user_quiz_scores')
-        .insert(testScore)
-        .select();
-
-      if (insertError) {
-        console.error("❌ [TEST] Erreur test insertion:", insertError);
-        return { error: insertError.message };
-      }
-
-      console.log("✅ [TEST] Insertion OK:", insertData);
-
-      // Nettoyer le test
-      if (insertData && insertData.length > 0) {
-        await supabase
-          .from('user_quiz_scores')
-          .delete()
-          .eq('question_id', testScore.question_id);
-        console.log("🧹 [TEST] Test nettoyé");
-      }
-
-      return { success: true };
-    } catch (error) {
-      console.error("❌ [TEST] Erreur générale:", error);
-      return { error: error.message };
-    }
-  };
-
   return {
     saveScore,
     loadProgress,
-    testConnection,
     syncing
   };
 };
