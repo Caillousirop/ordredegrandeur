@@ -55,7 +55,7 @@ export const calculateProfileStats = (scores: QuizScore[], questionsCompleted: n
 };
 
 // Fonction pour charger les statistiques depuis Supabase
-export const loadSupabaseStats = async (userId: string): ProfileStats | null => {
+export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | null> => {
   try {
     console.log("📊 [STATS] Chargement des statistiques pour:", userId);
     
