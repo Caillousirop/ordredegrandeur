@@ -59,9 +59,9 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
   try {
     console.log("📊 [STATS] Chargement des statistiques pour:", userId);
     
-    // Charger la progression globale avec un cast pour contourner le problème TypeScript
+    // Charger la progression globale
     const { data: progress, error: progressError } = await supabase
-      .from('user_progress' as any)
+      .from('user_progress')
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
@@ -71,23 +71,26 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
       return null;
     }
 
-    if (progress && progress !== null && typeof progress === 'object' && 'correct_percentage' in progress && 'total_points' in progress && 'user_level' in progress) {
-      console.log("✅ [STATS] Progression trouvée:", progress);
-      const typedProgress = progress as {
-        correct_percentage: number;
-        total_points: number;
-        user_level: number;
-      };
-      return {
-        correctPercentage: typedProgress.correct_percentage || 0,
-        totalPoints: typedProgress.total_points || 0,
-        userLevel: typedProgress.user_level || 1
-      };
-    } else {
+    // Vérifier que la progression existe et contient les données nécessaires
+    if (!progress) {
       console.log("ℹ️ [STATS] Aucune progression trouvée");
+      return null;
     }
 
-    return null;
+    // Vérifier que toutes les propriétés nécessaires existent
+    if (typeof progress.correct_percentage !== 'number' || 
+        typeof progress.total_points !== 'number' || 
+        typeof progress.user_level !== 'number') {
+      console.log("⚠️ [STATS] Progression incomplète:", progress);
+      return null;
+    }
+
+    console.log("✅ [STATS] Progression trouvée:", progress);
+    return {
+      correctPercentage: progress.correct_percentage,
+      totalPoints: progress.total_points,
+      userLevel: progress.user_level
+    };
   } catch (error) {
     console.error('❌ [STATS] Erreur lors du chargement des statistiques:', error);
     return null;

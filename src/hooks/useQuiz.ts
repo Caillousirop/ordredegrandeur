@@ -36,13 +36,9 @@ export const useQuiz = () => {
         console.log("🔄 [QUIZ] Initialisation des données utilisateur depuis Supabase...");
         const data = await loadProgress();
         
-        if (data?.progress && typeof data.progress === 'object') {
+        if (data?.progress) {
           console.log("✅ [QUIZ] Progression chargée:", data.progress);
-          const progress = data.progress as any;
-          // Vérifier que la propriété existe avant de l'utiliser
-          if (progress.questions_completed !== undefined) {
-            setQuestionsCompleted(progress.questions_completed);
-          }
+          setQuestionsCompleted(data.progress.questions_completed || 0);
         } else {
           console.log("ℹ️ [QUIZ] Aucune progression trouvée dans Supabase");
         }
@@ -185,35 +181,26 @@ export const useQuiz = () => {
     
     // Sauvegarder dans Supabase si l'utilisateur est connecté
     if (user) {
-      console.log("💾 [QUIZ] Début de la sauvegarde dans Supabase...");
-      try {
-        const success = await saveScore(score);
-        
-        if (success) {
-          console.log("✅ [QUIZ] Score sauvegardé avec succès");
-          
-          // Recharger immédiatement les données depuis Supabase
-          console.log("🔄 [QUIZ] Rechargement immédiat de la progression...");
+      console.log("💾 [QUIZ] Sauvegarde dans Supabase...");
+      const success = await saveScore(score);
+      
+      if (success) {
+        console.log("✅ [QUIZ] Score sauvegardé avec succès");
+        // Attendre un peu pour que le trigger s'exécute
+        setTimeout(async () => {
           const updatedData = await loadProgress();
-          if (updatedData?.progress && typeof updatedData.progress === 'object') {
-            const progress = updatedData.progress as any;
-            if (progress.questions_completed !== undefined) {
-              console.log("📈 [QUIZ] Nouvelle progression chargée:", updatedData.progress);
-              setQuestionsCompleted(progress.questions_completed);
-            }
+          if (updatedData?.progress) {
+            console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+            setQuestionsCompleted(updatedData.progress.questions_completed || 0);
           }
           if (updatedData?.scores) {
-            console.log("📋 [QUIZ] Nouveaux scores chargés:", updatedData.scores.length);
+            console.log("📋 [QUIZ] Scores mis à jour:", updatedData.scores.length);
             setScores(updatedData.scores);
           }
-        } else {
-          console.error("❌ [QUIZ] Échec de la sauvegarde");
-        }
-      } catch (error) {
-        console.error("❌ [QUIZ] Erreur lors de la sauvegarde:", error);
+        }, 1000);
+      } else {
+        console.error("❌ [QUIZ] Échec de la sauvegarde");
       }
-    } else {
-      console.log("⚠️ [QUIZ] Utilisateur non connecté, sauvegarde locale uniquement");
     }
     
     // Adjust accuracy based on hints usage

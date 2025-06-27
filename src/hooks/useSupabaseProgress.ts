@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { QuizScore } from "@/components/types";
@@ -11,15 +11,14 @@ export const useSupabaseProgress = () => {
   // Sauvegarder un score dans Supabase
   const saveScore = async (score: QuizScore) => {
     if (!user) {
-      console.log("❌ [SAVE] Utilisateur non connecté, impossible de sauvegarder");
+      console.log("❌ [SAVE] Utilisateur non connecté");
       return false;
     }
 
     try {
-      console.log("💾 [SAVE] Début de la sauvegarde du score:", score);
+      console.log("💾 [SAVE] Sauvegarde du score:", score);
       setSyncing(true);
       
-      // Préparer les données pour l'insertion - avec TOUTES les colonnes requises
       const scoreData = {
         user_id: user.id,
         question_id: score.questionId,
@@ -31,9 +30,8 @@ export const useSupabaseProgress = () => {
         hints_revealed_count: score.hintsRevealedCount || 0
       };
 
-      console.log("📝 [SAVE] Données préparées pour insertion:", scoreData);
+      console.log("📝 [SAVE] Données à sauvegarder:", scoreData);
 
-      // Insérer directement sans vérifier l'existence (on gère les conflits avec upsert)
       const { data, error } = await supabase
         .from('user_quiz_scores')
         .upsert(scoreData, { 
@@ -43,18 +41,14 @@ export const useSupabaseProgress = () => {
         .select();
 
       if (error) {
-        console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
+        console.error('❌ [SAVE] Erreur:', error);
         return false;
       }
 
-      console.log('✅ [SAVE] Score sauvegardé avec succès:', data);
-      
-      // Attendre que le trigger de progression s'exécute
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      console.log('✅ [SAVE] Score sauvegardé:', data);
       return true;
     } catch (error) {
-      console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
+      console.error('❌ [SAVE] Erreur:', error);
       return false;
     } finally {
       setSyncing(false);
@@ -70,9 +64,9 @@ export const useSupabaseProgress = () => {
 
     try {
       setSyncing(true);
-      console.log("📥 [LOAD] Chargement de la progression pour:", user.id);
+      console.log("📥 [LOAD] Chargement pour:", user.id);
       
-      // Charger la progression globale
+      // Charger la progression
       const { data: progress, error: progressError } = await supabase
         .from('user_progress')
         .select('*')
@@ -82,10 +76,10 @@ export const useSupabaseProgress = () => {
       if (progressError && progressError.code !== 'PGRST116') {
         console.error('❌ [LOAD] Erreur progression:', progressError);
       } else {
-        console.log('📊 [LOAD] Progression trouvée:', progress);
+        console.log('📊 [LOAD] Progression:', progress);
       }
 
-      // Charger tous les scores
+      // Charger les scores
       const { data: scores, error: scoresError } = await supabase
         .from('user_quiz_scores')
         .select('*')
@@ -95,10 +89,10 @@ export const useSupabaseProgress = () => {
       if (scoresError) {
         console.error('❌ [LOAD] Erreur scores:', scoresError);
       } else {
-        console.log('📋 [LOAD] Scores trouvés:', scores?.length || 0);
+        console.log('📋 [LOAD] Scores:', scores?.length || 0);
       }
 
-      const result = {
+      return {
         progress,
         scores: scores?.map(score => ({
           questionId: score.question_id,
@@ -110,11 +104,8 @@ export const useSupabaseProgress = () => {
           hintsRevealedCount: score.hints_revealed_count
         })) || []
       };
-      
-      console.log('📦 [LOAD] Données finales:', result);
-      return result;
     } catch (error) {
-      console.error('❌ [LOAD] Erreur lors du chargement:', error);
+      console.error('❌ [LOAD] Erreur:', error);
       return null;
     } finally {
       setSyncing(false);
