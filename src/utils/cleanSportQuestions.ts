@@ -94,11 +94,11 @@ export const cleanSportQuestions = async () => {
   try {
     console.log("🧹 Début du nettoyage des questions avec le thème 'sport'...");
     
-    // Récupérer toutes les questions avec le thème "sport"
+    // Récupérer SEULEMENT les questions avec le thème "sport" (exactement)
     const { data: sportQuestions, error: fetchError } = await supabase
       .from('quiz_questions')
       .select('*')
-      .eq('theme', 'sport');
+      .eq('theme', 'sport'); // Ne traiter QUE les questions avec theme = 'sport'
 
     if (fetchError) {
       console.error('❌ Erreur lors de la récupération des questions sport:', fetchError);

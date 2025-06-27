@@ -55,7 +55,7 @@ export const calculateProfileStats = (scores: QuizScore[], questionsCompleted: n
 };
 
 // Fonction pour charger les statistiques depuis Supabase
-export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | null> => {
+export const loadSupabaseStats = async (userId: string): ProfileStats | null => {
   try {
     console.log("📊 [STATS] Chargement des statistiques pour:", userId);
     
@@ -71,7 +71,7 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
       return null;
     }
 
-    if (progress && typeof progress === 'object' && progress !== null && 'correct_percentage' in progress) {
+    if (progress && progress !== null && typeof progress === 'object' && 'correct_percentage' in progress) {
       console.log("✅ [STATS] Progression trouvée:", progress);
       const typedProgress = progress as {
         correct_percentage: number;
