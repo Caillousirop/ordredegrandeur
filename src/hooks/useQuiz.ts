@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -151,6 +152,7 @@ export const useQuiz = () => {
   
   const handleScore = async (score: QuizScore) => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
+    console.log("🔑 [QUIZ] Utilisateur connecté:", !!user);
     
     // Mettre à jour les scores localement immédiatement
     setScores(prevScores => {
@@ -169,7 +171,11 @@ export const useQuiz = () => {
     });
 
     // Incrémenter le compteur localement
-    setQuestionsCompleted(prev => prev + 1);
+    setQuestionsCompleted(prev => {
+      const newCount = prev + 1;
+      console.log("📈 [QUIZ] Questions complétées:", prev, "->", newCount);
+      return newCount;
+    });
     
     // Sauvegarder dans Supabase si connecté
     if (user) {
@@ -179,20 +185,26 @@ export const useQuiz = () => {
       if (success) {
         console.log("✅ [QUIZ] Score sauvegardé avec succès");
         
-        // Recharger la progression immédiatement après la sauvegarde
+        // Recharger la progression après la sauvegarde
         console.log("🔄 [QUIZ] Rechargement de la progression...");
-        const updatedData = await loadProgress();
-        if (updatedData?.progress) {
-          console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
-          setQuestionsCompleted(updatedData.progress.questions_completed || 0);
-        }
-        if (updatedData?.scores) {
-          console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
-          setScores(updatedData.scores);
-        }
+        setTimeout(async () => {
+          const updatedData = await loadProgress();
+          if (updatedData?.progress) {
+            console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+            setQuestionsCompleted(updatedData.progress.questions_completed || 0);
+          } else {
+            console.warn("⚠️ [QUIZ] Aucune progression reçue après rechargement");
+          }
+          if (updatedData?.scores) {
+            console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
+            setScores(updatedData.scores);
+          }
+        }, 1500); // Attendre plus longtemps pour le trigger
       } else {
-        console.error("❌ [QUIZ] Échec de la sauvegarde");
+        console.error("❌ [QUIZ] Échec de la sauvegarde - les données locales restent");
       }
+    } else {
+      console.log("ℹ️ [QUIZ] Utilisateur non connecté - mise à jour locale uniquement");
     }
     
     // Afficher le toast de feedback
