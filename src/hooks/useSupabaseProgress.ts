@@ -16,7 +16,7 @@ export const useSupabaseProgress = () => {
     }
 
     try {
-      console.log("💾 [SAVE] Sauvegarde du score:", score);
+      console.log("💾 [SAVE] Début sauvegarde du score:", score);
       setSyncing(true);
       
       const scoreData = {
@@ -32,8 +32,8 @@ export const useSupabaseProgress = () => {
 
       console.log("📝 [SAVE] Données à sauvegarder:", scoreData);
 
-      // Utiliser la contrainte unique pour l'upsert
-      const { data, error } = await supabase
+      // Sauvegarder le score avec upsert
+      const { data: scoreResult, error: scoreError } = await supabase
         .from('user_quiz_scores')
         .upsert(scoreData, { 
           onConflict: 'user_id,question_id',
@@ -41,15 +41,28 @@ export const useSupabaseProgress = () => {
         })
         .select();
 
-      if (error) {
-        console.error('❌ [SAVE] Erreur lors de la sauvegarde:', error);
+      if (scoreError) {
+        console.error('❌ [SAVE] Erreur sauvegarde score:', scoreError);
         return false;
       }
 
-      console.log('✅ [SAVE] Score sauvegardé avec succès:', data);
+      console.log('✅ [SAVE] Score sauvegardé:', scoreResult);
       
-      // Le trigger va automatiquement mettre à jour user_progress
-      console.log('🔄 [SAVE] Le trigger va mettre à jour la progression automatiquement');
+      // Attendre un peu pour que le trigger s'exécute
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Vérifier que la progression a été mise à jour
+      const { data: progressCheck, error: progressError } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (progressError) {
+        console.error('❌ [SAVE] Erreur vérification progression:', progressError);
+      } else {
+        console.log('📊 [SAVE] Progression après trigger:', progressCheck);
+      }
       
       return true;
     } catch (error) {
@@ -69,45 +82,59 @@ export const useSupabaseProgress = () => {
 
     try {
       setSyncing(true);
-      console.log("📥 [LOAD] Chargement pour:", user.id);
+      console.log("📥 [LOAD] Chargement progression pour:", user.id);
       
-      // Charger la progression
+      // Charger la progression avec logs détaillés
       const { data: progress, error: progressError } = await supabase
         .from('user_progress')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
 
+      console.log("🔍 [LOAD] Requête progression terminée");
+      console.log("📊 [LOAD] Données progression:", progress);
+      console.log("❓ [LOAD] Erreur progression:", progressError);
+
       if (progressError && progressError.code !== 'PGRST116') {
         console.error('❌ [LOAD] Erreur progression:', progressError);
-      } else {
-        console.log('📊 [LOAD] Progression chargée:', progress);
+        return null;
       }
 
-      // Charger les scores
+      // Charger les scores avec logs détaillés
       const { data: scores, error: scoresError } = await supabase
         .from('user_quiz_scores')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
+      console.log("🔍 [LOAD] Requête scores terminée");
+      console.log("📋 [LOAD] Données scores:", scores);
+      console.log("❓ [LOAD] Erreur scores:", scoresError);
+
       if (scoresError) {
         console.error('❌ [LOAD] Erreur scores:', scoresError);
-      } else {
-        console.log('📋 [LOAD] Scores chargés:', scores?.length || 0);
+        return null;
       }
+
+      // Transformer les scores pour le format attendu
+      const transformedScores = scores?.map(score => ({
+        questionId: score.question_id,
+        accuracy: score.accuracy,
+        isMultiStep: score.is_multi_step,
+        directFinalAnswer: score.direct_final_answer,
+        skippedSteps: score.skipped_steps,
+        usedHints: score.used_hints,
+        hintsRevealedCount: score.hints_revealed_count
+      })) || [];
+
+      console.log("✅ [LOAD] Données transformées:", {
+        progress,
+        scoresCount: transformedScores.length
+      });
 
       return {
         progress,
-        scores: scores?.map(score => ({
-          questionId: score.question_id,
-          accuracy: score.accuracy,
-          isMultiStep: score.is_multi_step,
-          directFinalAnswer: score.direct_final_answer,
-          skippedSteps: score.skipped_steps,
-          usedHints: score.used_hints,
-          hintsRevealedCount: score.hints_revealed_count
-        })) || []
+        scores: transformedScores
       };
     } catch (error) {
       console.error('❌ [LOAD] Erreur inattendue:', error);

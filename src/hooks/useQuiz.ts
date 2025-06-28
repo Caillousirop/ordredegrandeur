@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -34,21 +33,21 @@ export const useQuiz = () => {
   useEffect(() => {
     const initializeData = async () => {
       if (user && !isLoaded) {
-        console.log("🔄 [QUIZ] Initialisation des données utilisateur depuis Supabase...");
+        console.log("🔄 [QUIZ] Initialisation des données utilisateur...");
         const data = await loadProgress();
         
         if (data?.progress) {
           console.log("✅ [QUIZ] Progression chargée:", data.progress);
           setQuestionsCompleted(data.progress.questions_completed || 0);
         } else {
-          console.log("ℹ️ [QUIZ] Aucune progression trouvée dans Supabase");
+          console.log("ℹ️ [QUIZ] Aucune progression trouvée");
         }
         
         if (data?.scores && data.scores.length > 0) {
           console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
           setScores(data.scores);
         } else {
-          console.log("ℹ️ [QUIZ] Aucun score trouvé dans Supabase");
+          console.log("ℹ️ [QUIZ] Aucun score trouvé");
         }
         
         setIsLoaded(true);
@@ -113,10 +112,7 @@ export const useQuiz = () => {
     }
 
     if (searchQuery && searchQuery.trim() !== "") {
-      // Convert to lowercase but preserve accents
       const lowerCaseQuery = searchQuery.toLowerCase().trim();
-      
-      // Use includes() which naturally preserves accents in comparison
       const results = supabaseQuestions.filter(q => 
         q.question.toLowerCase().includes(lowerCaseQuery)
       );
@@ -142,7 +138,6 @@ export const useQuiz = () => {
   };
 
   const handleNext = () => {
-    // Get a random question index different from the current one
     if (filteredQuestions.length > 1) {
       let newIndex;
       do {
@@ -157,69 +152,58 @@ export const useQuiz = () => {
   const handleScore = async (score: QuizScore) => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
     
-    // Update scores locally first
+    // Mettre à jour les scores localement immédiatement
     setScores(prevScores => {
       const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
       
       if (existingScoreIndex >= 0) {
         const newScores = [...prevScores];
         newScores[existingScoreIndex] = score;
-        console.log("🔄 [QUIZ] Score remplacé pour la question:", score.questionId);
+        console.log("🔄 [QUIZ] Score remplacé localement");
         return newScores;
       } else {
         const newScores = [...prevScores, score];
-        console.log("✅ [QUIZ] Nouveau score ajouté, total scores:", newScores.length);
+        console.log("✅ [QUIZ] Nouveau score ajouté localement, total:", newScores.length);
         return newScores;
       }
     });
 
-    // Incrémenter le nombre de questions complétées localement
-    setQuestionsCompleted(prev => {
-      const newCount = prev + 1;
-      console.log("📊 [QUIZ] Questions complétées mises à jour:", newCount);
-      return newCount;
-    });
+    // Incrémenter le compteur localement
+    setQuestionsCompleted(prev => prev + 1);
     
-    // Sauvegarder dans Supabase si l'utilisateur est connecté
+    // Sauvegarder dans Supabase si connecté
     if (user) {
-      console.log("💾 [QUIZ] Sauvegarde dans Supabase...");
+      console.log("💾 [QUIZ] Début sauvegarde Supabase...");
       const success = await saveScore(score);
       
       if (success) {
         console.log("✅ [QUIZ] Score sauvegardé avec succès");
-        console.log("🔄 [QUIZ] Le trigger va automatiquement mettre à jour la progression");
         
-        // Recharger la progression après un court délai pour voir les changements du trigger
-        setTimeout(async () => {
-          console.log("🔄 [QUIZ] Rechargement de la progression après trigger...");
-          const updatedData = await loadProgress();
-          if (updatedData?.progress) {
-            console.log("📈 [QUIZ] Progression mise à jour par le trigger:", updatedData.progress);
-            setQuestionsCompleted(updatedData.progress.questions_completed || 0);
-          }
-          if (updatedData?.scores) {
-            console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
-            setScores(updatedData.scores);
-          }
-        }, 1500); // Délai légèrement plus long pour laisser le trigger s'exécuter
+        // Recharger la progression immédiatement après la sauvegarde
+        console.log("🔄 [QUIZ] Rechargement de la progression...");
+        const updatedData = await loadProgress();
+        if (updatedData?.progress) {
+          console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+          setQuestionsCompleted(updatedData.progress.questions_completed || 0);
+        }
+        if (updatedData?.scores) {
+          console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
+          setScores(updatedData.scores);
+        }
       } else {
         console.error("❌ [QUIZ] Échec de la sauvegarde");
       }
     }
     
-    // Adjust accuracy based on hints usage
+    // Afficher le toast de feedback
     let displayAccuracy = score.accuracy;
     
-    // If all hints were revealed, no points
     if (score.usedHints && score.hintsRevealedCount === 3) {
       displayAccuracy = 0;
-    }
-    // Otherwise reduce points based on how many hints were used
-    else if (score.usedHints && score.hintsRevealedCount) {
+    } else if (score.usedHints && score.hintsRevealedCount) {
       displayAccuracy = Math.max(0, score.accuracy - (score.hintsRevealedCount * 20));
     }
     
-    // Show toast with consistent feedback message
     const feedback = getFeedbackMessage(displayAccuracy);
     
     if (feedback.type === 'success') {
@@ -233,7 +217,6 @@ export const useQuiz = () => {
 
   const startQuiz = () => {
     if (filteredQuestions.length > 0) {
-      // Check if it's the 30s challenge theme
       if (selectedTheme?.id === "challenge-30s") {
         setActiveTab("challenge-30s");
       } else {
@@ -262,7 +245,7 @@ export const useQuiz = () => {
     searchResults,
     syncing,
     questionsLoading,
-    questionsError,
+    questionsError,  
     themes: supabaseThemes,
     handleSearch,
     handleThemeSelect,
