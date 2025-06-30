@@ -30,35 +30,39 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
-  // Charger les données depuis Supabase au démarrage
+  // Charger les données depuis Supabase au démarrage UNIQUEMENT
   useEffect(() => {
     const initializeData = async () => {
       if (user && !isLoaded) {
         console.log("🔄 [QUIZ] Initialisation des données utilisateur...");
-        const data = await loadProgress();
-        
-        if (data?.progress) {
-          console.log("✅ [QUIZ] Progression chargée:", data.progress);
-          setQuestionsCompleted(data.progress.questions_completed || 0);
-        } else {
-          console.log("ℹ️ [QUIZ] Aucune progression trouvée");
+        try {
+          const data = await loadProgress();
+          
+          if (data?.progress) {
+            console.log("✅ [QUIZ] Progression chargée:", data.progress);
+            setQuestionsCompleted(data.progress.questions_completed || 0);
+          } else {
+            console.log("ℹ️ [QUIZ] Aucune progression trouvée");
+          }
+          
+          if (data?.scores && data.scores.length > 0) {
+            console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
+            setScores(data.scores);
+          } else {
+            console.log("ℹ️ [QUIZ] Aucun score trouvé");
+          }
+        } catch (error) {
+          console.error("❌ [QUIZ] Erreur lors du chargement:", error);
+        } finally {
+          setIsLoaded(true);
         }
-        
-        if (data?.scores && data.scores.length > 0) {
-          console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
-          setScores(data.scores);
-        } else {
-          console.log("ℹ️ [QUIZ] Aucun score trouvé");
-        }
-        
-        setIsLoaded(true);
-      } else if (!user) {
+      } else if (!user && !isLoaded) {
         setIsLoaded(true);
       }
     };
 
     initializeData();
-  }, [user, loadProgress, isLoaded]);
+  }, [user]); // Supprimer loadProgress et isLoaded des dépendances
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {
@@ -185,21 +189,25 @@ export const useQuiz = () => {
       if (success) {
         console.log("✅ [QUIZ] Score sauvegardé avec succès");
         
-        // Recharger la progression après la sauvegarde
+        // Recharger la progression UNE SEULE FOIS après la sauvegarde
         console.log("🔄 [QUIZ] Rechargement de la progression...");
         setTimeout(async () => {
-          const updatedData = await loadProgress();
-          if (updatedData?.progress) {
-            console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
-            setQuestionsCompleted(updatedData.progress.questions_completed || 0);
-          } else {
-            console.warn("⚠️ [QUIZ] Aucune progression reçue après rechargement");
+          try {
+            const updatedData = await loadProgress();
+            if (updatedData?.progress) {
+              console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+              setQuestionsCompleted(updatedData.progress.questions_completed || 0);
+            } else {
+              console.warn("⚠️ [QUIZ] Aucune progression reçue après rechargement");
+            }
+            if (updatedData?.scores) {
+              console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
+              setScores(updatedData.scores);
+            }
+          } catch (error) {
+            console.error("❌ [QUIZ] Erreur lors du rechargement:", error);
           }
-          if (updatedData?.scores) {
-            console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
-            setScores(updatedData.scores);
-          }
-        }, 1500); // Attendre plus longtemps pour le trigger
+        }, 2000); // Attendre 2 secondes pour le trigger
       } else {
         console.error("❌ [QUIZ] Échec de la sauvegarde - les données locales restent");
       }
