@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from "react";
-import { AuthButton } from "@/components/AuthButton";
 import { ProfileButton } from "@/components/ProfileButton";
 import UserLevelBadge from "@/components/UserLevelBadge";
 import FormattedNumber from "@/components/FormattedNumber";
@@ -73,7 +71,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
           <span className="text-sm text-muted-foreground">
             <FormattedNumber value={questionsCompleted} /> questions
           </span>
-          <AuthButton />
+          <ProfileButton />
         </div>
       )}
     </div>
