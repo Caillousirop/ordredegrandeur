@@ -70,7 +70,7 @@ export const useQuiz = () => {
     if (filteredQuestions.length > 0 && currentQuestionIndex < filteredQuestions.length) {
       const currentQuestion = filteredQuestions[currentQuestionIndex];
       if (currentQuestion && currentQuestion.id !== currentQuestionId) {
-        console.log("🔄 [QUIZ] Mise à jour de l'ID de question courante:", currentQuestion.id);
+        console.log("🔄 [QUIZ] Synchronisation ID question courante:", currentQuestion.id);
         setCurrentQuestionId(currentQuestion.id);
       }
     }
@@ -85,31 +85,37 @@ export const useQuiz = () => {
 
   const startQuiz = () => {
     if (filteredQuestions.length > 0) {
+      console.log("🚀 [QUIZ] Démarrage du quiz avec", filteredQuestions.length, "questions disponibles");
       baseStartQuiz();
     } else {
       toast.error("Veuillez sélectionner un thème et un type de question");
     }
   };
 
-  const currentQuestion = filteredQuestions[currentQuestionIndex];
+  // S'assurer qu'on n'affiche qu'UNE SEULE question à la fois
+  const currentQuestion = filteredQuestions.length > 0 && currentQuestionIndex < filteredQuestions.length 
+    ? filteredQuestions[currentQuestionIndex] 
+    : undefined;
+    
   const isMultiStep = currentQuestion?.type === "multistep";
 
-  // Log pour le débogage
+  // Log pour le débogage - mais seulement si on a une question
   useEffect(() => {
     if (currentQuestion) {
-      console.log("🎯 [QUIZ] Question courante:", {
+      console.log("🎯 [QUIZ] Question courante unique:", {
         index: currentQuestionIndex,
         id: currentQuestion.id,
         question: currentQuestion.question.substring(0, 50) + "...",
-        currentQuestionId
+        currentQuestionId,
+        totalFiltered: filteredQuestions.length
       });
     }
-  }, [currentQuestion, currentQuestionIndex, currentQuestionId]);
+  }, [currentQuestion, currentQuestionIndex, currentQuestionId, filteredQuestions.length]);
 
   return {
     filteredQuestions,
     currentQuestionIndex,
-    currentQuestion,
+    currentQuestion, // Une seule question
     isMultiStep,
     activeTab,
     setActiveTab,

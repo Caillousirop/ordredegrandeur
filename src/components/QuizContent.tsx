@@ -20,10 +20,17 @@ const QuizContent: React.FC<QuizContentProps> = ({
   onScore,
   onGoHome
 }) => {
+  console.log("🎯 [QuizContent] Rendu d'une seule question:", {
+    id: question.id,
+    type: question.type,
+    question: question.question.substring(0, 50) + "..."
+  });
+
   return (
     <div className="w-full flex justify-center">
       {isMultiStep ? (
         <MultiStepQuizQuestion
+          key={question.id}
           question={question as MultiStepQuestion}
           onNext={onNext}
           onScore={onScore}
@@ -31,6 +38,7 @@ const QuizContent: React.FC<QuizContentProps> = ({
         />
       ) : (
         <QuizQuestion
+          key={question.id}
           question={question as Question}
           onNext={onNext}
           onScore={onScore}
