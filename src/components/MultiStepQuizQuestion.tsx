@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MultiStepQuestion, QuizScore } from "./types";
@@ -25,36 +25,9 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
   onScore,
   onGoHome
 }) => {
-  const [questionId, setQuestionId] = useState<string>(question.id);
-
-  // Détecter le changement de question et réinitialiser si nécessaire
-  useEffect(() => {
-    if (question.id !== questionId) {
-      console.log("🔄 [MultiStepQuizQuestion] Changement de question détecté");
-      console.log("Ancienne question ID:", questionId);
-      console.log("Nouvelle question ID:", question.id);
-      setQuestionId(question.id);
-    }
-  }, [question.id, questionId]);
-
   const handleGoHome = () => {
     if (onGoHome) {
       onGoHome();
-    }
-  };
-
-  const handleScore = (score: QuizScore) => {
-    console.log("🎯 [MultiStepQuizQuestion] Score généré pour question ID:", question.id);
-    console.log("🎯 [MultiStepQuizQuestion] Score:", score);
-    
-    // S'assurer que l'ID de la question est correct
-    const correctedScore = {
-      ...score,
-      questionId: question.id
-    };
-    
-    if (onScore) {
-      onScore(correctedScore);
     }
   };
 
@@ -66,7 +39,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
     <MultiStepQuizManager
       question={question}
       onNext={onNext}
-      onScore={handleScore}
+      onScore={onScore}
     >
       {({
         directFinalMode,
@@ -114,12 +87,6 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
               <CardDescription className="mt-2">
                 Question à étapes multiples - Résolvez chaque étape ou tentez de répondre directement
               </CardDescription>
-              {/* Debug info en développement */}
-              {process.env.NODE_ENV === 'development' && (
-                <CardDescription className="text-xs text-muted-foreground">
-                  Question ID: {question.id}
-                </CardDescription>
-              )}
             </CardHeader>
             <CardContent className="pt-6 space-y-6 bg-transparent">
               <QuizModeSwitcher 

@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
@@ -28,28 +27,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [questionId, setQuestionId] = useState<string>(question.id);
 
   // Find theme color
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
 
   const unitDisplay = formatUnitDisplay(question.unit);
-
-  // Réinitialiser le composant quand la question change
-  useEffect(() => {
-    if (question.id !== questionId) {
-      console.log("🔄 [QuizQuestion] Changement de question détecté");
-      console.log("Ancienne question ID:", questionId);
-      console.log("Nouvelle question ID:", question.id);
-      
-      setAnswer("");
-      setSubmitted(false);
-      setUserAnswer(0);
-      setShowAnswer(false);
-      setQuestionId(question.id);
-    }
-  }, [question.id, questionId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,10 +44,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       return;
     }
     
-    console.log("🎯 [QuizQuestion] Soumission de réponse pour question ID:", question.id);
-    console.log("🎯 [QuizQuestion] Réponse utilisateur:", numAnswer);
-    console.log("🎯 [QuizQuestion] Réponse correcte:", question.correctAnswer);
-    
     setUserAnswer(numAnswer);
     setSubmitted(true);
 
@@ -72,20 +51,16 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       // Use the centralized accuracy calculation
       const calculatedAccuracy = calculateAccuracy(numAnswer, question.correctAnswer);
       
-      const score: QuizScore = {
-        questionId: question.id, // S'assurer d'utiliser l'ID de la question courante
+      onScore({
+        questionId: question.id,
         accuracy: calculatedAccuracy,
         isMultiStep: false,
         directFinalAnswer: false
-      };
-      
-      console.log("🎯 [QuizQuestion] Score généré:", score);
-      onScore(score);
+      });
     }
   };
 
   const handleNextQuestion = () => {
-    console.log("🔄 [QuizQuestion] Passage à la question suivante demandé");
     setAnswer("");
     setSubmitted(false);
     setUserAnswer(0);
@@ -127,12 +102,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               </div>
             )}
           </CardTitle>
-          {/* Debug info en développement */}
-          {process.env.NODE_ENV === 'development' && (
-            <CardDescription className="text-xs text-muted-foreground">
-              Question ID: {question.id}
-            </CardDescription>
-          )}
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
           {!submitted ? (
