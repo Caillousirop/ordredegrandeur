@@ -58,7 +58,7 @@ export const useQuiz = () => {
     };
 
     initializeData();
-  }, [user, loadProgress]);
+  }, [user, loadProgress, isLoaded]);
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {
@@ -164,6 +164,7 @@ export const useQuiz = () => {
       return [...prevScores, score];
     });
 
+    // Incrémenter le compteur local immédiatement
     setQuestionsCompleted(prev => prev + 1);
     
     // Sauvegarder dans Supabase si connecté
@@ -172,22 +173,11 @@ export const useQuiz = () => {
       const success = await saveScore(score);
       
       if (success) {
-        console.log("✅ [QUIZ] Sauvegarde réussie - le trigger mettra à jour la progression");
-        
-        // Attendre que le trigger s'exécute puis recharger la progression
-        setTimeout(async () => {
-          try {
-            const updatedData = await loadProgress();
-            if (updatedData?.progress) {
-              console.log("📈 [QUIZ] Progression synchronisée:", updatedData.progress);
-              setQuestionsCompleted(updatedData.progress.questions_completed || 0);
-            }
-          } catch (error) {
-            console.error("❌ [QUIZ] Erreur synchronisation:", error);
-          }
-        }, 3000); // Attendre 3 secondes pour le trigger
+        console.log("✅ [QUIZ] Score sauvegardé avec succès");
+        toast.success("Score sauvegardé !");
       } else {
         console.error("❌ [QUIZ] Échec sauvegarde");
+        toast.error("Erreur lors de la sauvegarde");
       }
     }
     
