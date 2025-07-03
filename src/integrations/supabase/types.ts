@@ -318,6 +318,18 @@ export type Database = {
       }
     }
     Functions: {
+      get_user_progress: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          correct_percentage: number
+          id: string
+          last_updated: string
+          questions_completed: number
+          total_points: number
+          user_id: string
+          user_level: number
+        }
+      }
       is_admin: {
         Args: { user_id?: string }
         Returns: boolean
@@ -325,6 +337,18 @@ export type Database = {
       is_user_admin: {
         Args: { check_user_id?: string }
         Returns: boolean
+      }
+      update_user_progress: {
+        Args: { p_experience_points: number; p_completed_stage?: Json }
+        Returns: {
+          correct_percentage: number
+          id: string
+          last_updated: string
+          questions_completed: number
+          total_points: number
+          user_id: string
+          user_level: number
+        }
       }
     }
     Enums: {

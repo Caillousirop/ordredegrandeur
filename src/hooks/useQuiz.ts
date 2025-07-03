@@ -9,7 +9,7 @@ import { getFeedbackMessage } from "@/utils/feedbackMessages";
 
 export const useQuiz = () => {
   const { user } = useAuth();
-  const { saveScore, loadProgress, syncing } = useSupabaseProgress();
+  const { saveScore, loadProgress, getCurrentProgress, syncing } = useSupabaseProgress();
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -22,6 +22,7 @@ export const useQuiz = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [userProgress, setUserProgress] = useState<any>(null);
 
   // Afficher les erreurs de chargement des questions
   useEffect(() => {
@@ -39,7 +40,8 @@ export const useQuiz = () => {
       const data = await loadProgress();
       
       if (data?.progress) {
-        console.log("✅ [QUIZ] Progression chargée:", data.progress);
+        console.log("✅ [QUIZ] Progression chargée via RPC:", data.progress);
+        setUserProgress(data.progress);
         setQuestionsCompleted(data.progress.questions_completed || 0);
       }
       
@@ -170,16 +172,27 @@ export const useQuiz = () => {
     // Incrémenter le compteur local immédiatement
     setQuestionsCompleted(prev => prev + 1);
     
-    // Sauvegarder dans Supabase si connecté
+    // Sauvegarder dans Supabase si connecté (utilise maintenant les fonctions RPC)
     if (user) {
-      console.log("💾 [QUIZ] Sauvegarde dans Supabase...");
+      console.log("💾 [QUIZ] Sauvegarde avec RPC dans Supabase...");
       const success = await saveScore(score);
       
       if (success) {
-        console.log("✅ [QUIZ] Score sauvegardé avec succès");
+        console.log("✅ [QUIZ] Score sauvegardé avec succès via RPC");
         toast.success("Score sauvegardé !");
+        
+        // Recharger la progression mise à jour
+        try {
+          const updatedProgress = await getCurrentProgress();
+          if (updatedProgress) {
+            setUserProgress(updatedProgress);
+            setQuestionsCompleted(updatedProgress.questions_completed || 0);
+          }
+        } catch (error) {
+          console.error("❌ [QUIZ] Erreur lors du rechargement de la progression:", error);
+        }
       } else {
-        console.error("❌ [QUIZ] Échec sauvegarde");
+        console.error("❌ [QUIZ] Échec sauvegarde RPC");
         toast.error("Erreur lors de la sauvegarde");
       }
     }
@@ -236,6 +249,7 @@ export const useQuiz = () => {
     questionsLoading,
     questionsError,  
     themes: supabaseThemes,
+    userProgress,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,

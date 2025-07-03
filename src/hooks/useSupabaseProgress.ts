@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -7,78 +8,7 @@ export const useSupabaseProgress = () => {
   const { user } = useAuth();
   const [syncing, setSyncing] = useState(false);
 
-  // Sauvegarder un score dans Supabase
-  const saveScore = async (score: QuizScore) => {
-    if (!user) {
-      console.log("❌ [SAVE] Utilisateur non connecté");
-      return false;
-    }
-
-    try {
-      console.log("💾 [SAVE] Début sauvegarde du score:", score);
-      setSyncing(true);
-      
-      // D'abord, vérifier si un score existe déjà pour cette question
-      const { data: existingScore } = await supabase
-        .from('user_quiz_scores')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('question_id', score.questionId)
-        .maybeSingle();
-
-      let result;
-      if (existingScore) {
-        // Mettre à jour le score existant
-        console.log("🔄 [SAVE] Mise à jour du score existant");
-        result = await supabase
-          .from('user_quiz_scores')
-          .update({
-            accuracy: score.accuracy,
-            is_multi_step: score.isMultiStep || false,
-            direct_final_answer: score.directFinalAnswer || false,
-            skipped_steps: score.skippedSteps || false,
-            used_hints: score.usedHints || false,
-            hints_revealed_count: score.hintsRevealedCount || 0
-          })
-          .eq('id', existingScore.id)
-          .select();
-      } else {
-        // Insérer un nouveau score avec toutes les valeurs requises
-        console.log("➕ [SAVE] Insertion d'un nouveau score");
-        
-        result = await supabase
-          .from('user_quiz_scores')
-          .insert({
-            user_id: user.id,
-            question_id: score.questionId,
-            accuracy: score.accuracy,
-            is_multi_step: score.isMultiStep || false,
-            direct_final_answer: score.directFinalAnswer || false,
-            skipped_steps: score.skippedSteps || false,
-            used_hints: score.usedHints || false,
-            hints_revealed_count: score.hintsRevealedCount || 0
-          })
-          .select();
-      }
-
-      const { data, error } = result;
-
-      if (error) {
-        console.error('❌ [SAVE] Erreur sauvegarde score:', error);
-        return false;
-      }
-
-      console.log('✅ [SAVE] Score sauvegardé avec succès:', data);
-      return true;
-    } catch (error) {
-      console.error('❌ [SAVE] Erreur inattendue:', error);
-      return false;
-    } finally {
-      setSyncing(false);
-    }
-  };
-
-  // Charger la progression depuis Supabase - fonction stable avec useCallback
+  // Charger la progression utilisateur avec la fonction RPC
   const loadProgress = async () => {
     if (!user) {
       console.log("❌ [LOAD] Utilisateur non connecté");
@@ -87,21 +17,18 @@ export const useSupabaseProgress = () => {
 
     try {
       setSyncing(true);
-      console.log("📥 [LOAD] Chargement progression pour:", user.id);
+      console.log("📥 [LOAD] Chargement progression avec RPC pour:", user.id);
       
-      // Charger la progression
+      // Utiliser la fonction RPC get_user_progress
       const { data: progress, error: progressError } = await supabase
-        .from('user_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+        .rpc('get_user_progress');
 
-      if (progressError && progressError.code !== 'PGRST116') {
-        console.error('❌ [LOAD] Erreur progression:', progressError);
+      if (progressError) {
+        console.error('❌ [LOAD] Erreur RPC progression:', progressError);
         return null;
       }
 
-      // Charger les scores
+      // Charger les scores existants
       const { data: scores, error: scoresError } = await supabase
         .from('user_quiz_scores')
         .select('*')
@@ -124,7 +51,7 @@ export const useSupabaseProgress = () => {
         hintsRevealedCount: score.hints_revealed_count
       })) || [];
 
-      console.log("✅ [LOAD] Données chargées:", {
+      console.log("✅ [LOAD] Données chargées avec RPC:", {
         progress,
         scoresCount: transformedScores.length
       });
@@ -141,9 +68,121 @@ export const useSupabaseProgress = () => {
     }
   };
 
+  // Sauvegarder un score et mettre à jour la progression
+  const saveScore = async (score: QuizScore) => {
+    if (!user) {
+      console.log("❌ [SAVE] Utilisateur non connecté");
+      return false;
+    }
+
+    try {
+      console.log("💾 [SAVE] Début sauvegarde du score:", score);
+      setSyncing(true);
+      
+      // D'abord, sauvegarder le score
+      const { data: existingScore } = await supabase
+        .from('user_quiz_scores')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('question_id', score.questionId)
+        .maybeSingle();
+
+      let scoreResult;
+      if (existingScore) {
+        // Mettre à jour le score existant
+        console.log("🔄 [SAVE] Mise à jour du score existant");
+        scoreResult = await supabase
+          .from('user_quiz_scores')
+          .update({
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
+          })
+          .eq('id', existingScore.id)
+          .select();
+      } else {
+        // Insérer un nouveau score
+        console.log("➕ [SAVE] Insertion d'un nouveau score");
+        scoreResult = await supabase
+          .from('user_quiz_scores')
+          .insert({
+            user_id: user.id,
+            question_id: score.questionId,
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
+          })
+          .select();
+      }
+
+      if (scoreResult.error) {
+        console.error('❌ [SAVE] Erreur sauvegarde score:', scoreResult.error);
+        return false;
+      }
+
+      // Calculer les points d'expérience basés sur la précision
+      let experiencePoints = Math.round(score.accuracy / 10);
+      
+      // Bonus pour les réponses directes sur questions multi-étapes
+      if (score.isMultiStep && score.directFinalAnswer) {
+        experiencePoints += 5;
+      }
+
+      // Mettre à jour la progression avec la fonction RPC
+      const { data: progressData, error: progressError } = await supabase
+        .rpc('update_user_progress', {
+          p_experience_points: experiencePoints
+        });
+
+      if (progressError) {
+        console.error('❌ [SAVE] Erreur RPC progression:', progressError);
+        return false;
+      }
+
+      console.log('✅ [SAVE] Score et progression sauvegardés:', {
+        score: scoreResult.data,
+        progress: progressData,
+        experiencePoints
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('❌ [SAVE] Erreur inattendue:', error);
+      return false;
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  // Fonction pour obtenir la progression actuelle
+  const getCurrentProgress = async () => {
+    if (!user) return null;
+
+    try {
+      const { data, error } = await supabase.rpc('get_user_progress');
+      
+      if (error) {
+        console.error('❌ [PROGRESS] Erreur RPC:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('❌ [PROGRESS] Erreur inattendue:', error);
+      return null;
+    }
+  };
+
   return {
     saveScore,
     loadProgress,
+    getCurrentProgress,
     syncing
   };
 };

@@ -12,7 +12,7 @@ interface UserSpaceProps {
 
 const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   const { user, loading: authLoading } = useAuth();
-  const { loadProgress } = useSupabaseProgress();
+  const { getCurrentProgress } = useSupabaseProgress();
   
   const [progress, setProgress] = useState<any>(null);
   const [localStats, setLocalStats] = useState({
@@ -22,21 +22,23 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   });
   const [isProgressLoaded, setIsProgressLoaded] = useState(false);
 
-  // Fonction stable pour charger la progression
+  // Fonction stable pour charger la progression via RPC
   const fetchProgress = useCallback(async () => {
     if (!user || isProgressLoaded) return;
     
     try {
-      const data = await loadProgress();
-      if (data?.progress) {
-        setProgress(data.progress);
+      console.log("📊 [USER_SPACE] Chargement progression via RPC");
+      const data = await getCurrentProgress();
+      if (data) {
+        console.log("✅ [USER_SPACE] Progression RPC chargée:", data);
+        setProgress(data);
       }
     } catch (error) {
-      console.error("Erreur lors du chargement de la progression:", error);
+      console.error("❌ [USER_SPACE] Erreur lors du chargement de la progression RPC:", error);
     } finally {
       setIsProgressLoaded(true);
     }
-  }, [user, loadProgress, isProgressLoaded]);
+  }, [user, getCurrentProgress, isProgressLoaded]);
 
   useEffect(() => {
     if (user && !isProgressLoaded) {
@@ -45,7 +47,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   }, [user, isProgressLoaded, fetchProgress]);
 
   useEffect(() => {
-    // Charger le profil depuis le localStorage au montage
+    // Charger le profil depuis le localStorage au montage (fallback)
     const storedProfile = localStorage.getItem('profile');
     if (storedProfile) {
       try {
@@ -61,6 +63,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     }
   }, []);
 
+  // Utiliser les données RPC si disponibles, sinon les données locales
   const displayStats = progress || localStats;
 
   return (
@@ -69,13 +72,13 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
         <div className="flex items-center gap-4">
           <div className="text-right">
             <div className="text-sm font-medium">
-              <FormattedNumber value={displayStats.total_points} /> points
+              <FormattedNumber value={displayStats.total_points || displayStats.experience_points || 0} /> points
             </div>
             <div className="text-xs text-muted-foreground">
-              Niveau {displayStats.user_level}
+              Niveau {displayStats.user_level || displayStats.level || 1}
             </div>
           </div>
-          <UserLevelBadge level={displayStats.user_level} />
+          <UserLevelBadge level={displayStats.user_level || displayStats.level || 1} />
           <ProfileButton />
         </div>
       ) : (
