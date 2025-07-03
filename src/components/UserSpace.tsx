@@ -22,13 +22,11 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     if (!user || isProgressLoaded) return;
     
     try {
-      console.log("📊 [USER_SPACE] Chargement progression via RPC");
+      console.log("📊 [USER_SPACE] Chargement progression unique via RPC");
       const data = await getCurrentProgress();
       if (data) {
         console.log("✅ [USER_SPACE] Progression RPC chargée:", data);
         setProgress(data);
-      } else {
-        console.log("⚠️ [USER_SPACE] Aucune progression RPC trouvée");
       }
     } catch (error) {
       console.error("❌ [USER_SPACE] Erreur lors du chargement de la progression RPC:", error);
@@ -46,21 +44,13 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     }
   }, [user, isProgressLoaded, fetchProgress]);
 
-  // Utiliser les données RPC Supabase si disponibles, sinon afficher les valeurs par défaut
+  // Utiliser les données RPC si disponibles, sinon afficher les valeurs par défaut
   const displayStats = progress || {
     total_points: 0,
     user_level: 1,
     experience_points: 0,
-    level: 1,
-    questions_completed: questionsCompleted
+    level: 1
   };
-
-  console.log("📊 [USER_SPACE] Stats affichées:", {
-    progress,
-    displayStats,
-    questionsCompleted,
-    isFromSupabase: !!progress
-  });
 
   return (
     <div className="flex items-center gap-4">
@@ -73,11 +63,6 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
             <div className="text-xs text-muted-foreground">
               Niveau {displayStats.user_level || displayStats.level || 1}
             </div>
-            {progress && (
-              <div className="text-xs text-green-600 dark:text-green-400">
-                {displayStats.questions_completed || questionsCompleted} questions
-              </div>
-            )}
           </div>
           <UserLevelBadge level={displayStats.user_level || displayStats.level || 1} />
           <ProfileButton />

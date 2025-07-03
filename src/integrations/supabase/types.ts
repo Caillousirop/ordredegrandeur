@@ -318,10 +318,6 @@ export type Database = {
       }
     }
     Functions: {
-      get_quiz_progress: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
       get_user_progress: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -341,10 +337,6 @@ export type Database = {
       is_user_admin: {
         Args: { check_user_id?: string }
         Returns: boolean
-      }
-      update_quiz_progress: {
-        Args: { p_progress_data: Json }
-        Returns: Json
       }
       update_user_progress: {
         Args: { p_experience_points: number; p_completed_stage?: Json }

@@ -1,11 +1,11 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
-import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import StatisticsCard from "@/components/profile/StatisticsCard";
 import RewardsSystem from "@/components/profile/RewardsSystem";
-import { calculateProfileStats } from "@/components/profile/ProfileStatCalculator";
+import { calculateProfileStats, loadSupabaseStats } from "@/components/profile/ProfileStatCalculator";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import UserSpace from "@/components/UserSpace";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,82 +16,60 @@ import { LogIn, Trophy, Target, Zap, Crown, RefreshCw } from "lucide-react";
 const Profile = () => {
   const { scores, questionsCompleted } = useQuiz();
   const { user } = useAuth();
-  const { getCurrentProgress } = useSupabaseProgress();
-  
-  const [supabaseProgress, setSupabaseProgress] = useState<any>(null);
+  const [supabaseStats, setSupabaseStats] = useState<{
+    correctPercentage: number;
+    totalPoints: number;
+    userLevel: number;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [progressLoaded, setProgressLoaded] = useState(false);
-  const [lastSyncTime, setLastSyncTime] = useState<string>("");
+  const [statsLoaded, setStatsLoaded] = useState(false);
   
-  // Fonction pour charger la progression depuis Supabase
-  const loadProgressFromSupabase = useCallback(async () => {
+  // Fonction stable pour recharger les statistiques
+  const reloadStats = useCallback(async () => {
     if (!user) return;
     
     setIsLoading(true);
-    console.log("🔄 [PROFILE] Chargement progression Supabase...");
-    
+    console.log("🔄 [PROFILE] Rechargement des statistiques...");
     try {
-      const progress = await getCurrentProgress();
-      if (progress) {
-        console.log("✅ [PROFILE] Progression Supabase chargée:", progress);
-        setSupabaseProgress(progress);
-        setLastSyncTime(new Date().toLocaleString('fr-FR'));
-      } else {
-        console.log("⚠️ [PROFILE] Aucune progression trouvée dans Supabase");
-      }
+      const stats = await loadSupabaseStats(user.id);
+      setSupabaseStats(stats);
+      console.log("✅ [PROFILE] Statistiques rechargées:", stats);
     } catch (error) {
-      console.error("❌ [PROFILE] Erreur chargement progression:", error);
+      console.error("❌ [PROFILE] Erreur:", error);
     } finally {
       setIsLoading(false);
-      setProgressLoaded(true);
+      setStatsLoaded(true);
     }
-  }, [user, getCurrentProgress]);
+  }, [user]);
 
-  // Charger la progression au montage et quand l'utilisateur change
+  // Charger les statistiques depuis Supabase au montage
   useEffect(() => {
-    if (user && !progressLoaded) {
-      loadProgressFromSupabase();
-    } else if (!user) {
-      setProgressLoaded(false);
-      setSupabaseProgress(null);
-      setLastSyncTime("");
+    if (user && !statsLoaded) {
+      reloadStats();
     }
-  }, [user, progressLoaded, loadProgressFromSupabase]);
+  }, [user, statsLoaded, reloadStats]);
 
-  // Recharger périodiquement les données (toutes les 30 secondes)
+  // Recharger les statistiques quand les scores changent (avec debounce)
   useEffect(() => {
-    if (user && progressLoaded) {
-      const interval = setInterval(() => {
-        console.log("🔄 [PROFILE] Rechargement automatique progression...");
-        loadProgressFromSupabase();
-      }, 30000);
+    if (user && scores.length > 0 && statsLoaded) {
+      const timeoutId = setTimeout(() => {
+        reloadStats();
+      }, 2000);
       
-      return () => clearInterval(interval);
+      return () => clearTimeout(timeoutId);
     }
-  }, [user, progressLoaded, loadProgressFromSupabase]);
+  }, [user, scores.length, statsLoaded, reloadStats]);
 
-  // Utiliser les données Supabase si disponibles, sinon calculer localement
-  const finalStats = supabaseProgress ? {
-    correctPercentage: supabaseProgress.correct_percentage || 0,
-    totalPoints: supabaseProgress.total_points || 0,
-    userLevel: supabaseProgress.user_level || 1
-  } : calculateProfileStats(scores, questionsCompleted);
-
+  // Utiliser les stats Supabase si disponibles, sinon calculer localement
+  const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
   const { correctPercentage, totalPoints, userLevel } = finalStats;
 
-  console.log("📊 [PROFILE] Stats utilisées:", {
+  console.log("📈 [PROFILE] Stats finales utilisées:", {
     finalStats,
-    isFromSupabase: !!supabaseProgress,
-    supabaseProgress,
     scoresCount: scores.length,
-    questionsCompleted
+    questionsCompleted,
+    isFromSupabase: !!supabaseStats
   });
-
-  // Fonction pour recharger manuellement
-  const handleRefresh = () => {
-    setProgressLoaded(false);
-    loadProgressFromSupabase();
-  };
 
   // If user is not logged in, show rewards preview
   if (!user) {
@@ -216,7 +194,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 dark:from-primary/10 dark:to-primary/5">
       <div className="flex justify-between items-center w-full px-4 py-3 border-b border-border/30">
         <DarkModeToggle />
-        <UserSpace questionsCompleted={supabaseProgress?.questions_completed || questionsCompleted} />
+        <UserSpace questionsCompleted={questionsCompleted} />
       </div>
       
       <div className="container mx-auto max-w-5xl px-4 py-10">
@@ -225,7 +203,7 @@ const Profile = () => {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              onClick={handleRefresh}
+              onClick={reloadStats}
               disabled={isLoading}
               className="flex items-center gap-2"
             >
@@ -236,22 +214,8 @@ const Profile = () => {
         </div>
         
         {isLoading && (
-          <div className="text-center py-4 mb-6">
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-              <p className="text-blue-800 dark:text-blue-200">
-                🔄 Synchronisation avec Supabase en cours...
-              </p>
-            </div>
-          </div>
-        )}
-
-        {supabaseProgress && lastSyncTime && (
-          <div className="mb-6">
-            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-              <p className="text-green-800 dark:text-green-200 text-sm">
-                ✅ Données synchronisées avec Supabase - Dernière mise à jour : {lastSyncTime}
-              </p>
-            </div>
+          <div className="text-center py-4">
+            <p className="text-muted-foreground">Mise à jour de vos statistiques...</p>
           </div>
         )}
         
@@ -260,7 +224,7 @@ const Profile = () => {
             <div className="lg:col-span-2">
               <StatisticsCard
                 scores={scores}
-                questionsCompleted={supabaseProgress?.questions_completed || questionsCompleted}
+                questionsCompleted={questionsCompleted}
                 correctPercentage={correctPercentage}
                 totalPoints={totalPoints}
                 userLevel={userLevel}
@@ -270,7 +234,7 @@ const Profile = () => {
             <div className="lg:col-span-1">
               <RewardsSystem 
                 scores={scores} 
-                questionsCompleted={supabaseProgress?.questions_completed || questionsCompleted}
+                questionsCompleted={questionsCompleted}
                 totalPoints={totalPoints}
                 correctPercentage={correctPercentage}
               />

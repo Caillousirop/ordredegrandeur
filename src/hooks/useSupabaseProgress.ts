@@ -172,11 +172,6 @@ export const useSupabaseProgress = () => {
         return null;
       }
 
-      // Ajouter un timestamp de dernière mise à jour côté client
-      if (data) {
-        data.last_updated = new Date().toISOString();
-      }
-
       return data;
     } catch (error) {
       console.error('❌ [PROGRESS] Erreur inattendue:', error);
