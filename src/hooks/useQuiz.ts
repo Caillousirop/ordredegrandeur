@@ -5,12 +5,14 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
+import { useQuizProgressContext } from "@/contexts/QuizProgressContext";
 import { getFeedbackMessage } from "@/utils/feedbackMessages";
 
 export const useQuiz = () => {
   const { user } = useAuth();
-  const { saveScore, loadProgress, getCurrentProgress, syncing } = useSupabaseProgress();
+  const { saveScore, getCurrentProgress, syncing } = useSupabaseProgress();
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
+  const { quizProgress, updateQuizProgress } = useQuizProgressContext();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("setup");
@@ -31,39 +33,29 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
-  // Fonction stable pour charger les données UNIQUEMENT au démarrage
-  const initializeUserData = useCallback(async () => {
-    if (!user || isDataLoaded) return;
-    
-    console.log("🔄 [QUIZ] Initialisation unique des données utilisateur...");
-    try {
-      const data = await loadProgress();
-      
-      if (data?.progress) {
-        console.log("✅ [QUIZ] Progression chargée:", data.progress);
-        setUserProgress(data.progress);
-        setQuestionsCompleted(data.progress.questions_completed || 0);
-      }
-      
-      if (data?.scores && data.scores.length > 0) {
-        console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
-        setScores(data.scores);
-      }
-    } catch (error) {
-      console.error("❌ [QUIZ] Erreur lors du chargement:", error);
-    } finally {
-      setIsDataLoaded(true);
-    }
-  }, [user, loadProgress, isDataLoaded]);
-
-  // Charger les données UNIQUEMENT au démarrage
+  // Charger les données depuis le contexte partagé
   useEffect(() => {
-    if (user && !isDataLoaded) {
-      initializeUserData();
+    if (user && quizProgress && !isDataLoaded) {
+      console.log("🔄 [QUIZ] Chargement des données depuis le contexte partagé...");
+      
+      if (quizProgress.scores) {
+        setScores(quizProgress.scores);
+      }
+      
+      if (quizProgress.questionsCompleted) {
+        setQuestionsCompleted(quizProgress.questionsCompleted);
+      }
+      
+      if (quizProgress.userProgress) {
+        setUserProgress(quizProgress.userProgress);
+      }
+      
+      setIsDataLoaded(true);
+      console.log("✅ [QUIZ] Données chargées depuis le contexte");
     } else if (!user && !isDataLoaded) {
       setIsDataLoaded(true);
     }
-  }, [user, isDataLoaded, initializeUserData]);
+  }, [user, quizProgress, isDataLoaded]);
 
   // Filtrer les questions basé sur le thème et type sélectionnés
   const filteredQuestions = useMemo(() => {
@@ -145,18 +137,25 @@ export const useQuiz = () => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
     
     // Mettre à jour immédiatement les données locales
-    setScores(prevScores => {
-      const existingIndex = prevScores.findIndex(s => s.questionId === score.questionId);
-      if (existingIndex >= 0) {
-        const newScores = [...prevScores];
-        newScores[existingIndex] = score;
-        return newScores;
-      }
-      return [...prevScores, score];
-    });
+    const newScores = [...scores];
+    const existingIndex = newScores.findIndex(s => s.questionId === score.questionId);
+    if (existingIndex >= 0) {
+      newScores[existingIndex] = score;
+    } else {
+      newScores.push(score);
+    }
+    setScores(newScores);
 
     // Incrémenter le compteur local immédiatement
-    setQuestionsCompleted(prev => prev + 1);
+    const newQuestionsCompleted = questionsCompleted + 1;
+    setQuestionsCompleted(newQuestionsCompleted);
+    
+    // Mettre à jour le contexte partagé
+    await updateQuizProgress({
+      scores: newScores,
+      questionsCompleted: newQuestionsCompleted,
+      lastUpdated: new Date().toISOString()
+    });
     
     // Sauvegarder dans Supabase si connecté
     if (user) {
@@ -173,6 +172,13 @@ export const useQuiz = () => {
           if (updatedProgress) {
             setUserProgress(updatedProgress);
             setQuestionsCompleted(updatedProgress.questions_completed || 0);
+            
+            // Mettre à jour le contexte avec les nouvelles données
+            await updateQuizProgress({
+              userProgress: updatedProgress,
+              questionsCompleted: updatedProgress.questions_completed || 0,
+              lastUpdated: new Date().toISOString()
+            });
           }
         } catch (error) {
           console.error("❌ [QUIZ] Erreur lors du rechargement de la progression:", error);
