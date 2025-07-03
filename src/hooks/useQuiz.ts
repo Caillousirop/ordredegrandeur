@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,16 +13,16 @@ export const useQuiz = () => {
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [filteredQuestions, setFilteredQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
   const [activeTab, setActiveTab] = useState("setup");
   const [scores, setScores] = useState<QuizScore[]>([]);
   const [questionsCompleted, setQuestionsCompleted] = useState(0);
   const [selectedTheme, setSelectedTheme] = useState<QuizTheme | null>(null);
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<(Question | MultiStepQuestion)[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [userProgress, setUserProgress] = useState<any>(null);
+  
+  // États pour éviter les re-initialisations
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // Afficher les erreurs de chargement des questions
   useEffect(() => {
@@ -31,16 +31,16 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
-  // Fonction stable pour charger les données
-  const loadUserData = useCallback(async () => {
-    if (!user || isLoaded) return;
+  // Fonction stable pour charger les données UNIQUEMENT au démarrage
+  const initializeUserData = useCallback(async () => {
+    if (!user || isDataLoaded) return;
     
-    console.log("🔄 [QUIZ] Initialisation des données utilisateur...");
+    console.log("🔄 [QUIZ] Initialisation unique des données utilisateur...");
     try {
       const data = await loadProgress();
       
       if (data?.progress) {
-        console.log("✅ [QUIZ] Progression chargée via RPC:", data.progress);
+        console.log("✅ [QUIZ] Progression chargée:", data.progress);
         setUserProgress(data.progress);
         setQuestionsCompleted(data.progress.questions_completed || 0);
       }
@@ -52,52 +52,40 @@ export const useQuiz = () => {
     } catch (error) {
       console.error("❌ [QUIZ] Erreur lors du chargement:", error);
     } finally {
-      setIsLoaded(true);
+      setIsDataLoaded(true);
     }
-  }, [user, loadProgress, isLoaded]);
+  }, [user, loadProgress, isDataLoaded]);
 
-  // Charger les données depuis Supabase au démarrage UNIQUEMENT
+  // Charger les données UNIQUEMENT au démarrage
   useEffect(() => {
-    if (user && !isLoaded) {
-      loadUserData();
-    } else if (!user && !isLoaded) {
-      setIsLoaded(true);
+    if (user && !isDataLoaded) {
+      initializeUserData();
+    } else if (!user && !isDataLoaded) {
+      setIsDataLoaded(true);
     }
-  }, [user, isLoaded, loadUserData]);
+  }, [user, isDataLoaded, initializeUserData]);
 
-  // Filter questions based on theme and type (not search)
-  useEffect(() => {
+  // Filtrer les questions basé sur le thème et type sélectionnés
+  const filteredQuestions = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
-      console.log("Aucune question disponible depuis Supabase");
-      setFilteredQuestions([]);
-      return;
+      return [];
     }
 
-    console.log("Filtering with theme:", selectedTheme?.id);
-    console.log("Filtering with type:", selectedType);
-    console.log("Total questions available:", supabaseQuestions.length);
-    
-    // Start with all questions from Supabase
     let filtered = [...supabaseQuestions];
     
     // Filter by theme if selected
     if (selectedTheme && selectedTheme.id !== "random" && selectedTheme.id !== "challenge-30s") {
-      console.log(`Filtering for theme: ${selectedTheme.id}`);
       filtered = filtered.filter(q => q.theme.toLowerCase() === selectedTheme.id.toLowerCase());
-      console.log(`After theme filter, questions count: ${filtered.length}`);
     }
     
     // Special handling for challenge-30s theme
     if (selectedTheme && selectedTheme.id === "challenge-30s") {
-      console.log("Filtering for 30s challenge - simple questions only");
       filtered = filtered.filter(q => q.type === "simple");
-      console.log(`After challenge-30s filter, questions count: ${filtered.length}`);
     }
     
     // Filter by question type if selected (except for challenge-30s which is already filtered to simple)
     if (selectedType !== "all" && selectedTheme?.id !== "challenge-30s") {
       filtered = filtered.filter(q => q.type === selectedType);
-      console.log(`After type filter, questions count: ${filtered.length}`);
     }
     
     // For random theme, just shuffle the questions
@@ -105,33 +93,31 @@ export const useQuiz = () => {
       filtered = filtered.sort(() => Math.random() - 0.5);
     }
     
-    console.log("Final filtered questions count:", filtered.length);
-    setFilteredQuestions(filtered);
-    setCurrentQuestionIndex(0);
+    return filtered;
   }, [selectedTheme, selectedType, supabaseQuestions]);
 
   // Handle search separately with proper accent handling
-  useEffect(() => {
+  const searchResults = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
-      setSearchResults([]);
-      return;
+      return [];
     }
 
     if (searchQuery && searchQuery.trim() !== "") {
       const lowerCaseQuery = searchQuery.toLowerCase().trim();
-      const results = supabaseQuestions.filter(q => 
+      return supabaseQuestions.filter(q => 
         q.question.toLowerCase().includes(lowerCaseQuery)
       );
-      
-      console.log("Search results for:", searchQuery, "found:", results.length);
-      setSearchResults(results);
     } else {
-      setSearchResults([]);
+      return [];
     }
   }, [searchQuery, supabaseQuestions]);
 
+  // Reset current question index when filtered questions change
+  useEffect(() => {
+    setCurrentQuestionIndex(0);
+  }, [filteredQuestions]);
+
   const handleSearch = (query: string) => {
-    console.log("Search query received:", query);
     setSearchQuery(query);
   };
 
@@ -172,13 +158,13 @@ export const useQuiz = () => {
     // Incrémenter le compteur local immédiatement
     setQuestionsCompleted(prev => prev + 1);
     
-    // Sauvegarder dans Supabase si connecté (utilise maintenant les fonctions RPC)
+    // Sauvegarder dans Supabase si connecté
     if (user) {
-      console.log("💾 [QUIZ] Sauvegarde avec RPC dans Supabase...");
+      console.log("💾 [QUIZ] Sauvegarde dans Supabase...");
       const success = await saveScore(score);
       
       if (success) {
-        console.log("✅ [QUIZ] Score sauvegardé avec succès via RPC");
+        console.log("✅ [QUIZ] Score sauvegardé avec succès");
         toast.success("Score sauvegardé !");
         
         // Recharger la progression mise à jour
@@ -192,7 +178,7 @@ export const useQuiz = () => {
           console.error("❌ [QUIZ] Erreur lors du rechargement de la progression:", error);
         }
       } else {
-        console.error("❌ [QUIZ] Échec sauvegarde RPC");
+        console.error("❌ [QUIZ] Échec sauvegarde");
         toast.error("Erreur lors de la sauvegarde");
       }
     }

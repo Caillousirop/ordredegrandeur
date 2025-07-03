@@ -15,11 +15,6 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   const { getCurrentProgress } = useSupabaseProgress();
   
   const [progress, setProgress] = useState<any>(null);
-  const [localStats, setLocalStats] = useState({
-    total_points: 0,
-    user_level: 1,
-    questions_completed: 0
-  });
   const [isProgressLoaded, setIsProgressLoaded] = useState(false);
 
   // Fonction stable pour charger la progression via RPC
@@ -27,7 +22,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     if (!user || isProgressLoaded) return;
     
     try {
-      console.log("📊 [USER_SPACE] Chargement progression via RPC");
+      console.log("📊 [USER_SPACE] Chargement progression unique via RPC");
       const data = await getCurrentProgress();
       if (data) {
         console.log("✅ [USER_SPACE] Progression RPC chargée:", data);
@@ -43,28 +38,19 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
   useEffect(() => {
     if (user && !isProgressLoaded) {
       fetchProgress();
+    } else if (!user) {
+      setIsProgressLoaded(false);
+      setProgress(null);
     }
   }, [user, isProgressLoaded, fetchProgress]);
 
-  useEffect(() => {
-    // Charger le profil depuis le localStorage au montage (fallback)
-    const storedProfile = localStorage.getItem('profile');
-    if (storedProfile) {
-      try {
-        const parsedProfile = JSON.parse(storedProfile);
-        setLocalStats({
-          total_points: parsedProfile.total_points || 0,
-          user_level: parsedProfile.user_level || 1,
-          questions_completed: parsedProfile.questions_completed || 0
-        });
-      } catch (error) {
-        console.error("Erreur lors de la lecture du profil depuis le localStorage", error);
-      }
-    }
-  }, []);
-
-  // Utiliser les données RPC si disponibles, sinon les données locales
-  const displayStats = progress || localStats;
+  // Utiliser les données RPC si disponibles, sinon afficher les valeurs par défaut
+  const displayStats = progress || {
+    total_points: 0,
+    user_level: 1,
+    experience_points: 0,
+    level: 1
+  };
 
   return (
     <div className="flex items-center gap-4">

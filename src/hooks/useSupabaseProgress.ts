@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { QuizScore } from "@/components/types";
@@ -9,7 +9,7 @@ export const useSupabaseProgress = () => {
   const [syncing, setSyncing] = useState(false);
 
   // Charger la progression utilisateur avec la fonction RPC
-  const loadProgress = async () => {
+  const loadProgress = useCallback(async () => {
     if (!user) {
       console.log("❌ [LOAD] Utilisateur non connecté");
       return null;
@@ -66,10 +66,10 @@ export const useSupabaseProgress = () => {
     } finally {
       setSyncing(false);
     }
-  };
+  }, [user]);
 
   // Sauvegarder un score et mettre à jour la progression
-  const saveScore = async (score: QuizScore) => {
+  const saveScore = useCallback(async (score: QuizScore) => {
     if (!user) {
       console.log("❌ [SAVE] Utilisateur non connecté");
       return false;
@@ -158,10 +158,10 @@ export const useSupabaseProgress = () => {
     } finally {
       setSyncing(false);
     }
-  };
+  }, [user]);
 
   // Fonction pour obtenir la progression actuelle
-  const getCurrentProgress = async () => {
+  const getCurrentProgress = useCallback(async () => {
     if (!user) return null;
 
     try {
@@ -177,7 +177,7 @@ export const useSupabaseProgress = () => {
       console.error('❌ [PROGRESS] Erreur inattendue:', error);
       return null;
     }
-  };
+  }, [user]);
 
   return {
     saveScore,
