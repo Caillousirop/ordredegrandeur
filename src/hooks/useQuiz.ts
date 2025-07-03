@@ -63,7 +63,7 @@ export const useQuiz = () => {
     }
   }, [user, isLoaded, loadUserData]);
 
-  // Filter questions based on theme and type (not search)
+  // Filter questions based on theme and type, prioritizing unanswered questions for logged users
   useEffect(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       console.log("Aucune question disponible depuis Supabase");
@@ -74,6 +74,8 @@ export const useQuiz = () => {
     console.log("Filtering with theme:", selectedTheme?.id);
     console.log("Filtering with type:", selectedType);
     console.log("Total questions available:", supabaseQuestions.length);
+    console.log("User connected:", !!user);
+    console.log("User scores:", scores.length);
     
     // Start with all questions from Supabase
     let filtered = [...supabaseQuestions];
@@ -98,15 +100,40 @@ export const useQuiz = () => {
       console.log(`After type filter, questions count: ${filtered.length}`);
     }
     
-    // For random theme, just shuffle the questions
-    if (selectedTheme && selectedTheme.id === "random") {
+    // For logged users, prioritize unanswered questions
+    if (user && scores.length > 0) {
+      console.log("🎯 [QUIZ] Priorisation des questions non répondues pour l'utilisateur connecté");
+      
+      // Get IDs of answered questions
+      const answeredQuestionIds = new Set(scores.map(score => score.questionId));
+      console.log("Questions déjà répondues:", answeredQuestionIds.size);
+      
+      // Separate answered and unanswered questions
+      const unansweredQuestions = filtered.filter(q => !answeredQuestionIds.has(q.id));
+      const answeredQuestions = filtered.filter(q => answeredQuestionIds.has(q.id));
+      
+      console.log("Questions non répondues:", unansweredQuestions.length);
+      console.log("Questions déjà répondues:", answeredQuestions.length);
+      
+      // For random theme, shuffle within each category
+      if (selectedTheme && selectedTheme.id === "random") {
+        unansweredQuestions.sort(() => Math.random() - 0.5);
+        answeredQuestions.sort(() => Math.random() - 0.5);
+      }
+      
+      // Prioritize unanswered questions first, then answered ones
+      filtered = [...unansweredQuestions, ...answeredQuestions];
+      
+      console.log("✅ [QUIZ] Questions réorganisées : non répondues en premier");
+    } else if (selectedTheme && selectedTheme.id === "random") {
+      // For random theme without user login, just shuffle
       filtered = filtered.sort(() => Math.random() - 0.5);
     }
     
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
     setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, supabaseQuestions]);
+  }, [selectedTheme, selectedType, supabaseQuestions, user, scores]);
 
   // Handle search separately with proper accent handling
   useEffect(() => {
