@@ -43,7 +43,7 @@ export const useSupabaseProgress = () => {
           .eq('id', existingScore.id)
           .select();
       } else {
-        // Insérer un nouveau score - version simplifiée avec seulement les colonnes obligatoires
+        // Insérer un nouveau score avec toutes les valeurs requises
         console.log("➕ [SAVE] Insertion d'un nouveau score");
         
         result = await supabase
@@ -51,7 +51,12 @@ export const useSupabaseProgress = () => {
           .insert({
             user_id: user.id,
             question_id: score.questionId,
-            accuracy: score.accuracy
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
           })
           .select();
       }
@@ -73,7 +78,6 @@ export const useSupabaseProgress = () => {
     }
   };
 
-  
   // Charger la progression depuis Supabase - fonction stable avec useCallback
   const loadProgress = async () => {
     if (!user) {

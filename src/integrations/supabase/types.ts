@@ -174,6 +174,7 @@ export type Database = {
           question: string | null
           steps: string | null
           unit: string | null
+          user_id: string | null
         }
         Insert: {
           correct_answer?: string | null
@@ -181,6 +182,7 @@ export type Database = {
           question?: string | null
           steps?: string | null
           unit?: string | null
+          user_id?: string | null
         }
         Update: {
           correct_answer?: string | null
@@ -188,6 +190,7 @@ export type Database = {
           question?: string | null
           steps?: string | null
           unit?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
