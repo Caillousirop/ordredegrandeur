@@ -32,13 +32,34 @@ export const useSupabaseProgress = () => {
 
       console.log("📝 [SAVE] Données à sauvegarder:", scoreData);
 
-      // Utiliser upsert pour éviter les doublons
-      const { data, error } = await supabase
+      // D'abord, vérifier si un score existe déjà pour cette question
+      const { data: existingScore } = await supabase
         .from('user_quiz_scores')
-        .upsert(scoreData, {
-          onConflict: 'user_id,question_id'
-        })
-        .select();
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('question_id', score.questionId)
+        .maybeSingle();
+
+      let result;
+      if (existingScore) {
+        // Mettre à jour le score existant
+        console.log("🔄 [SAVE] Mise à jour du score existant");
+        result = await supabase
+          .from('user_quiz_scores')
+          .update(scoreData)
+          .eq('user_id', user.id)
+          .eq('question_id', score.questionId)
+          .select();
+      } else {
+        // Insérer un nouveau score
+        console.log("➕ [SAVE] Insertion d'un nouveau score");
+        result = await supabase
+          .from('user_quiz_scores')
+          .insert(scoreData)
+          .select();
+      }
+
+      const { data, error } = result;
 
       if (error) {
         console.error('❌ [SAVE] Erreur sauvegarde score:', error);
