@@ -19,19 +19,6 @@ export const useSupabaseProgress = () => {
       console.log("💾 [SAVE] Début sauvegarde du score:", score);
       setSyncing(true);
       
-      const scoreData = {
-        user_id: user.id,
-        question_id: score.questionId,
-        accuracy: score.accuracy,
-        is_multi_step: score.isMultiStep || false,
-        direct_final_answer: score.directFinalAnswer || false,
-        skipped_steps: score.skippedSteps || false,
-        used_hints: score.usedHints || false,
-        hints_revealed_count: score.hintsRevealedCount || 0
-      };
-
-      console.log("📝 [SAVE] Données à sauvegarder:", scoreData);
-
       // D'abord, vérifier si un score existe déjà pour cette question
       const { data: existingScore } = await supabase
         .from('user_quiz_scores')
@@ -42,20 +29,41 @@ export const useSupabaseProgress = () => {
 
       let result;
       if (existingScore) {
-        // Mettre à jour le score existant
+        // Mettre à jour le score existant (sans user_id car il existe déjà)
         console.log("🔄 [SAVE] Mise à jour du score existant");
+        const updateData = {
+          question_id: score.questionId,
+          accuracy: score.accuracy,
+          is_multi_step: score.isMultiStep || false,
+          direct_final_answer: score.directFinalAnswer || false,
+          skipped_steps: score.skippedSteps || false,
+          used_hints: score.usedHints || false,
+          hints_revealed_count: score.hintsRevealedCount || 0
+        };
+        
         result = await supabase
           .from('user_quiz_scores')
-          .update(scoreData)
+          .update(updateData)
           .eq('user_id', user.id)
           .eq('question_id', score.questionId)
           .select();
       } else {
-        // Insérer un nouveau score
+        // Insérer un nouveau score (avec user_id)
         console.log("➕ [SAVE] Insertion d'un nouveau score");
+        const insertData = {
+          user_id: user.id,
+          question_id: score.questionId,
+          accuracy: score.accuracy,
+          is_multi_step: score.isMultiStep || false,
+          direct_final_answer: score.directFinalAnswer || false,
+          skipped_steps: score.skippedSteps || false,
+          used_hints: score.usedHints || false,
+          hints_revealed_count: score.hintsRevealedCount || 0
+        };
+        
         result = await supabase
           .from('user_quiz_scores')
-          .insert(scoreData)
+          .insert(insertData)
           .select();
       }
 
