@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -36,8 +35,12 @@ const Auth = () => {
     try {
       console.log("Demande de réinitialisation pour:", email);
       
+      // Construire l'URL de redirection complète
+      const redirectUrl = `${window.location.origin}/reset-password`;
+      console.log("Redirect URL:", redirectUrl);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: redirectUrl,
       });
 
       if (error) {
@@ -45,6 +48,7 @@ const Auth = () => {
         toast.error(`Erreur lors de l'envoi: ${error.message}`);
       } else {
         toast.success("Email de réinitialisation envoyé ! Vérifiez votre boîte mail.");
+        console.log("Email de réinitialisation envoyé avec succès");
         setResetMode(false);
       }
     } catch (error) {
