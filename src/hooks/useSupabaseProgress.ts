@@ -44,26 +44,21 @@ export const useSupabaseProgress = () => {
           .eq('id', existingScore.id)
           .select();
       } else {
-        // Insérer un nouveau score
+        // Insérer un nouveau score - utiliser seulement les colonnes qui existent
         console.log("➕ [SAVE] Insertion d'un nouveau score");
-        
-        // Préparer les données d'insertion en s'assurant que tous les champs sont présents
-        const insertData = {
-          user_id: user.id,
-          question_id: score.questionId,
-          accuracy: score.accuracy,
-          is_multi_step: score.isMultiStep || false,
-          direct_final_answer: score.directFinalAnswer || false,
-          skipped_steps: score.skippedSteps || false,
-          used_hints: score.usedHints || false,
-          hints_revealed_count: score.hintsRevealedCount || 0
-        };
-        
-        console.log("📝 [SAVE] Données à insérer:", insertData);
         
         result = await supabase
           .from('user_quiz_scores')
-          .insert(insertData)
+          .insert({
+            user_id: user.id,
+            question_id: score.questionId,
+            accuracy: score.accuracy,
+            is_multi_step: score.isMultiStep || false,
+            direct_final_answer: score.directFinalAnswer || false,
+            skipped_steps: score.skippedSteps || false,
+            used_hints: score.usedHints || false,
+            hints_revealed_count: score.hintsRevealedCount || 0
+          })
           .select();
       }
 
