@@ -41,15 +41,11 @@ export const useQuiz = () => {
           if (data?.progress) {
             console.log("✅ [QUIZ] Progression chargée:", data.progress);
             setQuestionsCompleted(data.progress.questions_completed || 0);
-          } else {
-            console.log("ℹ️ [QUIZ] Aucune progression trouvée");
           }
           
           if (data?.scores && data.scores.length > 0) {
             console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
             setScores(data.scores);
-          } else {
-            console.log("ℹ️ [QUIZ] Aucun score trouvé");
           }
         } catch (error) {
           console.error("❌ [QUIZ] Erreur lors du chargement:", error);
@@ -62,7 +58,7 @@ export const useQuiz = () => {
     };
 
     initializeData();
-  }, [user]); // Supprimer loadProgress et isLoaded des dépendances
+  }, [user, loadProgress]);
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {
@@ -156,63 +152,43 @@ export const useQuiz = () => {
   
   const handleScore = async (score: QuizScore) => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
-    console.log("🔑 [QUIZ] Utilisateur connecté:", !!user);
     
-    // Mettre à jour les scores localement immédiatement
+    // Mettre à jour immédiatement les données locales
     setScores(prevScores => {
-      const existingScoreIndex = prevScores.findIndex(s => s.questionId === score.questionId);
-      
-      if (existingScoreIndex >= 0) {
+      const existingIndex = prevScores.findIndex(s => s.questionId === score.questionId);
+      if (existingIndex >= 0) {
         const newScores = [...prevScores];
-        newScores[existingScoreIndex] = score;
-        console.log("🔄 [QUIZ] Score remplacé localement");
-        return newScores;
-      } else {
-        const newScores = [...prevScores, score];
-        console.log("✅ [QUIZ] Nouveau score ajouté localement, total:", newScores.length);
+        newScores[existingIndex] = score;
         return newScores;
       }
+      return [...prevScores, score];
     });
 
-    // Incrémenter le compteur localement
-    setQuestionsCompleted(prev => {
-      const newCount = prev + 1;
-      console.log("📈 [QUIZ] Questions complétées:", prev, "->", newCount);
-      return newCount;
-    });
+    setQuestionsCompleted(prev => prev + 1);
     
     // Sauvegarder dans Supabase si connecté
     if (user) {
-      console.log("💾 [QUIZ] Début sauvegarde Supabase...");
+      console.log("💾 [QUIZ] Sauvegarde dans Supabase...");
       const success = await saveScore(score);
       
       if (success) {
-        console.log("✅ [QUIZ] Score sauvegardé avec succès");
+        console.log("✅ [QUIZ] Sauvegarde réussie - le trigger mettra à jour la progression");
         
-        // Recharger la progression UNE SEULE FOIS après la sauvegarde
-        console.log("🔄 [QUIZ] Rechargement de la progression...");
+        // Attendre que le trigger s'exécute puis recharger la progression
         setTimeout(async () => {
           try {
             const updatedData = await loadProgress();
             if (updatedData?.progress) {
-              console.log("📈 [QUIZ] Progression mise à jour:", updatedData.progress);
+              console.log("📈 [QUIZ] Progression synchronisée:", updatedData.progress);
               setQuestionsCompleted(updatedData.progress.questions_completed || 0);
-            } else {
-              console.warn("⚠️ [QUIZ] Aucune progression reçue après rechargement");
-            }
-            if (updatedData?.scores) {
-              console.log("📋 [QUIZ] Scores synchronisés:", updatedData.scores.length);
-              setScores(updatedData.scores);
             }
           } catch (error) {
-            console.error("❌ [QUIZ] Erreur lors du rechargement:", error);
+            console.error("❌ [QUIZ] Erreur synchronisation:", error);
           }
-        }, 2000); // Attendre 2 secondes pour le trigger
+        }, 3000); // Attendre 3 secondes pour le trigger
       } else {
-        console.error("❌ [QUIZ] Échec de la sauvegarde - les données locales restent");
+        console.error("❌ [QUIZ] Échec sauvegarde");
       }
-    } else {
-      console.log("ℹ️ [QUIZ] Utilisateur non connecté - mise à jour locale uniquement");
     }
     
     // Afficher le toast de feedback
