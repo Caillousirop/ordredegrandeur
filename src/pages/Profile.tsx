@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +21,7 @@ const Profile = () => {
   const [supabaseProgress, setSupabaseProgress] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [progressLoaded, setProgressLoaded] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<string>("");
   
   // Fonction pour charger la progression depuis Supabase
   const loadProgressFromSupabase = useCallback(async () => {
@@ -35,6 +35,7 @@ const Profile = () => {
       if (progress) {
         console.log("✅ [PROFILE] Progression Supabase chargée:", progress);
         setSupabaseProgress(progress);
+        setLastSyncTime(new Date().toLocaleString('fr-FR'));
       } else {
         console.log("⚠️ [PROFILE] Aucune progression trouvée dans Supabase");
       }
@@ -53,6 +54,7 @@ const Profile = () => {
     } else if (!user) {
       setProgressLoaded(false);
       setSupabaseProgress(null);
+      setLastSyncTime("");
     }
   }, [user, progressLoaded, loadProgressFromSupabase]);
 
@@ -243,11 +245,11 @@ const Profile = () => {
           </div>
         )}
 
-        {supabaseProgress && (
+        {supabaseProgress && lastSyncTime && (
           <div className="mb-6">
             <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
               <p className="text-green-800 dark:text-green-200 text-sm">
-                ✅ Données synchronisées avec Supabase - Dernière mise à jour : {new Date(supabaseProgress.last_updated).toLocaleString('fr-FR')}
+                ✅ Données synchronisées avec Supabase - Dernière mise à jour : {lastSyncTime}
               </p>
             </div>
           </div>
