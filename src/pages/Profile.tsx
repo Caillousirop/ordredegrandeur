@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
@@ -22,35 +22,43 @@ const Profile = () => {
     userLevel: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [statsLoaded, setStatsLoaded] = useState(false);
   
-  // Fonction pour recharger les statistiques
-  const reloadStats = async () => {
-    if (user) {
-      setIsLoading(true);
-      console.log("🔄 [PROFILE] Rechargement des statistiques...");
-      try {
-        const stats = await loadSupabaseStats(user.id);
-        setSupabaseStats(stats);
-        console.log("✅ [PROFILE] Statistiques rechargées:", stats);
-      } catch (error) {
-        console.error("❌ [PROFILE] Erreur:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  // Fonction stable pour recharger les statistiques
+  const reloadStats = useCallback(async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    console.log("🔄 [PROFILE] Rechargement des statistiques...");
+    try {
+      const stats = await loadSupabaseStats(user.id);
+      setSupabaseStats(stats);
+      console.log("✅ [PROFILE] Statistiques rechargées:", stats);
+    } catch (error) {
+      console.error("❌ [PROFILE] Erreur:", error);
+    } finally {
+      setIsLoading(false);
+      setStatsLoaded(true);
     }
-  };
-
-  // Charger les statistiques depuis Supabase
-  useEffect(() => {
-    reloadStats();
   }, [user]);
 
-  // Recharger les statistiques quand les scores changent
+  // Charger les statistiques depuis Supabase au montage
   useEffect(() => {
-    if (user && scores.length > 0) {
-      setTimeout(reloadStats, 2000);
+    if (user && !statsLoaded) {
+      reloadStats();
     }
-  }, [user, scores.length]);
+  }, [user, statsLoaded, reloadStats]);
+
+  // Recharger les statistiques quand les scores changent (avec debounce)
+  useEffect(() => {
+    if (user && scores.length > 0 && statsLoaded) {
+      const timeoutId = setTimeout(() => {
+        reloadStats();
+      }, 2000);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [user, scores.length, statsLoaded, reloadStats]);
 
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
   const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
@@ -104,7 +112,6 @@ const Profile = () => {
 
             {/* Preview of rewards system */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Levels preview */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -134,7 +141,6 @@ const Profile = () => {
                 </CardContent>
               </Card>
 
-              {/* Achievements preview */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -165,7 +171,6 @@ const Profile = () => {
               </Card>
             </div>
 
-            {/* Call to action */}
             <Card className="text-center bg-gradient-to-r from-primary/5 to-purple-500/5">
               <CardContent className="pt-6">
                 <h3 className="text-lg font-semibold mb-2">Prêt à commencer votre parcours ?</h3>
@@ -187,7 +192,6 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-accent/10 dark:from-primary/10 dark:to-primary/5">
-      {/* Header with controls that scrolls with content */}
       <div className="flex justify-between items-center w-full px-4 py-3 border-b border-border/30">
         <DarkModeToggle />
         <UserSpace questionsCompleted={questionsCompleted} />
@@ -217,7 +221,6 @@ const Profile = () => {
         
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* User stats card - takes 2 columns on large screens */}
             <div className="lg:col-span-2">
               <StatisticsCard
                 scores={scores}
@@ -228,7 +231,6 @@ const Profile = () => {
               />
             </div>
             
-            {/* Rewards system - takes 1 column */}
             <div className="lg:col-span-1">
               <RewardsSystem 
                 scores={scores} 

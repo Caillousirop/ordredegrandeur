@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,35 +30,38 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
+  // Fonction stable pour charger les données
+  const loadUserData = useCallback(async () => {
+    if (!user || isLoaded) return;
+    
+    console.log("🔄 [QUIZ] Initialisation des données utilisateur...");
+    try {
+      const data = await loadProgress();
+      
+      if (data?.progress) {
+        console.log("✅ [QUIZ] Progression chargée:", data.progress);
+        setQuestionsCompleted(data.progress.questions_completed || 0);
+      }
+      
+      if (data?.scores && data.scores.length > 0) {
+        console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
+        setScores(data.scores);
+      }
+    } catch (error) {
+      console.error("❌ [QUIZ] Erreur lors du chargement:", error);
+    } finally {
+      setIsLoaded(true);
+    }
+  }, [user, loadProgress, isLoaded]);
+
   // Charger les données depuis Supabase au démarrage UNIQUEMENT
   useEffect(() => {
-    const initializeData = async () => {
-      if (user && !isLoaded) {
-        console.log("🔄 [QUIZ] Initialisation des données utilisateur...");
-        try {
-          const data = await loadProgress();
-          
-          if (data?.progress) {
-            console.log("✅ [QUIZ] Progression chargée:", data.progress);
-            setQuestionsCompleted(data.progress.questions_completed || 0);
-          }
-          
-          if (data?.scores && data.scores.length > 0) {
-            console.log("✅ [QUIZ] Scores chargés:", data.scores.length);
-            setScores(data.scores);
-          }
-        } catch (error) {
-          console.error("❌ [QUIZ] Erreur lors du chargement:", error);
-        } finally {
-          setIsLoaded(true);
-        }
-      } else if (!user && !isLoaded) {
-        setIsLoaded(true);
-      }
-    };
-
-    initializeData();
-  }, [user, loadProgress, isLoaded]);
+    if (user && !isLoaded) {
+      loadUserData();
+    } else if (!user && !isLoaded) {
+      setIsLoaded(true);
+    }
+  }, [user, isLoaded, loadUserData]);
 
   // Filter questions based on theme and type (not search)
   useEffect(() => {

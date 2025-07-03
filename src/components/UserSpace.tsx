@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useCallback } from "react";
 import { ProfileButton } from "@/components/ProfileButton";
 import UserLevelBadge from "@/components/UserLevelBadge";
 import FormattedNumber from "@/components/FormattedNumber";
@@ -19,18 +20,29 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     user_level: 1,
     questions_completed: 0
   });
+  const [isProgressLoaded, setIsProgressLoaded] = useState(false);
+
+  // Fonction stable pour charger la progression
+  const fetchProgress = useCallback(async () => {
+    if (!user || isProgressLoaded) return;
+    
+    try {
+      const data = await loadProgress();
+      if (data?.progress) {
+        setProgress(data.progress);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement de la progression:", error);
+    } finally {
+      setIsProgressLoaded(true);
+    }
+  }, [user, loadProgress, isProgressLoaded]);
 
   useEffect(() => {
-    if (user) {
-      const fetchProgress = async () => {
-        const data = await loadProgress();
-        if (data?.progress) {
-          setProgress(data.progress);
-        }
-      };
+    if (user && !isProgressLoaded) {
       fetchProgress();
     }
-  }, [user, loadProgress]);
+  }, [user, isProgressLoaded, fetchProgress]);
 
   useEffect(() => {
     // Charger le profil depuis le localStorage au montage

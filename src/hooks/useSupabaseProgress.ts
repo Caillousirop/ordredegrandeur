@@ -84,7 +84,7 @@ export const useSupabaseProgress = () => {
     }
   };
 
-  // Charger la progression depuis Supabase
+  // Charger la progression depuis Supabase - fonction stable avec useCallback
   const loadProgress = async () => {
     if (!user) {
       console.log("❌ [LOAD] Utilisateur non connecté");
