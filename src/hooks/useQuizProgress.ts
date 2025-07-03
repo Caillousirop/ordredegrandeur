@@ -8,9 +8,9 @@ import { getFeedbackMessage } from "@/utils/feedbackMessages";
 
 interface UseQuizProgressProps {
   scores: QuizScore[];
-  setScores: (scores: QuizScore[]) => void;
+  setScores: React.Dispatch<React.SetStateAction<QuizScore[]>>;
   questionsCompleted: number;
-  setQuestionsCompleted: (count: number) => void;
+  setQuestionsCompleted: React.Dispatch<React.SetStateAction<number>>;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
 }
