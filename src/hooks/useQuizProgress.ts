@@ -13,6 +13,7 @@ interface UseQuizProgressProps {
   setQuestionsCompleted: React.Dispatch<React.SetStateAction<number>>;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
+  currentQuestionId: string | null;
 }
 
 export const useQuizProgress = ({
@@ -21,7 +22,8 @@ export const useQuizProgress = ({
   questionsCompleted,
   setQuestionsCompleted,
   isLoaded,
-  setIsLoaded
+  setIsLoaded,
+  currentQuestionId
 }: UseQuizProgressProps) => {
   const { user } = useAuth();
   const { saveScore, loadProgress } = useSupabaseProgress();
@@ -61,20 +63,34 @@ export const useQuizProgress = ({
 
   const handleScore = async (score: QuizScore) => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
+    console.log("🎯 [QUIZ] Question ID actuelle attendue:", currentQuestionId);
     
-    // Mettre à jour immédiatement les données locales
-    setScores(prevScores => {
-      const existingIndex = prevScores.findIndex(s => s.questionId === score.questionId);
-      if (existingIndex >= 0) {
+    // VÉRIFICATION CRITIQUE : S'assurer que la question ID correspond
+    if (currentQuestionId && score.questionId !== currentQuestionId) {
+      console.error("❌ [QUIZ] ERREUR CRITIQUE: Mismatch entre question affichée et score enregistré!");
+      console.error("Question affichée ID:", currentQuestionId);
+      console.error("Score question ID:", score.questionId);
+      
+      toast.error("Erreur: La réponse ne correspond pas à la question affichée. Veuillez actualiser la page.");
+      return;
+    }
+    
+    // Vérifier si cette question a déjà été répondue
+    const existingScoreIndex = scores.findIndex(s => s.questionId === score.questionId);
+    if (existingScoreIndex >= 0) {
+      console.log("⚠️ [QUIZ] Question déjà répondue, mise à jour du score existant");
+      setScores(prevScores => {
         const newScores = [...prevScores];
-        newScores[existingIndex] = score;
+        newScores[existingScoreIndex] = score;
         return newScores;
-      }
-      return [...prevScores, score];
-    });
-
-    // Incrémenter le compteur local immédiatement
-    setQuestionsCompleted(prev => prev + 1);
+      });
+    } else {
+      console.log("✅ [QUIZ] Nouveau score ajouté");
+      setScores(prevScores => [...prevScores, score]);
+      
+      // Incrémenter le compteur seulement pour les nouvelles questions
+      setQuestionsCompleted(prev => prev + 1);
+    }
     
     // Sauvegarder dans Supabase si connecté
     if (user) {

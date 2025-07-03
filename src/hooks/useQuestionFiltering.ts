@@ -10,6 +10,8 @@ interface UseQuestionFilteringProps {
   scores: QuizScore[];
   setFilteredQuestions: (questions: (Question | MultiStepQuestion)[]) => void;
   setCurrentQuestionIndex: (index: number) => void;
+  setCurrentQuestionId: (id: string | null) => void;
+  syncCurrentQuestionId: () => void;
 }
 
 export const useQuestionFiltering = ({
@@ -19,12 +21,15 @@ export const useQuestionFiltering = ({
   user,
   scores,
   setFilteredQuestions,
-  setCurrentQuestionIndex
+  setCurrentQuestionIndex,
+  setCurrentQuestionId,
+  syncCurrentQuestionId
 }: UseQuestionFilteringProps) => {
   useEffect(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       console.log("Aucune question disponible depuis Supabase");
       setFilteredQuestions([]);
+      setCurrentQuestionId(null);
       return;
     }
 
@@ -89,6 +94,20 @@ export const useQuestionFiltering = ({
     
     console.log("Final filtered questions count:", filtered.length);
     setFilteredQuestions(filtered);
-    setCurrentQuestionIndex(0);
-  }, [selectedTheme, selectedType, supabaseQuestions, user, scores, setFilteredQuestions, setCurrentQuestionIndex]);
+    
+    // Réinitialiser l'index à 0 et définir l'ID de la première question
+    if (filtered.length > 0) {
+      setCurrentQuestionIndex(0);
+      setCurrentQuestionId(filtered[0].id);
+      console.log("🎯 [QUIZ] Question initiale définie - ID:", filtered[0].id);
+    } else {
+      setCurrentQuestionIndex(0);
+      setCurrentQuestionId(null);
+    }
+    
+    // Synchroniser l'ID après un court délai pour s'assurer que tout est bien mis à jour
+    setTimeout(() => {
+      syncCurrentQuestionId();
+    }, 100);
+  }, [selectedTheme, selectedType, supabaseQuestions, user, scores, setFilteredQuestions, setCurrentQuestionIndex, setCurrentQuestionId, syncCurrentQuestionId]);
 };

@@ -29,10 +29,13 @@ export const useQuiz = () => {
     selectedType,
     isLoaded,
     setIsLoaded,
+    currentQuestionId,
+    setCurrentQuestionId,
     handleThemeSelect,
     handleTypeSelect,
     handleNext,
-    startQuiz: baseStartQuiz
+    startQuiz: baseStartQuiz,
+    syncCurrentQuestionId
   } = useQuizState();
 
   const { searchQuery, searchResults, handleSearch } = useQuizSearch({ 
@@ -45,7 +48,8 @@ export const useQuiz = () => {
     questionsCompleted,
     setQuestionsCompleted,
     isLoaded,
-    setIsLoaded
+    setIsLoaded,
+    currentQuestionId
   });
 
   // Use the question filtering hook
@@ -56,8 +60,21 @@ export const useQuiz = () => {
     user,
     scores,
     setFilteredQuestions,
-    setCurrentQuestionIndex
+    setCurrentQuestionIndex,
+    setCurrentQuestionId,
+    syncCurrentQuestionId
   });
+
+  // Synchroniser l'ID de la question courante à chaque changement d'index
+  useEffect(() => {
+    if (filteredQuestions.length > 0 && currentQuestionIndex < filteredQuestions.length) {
+      const currentQuestion = filteredQuestions[currentQuestionIndex];
+      if (currentQuestion && currentQuestion.id !== currentQuestionId) {
+        console.log("🔄 [QUIZ] Mise à jour de l'ID de question courante:", currentQuestion.id);
+        setCurrentQuestionId(currentQuestion.id);
+      }
+    }
+  }, [currentQuestionIndex, filteredQuestions, currentQuestionId, setCurrentQuestionId]);
 
   // Afficher les erreurs de chargement des questions
   useEffect(() => {
@@ -77,6 +94,18 @@ export const useQuiz = () => {
   const currentQuestion = filteredQuestions[currentQuestionIndex];
   const isMultiStep = currentQuestion?.type === "multistep";
 
+  // Log pour le débogage
+  useEffect(() => {
+    if (currentQuestion) {
+      console.log("🎯 [QUIZ] Question courante:", {
+        index: currentQuestionIndex,
+        id: currentQuestion.id,
+        question: currentQuestion.question.substring(0, 50) + "...",
+        currentQuestionId
+      });
+    }
+  }, [currentQuestion, currentQuestionIndex, currentQuestionId]);
+
   return {
     filteredQuestions,
     currentQuestionIndex,
@@ -94,6 +123,7 @@ export const useQuiz = () => {
     questionsLoading,
     questionsError,  
     themes: supabaseThemes,
+    currentQuestionId,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,
