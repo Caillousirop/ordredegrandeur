@@ -8,6 +8,7 @@ import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
 import DailyQuestion from "./DailyQuestion";
 import { QuizTheme, Question, MultiStepQuestion } from "./types";
+import { useQuestionTracking } from "@/hooks/useQuestionTracking";
 
 interface QuizSetupProps {
   onSearch: (query: string) => void;
@@ -40,6 +41,7 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
 }) => {
   // État pour contrôler quelle étape afficher: 'theme' ou 'type-and-start'
   const [currentStep, setCurrentStep] = React.useState<'theme' | 'type-and-start'>('theme');
+  const { viewedQuestions } = useQuestionTracking();
 
   // Réinitialiser à l'étape type quand le thème change
   React.useEffect(() => {
@@ -59,6 +61,10 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
     onSelectTheme(null as any);
     setCurrentStep('theme');
   };
+
+  // Calculer le nombre de questions nouvelles
+  const newQuestionsCount = filteredQuestionsCount;
+  const totalViewedQuestions = viewedQuestions.length;
 
   return (
     <div className="space-y-6">
@@ -81,6 +87,11 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
           <div className="text-center mb-6">
             <h2 className="text-xl font-semibold mb-2">Choisissez un thème</h2>
             <p className="text-muted-foreground">Sélectionnez le domaine qui vous intéresse</p>
+            {totalViewedQuestions > 0 && (
+              <p className="text-sm text-muted-foreground mt-2">
+                {totalViewedQuestions} questions déjà répondues - priorité aux nouvelles questions
+              </p>
+            )}
           </div>
 
           <ThemeSelector 
@@ -135,7 +146,12 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
                     selectedType === 'multistep' ? 'Questions à étapes' : 
                     'Tous les types'
                   }</p>
-                  <p><span className="font-medium">Questions disponibles:</span> {filteredQuestionsCount}</p>
+                  <p><span className="font-medium">Questions disponibles:</span> {newQuestionsCount}</p>
+                  {newQuestionsCount < filteredQuestionsCount && (
+                    <p className="text-green-600 text-xs">
+                      ✨ Priorité aux questions non vues
+                    </p>
+                  )}
                 </div>
               </div>
 

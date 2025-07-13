@@ -7,12 +7,14 @@ import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuizProgressContext } from "@/contexts/QuizProgressContext";
 import { getFeedbackMessage } from "@/utils/feedbackMessages";
+import { useQuestionTracking } from "@/hooks/useQuestionTracking";
 
 export const useQuiz = () => {
   const { user } = useAuth();
   const { saveScore, getCurrentProgress, syncing } = useSupabaseProgress();
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   const { quizProgress, updateQuizProgress } = useQuizProgressContext();
+  const { viewedQuestions, loading: trackingLoading } = useQuestionTracking();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("setup");
@@ -57,7 +59,7 @@ export const useQuiz = () => {
     }
   }, [user, quizProgress, isDataLoaded]);
 
-  // Filtrer les questions basé sur le thème et type sélectionnés
+  // Filtrer les questions basé sur le thème, type sélectionnés ET questions déjà vues
   const filteredQuestions = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       return [];
@@ -80,13 +82,27 @@ export const useQuiz = () => {
       filtered = filtered.filter(q => q.type === selectedType);
     }
     
+    // Filtrer les questions déjà vues (sauf si c'est le thème random ou qu'il n'y a plus de questions non vues)
+    if (!trackingLoading && viewedQuestions.length > 0) {
+      const unviewedQuestions = filtered.filter(q => !viewedQuestions.includes(q.id));
+      
+      // Si il reste des questions non vues, les utiliser en priorité
+      if (unviewedQuestions.length > 0) {
+        filtered = unviewedQuestions;
+        console.log(`🎯 [QUIZ] ${unviewedQuestions.length} questions non vues disponibles sur ${filtered.length + viewedQuestions.length} total`);
+      } else {
+        // Sinon, utiliser toutes les questions (reset du cycle)
+        console.log("🔄 [QUIZ] Toutes les questions ont été vues, reset du cycle");
+      }
+    }
+    
     // For random theme, just shuffle the questions
     if (selectedTheme && selectedTheme.id === "random") {
       filtered = filtered.sort(() => Math.random() - 0.5);
     }
     
     return filtered;
-  }, [selectedTheme, selectedType, supabaseQuestions]);
+  }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading]);
 
   // Handle search separately with proper accent handling
   const searchResults = useMemo(() => {
@@ -238,7 +254,7 @@ export const useQuiz = () => {
     searchQuery,
     searchResults,
     syncing,
-    questionsLoading,
+    questionsLoading: questionsLoading || trackingLoading,
     questionsError,  
     themes: supabaseThemes,
     userProgress,
