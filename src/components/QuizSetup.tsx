@@ -54,6 +54,9 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
   };
 
   const handleBackToThemeSelection = () => {
+    console.log('Retour à la sélection de thème');
+    // Réinitialiser le thème sélectionné
+    onSelectTheme(null as any);
     setCurrentStep('theme');
   };
 
