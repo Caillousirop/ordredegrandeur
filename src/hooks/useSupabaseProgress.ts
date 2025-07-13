@@ -1,97 +1,40 @@
 
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
 import { QuizScore } from "@/components/types";
+import { useAuth } from "@/hooks/useAuth";
 
 export const useSupabaseProgress = () => {
   const { user } = useAuth();
   const [syncing, setSyncing] = useState(false);
 
-  // Charger la progression utilisateur avec la fonction RPC
-  const loadProgress = useCallback(async () => {
-    if (!user) {
-      console.log("❌ [LOAD] Utilisateur non connecté");
-      return null;
-    }
-
-    try {
-      setSyncing(true);
-      console.log("📥 [LOAD] Chargement progression avec RPC pour:", user.id);
-      
-      // Utiliser la fonction RPC get_user_progress
-      const { data: progress, error: progressError } = await supabase
-        .rpc('get_user_progress');
-
-      if (progressError) {
-        console.error('❌ [LOAD] Erreur RPC progression:', progressError);
-        return null;
-      }
-
-      // Charger les scores existants
-      const { data: scores, error: scoresError } = await supabase
-        .from('user_quiz_scores')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (scoresError) {
-        console.error('❌ [LOAD] Erreur scores:', scoresError);
-        return null;
-      }
-
-      // Transformer les scores pour le format attendu
-      const transformedScores = scores?.map(score => ({
-        questionId: score.question_id,
-        accuracy: score.accuracy,
-        isMultiStep: score.is_multi_step,
-        directFinalAnswer: score.direct_final_answer,
-        skippedSteps: score.skipped_steps,
-        usedHints: score.used_hints,
-        hintsRevealedCount: score.hints_revealed_count
-      })) || [];
-
-      console.log("✅ [LOAD] Données chargées avec RPC:", {
-        progress,
-        scoresCount: transformedScores.length
-      });
-
-      return {
-        progress,
-        scores: transformedScores
-      };
-    } catch (error) {
-      console.error('❌ [LOAD] Erreur inattendue:', error);
-      return null;
-    } finally {
-      setSyncing(false);
-    }
-  }, [user]);
-
-  // Sauvegarder un score et mettre à jour la progression
-  const saveScore = useCallback(async (score: QuizScore) => {
+  const saveScore = useCallback(async (score: QuizScore): Promise<boolean> => {
     if (!user) {
       console.log("❌ [SAVE] Utilisateur non connecté");
       return false;
     }
 
+    console.log("💾 [SAVE] Début sauvegarde du score:", score);
+    setSyncing(true);
+
     try {
-      console.log("💾 [SAVE] Début sauvegarde du score:", score);
-      setSyncing(true);
-      
-      // D'abord, sauvegarder le score
-      const { data: existingScore } = await supabase
+      // Vérifier d'abord si un score existe déjà pour cette question
+      const { data: existingScore, error: checkError } = await supabase
         .from('user_quiz_scores')
         .select('id')
         .eq('user_id', user.id)
         .eq('question_id', score.questionId)
         .maybeSingle();
 
-      let scoreResult;
+      if (checkError) {
+        console.error("❌ [SAVE] Erreur vérification score existant:", checkError);
+        return false;
+      }
+
       if (existingScore) {
+        console.log("🔄 [SAVE] Mise à jour d'un score existant");
         // Mettre à jour le score existant
-        console.log("🔄 [SAVE] Mise à jour du score existant");
-        scoreResult = await supabase
+        const { error: updateError } = await supabase
           .from('user_quiz_scores')
           .update({
             accuracy: score.accuracy,
@@ -101,12 +44,16 @@ export const useSupabaseProgress = () => {
             used_hints: score.usedHints || false,
             hints_revealed_count: score.hintsRevealedCount || 0
           })
-          .eq('id', existingScore.id)
-          .select();
+          .eq('id', existingScore.id);
+
+        if (updateError) {
+          console.error("❌ [SAVE] Erreur mise à jour score:", updateError);
+          return false;
+        }
       } else {
-        // Insérer un nouveau score
         console.log("➕ [SAVE] Insertion d'un nouveau score");
-        scoreResult = await supabase
+        // Insérer un nouveau score avec tous les champs requis
+        const { error: insertError } = await supabase
           .from('user_quiz_scores')
           .insert({
             user_id: user.id,
@@ -117,50 +64,25 @@ export const useSupabaseProgress = () => {
             skipped_steps: score.skippedSteps || false,
             used_hints: score.usedHints || false,
             hints_revealed_count: score.hintsRevealedCount || 0
-          })
-          .select();
+          });
+
+        if (insertError) {
+          console.error("❌ [SAVE] Erreur sauvegarde score:", insertError);
+          return false;
+        }
       }
 
-      if (scoreResult.error) {
-        console.error('❌ [SAVE] Erreur sauvegarde score:', scoreResult.error);
-        return false;
-      }
-
-      // Calculer les points d'expérience basés sur la précision
-      let experiencePoints = Math.round(score.accuracy / 10);
-      
-      // Bonus pour les réponses directes sur questions multi-étapes
-      if (score.isMultiStep && score.directFinalAnswer) {
-        experiencePoints += 5;
-      }
-
-      // Mettre à jour la progression avec la fonction RPC
-      const { data: progressData, error: progressError } = await supabase
-        .rpc('update_user_progress', {
-          p_experience_points: experiencePoints
-        });
-
-      if (progressError) {
-        console.error('❌ [SAVE] Erreur RPC progression:', progressError);
-        return false;
-      }
-
-      console.log('✅ [SAVE] Score et progression sauvegardés:', {
-        score: scoreResult.data,
-        progress: progressData,
-        experiencePoints
-      });
-      
+      console.log("✅ [SAVE] Score sauvegardé avec succès");
       return true;
+
     } catch (error) {
-      console.error('❌ [SAVE] Erreur inattendue:', error);
+      console.error("❌ [SAVE] Erreur inattendue:", error);
       return false;
     } finally {
       setSyncing(false);
     }
   }, [user]);
 
-  // Fonction pour obtenir la progression actuelle
   const getCurrentProgress = useCallback(async () => {
     if (!user) return null;
 
@@ -168,20 +90,19 @@ export const useSupabaseProgress = () => {
       const { data, error } = await supabase.rpc('get_user_progress');
       
       if (error) {
-        console.error('❌ [PROGRESS] Erreur RPC:', error);
+        console.error("❌ [PROGRESS] Erreur chargement progression:", error);
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error('❌ [PROGRESS] Erreur inattendue:', error);
+      console.error("❌ [PROGRESS] Erreur inattendue:", error);
       return null;
     }
   }, [user]);
 
   return {
     saveScore,
-    loadProgress,
     getCurrentProgress,
     syncing
   };

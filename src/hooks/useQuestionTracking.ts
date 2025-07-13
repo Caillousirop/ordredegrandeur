@@ -20,43 +20,49 @@ export const useQuestionTracking = () => {
 
   // Charger les questions déjà vues
   const loadViewedQuestions = useCallback(async () => {
-    try {
-      setLoading(true);
-      let query = supabase
-        .from('question_views')
-        .select('question_id');
+    if (loading) {
+      console.log("🔍 [TRACKING] Chargement des questions vues...");
+      try {
+        let query = supabase
+          .from('question_views')
+          .select('question_id');
 
-      if (user) {
-        // Utilisateur connecté : chercher par user_id
-        query = query.eq('user_id', user.id);
-      } else {
-        // Utilisateur non connecté : chercher par session_id
-        const sessionId = getSessionId();
-        query = query.eq('session_id', sessionId).is('user_id', null);
+        if (user) {
+          // Utilisateur connecté : chercher par user_id
+          query = query.eq('user_id', user.id);
+        } else {
+          // Utilisateur non connecté : chercher par session_id
+          const sessionId = getSessionId();
+          query = query.eq('session_id', sessionId).is('user_id', null);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Erreur lors du chargement des questions vues:', error);
+          return;
+        }
+
+        const questionIds = new Set(data?.map(item => item.question_id) || []);
+        setViewedQuestions(questionIds);
+        console.log(`✅ [TRACKING] ${questionIds.size} questions vues chargées`);
+        
+      } catch (error) {
+        console.error('Erreur inattendue lors du chargement des questions vues:', error);
+      } finally {
+        setLoading(false);
       }
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error('Erreur lors du chargement des questions vues:', error);
-        return;
-      }
-
-      const questionIds = new Set(data?.map(item => item.question_id) || []);
-      setViewedQuestions(questionIds);
-      
-    } catch (error) {
-      console.error('Erreur inattendue lors du chargement des questions vues:', error);
-    } finally {
-      setLoading(false);
     }
-  }, [user]);
+  }, [user, loading]);
 
   // Marquer une question comme vue
   const markQuestionAsViewed = useCallback(async (questionId: string, userAnswer?: number, accuracy?: number) => {
+    console.log(`📝 [TRACKING] Marquage question comme vue: ${questionId}`);
+    
     try {
-      // Vérifier si la question n'a pas déjà été vue
+      // Ne pas marquer si déjà vue
       if (viewedQuestions.has(questionId)) {
+        console.log(`⚠️ [TRACKING] Question ${questionId} déjà vue, ignorer`);
         return;
       }
 
@@ -81,8 +87,13 @@ export const useQuestionTracking = () => {
         return;
       }
 
-      // Mettre à jour l'état local
-      setViewedQuestions(prev => new Set([...prev, questionId]));
+      // Mettre à jour l'état local immédiatement
+      setViewedQuestions(prev => {
+        const newSet = new Set(prev);
+        newSet.add(questionId);
+        console.log(`✅ [TRACKING] Question ${questionId} ajoutée aux vues (total: ${newSet.size})`);
+        return newSet;
+      });
       
     } catch (error) {
       console.error('Erreur inattendue lors de l\'enregistrement de la question vue:', error);
@@ -91,6 +102,8 @@ export const useQuestionTracking = () => {
 
   // Mettre à jour une question déjà vue avec la réponse
   const updateQuestionView = useCallback(async (questionId: string, userAnswer: number, accuracy: number) => {
+    console.log(`🔄 [TRACKING] Mise à jour réponse pour question: ${questionId}`);
+    
     try {
       let query = supabase
         .from('question_views')
@@ -111,6 +124,8 @@ export const useQuestionTracking = () => {
 
       if (error) {
         console.error('Erreur lors de la mise à jour de la question vue:', error);
+      } else {
+        console.log(`✅ [TRACKING] Réponse mise à jour pour question ${questionId}`);
       }
       
     } catch (error) {
@@ -152,7 +167,7 @@ export const useQuestionTracking = () => {
     }
   }, [user]);
 
-  // Charger les données au démarrage et quand l'utilisateur change
+  // Charger les données au démarrage
   useEffect(() => {
     loadViewedQuestions();
   }, [loadViewedQuestions]);
