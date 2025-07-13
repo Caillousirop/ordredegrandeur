@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -223,6 +222,8 @@ export const useQuiz = () => {
     } else {
       toast.error(feedback.message);
     }
+
+    // NE PAS appeler handleNext() automatiquement ici - laisser l'utilisateur contrôler
   };
 
   const startQuiz = () => {
