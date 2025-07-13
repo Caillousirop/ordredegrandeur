@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Question, MultiStepQuestion, QuizScore, QuizTheme } from "@/components/types";
 import { toast } from "sonner";
@@ -23,6 +24,7 @@ export const useQuiz = () => {
   const [selectedType, setSelectedType] = useState<"simple" | "multistep" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [userProgress, setUserProgress] = useState<any>(null);
+  const [isProcessingAnswer, setIsProcessingAnswer] = useState(false);
   
   // États pour éviter les re-initialisations
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -119,10 +121,12 @@ export const useQuiz = () => {
     }
   }, [searchQuery, supabaseQuestions]);
 
-  // Reset current question index when filtered questions change
+  // Reset current question index when filtered questions change - SAUF si on traite une réponse
   useEffect(() => {
-    setCurrentQuestionIndex(0);
-  }, [filteredQuestions]);
+    if (!isProcessingAnswer) {
+      setCurrentQuestionIndex(0);
+    }
+  }, [filteredQuestions, isProcessingAnswer]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -150,6 +154,9 @@ export const useQuiz = () => {
   
   const handleScore = async (score: QuizScore) => {
     console.log("🎯 [QUIZ] Nouveau score reçu:", score);
+    
+    // Empêcher les changements automatiques de question pendant le traitement
+    setIsProcessingAnswer(true);
     
     // Mettre à jour immédiatement les données locales
     const newScores = [...scores];
@@ -222,6 +229,9 @@ export const useQuiz = () => {
     } else {
       toast.error(feedback.message);
     }
+
+    // Réactiver les changements automatiques après traitement
+    setIsProcessingAnswer(false);
 
     // NE PAS appeler handleNext() automatiquement ici - laisser l'utilisateur contrôler
   };
