@@ -38,7 +38,12 @@ export const useQuiz = () => {
     themes,
     questionsLoading,
     questionsError
-  } = useQuizData({ selectedTheme, selectedType, searchQuery });
+  } = useQuizData({ 
+    selectedTheme, 
+    selectedType, 
+    searchQuery, 
+    isProcessingAnswer // Passer l'état pour empêcher les changements pendant le traitement
+  });
 
   const {
     handleNext,
@@ -65,12 +70,13 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
-  // Reset current question index when filtered questions change - SAUF si on traite une réponse
+  // Reset current question index when filtered questions change - SEULEMENT si on ne traite pas une réponse
   useEffect(() => {
-    if (!isProcessingAnswer) {
+    if (!isProcessingAnswer && filteredQuestions.length > 0) {
       setCurrentQuestionIndex(0);
+      console.log("🔄 [QUIZ] Reset index question à 0 (filtres changés)");
     }
-  }, [filteredQuestions, isProcessingAnswer, setCurrentQuestionIndex]);
+  }, [filteredQuestions.length, isProcessingAnswer, setCurrentQuestionIndex]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -105,6 +111,7 @@ export const useQuiz = () => {
     questionsError,
     themes,
     userProgress,
+    isProcessingAnswer,
     handleSearch,
     handleThemeSelect,
     handleTypeSelect,

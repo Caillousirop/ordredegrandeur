@@ -8,19 +8,26 @@ interface UseQuizDataProps {
   selectedTheme: QuizTheme | null;
   selectedType: "simple" | "multistep" | "all";
   searchQuery: string;
+  isProcessingAnswer?: boolean;
 }
 
-export const useQuizData = ({ selectedTheme, selectedType, searchQuery }: UseQuizDataProps) => {
+export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProcessingAnswer = false }: UseQuizDataProps) => {
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   const { viewedQuestions, loading: trackingLoading } = useQuestionTracking();
   
   // Filtrer les questions basé sur le thème, type sélectionnés ET questions déjà vues
+  // MAIS SEULEMENT si on n'est pas en train de traiter une réponse
   const filteredQuestions = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       return [];
     }
 
     let filtered = [...supabaseQuestions];
+    
+    // Ne pas recalculer les questions filtrées si on traite une réponse
+    if (isProcessingAnswer) {
+      return filtered;
+    }
     
     // Filter by theme if selected
     if (selectedTheme && selectedTheme.id !== "random" && selectedTheme.id !== "challenge-30s") {
@@ -57,7 +64,7 @@ export const useQuizData = ({ selectedTheme, selectedType, searchQuery }: UseQui
     }
     
     return filtered;
-  }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading]);
+  }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading, isProcessingAnswer]);
 
   // Handle search separately with proper accent handling
   const searchResults = useMemo(() => {
