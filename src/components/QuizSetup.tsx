@@ -38,32 +38,19 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
   questionsError = null,
   themes
 }) => {
-  // État pour contrôler quelle étape afficher
-  const [currentStep, setCurrentStep] = React.useState<'daily' | 'theme' | 'type' | 'start'>('daily');
+  // État pour contrôler quelle étape afficher: 'daily', 'theme', 'type-and-start'
+  const [currentStep, setCurrentStep] = React.useState<'daily' | 'theme' | 'type-and-start'>('daily');
 
-  // Réinitialiser à l'étape thème quand le thème change
+  // Réinitialiser à l'étape type quand le thème change
   React.useEffect(() => {
     if (selectedTheme && currentStep === 'theme') {
-      setCurrentStep('type');
+      setCurrentStep('type-and-start');
     }
   }, [selectedTheme, currentStep]);
 
   const handleThemeSelect = (theme: QuizTheme) => {
     onSelectTheme(theme);
-    setCurrentStep('type');
-  };
-
-  const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
-    onSelectType(type);
-    setCurrentStep('start');
-  };
-
-  const handleBackToTheme = () => {
-    setCurrentStep('theme');
-  };
-
-  const handleBackToType = () => {
-    setCurrentStep('type');
+    setCurrentStep('type-and-start');
   };
 
   const handleStartFromDaily = () => {
@@ -136,14 +123,14 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
         </div>
       )}
 
-      {/* Étape 2: Sélection du type de question */}
-      {currentStep === 'type' && (
+      {/* Étape 2: Sélection du type de question + Commencer */}
+      {currentStep === 'type-and-start' && (
         <div className="space-y-6">
           {/* Navigation */}
           <div className="flex justify-between items-center">
             <Button 
               variant="outline" 
-              onClick={handleBackToTheme}
+              onClick={() => setCurrentStep('theme')}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -158,61 +145,37 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
           </div>
 
           <QuestionTypeSelector 
-            onSelectType={handleTypeSelect}
+            onSelectType={onSelectType}
             selectedType={selectedType}
           />
-        </div>
-      )}
 
-      {/* Étape 3: Commencer le test */}
-      {currentStep === 'start' && (
-        <div className="space-y-6">
-          {/* Navigation */}
-          <div className="flex justify-between items-center">
-            <Button 
-              variant="outline" 
-              onClick={handleBackToType}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Changer le type
-            </Button>
-            
-            <div className="text-sm text-muted-foreground text-right">
-              <div>Thème: <span className="font-medium">{selectedTheme?.name}</span></div>
-              <div>Type: <span className="font-medium">
-                {selectedType === 'simple' ? 'Questions simples' : 
-                 selectedType === 'multistep' ? 'Questions à étapes' : 
-                 'Tous les types'}
-              </span></div>
-            </div>
-          </div>
-
-          {/* Résumé et bouton commencer */}
-          <div className="text-center space-y-4">
-            <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="text-lg font-semibold mb-2">Récapitulatif de votre sélection</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p><span className="font-medium">Thème:</span> {selectedTheme?.name}</p>
-                <p><span className="font-medium">Type:</span> {
-                  selectedType === 'simple' ? 'Questions simples' : 
-                  selectedType === 'multistep' ? 'Questions à étapes' : 
-                  'Tous les types'
-                }</p>
-                <p><span className="font-medium">Questions disponibles:</span> {filteredQuestionsCount}</p>
+          {/* Section commencer le test */}
+          {selectedType && (
+            <div className="text-center space-y-4 mt-8">
+              <div className="bg-muted/30 rounded-lg p-6">
+                <h3 className="text-lg font-semibold mb-2">Récapitulatif de votre sélection</h3>
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p><span className="font-medium">Thème:</span> {selectedTheme?.name}</p>
+                  <p><span className="font-medium">Type:</span> {
+                    selectedType === 'simple' ? 'Questions simples' : 
+                    selectedType === 'multistep' ? 'Questions à étapes' : 
+                    'Tous les types'
+                  }</p>
+                  <p><span className="font-medium">Questions disponibles:</span> {filteredQuestionsCount}</p>
+                </div>
               </div>
-            </div>
 
-            <Button 
-              onClick={onStartQuiz}
-              disabled={filteredQuestionsCount === 0 || questionsLoading}
-              size="lg"
-              className="w-full max-w-md bg-gradient-to-r from-primary to-primary/80 font-semibold text-lg py-6"
-            >
-              {questionsLoading ? "Chargement..." : `Commencer le test`}
-              {!questionsLoading && <ArrowRight className="ml-2" />}
-            </Button>
-          </div>
+              <Button 
+                onClick={onStartQuiz}
+                disabled={filteredQuestionsCount === 0 || questionsLoading}
+                size="lg"
+                className="w-full max-w-md bg-gradient-to-r from-primary to-primary/80 font-semibold text-lg py-6"
+              >
+                {questionsLoading ? "Chargement..." : `Commencer le test`}
+                {!questionsLoading && <ArrowRight className="ml-2" />}
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
