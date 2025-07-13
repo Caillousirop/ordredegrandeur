@@ -15,7 +15,8 @@ interface FinalExplanationProps {
 
 const FinalExplanation: React.FC<FinalExplanationProps> = ({
   finalExplanation,
-  steps
+  steps,
+  onNextQuestion
 }) => {
   return (
     <div className="space-y-6">

@@ -260,6 +260,7 @@ const MultiStepQuizQuestion: React.FC<MultiStepQuizQuestionProps> = ({
                 <FinalExplanation 
                   finalExplanation={question.finalExplanation}
                   steps={question.steps}
+                  onNextQuestion={handleNextQuestion}
                 />
               )}
               

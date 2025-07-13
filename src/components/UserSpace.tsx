@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Settings, BarChart3 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import AuthButton from "./AuthButton";
+import { AuthButton } from "./AuthButton";
 import UserLevelBadge from "./UserLevelBadge";
 import QuestionStats from "./QuestionStats";
 
@@ -37,7 +37,7 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     <div className="flex items-center gap-3">
       <QuestionStats className="w-80" />
       
-      <UserLevelBadge questionsCompleted={questionsCompleted} />
+      <UserLevelBadge level={Math.floor(questionsCompleted / 5) + 1} />
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
