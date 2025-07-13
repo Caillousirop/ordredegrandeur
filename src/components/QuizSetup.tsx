@@ -53,6 +53,10 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
     setCurrentStep('type-and-start');
   };
 
+  const handleBackToThemeSelection = () => {
+    setCurrentStep('theme');
+  };
+
   return (
     <div className="space-y-6">
       {/* Daily Question Section - toujours visible en haut */}
@@ -92,7 +96,7 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
           <div className="flex justify-between items-center">
             <Button 
               variant="outline" 
-              onClick={() => setCurrentStep('theme')}
+              onClick={handleBackToThemeSelection}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
