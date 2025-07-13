@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { formatNumberInput, cleanNumberInput } from "@/utils/numberFormatter";
+import { formatNumberInput, cleanNumberInput, parseNumberInput } from "@/utils/numberFormatter";
 
 interface NumberInputProps {
   value: string;
@@ -41,16 +41,17 @@ const NumberInput: React.FC<NumberInputProps> = ({
     // Nettoyer la valeur (enlever tous les espaces)
     const cleanValue = cleanNumberInput(newValue);
     
-    // Vérifier si c'est un nombre valide (uniquement des chiffres)
-    if (/^\d+$/.test(cleanValue)) {
-      // Formater automatiquement avec des espaces si le nombre a plus de 3 chiffres
-      const formatted = cleanValue.length > 3 ? formatNumberInput(cleanValue) : cleanValue;
+    // Vérifier si c'est un nombre valide (chiffres + une virgule ou un point maximum)
+    const decimalRegex = /^\d*[.,]?\d*$/;
+    
+    if (decimalRegex.test(cleanValue)) {
+      // Formater automatiquement l'affichage
+      const formatted = formatNumberInput(cleanValue);
       setDisplayValue(formatted);
-      onChange(cleanValue); // Envoyer la valeur propre (sans espaces)
-    } else if (/^\d*$/.test(cleanValue)) {
-      // Autoriser les nombres partiels pendant la saisie
-      setDisplayValue(cleanValue);
-      onChange(cleanValue);
+      
+      // Envoyer la valeur propre (sans espaces, avec point décimal)
+      const cleanForBackend = cleanValue.replace(',', '.');
+      onChange(cleanForBackend);
     }
     // Si ce n'est pas numérique, on ignore la saisie
   };

@@ -1,10 +1,10 @@
 
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EyeIcon, CircleCheck } from "lucide-react";
 import AccuracyGauge from "../AccuracyGauge";
+import NumberInput from "../NumberInput";
 
 interface DirectAnswerSectionProps {
   correctAnswer: number;
@@ -33,10 +33,9 @@ const DirectAnswerSection: React.FC<DirectAnswerSectionProps> = ({
       {!finalSubmitted ? (
         <form onSubmit={handleDirectFinalSubmit} className="space-y-4">
           <div className="flex items-center gap-2">
-            <Input 
-              type="text" 
+            <NumberInput 
               value={directFinalAnswer} 
-              onChange={e => setDirectFinalAnswer(e.target.value)} 
+              onChange={setDirectFinalAnswer} 
               placeholder="Réponse" 
               className="flex-grow" 
             />

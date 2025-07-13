@@ -37,6 +37,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Utiliser parseFloat directement sur la valeur nettoyée
     const numAnswer = parseFloat(answer);
     
     if (isNaN(numAnswer)) {

@@ -164,6 +164,7 @@ const MultiStepQuizManager: React.FC<MultiStepQuizManagerProps> = ({
 
   const handleInputChange = (stepIndex: number, value: string) => {
     const newAnswers = [...answers];
+    // Utiliser parseFloat pour convertir la valeur (qui peut contenir des décimaux)
     newAnswers[stepIndex] = parseFloat(value) || null;
     setAnswers(newAnswers);
   };
