@@ -38,8 +38,8 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
   questionsError = null,
   themes
 }) => {
-  // État pour contrôler quelle étape afficher: 'daily', 'theme', 'type-and-start'
-  const [currentStep, setCurrentStep] = React.useState<'daily' | 'theme' | 'type-and-start'>('daily');
+  // État pour contrôler quelle étape afficher: 'theme' ou 'type-and-start'
+  const [currentStep, setCurrentStep] = React.useState<'theme' | 'type-and-start'>('theme');
 
   // Réinitialiser à l'étape type quand le thème change
   React.useEffect(() => {
@@ -53,57 +53,14 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
     setCurrentStep('type-and-start');
   };
 
-  const handleStartFromDaily = () => {
-    setCurrentStep('theme');
-  };
-
   return (
     <div className="space-y-6">
-      {/* Daily Question Section - toujours visible en premier */}
-      {currentStep === 'daily' && (
-        <div className="space-y-6">
-          <DailyQuestion />
-          
-          {/* Bouton pour passer à la sélection de thème */}
-          <div className="flex justify-center">
-            <Button 
-              onClick={handleStartFromDaily}
-              size="lg"
-              className="bg-gradient-to-r from-primary to-primary/80 font-semibold text-lg py-6"
-            >
-              Choisir un quiz personnalisé
-              <ArrowRight className="ml-2" />
-            </Button>
-          </div>
-
-          {/* Search bar en bas */}
-          <div className="mt-8 flex justify-center">
-            <SearchBar onSearch={onSearch} />
-          </div>
-          
-          {/* Search results */}
-          <SearchResults 
-            searchQuery={searchQuery}
-            searchResults={searchResults}
-          />
-        </div>
-      )}
+      {/* Daily Question Section - toujours visible en haut */}
+      <DailyQuestion />
 
       {/* Étape 1: Sélection du thème */}
       {currentStep === 'theme' && (
         <div className="space-y-6">
-          {/* Bouton retour */}
-          <div className="flex justify-start">
-            <Button 
-              variant="outline" 
-              onClick={() => setCurrentStep('daily')}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Retour
-            </Button>
-          </div>
-
           {/* Error message si les questions ont échoué à charger */}
           {questionsError && (
             <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
@@ -113,6 +70,11 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
               </p>
             </div>
           )}
+
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold mb-2">Choisissez un thème</h2>
+            <p className="text-muted-foreground">Sélectionnez le domaine qui vous intéresse</p>
+          </div>
 
           <ThemeSelector 
             onSelectTheme={handleThemeSelect} 
@@ -142,6 +104,11 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
                 Thème sélectionné: <span className="font-medium">{selectedTheme.name}</span>
               </div>
             )}
+          </div>
+
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold mb-2">Type de questions</h2>
+            <p className="text-muted-foreground">Choisissez le format qui vous convient</p>
           </div>
 
           <QuestionTypeSelector 
@@ -178,6 +145,21 @@ const QuizSetup: React.FC<QuizSetupProps> = ({
           )}
         </div>
       )}
+
+      {/* Search bar - toujours visible en bas */}
+      <div className="mt-8 border-t pt-6">
+        <div className="text-center mb-4">
+          <h3 className="text-lg font-medium mb-2">Recherche personnalisée</h3>
+          <p className="text-sm text-muted-foreground">Trouvez des questions spécifiques</p>
+        </div>
+        <SearchBar onSearch={onSearch} />
+      </div>
+      
+      {/* Search results */}
+      <SearchResults 
+        searchQuery={searchQuery}
+        searchResults={searchResults}
+      />
     </div>
   );
 };
