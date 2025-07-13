@@ -121,6 +121,36 @@ export type Database = {
         }
         Relationships: []
       }
+      question_views: {
+        Row: {
+          accuracy: number | null
+          id: string
+          question_id: string
+          session_id: string | null
+          user_answer: number | null
+          user_id: string | null
+          viewed_at: string
+        }
+        Insert: {
+          accuracy?: number | null
+          id?: string
+          question_id: string
+          session_id?: string | null
+          user_answer?: number | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          accuracy?: number | null
+          id?: string
+          question_id?: string
+          session_id?: string | null
+          user_answer?: number | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Relationships: []
+      }
       quiz_questions: {
         Row: {
           correct_answer: number
@@ -243,6 +273,7 @@ export type Database = {
           correct_percentage: number
           id: string
           last_updated: string
+          progress_data: Json | null
           questions_completed: number
           total_points: number
           user_id: string
@@ -252,6 +283,7 @@ export type Database = {
           correct_percentage?: number
           id?: string
           last_updated?: string
+          progress_data?: Json | null
           questions_completed?: number
           total_points?: number
           user_id: string
@@ -261,6 +293,7 @@ export type Database = {
           correct_percentage?: number
           id?: string
           last_updated?: string
+          progress_data?: Json | null
           questions_completed?: number
           total_points?: number
           user_id?: string
@@ -333,6 +366,7 @@ export type Database = {
           correct_percentage: number
           id: string
           last_updated: string
+          progress_data: Json | null
           questions_completed: number
           total_points: number
           user_id: string
@@ -357,6 +391,7 @@ export type Database = {
           correct_percentage: number
           id: string
           last_updated: string
+          progress_data: Json | null
           questions_completed: number
           total_points: number
           user_id: string

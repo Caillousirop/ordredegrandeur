@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AccuracyGauge from "./AccuracyGauge";
@@ -9,6 +9,7 @@ import { EyeIcon, Home } from "lucide-react";
 import { calculateAccuracy } from "./quiz/CalculateAccuracy";
 import { formatUnitDisplay } from "@/utils/unitDisplay";
 import NumberInput from "./NumberInput";
+import { useQuestionTracking } from "@/hooks/useQuestionTracking";
 
 interface QuizQuestionProps {
   question: Question;
@@ -27,12 +28,21 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [submitted, setSubmitted] = useState(false);
   const [userAnswer, setUserAnswer] = useState<number>(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  
+  const { markQuestionAsViewed, updateQuestionView, isQuestionViewed } = useQuestionTracking();
 
   // Find theme color
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
 
   const unitDisplay = formatUnitDisplay(question.unit);
+
+  // Marquer la question comme vue quand elle est affichée
+  useEffect(() => {
+    if (question && !isQuestionViewed(question.id)) {
+      markQuestionAsViewed(question.id);
+    }
+  }, [question, markQuestionAsViewed, isQuestionViewed]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,10 +58,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     setUserAnswer(numAnswer);
     setSubmitted(true);
 
+    // Use the centralized accuracy calculation
+    const calculatedAccuracy = calculateAccuracy(numAnswer, question.correctAnswer);
+
+    // Mettre à jour la vue de la question avec la réponse
+    updateQuestionView(question.id, numAnswer, calculatedAccuracy);
+
     if (onScore) {
-      // Use the centralized accuracy calculation
-      const calculatedAccuracy = calculateAccuracy(numAnswer, question.correctAnswer);
-      
       onScore({
         questionId: question.id,
         accuracy: calculatedAccuracy,
