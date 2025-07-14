@@ -90,7 +90,17 @@ export const useQuiz = () => {
     setSelectedType(type);
   };
 
-  const currentQuestion = filteredQuestions[currentQuestionIndex];
+  // Stable current question - ne change pas pendant le traitement d'une réponse
+  const [stableCurrentQuestion, setStableCurrentQuestion] = useState(null);
+  
+  // Mettre à jour la question stable seulement quand on ne traite pas une réponse
+  useEffect(() => {
+    if (!isProcessingAnswer && filteredQuestions[currentQuestionIndex]) {
+      setStableCurrentQuestion(filteredQuestions[currentQuestionIndex]);
+    }
+  }, [filteredQuestions, currentQuestionIndex, isProcessingAnswer]);
+  
+  const currentQuestion = stableCurrentQuestion || filteredQuestions[currentQuestionIndex];
   const isMultiStep = currentQuestion?.type === "multistep";
 
   return {
