@@ -1,5 +1,5 @@
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Question, MultiStepQuestion, QuizTheme } from "@/components/types";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuestionTracking } from "@/hooks/useQuestionTracking";
@@ -15,19 +15,17 @@ export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProces
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   const { viewedQuestions, loading: trackingLoading } = useQuestionTracking();
   
-  // Filtrer les questions basé sur le thème, type sélectionnés ET questions déjà vues
-  // MAIS SEULEMENT si on n'est pas en train de traiter une réponse
-  const filteredQuestions = useMemo(() => {
+  // Garder une référence stable des questions filtrées pendant le traitement
+  const [stableQuestions, setStableQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
+  const lastValidQuestions = useRef<(Question | MultiStepQuestion)[]>([]);
+  
+  // Calculer les questions filtrées
+  const computedQuestions = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       return [];
     }
 
     let filtered = [...supabaseQuestions];
-    
-    // Ne pas recalculer les questions filtrées si on traite une réponse
-    if (isProcessingAnswer) {
-      return filtered;
-    }
     
     // Filter by theme if selected
     if (selectedTheme && selectedTheme.id !== "random" && selectedTheme.id !== "challenge-30s") {
@@ -64,7 +62,19 @@ export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProces
     }
     
     return filtered;
-  }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading, isProcessingAnswer]);
+  }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading]);
+
+  // Mettre à jour les questions stables seulement quand on ne traite pas une réponse
+  useEffect(() => {
+    if (!isProcessingAnswer && computedQuestions.length > 0) {
+      setStableQuestions(computedQuestions);
+      lastValidQuestions.current = computedQuestions;
+      console.log("📝 [QUIZ] Questions mises à jour:", computedQuestions.length);
+    }
+  }, [computedQuestions, isProcessingAnswer]);
+
+  // Utiliser les questions stables pendant le traitement, sinon les questions calculées
+  const filteredQuestions = isProcessingAnswer ? stableQuestions : computedQuestions;
 
   // Handle search separately with proper accent handling
   const searchResults = useMemo(() => {
