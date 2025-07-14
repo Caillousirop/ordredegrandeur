@@ -70,13 +70,16 @@ export const useQuiz = () => {
     }
   }, [questionsError]);
 
-  // Reset current question index when filtered questions change - SEULEMENT si on ne traite pas une réponse
+  const currentQuestion = filteredQuestions[currentQuestionIndex];
+  const isMultiStep = currentQuestion?.type === "multistep";
+
+  // Reset current question index when filtered questions change - SEULEMENT si on ne traite pas une réponse ET si on a pas de question courante
   useEffect(() => {
-    if (!isProcessingAnswer && filteredQuestions.length > 0) {
+    if (!isProcessingAnswer && filteredQuestions.length > 0 && !currentQuestion) {
       setCurrentQuestionIndex(0);
-      console.log("🔄 [QUIZ] Reset index question à 0 (filtres changés)");
+      console.log("🔄 [QUIZ] Reset index question à 0 (pas de question courante)");
     }
-  }, [filteredQuestions.length, isProcessingAnswer, setCurrentQuestionIndex]);
+  }, [filteredQuestions.length, isProcessingAnswer, setCurrentQuestionIndex, currentQuestion]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -89,19 +92,6 @@ export const useQuiz = () => {
   const handleTypeSelect = (type: "simple" | "multistep" | "all") => {
     setSelectedType(type);
   };
-
-  // Stable current question - ne change pas pendant le traitement d'une réponse
-  const [stableCurrentQuestion, setStableCurrentQuestion] = useState(null);
-  
-  // Mettre à jour la question stable seulement quand on ne traite pas une réponse
-  useEffect(() => {
-    if (!isProcessingAnswer && filteredQuestions[currentQuestionIndex]) {
-      setStableCurrentQuestion(filteredQuestions[currentQuestionIndex]);
-    }
-  }, [filteredQuestions, currentQuestionIndex, isProcessingAnswer]);
-  
-  const currentQuestion = stableCurrentQuestion || filteredQuestions[currentQuestionIndex];
-  const isMultiStep = currentQuestion?.type === "multistep";
 
   return {
     filteredQuestions,
