@@ -59,37 +59,62 @@ export const loadSupabaseStats = async (userId: string): Promise<ProfileStats | 
   try {
     console.log("📊 [STATS] Chargement des statistiques pour:", userId);
     
-    // Charger la progression globale
-    const { data: progress, error: progressError } = await supabase
+    // Utiliser la fonction de calcul pour obtenir les stats en temps réel
+    const { data: calculatedStats, error: calcError } = await supabase
+      .rpc('calculate_user_progress', { user_uuid: userId });
+
+    if (calcError) {
+      console.error('❌ [STATS] Erreur lors du calcul des statistiques:', calcError);
+      
+      // Fallback: essayer de charger depuis user_progress
+      const { data: progress, error: progressError } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (progressError || !progress) {
+        console.log("ℹ️ [STATS] Aucune progression trouvée");
+        return null;
+      }
+
+      return {
+        correctPercentage: progress.correct_percentage,
+        totalPoints: progress.total_points,
+        userLevel: progress.user_level
+      };
+    }
+
+    // Les statistiques calculées sont dans un array, prendre le premier élément
+    const stats = calculatedStats && calculatedStats.length > 0 ? calculatedStats[0] : null;
+    
+    if (!stats) {
+      console.log("ℹ️ [STATS] Aucune statistique calculée");
+      return null;
+    }
+
+    console.log("✅ [STATS] Statistiques calculées:", stats);
+    
+    // Mettre à jour user_progress avec les nouvelles stats (sans trigger pour éviter les boucles)
+    const { error: updateError } = await supabase
       .from('user_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .maybeSingle();
-
-    if (progressError && progressError.code !== 'PGRST116') {
-      console.error('❌ [STATS] Erreur lors du chargement de la progression:', progressError);
-      return null;
+      .upsert({
+        user_id: userId,
+        total_points: stats.total_points,
+        questions_completed: stats.questions_completed,
+        user_level: stats.user_level,
+        correct_percentage: stats.correct_percentage,
+        last_updated: new Date().toISOString()
+      });
+      
+    if (updateError) {
+      console.error('⚠️ [STATS] Erreur mise à jour user_progress:', updateError);
     }
 
-    // Vérifier que la progression existe et contient les données nécessaires
-    if (!progress) {
-      console.log("ℹ️ [STATS] Aucune progression trouvée");
-      return null;
-    }
-
-    // Vérifier que toutes les propriétés nécessaires existent
-    if (typeof progress.correct_percentage !== 'number' || 
-        typeof progress.total_points !== 'number' || 
-        typeof progress.user_level !== 'number') {
-      console.log("⚠️ [STATS] Progression incomplète:", progress);
-      return null;
-    }
-
-    console.log("✅ [STATS] Progression trouvée:", progress);
     return {
-      correctPercentage: progress.correct_percentage,
-      totalPoints: progress.total_points,
-      userLevel: progress.user_level
+      correctPercentage: stats.correct_percentage,
+      totalPoints: stats.total_points,
+      userLevel: stats.user_level
     };
   } catch (error) {
     console.error('❌ [STATS] Erreur lors du chargement des statistiques:', error);

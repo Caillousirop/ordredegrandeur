@@ -356,6 +356,15 @@ export type Database = {
       }
     }
     Functions: {
+      calculate_user_progress: {
+        Args: { user_uuid: string }
+        Returns: {
+          total_points: number
+          questions_completed: number
+          user_level: number
+          correct_percentage: number
+        }[]
+      }
       get_quiz_progress: {
         Args: Record<PropertyKey, never>
         Returns: Json
