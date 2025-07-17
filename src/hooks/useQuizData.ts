@@ -1,5 +1,4 @@
-
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo } from "react";
 import { Question, MultiStepQuestion, QuizTheme } from "@/components/types";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuestionTracking } from "@/hooks/useQuestionTracking";
@@ -8,19 +7,14 @@ interface UseQuizDataProps {
   selectedTheme: QuizTheme | null;
   selectedType: "simple" | "multistep" | "all";
   searchQuery: string;
-  isProcessingAnswer?: boolean;
 }
 
-export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProcessingAnswer = false }: UseQuizDataProps) => {
+export const useQuizData = ({ selectedTheme, selectedType, searchQuery }: UseQuizDataProps) => {
   const { questions: supabaseQuestions, themes: supabaseThemes, loading: questionsLoading, error: questionsError } = useSupabaseQuestions();
   const { viewedQuestions, loading: trackingLoading } = useQuestionTracking();
   
-  // Garder une référence stable des questions filtrées pendant le traitement
-  const [stableQuestions, setStableQuestions] = useState<(Question | MultiStepQuestion)[]>([]);
-  const lastValidQuestions = useRef<(Question | MultiStepQuestion)[]>([]);
-  
   // Calculer les questions filtrées
-  const computedQuestions = useMemo(() => {
+  const filteredQuestions = useMemo(() => {
     if (!supabaseQuestions || supabaseQuestions.length === 0) {
       return [];
     }
@@ -42,17 +36,17 @@ export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProces
       filtered = filtered.filter(q => q.type === selectedType);
     }
     
-    // Filtrer les questions déjà vues (sauf si c'est le thème random ou qu'il n'y a plus de questions non vues)
+    // Filtrer les questions déjà vues
     if (!trackingLoading && viewedQuestions.length > 0) {
       const unviewedQuestions = filtered.filter(q => !viewedQuestions.includes(q.id));
       
       // Si il reste des questions non vues, les utiliser en priorité
       if (unviewedQuestions.length > 0) {
         filtered = unviewedQuestions;
-        console.log(`🎯 [QUIZ] ${unviewedQuestions.length} questions non vues disponibles sur ${filtered.length + viewedQuestions.length} total`);
+        console.log(`🎯 [QUIZ] ${unviewedQuestions.length} questions non vues disponibles`);
       } else {
         // Sinon, utiliser toutes les questions (reset du cycle)
-        console.log("🔄 [QUIZ] Toutes les questions ont été vues, reset du cycle");
+        console.log("🔄 [QUIZ] Toutes les questions vues, reset du cycle");
       }
     }
     
@@ -63,18 +57,6 @@ export const useQuizData = ({ selectedTheme, selectedType, searchQuery, isProces
     
     return filtered;
   }, [selectedTheme, selectedType, supabaseQuestions, viewedQuestions, trackingLoading]);
-
-  // Mettre à jour les questions stables seulement quand on ne traite pas une réponse
-  useEffect(() => {
-    if (!isProcessingAnswer && computedQuestions.length > 0) {
-      setStableQuestions(computedQuestions);
-      lastValidQuestions.current = computedQuestions;
-      console.log("📝 [QUIZ] Questions mises à jour:", computedQuestions.length);
-    }
-  }, [computedQuestions, isProcessingAnswer]);
-
-  // Utiliser les questions stables pendant le traitement, sinon les questions calculées
-  const filteredQuestions = isProcessingAnswer ? stableQuestions : computedQuestions;
 
   // Handle search separately with proper accent handling
   const searchResults = useMemo(() => {

@@ -41,8 +41,7 @@ export const useQuiz = () => {
   } = useQuizData({ 
     selectedTheme, 
     selectedType, 
-    searchQuery, 
-    isProcessingAnswer // Passer l'état pour empêcher les changements pendant le traitement
+    searchQuery
   });
 
   const {
