@@ -30,15 +30,17 @@ export const ProfileButton: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
-            <BarChart3 size={16} />
-            Mes résultats
-          </Link>
-        </DropdownMenuItem>
+        {user && (
+          <DropdownMenuItem asChild>
+            <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+              <BarChart3 size={16} />
+              Mon profil
+            </Link>
+          </DropdownMenuItem>
+        )}
         {!user && (
           <div className="px-2 py-1.5 text-xs text-muted-foreground">
-            Connectez-vous pour sauvegarder votre progression
+            Connectez-vous pour accéder à votre profil
           </div>
         )}
         <DropdownMenuSeparator />

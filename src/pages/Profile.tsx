@@ -11,7 +11,8 @@ import UserSpace from "@/components/UserSpace";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { LogIn, Trophy, Target, Zap, Crown, RefreshCw } from "lucide-react";
+import { LogIn, Trophy, Target, Zap, Crown, RefreshCw, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 
 const Profile = () => {
   const { scores, questionsCompleted } = useQuiz();
@@ -23,9 +24,10 @@ const Profile = () => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [statsLoaded, setStatsLoaded] = useState(false);
+  const [lastUpdateTime, setLastUpdateTime] = useState<string | null>(null);
   
-  // Fonction stable pour recharger les statistiques
-  const reloadStats = useCallback(async () => {
+  // Fonction stable pour recharger les statistiques avec feedback
+  const reloadStats = useCallback(async (showToast = false) => {
     if (!user) return;
     
     setIsLoading(true);
@@ -33,14 +35,27 @@ const Profile = () => {
     try {
       const stats = await loadSupabaseStats(user.id);
       setSupabaseStats(stats);
+      setLastUpdateTime(new Date().toLocaleTimeString());
       console.log("✅ [PROFILE] Statistiques rechargées:", stats);
+      
+      if (showToast) {
+        toast.success("📊 Statistiques mises à jour !");
+      }
     } catch (error) {
       console.error("❌ [PROFILE] Erreur:", error);
+      if (showToast) {
+        toast.error("Erreur lors de la mise à jour");
+      }
     } finally {
       setIsLoading(false);
       setStatsLoaded(true);
     }
   }, [user]);
+
+  // Wrapper pour le bouton de rechargement
+  const handleRefreshClick = () => {
+    reloadStats(true);
+  };
 
   // Charger les statistiques depuis Supabase au montage
   useEffect(() => {
@@ -49,12 +64,13 @@ const Profile = () => {
     }
   }, [user, statsLoaded, reloadStats]);
 
-  // Recharger les statistiques quand les scores changent (avec debounce)
+  // Recharger les statistiques quand les scores changent (plus réactif)
   useEffect(() => {
     if (user && scores.length > 0 && statsLoaded) {
       const timeoutId = setTimeout(() => {
+        console.log("🔄 [PROFILE] Mise à jour automatique des stats après nouvelle réponse");
         reloadStats();
-      }, 2000);
+      }, 500); // Réduit de 2000ms à 500ms pour une mise à jour plus rapide
       
       return () => clearTimeout(timeoutId);
     }
@@ -203,13 +219,19 @@ const Profile = () => {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              onClick={reloadStats}
+              onClick={handleRefreshClick}
               disabled={isLoading}
               className="flex items-center gap-2"
             >
               <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               Actualiser
             </Button>
+            {lastUpdateTime && (
+              <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <TrendingUp className="h-3 w-3" />
+                Mis à jour: {lastUpdateTime}
+              </div>
+            )}
           </div>
         </div>
         
