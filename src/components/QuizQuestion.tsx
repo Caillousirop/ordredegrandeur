@@ -54,19 +54,23 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       toast.error("Veuillez entrer un nombre valide.");
       return;
     }
+
+    // Capturer la question courante AVANT de marquer comme soumis
+    // pour éviter que la question change pendant le traitement
+    const currentQuestion = question;
     
     setUserAnswer(numAnswer);
     setSubmitted(true);
 
-    // Use the centralized accuracy calculation
-    const calculatedAccuracy = calculateAccuracy(numAnswer, question.correctAnswer);
+    // Use the centralized accuracy calculation avec la question capturée
+    const calculatedAccuracy = calculateAccuracy(numAnswer, currentQuestion.correctAnswer);
 
     // Mettre à jour la vue de la question avec la réponse
-    updateQuestionView(question.id, numAnswer, calculatedAccuracy);
+    updateQuestionView(currentQuestion.id, numAnswer, calculatedAccuracy);
 
     if (onScore) {
       onScore({
-        questionId: question.id,
+        questionId: currentQuestion.id,
         accuracy: calculatedAccuracy,
         isMultiStep: false,
         directFinalAnswer: false

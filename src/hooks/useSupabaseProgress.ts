@@ -88,14 +88,16 @@ export const useSupabaseProgress = () => {
     if (!user) return null;
 
     try {
-      const { data, error } = await supabase.rpc('get_user_progress');
+      const { data, error } = await supabase.rpc('calculate_user_progress', {
+        user_uuid: user.id
+      });
       
       if (error) {
         console.error("❌ [PROGRESS] Erreur chargement progression:", error);
         return null;
       }
 
-      return data;
+      return data[0]; // La fonction retourne un tableau avec un élément
     } catch (error) {
       console.error("❌ [PROGRESS] Erreur inattendue:", error);
       return null;
