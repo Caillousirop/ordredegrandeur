@@ -29,20 +29,34 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [userAnswer, setUserAnswer] = useState<number>(0);
   const [showAnswer, setShowAnswer] = useState(false);
   
+  // Capturer la question au moment de l'affichage pour éviter qu'elle change pendant le traitement
+  const [capturedQuestion, setCapturedQuestion] = useState<Question>(question);
+  
   const { markQuestionAsViewed, updateQuestionView, isQuestionViewed } = useQuestionTracking();
 
-  // Find theme color
+  // Find theme color - utiliser la question prop pour le thème (ne change pas pendant le traitement)
   const theme = themes.find(t => t.id === question.theme);
   const themeColor = theme?.color || "from-primary to-primary/70";
 
-  const unitDisplay = formatUnitDisplay(question.unit);
+  const unitDisplay = formatUnitDisplay(capturedQuestion.unit);
+
+  // Capturer une nouvelle question seulement si on n'a pas encore soumis
+  useEffect(() => {
+    if (!submitted && question.id !== capturedQuestion.id) {
+      setCapturedQuestion(question);
+      // Reset l'état quand on change de question
+      setAnswer("");
+      setUserAnswer(0);
+      setShowAnswer(false);
+    }
+  }, [question, submitted, capturedQuestion.id]);
 
   // Marquer la question comme vue quand elle est affichée
   useEffect(() => {
-    if (question && !isQuestionViewed(question.id)) {
-      markQuestionAsViewed(question.id);
+    if (capturedQuestion && !isQuestionViewed(capturedQuestion.id)) {
+      markQuestionAsViewed(capturedQuestion.id);
     }
-  }, [question, markQuestionAsViewed, isQuestionViewed]);
+  }, [capturedQuestion, markQuestionAsViewed, isQuestionViewed]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,22 +69,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       return;
     }
 
-    // Capturer la question courante AVANT de marquer comme soumis
-    // pour éviter que la question change pendant le traitement
-    const currentQuestion = question;
-    
+    // Utiliser la question capturée pour éviter qu'elle change pendant le traitement
     setUserAnswer(numAnswer);
     setSubmitted(true);
 
     // Use the centralized accuracy calculation avec la question capturée
-    const calculatedAccuracy = calculateAccuracy(numAnswer, currentQuestion.correctAnswer);
+    const calculatedAccuracy = calculateAccuracy(numAnswer, capturedQuestion.correctAnswer);
 
     // Mettre à jour la vue de la question avec la réponse
-    updateQuestionView(currentQuestion.id, numAnswer, calculatedAccuracy);
+    updateQuestionView(capturedQuestion.id, numAnswer, calculatedAccuracy);
 
     if (onScore) {
       onScore({
-        questionId: currentQuestion.id,
+        questionId: capturedQuestion.id,
         accuracy: calculatedAccuracy,
         isMultiStep: false,
         directFinalAnswer: false
@@ -113,7 +124,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <Card className="border-[1px] border-secondary/50 shadow-sm">
         <CardHeader className="border-b border-border/50">
           <CardTitle className={`text-xl bg-clip-text text-transparent bg-gradient-to-r ${themeColor}`}>
-            {question.question}
+            {capturedQuestion.question}
             {unitDisplay && (
               <div className="text-sm font-normal text-muted-foreground mt-1">
                 {unitDisplay}
@@ -140,7 +151,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 <div className="space-y-4">
                   <AccuracyGauge 
                     userAnswer={userAnswer} 
-                    correctAnswer={question.correctAnswer} 
+                    correctAnswer={capturedQuestion.correctAnswer} 
                     answerSubmitted={submitted}
                   />
                   <div className="flex justify-center">
@@ -158,17 +169,17 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                 <div className="space-y-4">
                   <AccuracyGauge 
                     userAnswer={userAnswer} 
-                    correctAnswer={question.correctAnswer} 
+                    correctAnswer={capturedQuestion.correctAnswer} 
                     answerSubmitted={submitted} 
                   />
                   
-                  {question.explanation && (
+                  {capturedQuestion.explanation && (
                     <div className="mt-4 p-3 rounded-md border border-primary/20 text-sm">
                       <p className="font-medium">Explication:</p>
-                      <p>{question.explanation}</p>
-                      {question.unit && (
+                      <p>{capturedQuestion.explanation}</p>
+                      {capturedQuestion.unit && (
                         <p className="text-xs text-muted-foreground mt-2">
-                          Réponse: {question.correctAnswer.toLocaleString()} {question.unit}
+                          Réponse: {capturedQuestion.correctAnswer.toLocaleString()} {capturedQuestion.unit}
                         </p>
                       )}
                     </div>
