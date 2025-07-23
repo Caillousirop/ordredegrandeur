@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Settings, BarChart3 } from "lucide-react";
+import { User, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthButton } from "./AuthButton";
 import UserLevelBadge from "./UserLevelBadge";
@@ -23,10 +23,6 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
     window.location.href = "/profile";
   };
 
-  const handleStatsClick = () => {
-    // TODO: Implement stats page navigation
-    console.log("Navigate to stats page");
-  };
 
   const handleSettingsClick = () => {
     // TODO: Implement settings page navigation
@@ -52,10 +48,6 @@ const UserSpace: React.FC<UserSpaceProps> = ({ questionsCompleted }) => {
           <DropdownMenuItem onClick={handleProfileClick} className="flex items-center gap-2">
             <User className="h-4 w-4" />
             Mon profil
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleStatsClick} className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Statistiques
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleSettingsClick} className="flex items-center gap-2">
             <Settings className="h-4 w-4" />

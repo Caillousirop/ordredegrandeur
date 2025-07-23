@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { LogIn, Trophy, Target, Zap, Crown, RefreshCw, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile = () => {
   const { scores, questionsCompleted } = useQuiz();
@@ -64,17 +65,37 @@ const Profile = () => {
     }
   }, [user, statsLoaded, reloadStats]);
 
-  // Recharger les statistiques quand les scores changent (plus réactif)
+  // Écouter les changements en temps réel sur user_quiz_scores pour ce user
   useEffect(() => {
-    if (user && scores.length > 0 && statsLoaded) {
-      const timeoutId = setTimeout(() => {
-        console.log("🔄 [PROFILE] Mise à jour automatique des stats après nouvelle réponse");
-        reloadStats();
-      }, 500); // Réduit de 2000ms à 500ms pour une mise à jour plus rapide
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [user, scores.length, statsLoaded, reloadStats]);
+    if (!user || !statsLoaded) return;
+
+    console.log("🔗 [PROFILE] Configuration du listener temps réel");
+    
+    const channel = supabase
+      .channel('user-quiz-scores-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // INSERT, UPDATE, DELETE
+          schema: 'public',
+          table: 'user_quiz_scores',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log("🔄 [PROFILE] Changement détecté dans user_quiz_scores:", payload);
+          // Petit délai pour laisser la transaction se terminer
+          setTimeout(() => {
+            reloadStats();
+          }, 200);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log("🔇 [PROFILE] Suppression du listener temps réel");
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, statsLoaded, reloadStats]);
 
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
   const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
