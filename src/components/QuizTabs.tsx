@@ -49,6 +49,8 @@ const QuizTabs: React.FC<QuizTabsProps> = ({
   startQuiz
 }) => {
   const handleGoHome = () => {
+    // Réinitialiser la sélection et revenir au choix du thème
+    handleThemeSelect(null);
     setActiveTab("setup");
   };
 

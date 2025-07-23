@@ -97,6 +97,18 @@ const Profile = () => {
     };
   }, [user?.id, statsLoaded, reloadStats]);
 
+  // Mise à jour quand le nombre de questions local change (fallback)
+  useEffect(() => {
+    if (user && questionsCompleted > 0 && statsLoaded) {
+      const timeoutId = setTimeout(() => {
+        console.log("🔄 [PROFILE] Mise à jour stats - questions completed:", questionsCompleted);
+        reloadStats();
+      }, 300);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [user, questionsCompleted, statsLoaded, reloadStats]);
+
   // Utiliser les stats Supabase si disponibles, sinon calculer localement
   const finalStats = supabaseStats || calculateProfileStats(scores, questionsCompleted);
   const { correctPercentage, totalPoints, userLevel } = finalStats;
