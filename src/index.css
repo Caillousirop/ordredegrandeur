@@ -37,45 +37,51 @@
   }
 
   .dark {
-    /* Darker background */
-    --background: 225 30% 4%;
-    --foreground: 220 45% 92%;
+    /* Background plus moderne avec une teinte bleu-gris */
+    --background: 222 47% 11%;
+    --foreground: 213 31% 91%;
 
-    /* Less dark components to create contrast with background */
-    --card: 225 30% 10%;
-    --card-foreground: 220 45% 92%;
+    /* Cartes avec plus de contraste et une teinte cohérente */
+    --card: 222 47% 15%;
+    --card-foreground: 213 31% 91%;
 
-    --popover: 225 30% 10%;
-    --popover-foreground: 220 45% 92%;
+    --popover: 222 47% 15%;
+    --popover-foreground: 213 31% 91%;
 
-    --primary: 270 85% 72%;
-    --primary-foreground: 225 25% 4%;
+    /* Primary plus vif et moderne */
+    --primary: 262 85% 65%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 220 30% 14%;
-    --secondary-foreground: 220 40% 85%;
+    /* Secondary avec plus de nuances */
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 213 31% 88%;
 
-    --muted: 220 30% 14%;
-    --muted-foreground: 220 25% 65%;
+    /* Muted plus doux et lisible */
+    --muted: 215 25% 18%;
+    --muted-foreground: 217 19% 70%;
 
-    --accent: 260 40% 20%;
-    --accent-foreground: 220 40% 85%;
+    /* Accent plus subtil avec harmonie couleur */
+    --accent: 215 25% 20%;
+    --accent-foreground: 213 31% 88%;
 
-    --destructive: 10 80% 65%;
-    --destructive-foreground: 220 45% 92%;
+    /* Destructive plus doux en mode sombre */
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 213 31% 91%;
 
-    --border: 220 25% 18%;
-    --input: 220 30% 16%;
-    --ring: 270 85% 72%;
+    /* Bordures plus définies */
+    --border: 215 25% 22%;
+    --input: 215 25% 18%;
+    --ring: 262 85% 65%;
     
-    /* Added for sidebar if present */
-    --sidebar-background: 225 30% 10%;
-    --sidebar-foreground: 220 45% 92%;
-    --sidebar-primary: 270 85% 72%;
-    --sidebar-primary-foreground: 225 25% 4%;
-    --sidebar-accent: 260 40% 20%;
-    --sidebar-accent-foreground: 220 40% 85%;
-    --sidebar-border: 220 25% 18%;
-    --sidebar-ring: 270 85% 72%;
+    /* Sidebar harmonisé avec le thème principal */
+    --sidebar-background: 222 47% 13%;
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-primary: 262 85% 65%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 215 25% 20%;
+    --sidebar-accent-foreground: 213 31% 88%;
+    --sidebar-border: 215 25% 22%;
+    --sidebar-ring: 262 85% 65%;
   }
 }
 
@@ -85,7 +91,20 @@
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground transition-colors duration-500 ease-in-out;
+  }
+  
+  /* Amélioration des scrollbars en mode sombre */
+  .dark ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-border/80;
   }
 }
 
@@ -94,18 +113,33 @@
     @apply bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent;
   }
   
-  /* Add dark mode specific transitions */
+  /* Mode sombre amélioré avec transitions fluides */
   .dark-transition {
-    @apply transition-all duration-300;
+    @apply transition-all duration-300 ease-in-out;
   }
   
-  /* Enhanced card styling for dark mode - lighter than background, darker than content */
-  .dark .card-content-dark {
-    @apply bg-gradient-to-br from-slate-800/70 to-slate-700/50 border-slate-600/30;
+  /* Amélioration de l'apparence des cartes en mode sombre */
+  .dark .card-enhanced {
+    @apply bg-gradient-to-br from-card to-card/90 border-border/40 shadow-xl backdrop-blur-sm;
   }
   
-  .dark .card-hover-dark {
-    @apply hover:bg-gradient-to-br hover:from-slate-700/80 hover:to-slate-600/60;
+  .dark .card-hover-enhanced {
+    @apply hover:border-border/60 hover:shadow-2xl hover:bg-gradient-to-br hover:from-card/95 hover:to-secondary/30;
+  }
+  
+  /* Amélioration des boutons en mode sombre */
+  .dark .button-enhanced {
+    @apply shadow-lg hover:shadow-xl transition-all duration-200;
+  }
+  
+  /* Text avec meilleur contraste en mode sombre */
+  .dark .text-enhanced {
+    @apply text-foreground/95;
+  }
+  
+  /* Inputs plus visibles en mode sombre */
+  .dark .input-enhanced {
+    @apply bg-input/80 border-border/50 focus:border-primary/50 focus:ring-primary/20;
   }
 }
 
