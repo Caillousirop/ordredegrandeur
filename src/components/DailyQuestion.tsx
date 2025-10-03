@@ -151,13 +151,7 @@ const DailyQuestion: React.FC = () => {
   }
 
   if (!dailyQuestion) {
-    return (
-      <Card className="mb-6 border-muted/50">
-        <CardContent className="p-6 text-center">
-          <p className="text-muted-foreground">Aucune question du jour disponible</p>
-        </CardContent>
-      </Card>
-    );
+    return null;
   }
 
   const unitDisplay = formatUnitDisplay(dailyQuestion.unit);
